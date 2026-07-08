@@ -8,10 +8,10 @@ hero:
   actions:
     - theme: brand
       text: Посмотреть собак
-      link: /ru/dogs_index
+      link: /ru/dogs
     - theme: alt
       text: Стать волонтёром
-      link: /ru/volunteers_index
+      link: /ru/volunteers
 features:
   - icon: 🐕
     title: Познакомься
