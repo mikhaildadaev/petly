@@ -44,7 +44,7 @@
           <h3>{{ volunteer.name }}</h3>
           <div class="grid-meta">
             <span v-if="volunteer.experience" class="tag experience-tag">{{ volunteer.experience }}</span>
-            <span v-if="volunteer.experienceYears" class="tag">{{ volunteer.experienceYears }}</span>
+            <span v-if="volunteer.experienceYears" class="tag extra-tag">{{ volunteer.experienceYears }}</span>
             <span v-if="volunteer.direction" class="tag direction-tag">{{ volunteer.direction }}</span>
             <span v-for="tag in volunteer.tags" :key="tag" class="tag">{{ tag }}</span>
           </div>
