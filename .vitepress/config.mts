@@ -44,11 +44,11 @@ export default defineConfig({
           },
           { 
             text: 'Волонтеры', 
-            link: '/ru/volunteers_index' 
+            link: '/ru/volunteers' 
           },
           { 
             text: 'Собаки', 
-            link: '/ru/dogs_index' 
+            link: '/ru/dogs' 
           }
         ],
         darkModeSwitchLabel: "Внешний вид",
