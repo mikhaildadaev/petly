@@ -356,6 +356,7 @@ export default {
 /* Индикатор открытия в новой вкладке */
 .volunteer-card::after {
   content: '↗';
+  aspect-ratio: 1 / 1;
   position: absolute;
   top: 12px;
   right: 16px;
