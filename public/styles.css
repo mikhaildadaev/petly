@@ -1,0 +1,251 @@
+/* ===== Базовые переменные ===== */
+:root {
+  --vp-c-brand: #e67e22;
+  --vp-c-brand-light: #f0a04b;
+  --vp-c-brand-dark: #c96a1c;
+  --vp-c-bg: #fdfaf6;
+  --vp-c-bg-soft: #f5efe6;
+  --vp-c-bg-alt: #ede4d8;
+  --vp-c-text: #3e3232;
+  --vp-c-text-light: #6b5b5b;
+  --vp-c-border: #e0d5c5;
+  --radius: 14px;
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  --shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Тёмная тема */
+.dark {
+  --vp-c-bg: #1a1a1a;
+  --vp-c-bg-soft: #252525;
+  --vp-c-bg-alt: #2a2a2a;
+  --vp-c-text: #e0d5c1;
+  --vp-c-text-light: #a89b8b;
+  --vp-c-border: #3a3530;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 16px 40px rgba(230, 126, 34, 0.15);
+}
+
+/* ===== Шрифты ===== */
+body {
+  font-family: 'Nunito', 'Inter', sans-serif;
+  line-height: 1.7;
+}
+
+/* ===== Тэги ===== */
+.tag {
+  display: inline-block;
+  background: rgba(230, 126, 34, 0.12);
+  color: var(--vp-c-brand);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0 0.3rem 0.3rem 0;
+}
+
+/* ===== Кнопки ===== */
+.btn {
+  display: inline-block;
+  padding: 0.7rem 1.8rem;
+  background: var(--vp-c-brand);
+  color: #fff !important;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.2s;
+  border: none;
+  cursor: pointer;
+}
+.btn:hover {
+  background: var(--vp-c-brand-light);
+  transform: scale(1.03);
+  text-decoration: none;
+}
+.btn-secondary {
+  background: transparent;
+  border: 2px solid var(--vp-c-brand);
+  color: var(--vp-c-brand) !important;
+}
+.btn-secondary:hover {
+  background: rgba(230, 126, 34, 0.08);
+}
+
+/* ===== Блок с историей ===== */
+.story-block {
+  background: var(--vp-c-bg-soft);
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin: 2rem 0;
+  border: 1px solid var(--vp-c-border);
+  box-shadow: var(--shadow);
+}
+.story-block blockquote {
+  border-left: 4px solid var(--vp-c-brand);
+  background: rgba(230, 126, 34, 0.06);
+  padding: 1rem 1.5rem;
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+  color: var(--vp-c-text-light);
+  margin: 1.5rem 0;
+}
+
+/* ===== Блок «Познакомиться» ===== */
+.meet-block {
+  background: var(--vp-c-bg-soft);
+  border-radius: var(--radius);
+  padding: 2rem;
+  text-align: center;
+  border: 1px solid var(--vp-c-brand);
+  box-shadow: 0 0 30px rgba(230, 126, 34, 0.08);
+  margin-top: 2rem;
+}
+
+/* ===== Мета-информация собаки ===== */
+.dog-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 1rem 0 2rem;
+}
+.dog-meta .tag {
+  margin: 0;
+}
+
+/* ===== Адаптив ===== */
+@media (max-width: 640px) {
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .dog-card img {
+    height: 200px;
+  }
+}
+
+
+/* ===== Main Index ===== */
+.VPHero .image-bg {
+  opacity: 0.8;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.VPFeatures {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.VPFeature {
+  background: var(--vp-c-bg-soft);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid var(--vp-c-border);
+}
+
+.VPFeature:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.dark .VPFeature {
+  background: #252525;
+  border-color: #3a3530;
+}
+
+.dark .VPFeature:hover {
+  box-shadow: 0 8px 30px rgba(230, 126, 34, 0.15);
+  border-color: #e67e22;
+}
+
+/* ===== Universal ===== */
+.uuid {
+  opacity: 0;
+}
+
+/* ===== Dogs Index ===== */
+.hero-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 3rem 1.5rem 1.5rem;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.hero-name {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tag {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  backdrop-filter: blur(4px);
+}
+
+@media (max-width: 640px) {
+  .hero-name {
+    font-size: 1.8rem;
+  }
+}
+
+.dog-card-body p {
+  color: var(--vp-c-text-light);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1.2rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1.5rem;
+  background: #e67e22;
+  color: #fff !important;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.btn:hover {
+  background: #f0a04b;
+  text-decoration: none;
+}
+
+@media (max-width: 640px) {
+  .dogs-grid {
+    grid-template-columns: 1fr;
+  }
+}
