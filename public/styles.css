@@ -328,10 +328,6 @@ a {
   opacity: 1;
   transform: translateX(4px) scale(1.1);
 }
-.grid-card:hover::after {
-  opacity: 1;
-  transform: translateX(4px);
-}
 .dark .grid-card::after {
   background: rgba(37, 37, 37, 0.9);
 }
