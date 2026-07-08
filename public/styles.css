@@ -220,6 +220,33 @@ body {
     font-size: 1.8rem;
   }
 }
+@media (orientation: portrait) {
+  .hero-wrapper {
+    aspect-ratio: 4 / 5;
+  }
+}
+
+@media (orientation: landscape) {
+  .hero-wrapper {
+    aspect-ratio: 16 / 9;
+  }
+}
+@media (max-width: 480px) and (orientation: portrait) {
+  .hero-wrapper {
+    aspect-ratio: 3 / 4;
+  }
+}
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  .hero-wrapper {
+    aspect-ratio: 4 / 5;
+  }
+}
+
+@media (min-width: 1400px) {
+  .hero-wrapper {
+    aspect-ratio: 21 / 9; /* Широкий формат для больших экранов */
+  }
+}
 
 .dog-card-body p {
   color: var(--vp-c-text-light);
