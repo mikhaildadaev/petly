@@ -220,6 +220,8 @@ export default {
     })
 
     // === ЛОГИКА КАРУСЕЛИ ===
+    let isScrolling = false
+
     const scrollToSlide = (index) => {
       if (!carouselRef.value) return
       const container = carouselRef.value
@@ -231,14 +233,21 @@ export default {
       const slideWidth = slide.offsetWidth
       const scrollPosition = slide.offsetLeft - (containerWidth - slideWidth) / 2
 
+      isScrolling = true
+
       container.scrollTo({
         left: Math.max(0, scrollPosition),
         behavior: 'smooth'
       })
 
       currentIndex.value = index
+
+      setTimeout(() => {
+        isScrolling = false
+      }, 300)
     }
 
+    // === НАВИГАЦИЯ КАРУСЕЛИ ===
     const nextSlide = () => {
       if (currentIndex.value < paginatedDogs.value.length - 1) {
         scrollToSlide(currentIndex.value + 1)
@@ -257,6 +266,7 @@ export default {
 
     // === ОБНОВЛЕНИЕ ИНДЕКСА ПРИ СКРОЛЛЕ ===
     const updateIndex = () => {
+      if (isScrolling) return
       if (!carouselRef.value) return
       const container = carouselRef.value
       const slides = container.querySelectorAll('.carousel-slide')
@@ -283,25 +293,49 @@ export default {
 
     // === TOUCH-СОБЫТИЯ ДЛЯ МОБИЛЬНЫХ ===
     let touchStartX = 0
+    let touchEndX = 0
     let isDragging = false
 
     const handleTouchStart = (e) => {
       touchStartX = e.touches[0].clientX
+      touchEndX = touchStartX
       isDragging = false
     }
 
     const handleTouchMove = (e) => {
-      const diff = touchStartX - e.touches[0].clientX
+      touchEndX = e.touches[0].clientX
+      const diff = touchStartX - touchEndX
       if (Math.abs(diff) > 10) {
         isDragging = true
       }
     }
 
     const handleTouchEnd = () => {
-      if (isDragging) {
+      if (!isDragging) {
+        isDragging = false
+        return
+      }
+
+      const diff = touchStartX - touchEndX
+      const threshold = 50
+
+      if (Math.abs(diff) > threshold) {
+        if (diff > 0) {
+          if (currentIndex.value < paginatedDogs.value.length - 1) {
+            scrollToSlide(currentIndex.value + 1)
+          }
+        } else {
+          if (currentIndex.value > 0) {
+            scrollToSlide(currentIndex.value - 1)
+          }
+        }
+      } else {
         setTimeout(updateIndex, 100)
       }
+
       isDragging = false
+      touchStartX = 0
+      touchEndX = 0
     }
 
     // Сбрасываем карусель при смене режима
