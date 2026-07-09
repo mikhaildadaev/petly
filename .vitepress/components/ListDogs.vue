@@ -219,10 +219,11 @@ export default {
       currentIndex.value = 0
     })
 
-    // === ЛОГИКА КАРУСЕЛИ ===
-    let isScrolling = false
+    // === НОВАЯ ПЛАВНАЯ ЛОГИКА КАРУСЕЛИ ===
+    let isAnimating = false
+    let animationTimer = null
 
-    const scrollToSlide = (index) => {
+    const scrollToSlide = (index, smooth = true) => {
       if (!carouselRef.value) return
       const container = carouselRef.value
       const slides = container.querySelectorAll('.carousel-slide')
@@ -233,41 +234,53 @@ export default {
       const slideWidth = slide.offsetWidth
       const scrollPosition = slide.offsetLeft - (containerWidth - slideWidth) / 2
 
-      isScrolling = true
+      // Отменяем предыдущий таймер
+      if (animationTimer) {
+        clearTimeout(animationTimer)
+        animationTimer = null
+      }
+
+      isAnimating = true
+      currentIndex.value = index
 
       container.scrollTo({
         left: Math.max(0, scrollPosition),
-        behavior: 'smooth'
+        behavior: smooth ? 'smooth' : 'auto'
       })
 
-      currentIndex.value = index
-
-      setTimeout(() => {
-        isScrolling = false
-      }, 300)
+      // Разблокируем после завершения анимации
+      animationTimer = setTimeout(() => {
+        isAnimating = false
+        animationTimer = null
+      }, 400)
     }
 
-    // === НАВИГАЦИЯ КАРУСЕЛИ ===
     const nextSlide = () => {
+      if (isAnimating) return
       if (currentIndex.value < paginatedDogs.value.length - 1) {
         scrollToSlide(currentIndex.value + 1)
       }
     }
 
     const prevSlide = () => {
+      if (isAnimating) return
       if (currentIndex.value > 0) {
         scrollToSlide(currentIndex.value - 1)
       }
     }
 
     const goToSlide = (index) => {
+      if (isAnimating) return
       scrollToSlide(index)
     }
 
-    // === ОБНОВЛЕНИЕ ИНДЕКСА ПРИ СКРОЛЛЕ ===
+    // === ОБНОВЛЕНИЕ ИНДЕКСА — ТОЛЬКО ПОСЛЕ ОСТАНОВКИ СКРОЛЛА ===
+    let scrollTimeout = null
+
     const updateIndex = () => {
-      if (isScrolling) return
+      if (isAnimating) return
       if (!carouselRef.value) return
+      
       const container = carouselRef.value
       const slides = container.querySelectorAll('.carousel-slide')
       if (!slides.length) return
@@ -291,51 +304,72 @@ export default {
       }
     }
 
-    // === TOUCH-СОБЫТИЯ ДЛЯ МОБИЛЬНЫХ ===
+    // Обработчик скролла с задержкой (только после остановки)
+    const handleScroll = () => {
+      if (isAnimating) return
+      
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout)
+      }
+      
+      scrollTimeout = setTimeout(() => {
+        updateIndex()
+        scrollTimeout = null
+      }, 100)
+    }
+
+    // === ПЛАВНЫЕ TOUCH-СОБЫТИЯ ===
     let touchStartX = 0
-    let touchEndX = 0
-    let isDragging = false
+    let touchCurrentX = 0
+    let isSwiping = false
+    let swipeDirection = null
 
     const handleTouchStart = (e) => {
+      if (isAnimating) return
       touchStartX = e.touches[0].clientX
-      touchEndX = touchStartX
-      isDragging = false
+      touchCurrentX = touchStartX
+      isSwiping = false
+      swipeDirection = null
     }
 
     const handleTouchMove = (e) => {
-      touchEndX = e.touches[0].clientX
-      const diff = touchStartX - touchEndX
-      if (Math.abs(diff) > 10) {
-        isDragging = true
+      if (isAnimating) return
+      touchCurrentX = e.touches[0].clientX
+      const diff = touchStartX - touchCurrentX
+      
+      if (Math.abs(diff) > 15) {
+        isSwiping = true
+        swipeDirection = diff > 0 ? 'left' : 'right'
       }
     }
 
     const handleTouchEnd = () => {
-      if (!isDragging) {
-        isDragging = false
+      if (isAnimating || !isSwiping) {
+        isSwiping = false
         return
       }
 
-      const diff = touchStartX - touchEndX
-      const threshold = 50
+      const diff = touchStartX - touchCurrentX
+      const threshold = 40
 
       if (Math.abs(diff) > threshold) {
         if (diff > 0) {
+          // Свайп влево
           if (currentIndex.value < paginatedDogs.value.length - 1) {
             scrollToSlide(currentIndex.value + 1)
           }
         } else {
+          // Свайп вправо
           if (currentIndex.value > 0) {
             scrollToSlide(currentIndex.value - 1)
           }
         }
-      } else {
-        setTimeout(updateIndex, 100)
       }
 
-      isDragging = false
+      isSwiping = false
+      swipeDirection = null
       touchStartX = 0
-      touchEndX = 0
+      touchCurrentX = 0
     }
 
     // Сбрасываем карусель при смене режима
@@ -343,7 +377,7 @@ export default {
       if (newMode === 'carousel') {
         nextTick(() => {
           if (carouselRef.value && paginatedDogs.value.length) {
-            scrollToSlide(0)
+            scrollToSlide(0, false)
           }
         })
       }
@@ -354,19 +388,21 @@ export default {
       if (viewMode.value === 'carousel') {
         nextTick(() => {
           if (carouselRef.value && paginatedDogs.value.length) {
-            scrollToSlide(0)
+            scrollToSlide(0, false)
           }
         })
       }
     }, { deep: true })
 
     // Обновляем индекс при ресайзе
+    const handleResize = () => {
+      if (viewMode.value === 'carousel' && !isAnimating) {
+        updateIndex()
+      }
+    }
+
     onMounted(() => {
-      window.addEventListener('resize', () => {
-        if (viewMode.value === 'carousel') {
-          updateIndex()
-        }
-      })
+      window.addEventListener('resize', handleResize)
     })
 
     return {
@@ -390,6 +426,7 @@ export default {
       prevSlide,
       goToSlide,
       updateIndex,
+      handleScroll,
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
