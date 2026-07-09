@@ -576,7 +576,7 @@ a {
 }
 
 /* Планшеты в портрете */
-@media (min-width: 738px) and (max-width: 1024px) and (orientation: portrait) {
+@media (min-width: 736px) and (max-width: 1024px) and (orientation: portrait) {
   .hero-wrapper {
     aspect-ratio: 4 / 5;
   }
@@ -643,7 +643,7 @@ a {
    ============================================ */
 
 /* Планшеты */
-@media (max-width: 738px) {
+@media (max-width: 736px) {
   .filters {
     gap: 0.75rem;
   }
