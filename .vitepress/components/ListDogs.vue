@@ -159,16 +159,12 @@ export default {
     const allDogs = ref([])
     const visibleCount = ref(perPage)
     const isLoading = ref(true)
-    // Инициализируем isMobile как false (как на сервере)
     const isMobile = ref(false)
     const isLoadingMore = ref(false)
-    // Флаг, что компонент уже смонтирован на клиенте
     const isClient = ref(false)
     
-    // Сохраняем индекс, который был до загрузки
     const savedIndex = ref(0)
     
-    // Определяем размер экрана только на клиенте
     const checkMobile = () => {
       if (typeof window !== 'undefined') {
         const newIsMobile = window.innerWidth < MOBILE_BREAKPOINT
@@ -199,10 +195,7 @@ export default {
 
     // Загрузка данных
     onMounted(async () => {
-      // Помечаем, что мы на клиенте
       isClient.value = true
-      
-      // Определяем размер экрана
       checkMobile()
       
       try {
@@ -232,7 +225,6 @@ export default {
         isLoading.value = false
       }
       
-      // Добавляем слушатель resize
       if (typeof window !== 'undefined') {
         window.addEventListener('resize', handleResize)
       }
@@ -277,24 +269,17 @@ export default {
       if (isLoadingMore.value || !hasMoreItems.value) return
       
       isLoadingMore.value = true
-      
-      // Сохраняем текущий индекс
       savedIndex.value = currentIndex.value
       
-      // Имитация загрузки
       await new Promise(resolve => setTimeout(resolve, 500))
       
-      // Увеличиваем видимое количество
       visibleCount.value += perPage
       isLoadingMore.value = false
       
-      // После загрузки восстанавливаем позицию
       if (isMobile.value) {
         nextTick(() => {
           if (carouselRef.value && paginatedDogs.value.length) {
             let targetIndex = savedIndex.value
-            
-            // Проверяем, не вышел ли индекс за пределы
             const maxIndex = carouselTotalSlides.value - 1
             
             if (targetIndex > maxIndex) {
@@ -312,10 +297,55 @@ export default {
       }
     }
 
-    watch([filterAge, filterGender, filterSize], () => {
-      visibleCount.value = perPage
+    // === НАДЕЖНЫЙ СБРОС НА ПЕРВУЮ ПОЗИЦИЮ ===
+    const resetToFirstSlide = () => {
+      // Сбрасываем индексы
       currentIndex.value = 0
       savedIndex.value = 0
+      
+      // Сбрасываем видимое количество
+      visibleCount.value = perPage
+      
+      // Принудительно прокручиваем к первому слайду
+      if (carouselRef.value) {
+        const container = carouselRef.value
+        
+        // Сначала мгновенно прокручиваем к началу
+        container.scrollLeft = 0
+        
+        // Затем через микротик делаем плавную прокрутку для гарантии
+        nextTick(() => {
+          // Еще раз устанавливаем scrollLeft для надежности
+          container.scrollLeft = 0
+          
+          // Если есть первый слайд, прокручиваем к нему
+          const slides = container.querySelectorAll('.carousel-slide')
+          if (slides && slides.length > 0) {
+            const firstSlide = slides[0]
+            const containerWidth = container.offsetWidth
+            const slideWidth = firstSlide.offsetWidth
+            const scrollPosition = firstSlide.offsetLeft - (containerWidth - slideWidth) / 2
+            
+            container.scrollTo({
+              left: Math.max(0, scrollPosition),
+              behavior: 'smooth'
+            })
+          }
+        })
+      }
+    }
+
+    // === ОТСЛЕЖИВАНИЕ ИЗМЕНЕНИЙ ФИЛЬТРОВ ===
+    watch([filterAge, filterGender, filterSize], () => {
+      // Сначала сбрасываем индексы
+      currentIndex.value = 0
+      savedIndex.value = 0
+      visibleCount.value = perPage
+      
+      // Затем через nextTick прокручиваем
+      nextTick(() => {
+        resetToFirstSlide()
+      })
     })
 
     // === ЛОГИКА КАРУСЕЛИ ===
@@ -369,26 +399,22 @@ export default {
     }
 
     watch(isMobile, (newVal, oldVal) => {
-      // Только если мы уже на клиенте
       if (isClient.value && newVal && paginatedDogs.value.length) {
         nextTick(() => {
           if (carouselRef.value) {
-            currentIndex.value = 0
-            scrollToSlide(0)
+            resetToFirstSlide()
           }
         })
       }
     })
 
     watch(() => paginatedDogs.value, (newVal, oldVal) => {
-      // Только если мы уже на клиенте и в мобильном режиме
       if (isClient.value && isMobile.value && newVal.length) {
         nextTick(() => {
           if (carouselRef.value) {
             const maxIndex = carouselTotalSlides.value - 1
             if (currentIndex.value > maxIndex) {
-              currentIndex.value = maxIndex
-              scrollToSlide(currentIndex.value)
+              resetToFirstSlide()
             }
           }
         })
@@ -427,11 +453,11 @@ export default {
       nextSlide,
       prevSlide,
       goToSlide,
+      resetToFirstSlide,
     }
   }
 }
 </script>
-
 
 <style scoped>
 
