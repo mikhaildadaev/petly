@@ -119,7 +119,7 @@ import { computed, ref, onMounted, watch, nextTick, onUnmounted } from 'vue'
 const baseUrl = import.meta.env.BASE_URL
 const modules = import.meta.glob('/ru/dogs/*.md')
 const perPage = 8
-const MOBILE_BREAKPOINT = 768
+const MOBILE_BREAKPOINT = 736
 
 export default {
   setup() {
