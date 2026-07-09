@@ -353,10 +353,10 @@ a {
   background: #252525;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
-.grid-card:hover {
+.grid-cards .grid-card:hover {
   transform: scale(1.05);
 }
-.dark .grid-card:hover {
+.dark .grid-cards .grid-card:hover {
   transform: scale(1.05);
   border-color: #e67e22;
 }
