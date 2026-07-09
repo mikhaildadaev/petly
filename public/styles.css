@@ -306,7 +306,7 @@ a {
 }
 .carousel-slide:not(.center) {
   opacity: 0.6;
-  transform: scale(0.95);
+  transform: scale(0.9, 0.9);
 }
 .carousel-slide:first-child {
   margin-left: 24px;
