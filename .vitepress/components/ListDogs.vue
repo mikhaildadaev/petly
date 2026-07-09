@@ -67,11 +67,7 @@
     <!-- Режим: Карусель (мобильные) -->
     <div v-else class="carousel-container">
       <div class="carousel-wrapper">
-        <button class="carousel-btn prev" @click="prevSlide" :disabled="currentIndex === 0">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
-        </button>
+        <button class="carousel-btn prev" @click="prevSlide" :disabled="currentIndex === 0"></button>
         
         <div class="carousel-track" ref="carouselRef">
           <!-- Карточки собак -->
@@ -119,11 +115,7 @@
           </div>
         </div>
         
-        <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 18l6-6-6-6" />
-          </svg>
-        </button>
+        <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1"></button>
       </div>
       
       <!-- Индикаторы -->
@@ -528,7 +520,7 @@ export default {
   display: flex;
   gap: 14px;
   overflow: hidden;
-  padding: 10px 0;
+  padding: 24px 0;
   scrollbar-width: none;
   flex: 1;
   scroll-snap-type: x mandatory;
