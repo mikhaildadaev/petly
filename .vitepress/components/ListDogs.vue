@@ -48,14 +48,33 @@
           <p>{{ dog.description }}</p>
         </div>
       </a>
+      
+      <!-- Кнопка загрузки для сетки -->
+      <div v-if="hasMoreItems" class="load-more-card" @click="loadMore">
+        <div class="load-more-content">
+          <div class="load-more-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 5v14" />
+              <path d="M5 12h14" />
+            </svg>
+          </div>
+          <span class="load-more-text">Загрузить ещё</span>
+          <span class="load-more-count">{{ remaining }} осталось</span>
+        </div>
+      </div>
     </div>
 
     <!-- Режим: Карусель (мобильные) -->
     <div v-else class="carousel-container">
       <div class="carousel-wrapper">
-        <button class="carousel-btn prev" @click="prevSlide" :disabled="currentIndex === 0"></button>
+        <button class="carousel-btn prev" @click="prevSlide" :disabled="currentIndex === 0">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
         
         <div class="carousel-track" ref="carouselRef">
+          <!-- Карточки собак -->
           <div 
             v-for="(dog, index) in paginatedDogs" 
             :key="dog.slug" 
@@ -75,15 +94,42 @@
               </div>
             </a>
           </div>
+
+          <!-- Карточка "Загрузить ещё" для карусели -->
+          <div 
+            v-if="hasMoreItems" 
+            class="carousel-slide load-more-slide"
+            :class="{ center: currentIndex === paginatedDogs.length }"
+          >
+            <div class="load-more-card" @click="loadMore">
+              <div class="load-more-content">
+                <div class="load-more-icon">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14" />
+                    <path d="M5 12h14" />
+                  </svg>
+                </div>
+                <span class="load-more-text">Загрузить ещё</span>
+                <span class="load-more-count">{{ remaining }} осталось</span>
+                <div class="load-more-progress">
+                  <div class="progress-bar" :style="{ width: `${(visibleCount / filteredDogs.length) * 100}%` }"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         
-        <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= paginatedDogs.length - 1"></button>
+        <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+        </button>
       </div>
       
       <!-- Индикаторы -->
       <div class="carousel-indicators">
         <span 
-          v-for="(_, index) in paginatedDogs" 
+          v-for="(_, index) in carouselTotalSlides" 
           :key="index"
           class="dot"
           :class="{ active: index === currentIndex }"
@@ -97,11 +143,6 @@
       <p>😕 По вашему запросу ничего не найдено</p>
       <button @click="resetFilters" class="btn-reset-link">Показать всех собак</button>
     </div>
-
-    <!-- Кнопка «Загрузить ещё» -->
-    <div v-if="filteredDogs.length > visibleCount" class="load-more">
-      <button @click="loadMore" class="btn-load">Загрузить ещё ({{ remaining }})</button>
-    </div>
   </div>
 </template>
 
@@ -111,6 +152,7 @@ import { computed, ref, onMounted, watch, nextTick, onUnmounted } from 'vue'
 const baseUrl = import.meta.env.BASE_URL
 const modules = import.meta.glob('/ru/dogs/*.md')
 const perPage = 8
+const MOBILE_BREAKPOINT = 768
 
 export default {
   setup() {
@@ -118,8 +160,23 @@ export default {
     const visibleCount = ref(perPage)
     const isLoading = ref(true)
     const isMobile = ref(false)
+    const isLoadingMore = ref(false)
+    
+    // Сохраняем индекс, который был до загрузки
+    const savedIndex = ref(0)
+    
+    // Определяем размер экрана
+    const checkMobile = () => {
+      if (typeof window !== 'undefined') {
+        const newIsMobile = window.innerWidth < MOBILE_BREAKPOINT
+        if (isMobile.value !== newIsMobile) {
+          isMobile.value = newIsMobile
+        }
+      }
+    }
+
     if (typeof window !== 'undefined') {
-      isMobile.value = window.innerWidth < 768
+      isMobile.value = window.innerWidth < MOBILE_BREAKPOINT
     }
 
     // Фильтры
@@ -131,7 +188,6 @@ export default {
     const carouselRef = ref(null)
     const currentIndex = ref(0)
 
-    // Проверка, активен ли хотя бы один фильтр
     const isFilterActive = computed(() => {
       return filterAge.value !== '' || filterGender.value !== '' || filterSize.value !== ''
     })
@@ -172,7 +228,6 @@ export default {
       }
     })
 
-    // Возрастная категория
     const getAgeCategory = (ageStr) => {
       if (!ageStr) return ''
       const match = ageStr.match(/(\d+)/)
@@ -183,7 +238,6 @@ export default {
       return 'взрослая'
     }
 
-    // Фильтрация
     const filteredDogs = computed(() => {
       return allDogs.value.filter(dog => {
         if (filterAge.value && getAgeCategory(dog.age) !== filterAge.value) return false
@@ -193,7 +247,6 @@ export default {
       })
     })
 
-    // Пагинация
     const paginatedDogs = computed(() => {
       return filteredDogs.value.slice(0, visibleCount.value)
     })
@@ -202,13 +255,62 @@ export default {
       return filteredDogs.value.length - visibleCount.value
     })
 
-    const loadMore = () => {
+    const hasMoreItems = computed(() => {
+      return filteredDogs.value.length > visibleCount.value
+    })
+
+    const carouselTotalSlides = computed(() => {
+      return paginatedDogs.value.length + (hasMoreItems.value ? 1 : 0)
+    })
+
+    const loadMore = async () => {
+      if (isLoadingMore.value || !hasMoreItems.value) return
+      
+      isLoadingMore.value = true
+      
+      // Сохраняем текущий индекс
+      savedIndex.value = currentIndex.value
+      
+      // Имитация загрузки
+      await new Promise(resolve => setTimeout(resolve, 500))
+      
+      // Увеличиваем видимое количество
       visibleCount.value += perPage
+      isLoadingMore.value = false
+      
+      // После загрузки восстанавливаем позицию
+      if (isMobile.value) {
+        nextTick(() => {
+          if (carouselRef.value && paginatedDogs.value.length) {
+            let targetIndex = savedIndex.value
+            
+            // Проверяем, не вышел ли индекс за пределы
+            const maxIndex = carouselTotalSlides.value - 1
+            
+            // Если индекс был на карточке загрузки (последний слайд)
+            // или стал больше максимального, показываем последнюю карточку
+            if (targetIndex > maxIndex) {
+              targetIndex = maxIndex
+            }
+            
+            if (targetIndex < 0) {
+              targetIndex = 0
+            }
+            
+            // Плавно переходим к нужной карточке
+            scrollToSlide(targetIndex)
+            
+            // Очищаем сохраненный индекс
+            savedIndex.value = 0
+          }
+        })
+      }
     }
 
     watch([filterAge, filterGender, filterSize], () => {
       visibleCount.value = perPage
       currentIndex.value = 0
+      savedIndex.value = 0
     })
 
     // === ЛОГИКА КАРУСЕЛИ ===
@@ -232,7 +334,7 @@ export default {
     }
 
     const nextSlide = () => {
-      if (currentIndex.value < paginatedDogs.value.length - 1) {
+      if (currentIndex.value < carouselTotalSlides.value - 1) {
         scrollToSlide(currentIndex.value + 1)
       }
     }
@@ -247,28 +349,40 @@ export default {
       scrollToSlide(index)
     }
 
-    // === ОТСЛЕЖИВАНИЕ РАЗМЕРА ЭКРАНА ===
-    const checkMobile = () => {
-      if (typeof window !== 'undefined') {
-        isMobile.value = window.innerWidth < 768
+    // === ОТСЛЕЖИВАНИЕ ИЗМЕНЕНИЙ РАЗМЕРА ===
+    let resizeTimeout = null
+    
+    const handleResize = () => {
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout)
       }
+      
+      resizeTimeout = setTimeout(() => {
+        checkMobile()
+        resizeTimeout = null
+      }, 100)
     }
 
-    watch(isMobile, (newVal) => {
-      if (newVal) {
+    watch(isMobile, (newVal, oldVal) => {
+      if (newVal && paginatedDogs.value.length) {
         nextTick(() => {
-          if (carouselRef.value && paginatedDogs.value.length) {
+          if (carouselRef.value) {
+            currentIndex.value = 0
             scrollToSlide(0)
           }
         })
       }
     })
 
-    watch(() => paginatedDogs.value, () => {
-      if (isMobile.value) {
+    watch(() => paginatedDogs.value, (newVal, oldVal) => {
+      if (isMobile.value && newVal.length) {
         nextTick(() => {
-          if (carouselRef.value && paginatedDogs.value.length) {
-            scrollToSlide(0)
+          if (carouselRef.value) {
+            const maxIndex = carouselTotalSlides.value - 1
+            if (currentIndex.value > maxIndex) {
+              currentIndex.value = maxIndex
+              scrollToSlide(currentIndex.value)
+            }
           }
         })
       }
@@ -276,13 +390,25 @@ export default {
 
     onMounted(() => {
       if (typeof window !== 'undefined') {
-        window.addEventListener('resize', checkMobile)
+        checkMobile()
+        window.addEventListener('resize', handleResize)
+        
+        if (isMobile.value && paginatedDogs.value.length) {
+          nextTick(() => {
+            if (carouselRef.value) {
+              scrollToSlide(0)
+            }
+          })
+        }
       }
     })
 
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
-        window.removeEventListener('resize', checkMobile)
+        window.removeEventListener('resize', handleResize)
+        if (resizeTimeout) {
+          clearTimeout(resizeTimeout)
+        }
       }
     })
 
@@ -296,12 +422,15 @@ export default {
       resetFilters,
       visibleCount,
       remaining,
+      hasMoreItems,
       loadMore,
+      isLoadingMore,
       baseUrl,
       isLoading,
       isMobile,
       carouselRef,
       currentIndex,
+      carouselTotalSlides,
       scrollToSlide,
       nextSlide,
       prevSlide,
@@ -311,8 +440,77 @@ export default {
 }
 </script>
 
+
 <style scoped>
 
+/* ===== КАРТОЧКА ЗАГРУЗКИ ===== */
+.load-more-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 100%;
+  padding: 40px 20px;
+}
+.load-more-card:hover {
+  background: #f1f3f5;
+  border-color: #adb5bd;
+  transform: scale(1.02);
+}
+.load-more-card:active {
+  transform: scale(0.98);
+}
+.load-more-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+.load-more-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #e9ecef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+.load-more-card:hover .load-more-icon {
+  background: #dee2e6;
+  transform: rotate(90deg);
+}
+.load-more-icon svg {
+  color: #495057;
+}
+.load-more-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+.load-more-count {
+  font-size: 14px;
+  color: #868e96;
+}
+.load-more-progress {
+  width: 100%;
+  max-width: 200px;
+  height: 4px;
+  background: #e9ecef;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #4a90d9, #357abd);
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
 
 /* ===== КАРУСЕЛЬ ===== */
 .carousel-container {
@@ -343,6 +541,7 @@ export default {
   flex: 0 0 85%;
   scroll-snap-align: center;
   transition: all 0.5s ease;
+  min-height: 280px;
 }
 .carousel-slide.center {
   z-index: 2;
@@ -362,10 +561,14 @@ export default {
 .carousel-btn {
   position: absolute;
   top: 0;
-  width: 48px;
+  width: 40px;
   height: 100%;
   cursor: pointer;
   z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
 }
 .carousel-btn.prev {
   left: 0;
@@ -381,9 +584,12 @@ export default {
   }
   .carousel-slide:first-child {
     margin-left: 10%;
-  }
+  }  
   .carousel-slide:last-child {
     margin-right: 10%;
+  }
+  .load-more-card {
+    min-height: 300px;
   }
 }
 
@@ -393,9 +599,24 @@ export default {
   }
   .carousel-slide:first-child {
     margin-left: 12.5%;
-  }
+  }  
   .carousel-slide:last-child {
     margin-right: 12.5%;
+  }
+  .load-more-card {
+    min-height: 260px;
+    padding: 30px 16px;
+  }
+  .load-more-icon {
+    width: 48px;
+    height: 48px;
+  }
+  .load-more-icon svg {
+    width: 36px;
+    height: 36px;
+  }
+  .load-more-text {
+    font-size: 16px;
   }
 }
 </style>
