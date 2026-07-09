@@ -55,13 +55,7 @@
       <div class="carousel-wrapper">
         <button class="carousel-btn prev" @click="prevSlide" :disabled="currentIndex === 0"></button>
         
-        <div 
-          class="carousel-track" 
-          ref="carouselRef"
-          @touchstart="handleTouchStart"
-          @touchmove="handleTouchMove"
-          @touchend="handleTouchEnd"
-        >
+        <div class="carousel-track" ref="carouselRef">
           <div 
             v-for="(dog, index) in paginatedDogs" 
             :key="dog.slug" 
@@ -217,7 +211,7 @@ export default {
       currentIndex.value = 0
     })
 
-    // === ПРОСТАЯ ЛОГИКА КАРУСЕЛИ ===
+    // === ЛОГИКА КАРУСЕЛИ ===
     const scrollToSlide = (index) => {
       if (!carouselRef.value) return
       const container = carouselRef.value
@@ -251,52 +245,6 @@ export default {
 
     const goToSlide = (index) => {
       scrollToSlide(index)
-    }
-
-    // === TOUCH-СОБЫТИЯ ===
-    let touchStartX = 0
-    let touchCurrentX = 0
-    let isSwiping = false
-
-    const handleTouchStart = (e) => {
-      touchStartX = e.touches[0].clientX
-      touchCurrentX = touchStartX
-      isSwiping = false
-    }
-
-    const handleTouchMove = (e) => {
-      touchCurrentX = e.touches[0].clientX
-      const diff = touchStartX - touchCurrentX
-      
-      if (Math.abs(diff) > 15) {
-        isSwiping = true
-      }
-    }
-
-    const handleTouchEnd = () => {
-      if (!isSwiping) {
-        isSwiping = false
-        return
-      }
-
-      const diff = touchStartX - touchCurrentX
-      const threshold = 40
-
-      if (Math.abs(diff) > threshold) {
-        if (diff > 0) {
-          if (currentIndex.value < paginatedDogs.value.length - 1) {
-            scrollToSlide(currentIndex.value + 1)
-          }
-        } else {
-          if (currentIndex.value > 0) {
-            scrollToSlide(currentIndex.value - 1)
-          }
-        }
-      }
-
-      isSwiping = false
-      touchStartX = 0
-      touchCurrentX = 0
     }
 
     // === ОТСЛЕЖИВАНИЕ РАЗМЕРА ЭКРАНА ===
@@ -358,9 +306,6 @@ export default {
       nextSlide,
       prevSlide,
       goToSlide,
-      handleTouchStart,
-      handleTouchMove,
-      handleTouchEnd,
     }
   }
 }
@@ -384,8 +329,7 @@ export default {
 .carousel-track {
   display: flex;
   gap: 14px;
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow: hidden;
   padding: 10px 0;
   scrollbar-width: none;
   flex: 1;
