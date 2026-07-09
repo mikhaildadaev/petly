@@ -12,8 +12,8 @@
   --vp-c-text-light: #6b5b5b;
   --vp-c-border: #e0d5c5;
   --radius: 14px;
-  --shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-  --shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.12);
+  --shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+  --shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.12);
 }
 
 /* ============================================
@@ -26,8 +26,8 @@
   --vp-c-text: #e0d5c1;
   --vp-c-text-light: #a89b8b;
   --vp-c-border: #3a3530;
-  --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  --shadow-hover: 0 16px 40px rgba(230, 126, 34, 0.15);
+  --shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 4px 16px rgba(230, 126, 34, 0.15);
 }
 
 /* ============================================
@@ -65,51 +65,33 @@ a {
 /* Опыт / оранжевый */
 .experience-tag {
   background: #9422e6;
-  color: #000;
-  font-weight: 700;
-}
-.dark .experience-tag {
-  color: #fff;
+  color: var(--vp-c-bg);
 }
 /* Возраст / оранжевый */
 .age-tag {
   background: #e67e22;
-  color: #000;
-  font-weight: 700;
-}
-.dark .age-tag {
-  color: #fff;
+  color: var(--vp-c-bg);
 }
 
 /* Пол — розовый/синий */
 .gender-tag {
   background: #e74c3c;
-  color: #000;
+  color: var(--vp-c-bg);
 }
 .gender-tag[data-gender="Мальчик"] {
   background: #2980b9;
-}
-.dark .gender-tag {
-  color: #fff;
 }
 
 /* Размер / Направление — зелёный */
 .size-tag,
 .direction-tag {
   background: #27ae60;
-  color: #000;
-}
-.dark .size-tag,
-.dark .direction-tag {
-  color: #fff;
+  color: var(--vp-c-bg);
 }
 
 .extra-tag {
   background: #e67e22;
-  color: #000;
-}
-.dark .extra-tag {
-  color: #fff;
+  color: var(--vp-c-bg);
 }
 
 /* ============================================
@@ -276,7 +258,72 @@ a {
 }
 
 /* ============================================
-   КАРТОЧКА
+   КАРУСЕЛЬ КАРТОЧЕК
+   ============================================ */
+.carousel-container {
+  width: 100%;
+  margin: 2rem 0;
+}
+.carousel-wrapper {
+  margin: 0 -24px;
+  width: calc(100% + 48px);
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.carousel-track {
+  display: flex;
+  gap: 14px;
+  overflow: hidden;
+  padding: 24px 0;
+  scrollbar-width: none;
+  flex: 1;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+.carousel-slide {
+  flex: 0 0 85%;
+  scroll-snap-align: center;
+  transition: all 0.5s ease;
+  min-height: 280px;
+}
+.carousel-slide.center {
+  z-index: 2;
+}
+.carousel-slide:not(.center) {
+  opacity: 0.6;
+  transform: scale(0.9);
+}
+.carousel-slide:first-child {
+  margin-left: 7.5%;
+}
+.carousel-slide:last-child {
+  margin-right: 7.5%;
+}
+.carousel-btn {
+  position: absolute;
+  top: 0;
+  width: 40px;
+  height: 100%;
+  cursor: pointer;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+.carousel-btn.prev {
+  left: 0;
+}
+.carousel-btn.next {
+  right: 0;
+}
+
+/* ============================================
+   КАРТОЧКИ
    ============================================ */
 .grid-card {
   display: grid;
@@ -359,12 +406,15 @@ a {
   position: relative;
   bottom: 0;
   display: grid;
-  background-color: #ffffff;
+  background-color: #fff;
   margin-top: auto;
   border: 0px;
   padding: 1.5rem;
   border-radius: 14px;
   z-index: 1;
+}
+.dark .grid-card-body {
+  background-color: #3a3530;
 }
 .grid-card-body h3 {
   margin: 0 0 0.5rem;
@@ -404,6 +454,76 @@ a {
   text-align: center;
   padding: 2rem;
   color: var(--vp-c-text-light);
+}
+
+/* ===== КАРТОЧКА ЗАГРУЗКИ ===== */
+.load-more-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--vp-c-bg-soft);
+  border: 2px dashed var(--vp-c-border);
+  border-radius: var(--radius, 12px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 100%;
+  padding: 40px 20px;
+  box-shadow: var(--shadow);
+}
+.load-more-card:hover {
+  border-color: var(--vp-c-brand-light);
+  transform: scale(1.02);
+  box-shadow: var(--shadow-hover);
+}
+.load-more-card:active {
+  transform: scale(0.98);
+}
+.load-more-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+.load-more-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--vp-c-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+.load-more-card:hover .load-more-icon {
+  background: var(--vp-c-bg-alt);
+  transform: rotate(90deg);
+}
+.load-more-icon svg {
+  color: var(--vp-c-text-light);
+}
+.load-more-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--vp-c-text);
+}
+.load-more-count {
+  font-size: 14px;
+  color: var(--vp-c-text-light);
+}
+.load-more-progress {
+  width: 100%;
+  max-width: 200px;
+  height: 4px;
+  background: var(--vp-c-bg-alt);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--vp-c-brand, #4a90d9), var(--vp-c-brand-dark, #357abd));
+  transition: width 0.3s ease;
+  border-radius: 2px;
 }
 
 /* ============================================
@@ -528,46 +648,18 @@ a {
   .hero-name {
     font-size: 2rem;
   }
+  .carousel-slide {
+    flex: 0 0 80%;
+  }
+  .carousel-slide:first-child {
+    margin-left: 10%;
+  }  
+  .carousel-slide:last-child {
+    margin-right: 10%;
+  }
 }
 
-/* Мобильные */
-@media (max-width: 640px) {
-  .filters {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  .filter-select {
-    min-width: 100%;
-    flex: 1 1 100%;
-  }
-  .btn-reset {
-    width: 100%;
-    justify-content: center;
-    padding: 0.6rem;
-  }
-  .grid-cards {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-  .grid-card-body {
-    padding: 1rem;
-  }
-  .grid-card-body h3 {
-    font-size: 1.3rem;
-  }
-  .grid-card::after {
-    top: 8px;
-    right: 12px;
-    font-size: 16px;
-    padding: 2px 6px;
-  }
-  .hero-name {
-    font-size: 1.8rem;
-  }
-  .hero-overlay {
-    padding: 2rem 1rem 1rem;
-  }
-}
+
 
 /* Очень маленькие экраны */
 @media (max-width: 480px) {
@@ -586,5 +678,14 @@ a {
   }
   .hero-name {
     font-size: 1.5rem;
+  }
+  .carousel-slide {
+    flex: 0 0 75%;
+  }
+  .carousel-slide:first-child {
+    margin-left: 12.5%;
+  }  
+  .carousel-slide:last-child {
+    margin-right: 12.5%;
   }
 }
