@@ -1,63 +1,39 @@
 <template>
   <div>
     <!-- Фильтры -->
-    <div class="filters-bar">
-      <div class="filters">
-        <select v-model="filterGender" class="filter-select">
-          <option value="">Все гендеры</option>
-          <option value="Девочка">Девочки</option>
-          <option value="Мальчик">Мальчики</option>
-        </select>
-        <select v-model="filterAge" class="filter-select">
-          <option value="">Все возрасты</option>
-          <option value="щенок">Щенки (до 1 года)</option>
-          <option value="молодая">Молодые (1–3 года)</option>
-          <option value="взрослая">Взрослые (3+ лет)</option>
-        </select>
-        <select v-model="filterSize" class="filter-select">
-          <option value="">Все размеры</option>
-          <option value="Маленькая">Маленькие</option>
-          <option value="Средняя">Средние</option>
-          <option value="Крупная">Крупные</option>
-        </select>
-
-        <!-- Кнопка сброса -->
-        <button v-if="isFilterActive" @click="resetFilters" class="btn-reset" title="Сбросить все фильтры">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 6h18" />
-            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-            <path d="M10 11v6" />
-            <path d="M14 11v6" />
-          </svg>
-          Сбросить
-        </button>
-      </div>
-
-      <!-- Переключатель режимов -->
-      <div class="view-toggle">
-        <button @click="viewMode = 'grid'" :class="['toggle-btn', { active: viewMode === 'grid' }]" title="Сетка">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="3" width="7" height="7" rx="1" />
-            <rect x="14" y="3" width="7" height="7" rx="1" />
-            <rect x="3" y="14" width="7" height="7" rx="1" />
-            <rect x="14" y="14" width="7" height="7" rx="1" />
-          </svg>
-        </button>
-        <button @click="viewMode = 'carousel'" :class="['toggle-btn', { active: viewMode === 'carousel' }]" title="Карусель">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="2" y="4" width="20" height="16" rx="2" />
-            <circle cx="9" cy="12" r="2" />
-            <circle cx="15" cy="12" r="2" />
-            <line x1="2" y1="8" x2="4" y2="8" />
-            <line x1="20" y1="8" x2="22" y2="8" />
-          </svg>
-        </button>
-      </div>
+    <div class="filters">
+      <select v-model="filterGender" class="filter-select">
+        <option value="">Все гендеры</option>
+        <option value="Девочка">Девочки</option>
+        <option value="Мальчик">Мальчики</option>
+      </select>
+      <select v-model="filterAge" class="filter-select">
+        <option value="">Все возрасты</option>
+        <option value="щенок">Щенки (до 1 года)</option>
+        <option value="молодая">Молодые (1–3 года)</option>
+        <option value="взрослая">Взрослые (3+ лет)</option>
+      </select>
+      <select v-model="filterSize" class="filter-select">
+        <option value="">Все размеры</option>
+        <option value="Маленькая">Маленькие</option>
+        <option value="Средняя">Средние</option>
+        <option value="Крупная">Крупные</option>
+      </select>
+      <!-- Кнопка сброса -->
+      <button v-if="isFilterActive" @click="resetFilters" class="btn-reset" title="Сбросить все фильтры">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 6h18" />
+          <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+          <path d="M10 11v6" />
+          <path d="M14 11v6" />
+        </svg>
+        Сбросить
+      </button>
     </div>
 
-    <!-- Режим: Сетка (оригинальная) -->
-    <div v-if="viewMode === 'grid'" class="grid-cards">
+    <!-- Режим: Сетка (десктоп) -->
+    <div v-if="!isMobile" class="grid-cards">
       <a v-for="dog in paginatedDogs" :key="dog.slug" :href="`${baseUrl}ru/dogs/${dog.slug}`" target="_blank" rel="noopener noreferrer" class="grid-card">
         <div class="grid-meta">
           <span v-if="dog.gender" class="tag gender-tag" :data-gender="dog.gender">{{ dog.gender }}</span>
@@ -72,20 +48,20 @@
       </a>
     </div>
 
-    <!-- Режим: Карусель -->
+    <!-- Режим: Карусель (мобильные) -->
     <div v-else class="carousel-container">
       <div class="carousel-wrapper">
         <button class="carousel-btn prev" @click="prevSlide" :disabled="currentIndex === 0"></button>
         <div 
           class="carousel-track" 
           ref="carouselRef"
-          @scroll="updateIndex"
+          @scroll="handleScroll"
           @touchstart="handleTouchStart"
           @touchmove="handleTouchMove"
           @touchend="handleTouchEnd"
         >
           <div v-for="(dog, index) in paginatedDogs" :key="dog.slug" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="`${baseUrl}ru/dogs/${dog.slug}`" target="_blank" rel="noopener noreferrer" class="grid-card" >
+            <a :href="`${baseUrl}ru/dogs/${dog.slug}`" target="_blank" rel="noopener noreferrer" class="grid-card">
               <div class="grid-meta">
                 <span v-if="dog.gender" class="tag gender-tag" :data-gender="dog.gender">{{ dog.gender }}</span>
                 <span v-if="dog.age" class="tag age-tag">{{ dog.age }}</span>
@@ -99,7 +75,12 @@
             </a>
           </div>
         </div>
-        <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= paginatedDogs.length - 1" ></button>
+        <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= paginatedDogs.length - 1"></button>
+      </div>
+      
+      <!-- Индикаторы для мобильных -->
+      <div class="carousel-indicators">
+        <span  v-for="(_, index) in paginatedDogs"  :key="index" class="dot" :class="{ active: index === currentIndex }" @click="goToSlide(index)" />
       </div>
     </div>
 
@@ -117,7 +98,7 @@
 </template>
 
 <script>
-import { computed, ref, onMounted, watch, nextTick } from 'vue'
+import { computed, ref, onMounted, watch, nextTick, onUnmounted } from 'vue'
 
 const baseUrl = import.meta.env.BASE_URL
 const modules = import.meta.glob('/ru/dogs/*.md')
@@ -128,7 +109,7 @@ export default {
     const allDogs = ref([])
     const visibleCount = ref(perPage)
     const isLoading = ref(true)
-    const viewMode = ref('grid')
+    const isMobile = ref(window.innerWidth < 768)
 
     // Фильтры
     const filterAge = ref('')
@@ -219,9 +200,10 @@ export default {
       currentIndex.value = 0
     })
 
-    // === НОВАЯ ПЛАВНАЯ ЛОГИКА КАРУСЕЛИ ===
+    // === ЛОГИКА КАРУСЕЛИ ===
     let isAnimating = false
     let animationTimer = null
+    let scrollTimeout = null
 
     const scrollToSlide = (index, smooth = true) => {
       if (!carouselRef.value) return
@@ -234,7 +216,6 @@ export default {
       const slideWidth = slide.offsetWidth
       const scrollPosition = slide.offsetLeft - (containerWidth - slideWidth) / 2
 
-      // Отменяем предыдущий таймер
       if (animationTimer) {
         clearTimeout(animationTimer)
         animationTimer = null
@@ -248,7 +229,6 @@ export default {
         behavior: smooth ? 'smooth' : 'auto'
       })
 
-      // Разблокируем после завершения анимации
       animationTimer = setTimeout(() => {
         isAnimating = false
         animationTimer = null
@@ -274,9 +254,7 @@ export default {
       scrollToSlide(index)
     }
 
-    // === ОБНОВЛЕНИЕ ИНДЕКСА — ТОЛЬКО ПОСЛЕ ОСТАНОВКИ СКРОЛЛА ===
-    let scrollTimeout = null
-
+    // Обновление индекса при скролле
     const updateIndex = () => {
       if (isAnimating) return
       if (!carouselRef.value) return
@@ -304,7 +282,6 @@ export default {
       }
     }
 
-    // Обработчик скролла с задержкой (только после остановки)
     const handleScroll = () => {
       if (isAnimating) return
       
@@ -318,18 +295,16 @@ export default {
       }, 100)
     }
 
-    // === ПЛАВНЫЕ TOUCH-СОБЫТИЯ ===
+    // === TOUCH-СОБЫТИЯ ===
     let touchStartX = 0
     let touchCurrentX = 0
     let isSwiping = false
-    let swipeDirection = null
 
     const handleTouchStart = (e) => {
       if (isAnimating) return
       touchStartX = e.touches[0].clientX
       touchCurrentX = touchStartX
       isSwiping = false
-      swipeDirection = null
     }
 
     const handleTouchMove = (e) => {
@@ -339,7 +314,6 @@ export default {
       
       if (Math.abs(diff) > 15) {
         isSwiping = true
-        swipeDirection = diff > 0 ? 'left' : 'right'
       }
     }
 
@@ -354,12 +328,10 @@ export default {
 
       if (Math.abs(diff) > threshold) {
         if (diff > 0) {
-          // Свайп влево
           if (currentIndex.value < paginatedDogs.value.length - 1) {
             scrollToSlide(currentIndex.value + 1)
           }
         } else {
-          // Свайп вправо
           if (currentIndex.value > 0) {
             scrollToSlide(currentIndex.value - 1)
           }
@@ -367,14 +339,18 @@ export default {
       }
 
       isSwiping = false
-      swipeDirection = null
       touchStartX = 0
       touchCurrentX = 0
     }
 
+    // === ОТСЛЕЖИВАНИЕ РАЗМЕРА ЭКРАНА ===
+    const checkMobile = () => {
+      isMobile.value = window.innerWidth < 768
+    }
+
     // Сбрасываем карусель при смене режима
-    watch(viewMode, (newMode) => {
-      if (newMode === 'carousel') {
+    watch(isMobile, (newVal) => {
+      if (newVal) {
         nextTick(() => {
           if (carouselRef.value && paginatedDogs.value.length) {
             scrollToSlide(0, false)
@@ -385,7 +361,7 @@ export default {
 
     // Следим за изменением данных
     watch(() => paginatedDogs.value, () => {
-      if (viewMode.value === 'carousel') {
+      if (isMobile.value) {
         nextTick(() => {
           if (carouselRef.value && paginatedDogs.value.length) {
             scrollToSlide(0, false)
@@ -394,15 +370,12 @@ export default {
       }
     }, { deep: true })
 
-    // Обновляем индекс при ресайзе
-    const handleResize = () => {
-      if (viewMode.value === 'carousel' && !isAnimating) {
-        updateIndex()
-      }
-    }
-
     onMounted(() => {
-      window.addEventListener('resize', handleResize)
+      window.addEventListener('resize', checkMobile)
+    })
+
+    onUnmounted(() => {
+      window.removeEventListener('resize', checkMobile)
     })
 
     return {
@@ -418,14 +391,13 @@ export default {
       loadMore,
       baseUrl,
       isLoading,
-      viewMode,
+      isMobile,
       carouselRef,
       currentIndex,
       scrollToSlide,
       nextSlide,
       prevSlide,
       goToSlide,
-      updateIndex,
       handleScroll,
       handleTouchStart,
       handleTouchMove,
@@ -437,136 +409,25 @@ export default {
 
 <style scoped>
 
-/* ===== ОБЪЕДИНЕННАЯ ПАНЕЛЬ ===== */
-.filters-bar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-  padding: 0.75rem 1rem;
-  background: var(--vp-c-bg-soft);
-  border-radius: 12px;
-  border: 1px solid var(--vp-c-border);
-}
-
-/* ===== ПЕРЕКЛЮЧАТЕЛЬ РЕЖИМОВ ===== */
-.view-toggle {
-  display: flex;
-  gap: 4px;
-  background: var(--vp-c-bg);
-  padding: 3px;
-  border-radius: 8px;
-  border: 1px solid var(--vp-c-border);
-  flex-shrink: 0;
-}
-
-.toggle-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 5px 10px;
-  border: none;
-  background: transparent;
-  border-radius: 6px;
-  cursor: pointer;
-  color: var(--vp-c-text-light);
-  transition: all 0.2s;
-}
-
-.toggle-btn:hover {
-  color: var(--vp-c-text);
-  background: var(--vp-c-bg-soft);
-}
-
-.toggle-btn.active {
-  background: var(--vp-c-brand);
-  color: white;
-}
-
-.toggle-btn svg {
-  flex-shrink: 0;
-}
-
-.dark .view-toggle {
-  background: #1a1a1a;
-  border-color: #3a3530;
-}
-
-.dark .toggle-btn:hover {
-  background: #2a2a2a;
-}
-
-.dark .toggle-btn.active {
-  background: var(--vp-c-brand);
-  color: white;
-}
-
-/* ===== АДАПТИВНОСТЬ ===== */
-@media (max-width: 768px) {
-  .filters-bar {
-    flex-direction: column;
-    gap: 0.75rem;
-    align-items: stretch;
-  }
-
-  .filters {
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .filter-select {
-    flex: 1 1 calc(50% - 0.5rem);
-    min-width: 100px;
-  }
-
-  .view-toggle {
-    align-self: flex-end;
-  }
-}
-
-@media (max-width: 480px) {
-  .filters-bar {
-    padding: 0.5rem;
-  }
-
-  .filter-select {
-    flex: 1 1 100%;
-    font-size: 0.8rem;
-    padding: 0.35rem 0.6rem;
-  }
-  .btn-reset {
-    font-size: 0.75rem;
-    padding: 0.35rem 0.6rem;
-  }
-  .view-toggle {
-    align-self: stretch;
-  }
-  .toggle-btn {
-    flex: 1;
-    padding: 5px 8px;
-  }
-}
-
 /* ===== КАРУСЕЛЬ ===== */
 .carousel-container {
-  width: calc(100% + 48px);
-  margin: 2rem -24px;
+  width: 100%;
+  margin: 2rem 0;
 }
-
 .carousel-wrapper {
   position: relative;
   align-items: center;
   gap: 10px;
+  margin: 0 -24px;
+  padding: 24px 0;
+  width: calc(100% + 48px);
 }
-
 .carousel-track {
   display: flex;
   gap: 14px;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 24px;
+  padding: 10px 0;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
@@ -575,50 +436,112 @@ export default {
 .carousel-track::-webkit-scrollbar {
   display: none;
 }
-
 .carousel-slide {
-  flex: 0 0 calc(100% - 48px);
+  flex: 0 0 85%;
   scroll-snap-align: center;
   transition: all 0.5s ease;
 }
 .carousel-slide.center {
-  transform: scale(1.08);
+  transform: scale(1.05);
   z-index: 2;
 }
 .carousel-slide:not(.center) {
-  opacity: 0.5;
-  transform: scale(0.85);
+  opacity: 0.6;
+  transform: scale(0.9);
 }
 .carousel-slide:first-child {
-  margin-left: 24px
+  margin-left: 7.5%;
 }
 .carousel-slide:last-child {
-  margin-right: 24px
+  margin-right: 7.5%;
 }
 
 /* Кнопки карусели */
 .carousel-btn {
   position: absolute;
   top: 0;
-  width: 40px;
+  width: 48px;
   height: 100%;
   cursor: pointer;
   transition: all 0.2s;
-  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 5;
 }
-.carousel-btn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
 .carousel-btn.prev {
   left: 0;
 }
+
 .carousel-btn.next {
   right: 0;
+}
+
+/* Индикаторы */
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--vp-c-border);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.dot.active {
+  background: var(--vp-c-brand);
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* ===== ТЕГИ ===== */
+.tag {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.age-tag {
+  background: rgba(52, 152, 219, 0.15);
+  color: #2980b9;
+}
+
+.dark .age-tag {
+  background: rgba(52, 152, 219, 0.25);
+  color: #5dade2;
+}
+
+.gender-tag {
+  background: rgba(231, 76, 60, 0.12);
+  color: #e74c3c;
+}
+
+.gender-tag[data-gender="Мальчик"] {
+  background: rgba(52, 73, 94, 0.15);
+  color: #2c3e50;
+}
+
+.dark .gender-tag[data-gender="Мальчик"] {
+  background: rgba(52, 73, 94, 0.25);
+  color: #5d6d7e;
+}
+
+.size-tag {
+  background: rgba(46, 204, 113, 0.15);
+  color: #27ae60;
+}
+
+.dark .size-tag {
+  background: rgba(46, 204, 113, 0.25);
+  color: #58d68d;
 }
 
 /* ===== СОСТОЯНИЯ ===== */
@@ -630,6 +553,7 @@ export default {
   border: 1px solid var(--vp-c-border);
   margin: 2rem 0;
 }
+
 .no-results p {
   font-size: 1.2rem;
   color: var(--vp-c-text-light);
@@ -647,10 +571,12 @@ export default {
   cursor: pointer;
   transition: background 0.2s, transform 0.2s;
 }
+
 .btn-reset-link:hover {
   background: #f0a04b;
   transform: scale(1.02);
 }
+
 .btn-reset-link:active {
   transform: scale(0.98);
 }
@@ -659,6 +585,7 @@ export default {
   text-align: center;
   margin: 2rem 0;
 }
+
 .btn-load {
   padding: 0.8rem 2rem;
   background: transparent;
@@ -670,76 +597,39 @@ export default {
   cursor: pointer;
   transition: background 0.2s, color 0.2s, transform 0.2s;
 }
+
 .btn-load:hover {
   background: #e67e22;
   color: #fff;
   transform: scale(1.02);
 }
+
 .btn-load:active {
   transform: scale(0.98);
 }
 
 /* ===== АДАПТИВНОСТЬ ===== */
 @media (max-width: 768px) {
-  .filters {
-    gap: 0.75rem;
+  .carousel-slide {
+    flex: 0 0 80%;
   }
-  .filter-select {
-    min-width: 120px;
-    flex: 1 1 calc(50% - 0.75rem);
+  .carousel-slide:first-child {
+    margin-left: 10%;
   }
-  .btn-reset {
-    flex: 0 1 auto;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.85rem;
-  }
-}
-
-@media (max-width: 640px) {
-  .filters {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  .filter-select {
-    min-width: 100%;
-    flex: 1 1 100%;
-  }
-  .btn-reset {
-    width: 100%;
-    justify-content: center;
-    padding: 0.6rem;
-  }
-  .grid-cards {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-  .grid-card-body {
-    padding: 1rem;
-  }
-  .grid-card-body h3 {
-    font-size: 1.3rem;
-  }
-  .grid-card::after {
-    top: 8px;
-    right: 12px;
-    font-size: 16px;
-    padding: 2px 6px;
+  .carousel-slide:last-child {
+    margin-right: 10%;
   }
 }
 
 @media (max-width: 480px) {
-  .grid-card-body p {
-    font-size: 0.9rem;
+  .carousel-slide {
+    flex: 0 0 75%;
   }
-  .tag {
-    font-size: 0.75rem;
-    padding: 0.2rem 0.6rem;
+  .carousel-slide:first-child {
+    margin-left: 12.5%;
   }
-  .no-results {
-    padding: 2rem 1rem;
-  }
-  .no-results p {
-    font-size: 1rem;
+  .carousel-slide:last-child {
+    margin-right: 12.5%;
   }
 }
 </style>
