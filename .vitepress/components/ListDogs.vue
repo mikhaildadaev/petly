@@ -76,7 +76,14 @@
     <div v-else class="carousel-container">
       <div class="carousel-wrapper">
         <button class="carousel-btn prev" @click="prevSlide" :disabled="currentIndex === 0"></button>
-        <div class="carousel-track" ref="carouselRef">
+        <div 
+          class="carousel-track" 
+          ref="carouselRef"
+          @scroll="updateIndex"
+          @touchstart="handleTouchStart"
+          @touchmove="handleTouchMove"
+          @touchend="handleTouchEnd"
+        >
           <div v-for="(dog, index) in paginatedDogs" :key="dog.slug" class="carousel-slide" :class="{ center: index === currentIndex }">
             <a :href="`${baseUrl}ru/dogs/${dog.slug}`" target="_blank" rel="noopener noreferrer" class="grid-card" >
               <div class="grid-meta">
@@ -248,6 +255,7 @@ export default {
       scrollToSlide(index)
     }
 
+    // === ОБНОВЛЕНИЕ ИНДЕКСА ПРИ СКРОЛЛЕ ===
     const updateIndex = () => {
       if (!carouselRef.value) return
       const container = carouselRef.value
@@ -273,6 +281,29 @@ export default {
       }
     }
 
+    // === TOUCH-СОБЫТИЯ ДЛЯ МОБИЛЬНЫХ ===
+    let touchStartX = 0
+    let isDragging = false
+
+    const handleTouchStart = (e) => {
+      touchStartX = e.touches[0].clientX
+      isDragging = false
+    }
+
+    const handleTouchMove = (e) => {
+      const diff = touchStartX - e.touches[0].clientX
+      if (Math.abs(diff) > 10) {
+        isDragging = true
+      }
+    }
+
+    const handleTouchEnd = () => {
+      if (isDragging) {
+        setTimeout(updateIndex, 100)
+      }
+      isDragging = false
+    }
+
     // Сбрасываем карусель при смене режима
     watch(viewMode, (newMode) => {
       if (newMode === 'carousel') {
@@ -282,6 +313,26 @@ export default {
           }
         })
       }
+    })
+
+    // Следим за изменением данных
+    watch(() => paginatedDogs.value, () => {
+      if (viewMode.value === 'carousel') {
+        nextTick(() => {
+          if (carouselRef.value && paginatedDogs.value.length) {
+            scrollToSlide(0)
+          }
+        })
+      }
+    }, { deep: true })
+
+    // Обновляем индекс при ресайзе
+    onMounted(() => {
+      window.addEventListener('resize', () => {
+        if (viewMode.value === 'carousel') {
+          updateIndex()
+        }
+      })
     })
 
     return {
@@ -305,6 +356,9 @@ export default {
       prevSlide,
       goToSlide,
       updateIndex,
+      handleTouchStart,
+      handleTouchMove,
+      handleTouchEnd,
     }
   }
 }
@@ -615,9 +669,6 @@ export default {
   }
   .no-results p {
     font-size: 1rem;
-  }
-  .carousel-card img {
-    height: 150px;
   }
 }
 </style>
