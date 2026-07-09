@@ -75,25 +75,24 @@
     <!-- Режим: Карусель -->
     <div v-else class="carousel-container">
       <div class="carousel-wrapper">
-        <button class="carousel-btn prev" @click="prevSlide" :disabled="currentIndex === 0">‹</button>
+        <button class="carousel-btn prev" @click="prevSlide" :disabled="currentIndex === 0"></button>
         <div class="carousel-track" ref="carouselRef">
           <div v-for="(dog, index) in paginatedDogs" :key="dog.slug" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="`${baseUrl}ru/dogs/${dog.slug}`" target="_blank" rel="noopener noreferrer" class="carousel-card" >
-              <div class="carousel-meta">
+            <a :href="`${baseUrl}ru/dogs/${dog.slug}`" target="_blank" rel="noopener noreferrer" class="grid-card" >
+              <div class="grid-meta">
                 <span v-if="dog.gender" class="tag gender-tag" :data-gender="dog.gender">{{ dog.gender }}</span>
                 <span v-if="dog.age" class="tag age-tag">{{ dog.age }}</span>
                 <span v-if="dog.size" class="tag size-tag">{{ dog.size }}</span>
               </div>
               <img :src="dog.image" :alt="dog.name" loading="lazy" />
-              <div class="carousel-card-body">
+              <div class="grid-card-body">
                 <h3>{{ dog.name }}</h3>
                 <p>{{ dog.description }}</p>
               </div>
             </a>
           </div>
         </div>
-
-        <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= paginatedDogs.length - 1" >›</button>
+        <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= paginatedDogs.length - 1" ></button>
       </div>
     </div>
 
@@ -442,7 +441,7 @@ export default {
   gap: 14px;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 10px 0;
+  padding: 24px;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
@@ -453,7 +452,7 @@ export default {
 }
 
 .carousel-slide {
-  flex: 0 0 calc(100% - 96px);
+  flex: 0 0 calc(100% - 48px);
   scroll-snap-align: center;
   transition: all 0.5s ease;
 }
@@ -466,57 +465,16 @@ export default {
   transform: scale(0.85);
 }
 .carousel-slide:first-child {
-  margin-left: 48px
+  margin-left: 24px
 }
 .carousel-slide:last-child {
-  margin-right: 48px
-}
-
-.carousel-card {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  background: var(--vp-c-bg-soft);
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid var(--vp-c-border);
-  transition: all 0.3s;
-}
-.dark .carousel-card {
-  background: #252525;
-  border-color: #3a3530;
-}
-.carousel-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-}
-.carousel-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-  padding: 0.5rem 1rem 0;
-}
-.carousel-card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-.carousel-card-body {
-  padding: 1rem;
-}
-.carousel-card-body h3 {
-  margin: 0 0 0.5rem;
-  font-size: 1.2rem;
-}
-.carousel-card-body p {
-  font-size: 0.9rem;
-  color: var(--vp-c-text-light);
-  margin: 0;
+  margin-right: 24px
 }
 
 /* Кнопки карусели */
 .carousel-btn {
   position: absolute;
+  top: 0;
   width: 40px;
   height: 100%;
   cursor: pointer;
@@ -610,11 +568,6 @@ export default {
     padding: 0.5rem 0.75rem;
     font-size: 0.85rem;
   }
-  .carousel-btn {
-    width: 32px;
-    height: 32px;
-    font-size: 18px;
-  }
 }
 
 @media (max-width: 640px) {
@@ -665,11 +618,6 @@ export default {
   }
   .carousel-card img {
     height: 150px;
-  }
-  .carousel-btn {
-    width: 28px;
-    height: 28px;
-    font-size: 16px;
   }
 }
 </style>
