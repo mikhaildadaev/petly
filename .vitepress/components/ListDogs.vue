@@ -109,7 +109,10 @@ export default {
     const allDogs = ref([])
     const visibleCount = ref(perPage)
     const isLoading = ref(true)
-    const isMobile = ref(window.innerWidth < 768)
+    const isMobile = ref(false)
+    if (typeof window !== 'undefined') {
+      isMobile.value = window.innerWidth < 768
+    }
 
     // Фильтры
     const filterAge = ref('')
@@ -345,7 +348,9 @@ export default {
 
     // === ОТСЛЕЖИВАНИЕ РАЗМЕРА ЭКРАНА ===
     const checkMobile = () => {
-      isMobile.value = window.innerWidth < 768
+      if (typeof window !== 'undefined') {
+        isMobile.value = window.innerWidth < 768
+      }
     }
 
     // Сбрасываем карусель при смене режима
@@ -371,11 +376,15 @@ export default {
     }, { deep: true })
 
     onMounted(() => {
-      window.addEventListener('resize', checkMobile)
+      if (typeof window !== 'undefined') {
+        window.addEventListener('resize', checkMobile)
+      }
     })
 
     onUnmounted(() => {
-      window.removeEventListener('resize', checkMobile)
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', checkMobile)
+      }
     })
 
     return {
