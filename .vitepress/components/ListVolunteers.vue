@@ -39,15 +39,14 @@
     <!-- Сетка -->
     <div class="grid-cards">
       <a v-for="volunteer in paginatedVolunteers" :key="volunteer.slug" :href="`${baseUrl}ru/volunteers/${volunteer.slug}`" target="_blank" rel="noopener noreferrer" class="grid-card">
+        <div class="grid-meta">
+          <span v-if="volunteer.experience" class="tag experience-tag">{{ volunteer.experience }}</span>
+          <span v-if="volunteer.experienceYears" class="tag extra-tag">{{ volunteer.experienceYears }}</span>
+          <span v-if="volunteer.direction" class="tag direction-tag">{{ volunteer.direction }}</span>
+        </div>
         <img :src="volunteer.image" :alt="volunteer.name" loading="lazy" />
         <div class="grid-card-body">
           <h3>{{ volunteer.name }}</h3>
-          <div class="grid-meta">
-            <span v-if="volunteer.experience" class="tag experience-tag">{{ volunteer.experience }}</span>
-            <span v-if="volunteer.experienceYears" class="tag extra-tag">{{ volunteer.experienceYears }}</span>
-            <span v-if="volunteer.direction" class="tag direction-tag">{{ volunteer.direction }}</span>
-            <span v-for="tag in volunteer.tags" :key="tag" class="tag">{{ tag }}</span>
-          </div>
           <p>{{ volunteer.description }}</p>
         </div>
       </a>

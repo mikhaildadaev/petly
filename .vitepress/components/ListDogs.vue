@@ -36,15 +36,14 @@
     <!-- Сетка -->
     <div class="grid-cards">
       <a v-for="dog in paginatedDogs" :key="dog.slug" :href="`${baseUrl}ru/dogs/${dog.slug}`" target="_blank" rel="noopener noreferrer" class="grid-card">
+        <div class="grid-meta">
+          <span v-if="dog.gender" class="tag gender-tag" :data-gender="dog.gender">{{ dog.gender }}</span>
+          <span v-if="dog.age" class="tag age-tag">{{ dog.age }}</span>
+          <span v-if="dog.size" class="tag size-tag">{{ dog.size }}</span>
+        </div>
         <img :src="dog.image" :alt="dog.name" loading="lazy" />
         <div class="grid-card-body">
           <h3>{{ dog.name }}</h3>
-          <div class="grid-meta">
-            <span v-if="dog.age" class="tag age-tag">{{ dog.age }}</span>
-            <span v-if="dog.gender" class="tag gender-tag">{{ dog.gender }}</span>
-            <span v-if="dog.size" class="tag size-tag">{{ dog.size }}</span>
-            <span v-for="tag in dog.tags" :key="tag" class="tag extra-tag">{{ tag }}</span>
-          </div>
           <p>{{ dog.description }}</p>
         </div>
       </a>
