@@ -73,7 +73,7 @@
             <path d="M15 18l-6-6 6-6" />
           </svg>
         </button>      
-        <div class="carousel-track" ref="carouselRef">
+        <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(dog, index) in paginatedDogs" :key="dog.slug" class="carousel-slide" :class="{ center: index === currentIndex }" >
             <a :href="`${baseUrl}ru/dogs/${dog.slug}`" target="_blank" rel="noopener noreferrer" class="grid-card">
               <div class="grid-meta">
@@ -132,6 +132,9 @@ const MOBILE_BREAKPOINT = 768
 
 export default {
   setup() {
+    const touchStartX = ref(0);
+    const touchEndX = ref(0);
+    const isSwiping = ref(false);
     const allDogs = ref([])
     const visibleCount = ref(perPage)
     const isLoading = ref(true)
@@ -360,6 +363,47 @@ export default {
       scrollToSlide(index)
     }
 
+    // === ОБРАБОТЧИКИ СОБЫТИЙ СВАЙПА ===
+
+    // Начало касания
+    const handleTouchStart = (e) => {
+      touchStartX.value = e.touches[0].clientX;
+      isSwiping.value = true;
+    };
+
+    // Движение пальцем
+    const handleTouchMove = (e) => {
+      if (!isSwiping.value) return;
+      // Предотвращаем прокрутку страницы во время свайпа по карусели
+      e.preventDefault();
+    };
+
+    // Конец касания
+    const handleTouchEnd = (e) => {
+      if (!isSwiping.value) return;
+      isSwiping.value = false;
+
+      // Получаем позицию конца касания
+      touchEndX.value = e.changedTouches[0].clientX;
+      const diffX = touchStartX.value - touchEndX.value;
+
+      // Минимальное расстояние для регистрации свайпа (в пикселях)
+      const minSwipeDistance = 50;
+
+      // Если свайп влево (diffX > 0) и достаточно длинный
+      if (diffX > minSwipeDistance) {
+        nextSlide(); // Переключаем на следующий слайд
+      }
+      // Если свайп вправо (diffX < 0) и достаточно длинный
+      else if (diffX < -minSwipeDistance) {
+        prevSlide(); // Переключаем на предыдущий слайд
+      }
+
+      // Сбрасываем значения
+      touchStartX.value = 0;
+      touchEndX.value = 0;
+    };
+
     // === ОТСЛЕЖИВАНИЕ ИЗМЕНЕНИЙ РАЗМЕРА ===
     let resizeTimeout = null
     
@@ -430,6 +474,9 @@ export default {
       prevSlide,
       goToSlide,
       resetToFirstSlide,
+      handleTouchStart,
+      handleTouchMove,
+      handleTouchEnd,
     }
   }
 }
