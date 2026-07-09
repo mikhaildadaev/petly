@@ -73,17 +73,20 @@ a {
 .experience-tag {
   background: #9422e6;
   color: var(--vp-c-bg);
+  font-weight: 700;
 }
 /* Возраст / оранжевый */
 .age-tag {
   background: #e67e22;
   color: var(--vp-c-bg);
+  font-weight: 700;
 }
 
 /* Пол — розовый/синий */
 .gender-tag {
   background: #e74c3c;
   color: var(--vp-c-bg);
+  font-weight: 700;
 }
 .gender-tag[data-gender="Мальчик"] {
   background: #2980b9;
@@ -94,11 +97,13 @@ a {
 .direction-tag {
   background: #27ae60;
   color: var(--vp-c-bg);
+  font-weight: 700;
 }
 
 .extra-tag {
   background: #e67e22;
   color: var(--vp-c-bg);
+  font-weight: 700;
 }
 
 /* ============================================
