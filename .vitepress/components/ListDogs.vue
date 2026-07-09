@@ -10,15 +10,15 @@
         </select>
         <select v-model="filterAge" class="filter-select">
           <option value="">Все возрасты</option>
-          <option value="щенок">Щенки (до 1 года)</option>
-          <option value="молодая">Молодые (1–3 года)</option>
-          <option value="взрослая">Взрослые (3+ лет)</option>
+          <option value="Щенок">Щенки (до 1 года)</option>
+          <option value="Молодая">Молодые (1–3 года)</option>
+          <option value="Взрослая">Взрослые (от 3 лет)</option>
         </select>
         <select v-model="filterSize" class="filter-select">
           <option value="">Все размеры</option>
-          <option value="Маленькая">Маленькие</option>
-          <option value="Средняя">Средние</option>
-          <option value="Крупная">Крупные</option>
+          <option value="Маленькая">Маленькие (до 10 кг)</option>
+          <option value="Средняя">Средние (10–25 кг)</option>
+          <option value="Крупная">Крупные (от 25 кг)</option>
         </select>
         <button v-if="isFilterActive" @click="resetFilters" class="btn-reset" title="Сбросить все фильтры">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -116,8 +116,7 @@
     </div>
     <!-- Результаты фильтрации -->
     <div v-if="filteredDogs.length === 0 && !isLoading" class="no-results">
-      <p>😕 По вашему запросу ничего не найдено</p>
-      <button @click="resetFilters" class="btn-reset-link">Показать всех собак</button>
+      <p>По выбранным фильтрам ничего не найдено</p>
     </div>
   </div>
 </template>
@@ -214,9 +213,9 @@ export default {
       const match = ageStr.match(/(\d+)/)
       if (!match) return ''
       const num = parseInt(match[1])
-      if (ageStr.includes('месяц') || num < 1) return 'щенок'
-      if (num <= 3) return 'молодая'
-      return 'взрослая'
+      if (ageStr.includes('месяц') || num < 1) return 'Щенок'
+      if (num <= 3) return 'Молодая'
+      return 'Взрослая'
     }
 
     const filteredDogs = computed(() => {
