@@ -451,7 +451,6 @@ export default {
   transition: all 0.5s ease;
 }
 .carousel-slide.center {
-  transform: scale(1.05);
   z-index: 2;
 }
 .carousel-slide:not(.center) {
@@ -484,73 +483,6 @@ export default {
 
 .carousel-btn.next {
   right: 0;
-}
-
-/* Индикаторы */
-.carousel-indicators {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-top: 1rem;
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--vp-c-border);
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.dot.active {
-  background: var(--vp-c-brand);
-  width: 24px;
-  border-radius: 4px;
-}
-
-/* ===== ТЕГИ ===== */
-.tag {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-.age-tag {
-  background: rgba(52, 152, 219, 0.15);
-  color: #2980b9;
-}
-
-.dark .age-tag {
-  background: rgba(52, 152, 219, 0.25);
-  color: #5dade2;
-}
-
-.gender-tag {
-  background: rgba(231, 76, 60, 0.12);
-  color: #e74c3c;
-}
-
-.gender-tag[data-gender="Мальчик"] {
-  background: rgba(52, 73, 94, 0.15);
-  color: #2c3e50;
-}
-
-.dark .gender-tag[data-gender="Мальчик"] {
-  background: rgba(52, 73, 94, 0.25);
-  color: #5d6d7e;
-}
-
-.size-tag {
-  background: rgba(46, 204, 113, 0.15);
-  color: #27ae60;
-}
-
-.dark .size-tag {
-  background: rgba(46, 204, 113, 0.25);
-  color: #58d68d;
 }
 
 /* ===== СОСТОЯНИЯ ===== */
