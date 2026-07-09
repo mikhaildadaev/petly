@@ -285,7 +285,7 @@ a {
   background: var(--vp-c-bg-soft);
   border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
   position: relative;
   min-height: 400px;
   height: 100%;
@@ -293,15 +293,13 @@ a {
 }
 .dark .grid-card {
   background: #252525;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 .grid-card:hover {
   transform: scale(1.05);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
 }
 .dark .grid-card:hover {
   transform: scale(1.05);
-  box-shadow: 0 16px 40px rgba(230, 126, 34, 0.15);
   border-color: #e67e22;
 }
 .grid-card::after {
