@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- Фильтры -->
     <div class="filters-bar">
       <div class="filters">
         <select v-model="filterGender" class="filter-select">
@@ -32,8 +31,6 @@
         </button>
       </div>
     </div>
-
-    <!-- Сетка - карточки -->
     <div v-if="!isMobile" class="grid-cards">
       <a v-for="dog in paginatedDogs" :key="dog.slug" :href="`${baseUrl}ru/dogs/${dog.slug}`" target="_blank" rel="noopener noreferrer" class="grid-card">
         <div class="grid-meta">
@@ -47,7 +44,6 @@
           <p>{{ dog.description }}</p>
         </div>
       </a>
-      <!-- Сетка - элемент дозагрузки -->
       <div v-if="hasMoreItems" class="load-more-card" @click="loadMore">
         <div class="load-more-content">
           <div class="load-more-icon">
@@ -64,8 +60,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Карусель - карточки -->
     <div v-else class="carousel-container">
       <div class="carousel-wrapper">
         <button class="carousel-btn prev" @click="prevSlide" :disabled="currentIndex === 0">
@@ -88,7 +82,6 @@
               </div>
             </a>
           </div>
-          <!-- Карусель - элемент дозагрузки -->
           <div v-if="hasMoreItems" class="carousel-slide load-more-slide" :class="{ center: currentIndex === paginatedDogs.length }">
             <div class="load-more-card" @click="loadMore">
               <div class="load-more-content">
@@ -114,7 +107,6 @@
         </button>
       </div>
     </div>
-    <!-- Результаты фильтрации -->
     <div v-if="filteredDogs.length === 0 && !isLoading" class="no-results">
       <p>По выбранным фильтрам ничего не найдено</p>
     </div>
