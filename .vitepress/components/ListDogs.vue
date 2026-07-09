@@ -4,18 +4,18 @@
     <div class="filters-bar">
       <div class="filters">
         <select v-model="filterGender" class="filter-select">
-          <option value="">Гендер</option>
+          <option value="">Все гендеры</option>
           <option value="Девочка">Девочки</option>
           <option value="Мальчик">Мальчики</option>
         </select>
         <select v-model="filterAge" class="filter-select">
-          <option value="">Возраст</option>
+          <option value="">Все возрасты</option>
           <option value="щенок">Щенки (до 1 года)</option>
           <option value="молодая">Молодые (1–3 года)</option>
           <option value="взрослая">Взрослые (3+ лет)</option>
         </select>
         <select v-model="filterSize" class="filter-select">
-          <option value="">Размер</option>
+          <option value="">Все размеры</option>
           <option value="Маленькая">Маленькие</option>
           <option value="Средняя">Средние</option>
           <option value="Крупная">Крупные</option>
@@ -325,89 +325,6 @@ export default {
   background: var(--vp-c-bg-soft);
   border-radius: 12px;
   border: 1px solid var(--vp-c-border);
-}
-
-.filters {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  align-items: center;
-  flex: 1;
-}
-
-.filter-select {
-  padding: 0.4rem 0.8rem;
-  border-radius: 8px;
-  border: 1px solid var(--vp-c-border);
-  background: var(--vp-c-bg);
-  color: var(--vp-c-text);
-  font-family: inherit;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  min-width: 120px;
-}
-
-.filter-select:hover {
-  border-color: #e67e22;
-}
-
-.filter-select:focus {
-  outline: none;
-  border-color: #e67e22;
-  box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.2);
-}
-
-.dark .filter-select {
-  background: #252525;
-  border-color: #3a3530;
-}
-
-/* Кнопка сброса */
-.btn-reset {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 0.4rem 0.8rem;
-  border-radius: 8px;
-  border: 1px solid #e67e22;
-  background: transparent;
-  color: #e67e22;
-  font-family: inherit;
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.btn-reset:hover {
-  background: #e67e22;
-  color: white;
-  transform: scale(1.02);
-}
-
-.btn-reset:active {
-  transform: scale(0.95);
-}
-
-.btn-reset svg {
-  flex-shrink: 0;
-  transition: transform 0.3s ease;
-}
-
-.btn-reset:hover svg {
-  transform: rotate(30deg);
-}
-
-.dark .btn-reset {
-  border-color: #e67e22;
-  color: #e67e22;
-}
-
-.dark .btn-reset:hover {
-  background: #e67e22;
-  color: #fff;
 }
 
 /* ===== ПЕРЕКЛЮЧАТЕЛЬ РЕЖИМОВ ===== */
