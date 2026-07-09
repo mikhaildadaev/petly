@@ -67,7 +67,11 @@
     <!-- Режим: Карусель (мобильные) -->
     <div v-else class="carousel-container">
       <div class="carousel-wrapper">
-        <button class="carousel-btn prev" @click="prevSlide" :disabled="currentIndex === 0"></button>
+        <button class="carousel-btn prev" @click="prevSlide" :disabled="currentIndex === 0">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
         
         <div class="carousel-track" ref="carouselRef">
           <!-- Карточки собак -->
@@ -115,7 +119,11 @@
           </div>
         </div>
         
-        <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1"></button>
+        <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+        </button>
       </div>
       
       <!-- Индикаторы -->
@@ -151,13 +159,16 @@ export default {
     const allDogs = ref([])
     const visibleCount = ref(perPage)
     const isLoading = ref(true)
+    // Инициализируем isMobile как false (как на сервере)
     const isMobile = ref(false)
     const isLoadingMore = ref(false)
+    // Флаг, что компонент уже смонтирован на клиенте
+    const isClient = ref(false)
     
     // Сохраняем индекс, который был до загрузки
     const savedIndex = ref(0)
     
-    // Определяем размер экрана
+    // Определяем размер экрана только на клиенте
     const checkMobile = () => {
       if (typeof window !== 'undefined') {
         const newIsMobile = window.innerWidth < MOBILE_BREAKPOINT
@@ -165,10 +176,6 @@ export default {
           isMobile.value = newIsMobile
         }
       }
-    }
-
-    if (typeof window !== 'undefined') {
-      isMobile.value = window.innerWidth < MOBILE_BREAKPOINT
     }
 
     // Фильтры
@@ -192,6 +199,12 @@ export default {
 
     // Загрузка данных
     onMounted(async () => {
+      // Помечаем, что мы на клиенте
+      isClient.value = true
+      
+      // Определяем размер экрана
+      checkMobile()
+      
       try {
         const loaded = await Promise.all(
           Object.entries(modules)
@@ -217,6 +230,11 @@ export default {
         console.error('Ошибка загрузки данных:', error)
       } finally {
         isLoading.value = false
+      }
+      
+      // Добавляем слушатель resize
+      if (typeof window !== 'undefined') {
+        window.addEventListener('resize', handleResize)
       }
     })
 
@@ -279,8 +297,6 @@ export default {
             // Проверяем, не вышел ли индекс за пределы
             const maxIndex = carouselTotalSlides.value - 1
             
-            // Если индекс был на карточке загрузки (последний слайд)
-            // или стал больше максимального, показываем последнюю карточку
             if (targetIndex > maxIndex) {
               targetIndex = maxIndex
             }
@@ -289,10 +305,7 @@ export default {
               targetIndex = 0
             }
             
-            // Плавно переходим к нужной карточке
             scrollToSlide(targetIndex)
-            
-            // Очищаем сохраненный индекс
             savedIndex.value = 0
           }
         })
@@ -356,7 +369,8 @@ export default {
     }
 
     watch(isMobile, (newVal, oldVal) => {
-      if (newVal && paginatedDogs.value.length) {
+      // Только если мы уже на клиенте
+      if (isClient.value && newVal && paginatedDogs.value.length) {
         nextTick(() => {
           if (carouselRef.value) {
             currentIndex.value = 0
@@ -367,7 +381,8 @@ export default {
     })
 
     watch(() => paginatedDogs.value, (newVal, oldVal) => {
-      if (isMobile.value && newVal.length) {
+      // Только если мы уже на клиенте и в мобильном режиме
+      if (isClient.value && isMobile.value && newVal.length) {
         nextTick(() => {
           if (carouselRef.value) {
             const maxIndex = carouselTotalSlides.value - 1
@@ -379,21 +394,6 @@ export default {
         })
       }
     }, { deep: true })
-
-    onMounted(() => {
-      if (typeof window !== 'undefined') {
-        checkMobile()
-        window.addEventListener('resize', handleResize)
-        
-        if (isMobile.value && paginatedDogs.value.length) {
-          nextTick(() => {
-            if (carouselRef.value) {
-              scrollToSlide(0)
-            }
-          })
-        }
-      }
-    })
 
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
