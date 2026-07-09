@@ -20,7 +20,6 @@
           <option value="Средняя">Средние</option>
           <option value="Крупная">Крупные</option>
         </select>
-
         <button v-if="isFilterActive" @click="resetFilters" class="btn-reset" title="Сбросить все фильтры">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 6h18" />
@@ -34,7 +33,7 @@
       </div>
     </div>
 
-    <!-- Режим: Сетка (десктоп) -->
+    <!-- Сетка - карточки -->
     <div v-if="!isMobile" class="grid-cards">
       <a v-for="dog in paginatedDogs" :key="dog.slug" :href="`${baseUrl}ru/dogs/${dog.slug}`" target="_blank" rel="noopener noreferrer" class="grid-card">
         <div class="grid-meta">
@@ -48,8 +47,7 @@
           <p>{{ dog.description }}</p>
         </div>
       </a>
-      
-      <!-- Кнопка загрузки для сетки -->
+      <!-- Сетка - элемент дозагрузки -->
       <div v-if="hasMoreItems" class="load-more-card" @click="loadMore">
         <div class="load-more-content">
           <div class="load-more-icon">
@@ -60,27 +58,23 @@
           </div>
           <span class="load-more-text">Загрузить ещё</span>
           <span class="load-more-count">{{ remaining }} осталось</span>
+          <div class="load-more-progress">
+            <div class="progress-bar" :style="{ width: `${(visibleCount / filteredDogs.length) * 100}%` }"></div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Режим: Карусель (мобильные) -->
+    <!-- Карусель - карточки -->
     <div v-else class="carousel-container">
       <div class="carousel-wrapper">
         <button class="carousel-btn prev" @click="prevSlide" :disabled="currentIndex === 0">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
             <path d="M15 18l-6-6 6-6" />
           </svg>
-        </button>
-        
+        </button>      
         <div class="carousel-track" ref="carouselRef">
-          <!-- Карточки собак -->
-          <div 
-            v-for="(dog, index) in paginatedDogs" 
-            :key="dog.slug" 
-            class="carousel-slide" 
-            :class="{ center: index === currentIndex }"
-          >
+          <div v-for="(dog, index) in paginatedDogs" :key="dog.slug" class="carousel-slide" :class="{ center: index === currentIndex }" >
             <a :href="`${baseUrl}ru/dogs/${dog.slug}`" target="_blank" rel="noopener noreferrer" class="grid-card">
               <div class="grid-meta">
                 <span v-if="dog.gender" class="tag gender-tag" :data-gender="dog.gender">{{ dog.gender }}</span>
@@ -94,13 +88,8 @@
               </div>
             </a>
           </div>
-
-          <!-- Карточка "Загрузить ещё" для карусели -->
-          <div 
-            v-if="hasMoreItems" 
-            class="carousel-slide load-more-slide"
-            :class="{ center: currentIndex === paginatedDogs.length }"
-          >
+          <!-- Карусель - элемент дозагрузки -->
+          <div v-if="hasMoreItems" class="carousel-slide load-more-slide" :class="{ center: currentIndex === paginatedDogs.length }">
             <div class="load-more-card" @click="loadMore">
               <div class="load-more-content">
                 <div class="load-more-icon">
@@ -117,27 +106,14 @@
               </div>
             </div>
           </div>
-        </div>
-        
+        </div> 
         <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
             <path d="M9 18l6-6-6-6" />
           </svg>
         </button>
       </div>
-      
-      <!-- Индикаторы -->
-      <div class="carousel-indicators">
-        <span 
-          v-for="(_, index) in carouselTotalSlides" 
-          :key="index"
-          class="dot"
-          :class="{ active: index === currentIndex }"
-          @click="goToSlide(index)"
-        />
-      </div>
     </div>
-
     <!-- Результаты фильтрации -->
     <div v-if="filteredDogs.length === 0 && !isLoading" class="no-results">
       <p>😕 По вашему запросу ничего не найдено</p>
@@ -458,183 +434,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-/* ===== КАРТОЧКА ЗАГРУЗКИ ===== */
-.load-more-card {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f8f9fa;
-  border: 2px dashed #dee2e6;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  height: 100%;
-  padding: 40px 20px;
-}
-.load-more-card:hover {
-  background: #f1f3f5;
-  border-color: #adb5bd;
-  transform: scale(1.02);
-}
-.load-more-card:active {
-  transform: scale(0.98);
-}
-.load-more-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  text-align: center;
-}
-.load-more-icon {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: #e9ecef;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-.load-more-card:hover .load-more-icon {
-  background: #dee2e6;
-  transform: rotate(90deg);
-}
-.load-more-icon svg {
-  color: #495057;
-}
-.load-more-text {
-  font-size: 18px;
-  font-weight: 600;
-  color: #333;
-}
-.load-more-count {
-  font-size: 14px;
-  color: #868e96;
-}
-.load-more-progress {
-  width: 100%;
-  max-width: 200px;
-  height: 4px;
-  background: #e9ecef;
-  border-radius: 2px;
-  overflow: hidden;
-}
-.progress-bar {
-  height: 100%;
-  background: linear-gradient(90deg, #4a90d9, #357abd);
-  transition: width 0.3s ease;
-  border-radius: 2px;
-}
-
-/* ===== КАРУСЕЛЬ ===== */
-.carousel-container {
-  width: 100%;
-  margin: 2rem 0;
-}
-.carousel-wrapper {
-  margin: 0 -24px;
-  width: calc(100% + 48px);
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-.carousel-track {
-  display: flex;
-  gap: 14px;
-  overflow: hidden;
-  padding: 24px 0;
-  scrollbar-width: none;
-  flex: 1;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-}
-.carousel-track::-webkit-scrollbar {
-  display: none;
-}
-.carousel-slide {
-  flex: 0 0 85%;
-  scroll-snap-align: center;
-  transition: all 0.5s ease;
-  min-height: 280px;
-}
-.carousel-slide.center {
-  z-index: 2;
-}
-.carousel-slide:not(.center) {
-  opacity: 0.6;
-  transform: scale(0.9);
-}
-.carousel-slide:first-child {
-  margin-left: 7.5%;
-}
-.carousel-slide:last-child {
-  margin-right: 7.5%;
-}
-
-/* Кнопки карусели */
-.carousel-btn {
-  position: absolute;
-  top: 0;
-  width: 40px;
-  height: 100%;
-  cursor: pointer;
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-.carousel-btn.prev {
-  left: 0;
-}
-.carousel-btn.next {
-  right: 0;
-}
-
-/* ===== АДАПТИВНОСТЬ ===== */
-@media (max-width: 768px) {
-  .carousel-slide {
-    flex: 0 0 80%;
-  }
-  .carousel-slide:first-child {
-    margin-left: 10%;
-  }  
-  .carousel-slide:last-child {
-    margin-right: 10%;
-  }
-  .load-more-card {
-    min-height: 300px;
-  }
-}
-
-@media (max-width: 480px) {
-  .carousel-slide {
-    flex: 0 0 75%;
-  }
-  .carousel-slide:first-child {
-    margin-left: 12.5%;
-  }  
-  .carousel-slide:last-child {
-    margin-right: 12.5%;
-  }
-  .load-more-card {
-    min-height: 260px;
-    padding: 30px 16px;
-  }
-  .load-more-icon {
-    width: 48px;
-    height: 48px;
-  }
-  .load-more-icon svg {
-    width: 36px;
-    height: 36px;
-  }
-  .load-more-text {
-    font-size: 16px;
-  }
-}
-</style>
