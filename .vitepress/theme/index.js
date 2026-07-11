@@ -1,4 +1,5 @@
 import DefaultTheme from 'vitepress/theme'
+import CardDogs from '../components/CardDogs.vue'
 import GalleryPhoto from '../components/GalleryPhoto.vue'
 import ListDogs from '../components/ListDogs.vue'
 import ListGuardians from '../components/ListGuardians.vue'
@@ -7,6 +8,7 @@ import ListVolunteers from '../components/ListVolunteers.vue'
 export default {
   extends: DefaultTheme,
   enhanceApp({ app }) {
+    app.component('CardDogs', CardDogs)
     app.component('GalleryPhoto', GalleryPhoto)
     app.component('ListDogs', ListDogs)
     app.component('ListGuardians', ListGuardians)
