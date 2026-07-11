@@ -1,7 +1,7 @@
 <template>
   <div v-if="guardians && guardians.length > 0" class="grid-list">
     <div v-if="!isMobile" class="grid-cards">
-      <a v-for="guardian in guardians" :key="guardian.uuid" :href="`${baseUrl}ru/volunteers/${guardian.slug}`" class="aspect-list grid-card">
+      <a v-for="guardian in guardians" :key="guardian.uuid" :href="`${baseUrl}ru/${humanType}/${guardian.slug}`" class="aspect-list grid-card">
         <div class="grid-meta">
           <span v-if="guardian.direction" class="tag direction-tag">{{ guardian.direction }}</span>
           <span v-if="guardian.experience" class="tag experience-tag">{{ guardian.experience }}</span>
@@ -22,7 +22,7 @@
         </button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(guardian, index) in guardians" :key="guardian.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="`${baseUrl}ru/volunteers/${guardian.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+            <a :href="`${baseUrl}ru/${humanType}/${guardian.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
               <div class="grid-meta">
                 <span v-if="guardian.direction" class="tag direction-tag">{{ guardian.direction }}</span>
                 <span v-if="guardian.experience" class="tag experience-tag">{{ guardian.experience }}</span>
@@ -63,11 +63,16 @@ export default {
     guardianUuids: {
       type: Array,
       default: () => []
+    },
+    humanType: {
+      type: String,
+      required: true,
+      default: 'volunteers'
     }
   },
   setup(props) {
     // Все переменные ОБЪЯВЛЯЕМ ВНУТРИ setup()
-    const allVolunteers = ref([])
+    const allHumans = ref([])
     const isLoading = ref(true)
     const isMobile = ref(false)
 
@@ -106,10 +111,10 @@ export default {
     // === ФИЛЬТРАЦИЯ ===
     const guardians = computed(() => {
       if (isLoading.value) return []
-      if (!allVolunteers.value || allVolunteers.value.length === 0) return []
+      if (!allHumans.value || allHumans.value.length === 0) return []
       if (!props.guardianUuids || props.guardianUuids.length === 0) return []
       
-      return allVolunteers.value.filter(v => 
+      return allHumans.value.filter(v => 
         v.uuid && props.guardianUuids.includes(v.uuid)
       )
     })
@@ -123,30 +128,33 @@ export default {
       }
       
       try {
-        const modules = import.meta.glob('/ru/volunteers/*.md')
+        const modules = import.meta.glob('/ru/*/*.md')
+        
+        // Фильтруем по humanType
+        const filteredModules = Object.entries(modules).filter(([path]) => {
+          return path.includes(`/ru/${props.humanType}/`) && !path.endsWith(`${props.humanType}_index.md`)
+        })
         
         const loaded = await Promise.all(
-          Object.entries(modules)
-            .filter(([path]) => !path.endsWith('volunteers_index.md'))
-            .map(async ([path, loader]) => {
-              const mod = await loader()
-              const slug = path.replace('/ru/volunteers/', '').replace('.md', '')
-              const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-              
-              return {
-                slug,
-                uuid: fm.uuid || slug,
-                name: fm.title || slug.charAt(0).toUpperCase() + slug.slice(1),
-                description: fm.description || '',
-                experience: fm.experience || '',
-                direction: fm.direction || '',
-                image: fm.image || '/placeholder-volunteer.svg'
-              }
-            })
+          filteredModules.map(async ([path, loader]) => {
+            const mod = await loader()
+            const slug = path.replace(`/ru/${props.humanType}/`, '').replace('.md', '')
+            const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
+            
+            return {
+              slug,
+              uuid: fm.uuid || slug,
+              name: fm.title || slug.charAt(0).toUpperCase() + slug.slice(1),
+              description: fm.description || '',
+              experience: fm.experience || '',
+              direction: fm.direction || '',
+              image: fm.image || `/placeholder-${props.humanType}.svg`
+            }
+          })
         )
-        allVolunteers.value = loaded
+        allHumans.value = loaded
       } catch (error) {
-        console.error('Ошибка загрузки данных волонтеров:', error)
+        console.error('Ошибка загрузки данных:', error)
       } finally {
         isLoading.value = false
       }
@@ -283,6 +291,7 @@ export default {
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
+      humanType: props.humanType,
       getRandomVolunteerClass,
       baseUrl,
       touchStartX,
