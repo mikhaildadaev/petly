@@ -325,12 +325,14 @@ h1,h2,h3 {
 }
 .carousel-track {
   display: flex;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: visible;
   padding: 14px 0;
   scrollbar-width: none;
   flex: 1;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-y pinch-zoom;
 }
 .carousel-track::-webkit-scrollbar {
   display: none;
