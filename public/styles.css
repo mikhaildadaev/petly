@@ -56,8 +56,11 @@ a {
 /* ============================================
    СООТНОШЕНИЕ
    ============================================ */
-.aspect{
+.aspect-card {
   aspect-ratio: 15/9;
+}
+.aspect-list {
+  aspect-ratio: 3/4;
 }
 
 /* ============================================
@@ -594,7 +597,10 @@ a {
 
 /* Планшеты */
 @media (min-width: 736px) and (max-width: 1124px) {
-  .aspect {
+  .aspect-card {
+    aspect-ratio: 4/3;
+  }
+  .aspect-list {
     aspect-ratio: 3/4;
   }
   .filters {
@@ -618,8 +624,11 @@ a {
 
 /* Телефоны */
 @media (max-width: 736px) {
-  .aspect {
+  .aspect-card {
     aspect-ratio: 9/15;
+  }
+  .aspect-list {
+    aspect-ratio: 15/9;
   }
   .grid-card-body p {
     font-size: 0.9rem;
