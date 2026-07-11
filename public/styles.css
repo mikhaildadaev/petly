@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Rubik+Bubbles&display=swap');
 /* ============================================
    БАЗОВЫЕ ПЕРЕМЕННЫЕ
    ============================================ */
@@ -7,6 +6,7 @@
   --vp-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --vp-font-family-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
   --vp-font-family-written: 'Caveat', cursive;
+  --vp-font-family-bubbles: 'Rubik Bubbles', cursive;
   --vp-c-brand: #e67e22;
   --vp-c-brand-light: #f0a04b;
   --vp-c-brand-dark: #c96a1c;
@@ -44,7 +44,7 @@ body {
 }
 
 /* ============================================
-   ШРИФТЫ
+   Выделение
    ============================================ */
 a, button, select {
   -webkit-tap-highlight-color: transparent !important;
@@ -54,6 +54,15 @@ a, button, select {
    ССЫЛКИ
    ============================================ */
 a {
+  text-decoration: none!important;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)!important;
+}
+
+/* ============================================
+   ЗАГОЛОВКИ
+   ============================================ */
+h1,h2,h3 {
+  font-family: var(--vp-font-family-bubbles);
   text-decoration: none!important;
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)!important;
 }
@@ -92,7 +101,7 @@ a {
 }
 
 /* ============================================
-   Заголовки
+   ИМЕНОВАНИЕ
    ============================================ */
 .name {
   font-size: 2.2rem;
