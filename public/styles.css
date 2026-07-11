@@ -1,7 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
+
 /* ============================================
    БАЗОВЫЕ ПЕРЕМЕННЫЕ
    ============================================ */
 :root {
+  --vp-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --vp-font-family-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  --vp-font-family-written: 'Caveat', cursive;
   --vp-c-brand: #e67e22;
   --vp-c-brand-light: #f0a04b;
   --vp-c-brand-dark: #c96a1c;
@@ -34,7 +39,7 @@
    ШРИФТЫ
    ============================================ */
 body {
-  font-family: 'Nunito', 'Inter', sans-serif;
+  font-family: var(--vp-font-family-base);
   line-height: 1.7;
 }
 
@@ -84,6 +89,15 @@ a {
   font-weight: 600;
   margin: 0 0.3rem 0.3rem 0;
   width: fit-content;
+}
+
+/* ============================================
+   Заголовки
+   ============================================ */
+.name {
+  font-size: 2.0rem;
+  font-weight: 600;
+  font-family: var(--vp-font-family-written);
 }
 
 /* ============================================
