@@ -46,7 +46,7 @@
           <p>{{ human.description }}</p>
         </div>
       </a>
-      <div v-if="hasMoreItems" class="load-more-card" @click="loadMore">
+      <div v-if="hasMoreItems" class="load-more" @click="loadMore">
         <div class="load-more-content">
           <div class="load-more-icon">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -84,7 +84,7 @@
             </a>
           </div>
           <div v-if="hasMoreItems" class="carousel-slide load-more-slide" :class="{ center: currentIndex === paginatedHumans.length }">
-            <div class="load-more-card" @click="loadMore">
+            <div class="load-more" @click="loadMore">
               <div class="load-more-content">
                 <div class="load-more-icon">
                   <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
