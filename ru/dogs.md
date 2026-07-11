@@ -3,4 +3,4 @@ title: Собаки
 description: Собака — лучший друг человека.
 ---
 
-<ListDogs />
+<ListPets :petType="'dogs'"/>
