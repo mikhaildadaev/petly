@@ -2,22 +2,25 @@
   <div>
     <div class="filters-bar">
       <div class="filters">
-        <select v-model="filterGender" class="filter-select">
-          <option value="">Все гендеры</option>
-          <option value="Девочка">Девочки</option>
-          <option value="Мальчик">Мальчики</option>
+        <select v-model="filterExperience" class="filter-select">
+          <option value="">Все уровни</option>
+          <option value="Начинающий">Начинающий (до 1 года)</option>
+          <option value="Опытный">Опытный (1–3 года)</option>
+          <option value="Эксперт">Эксперт (от 3 лет)</option>
         </select>
-        <select v-model="filterAge" class="filter-select">
-          <option value="">Все возрасты</option>
-          <option value="Щенок">Щенки (до 1 года)</option>
-          <option value="Молодая">Молодые (1–3 года)</option>
-          <option value="Взрослая">Взрослые (от 3 лет)</option>
-        </select>
-        <select v-model="filterSize" class="filter-select">
-          <option value="">Все размеры</option>
-          <option value="Маленькая">Маленькие (до 10 кг)</option>
-          <option value="Средняя">Средние (10–25 кг)</option>
-          <option value="Крупная">Крупные (от 25 кг)</option>
+        <select v-model="filterDirection" class="filter-select">
+          <option value="">Все направления</option>
+          <option value="Выгул">Выгул</option>
+          <option value="Социализация">Социализация</option>
+          <option value="Лечение">Лечение</option>
+          <option value="Передержка">Передержка</option>
+          <option value="Фото/Видео">Фото/Видео</option>
+          <option value="Реклама">Реклама</option>
+          <option value="SMM">SMM</option>
+          <option value="Дизайн">Дизайн</option>
+          <option value="Юридическая помощь">Юридическая помощь</option>
+          <option value="Ветеринария">Ветеринария</option>
+          <option value="Фандрайзинг">Фандрайзинг</option>
         </select>
         <button v-if="isFilterActive" @click="resetFilters" class="btn-reset" title="Сбросить все фильтры">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -32,16 +35,15 @@
       </div>
     </div>
     <div v-if="!isMobile" class="grid-cards">
-      <a v-for="dog in paginatedDogs" :key="dog.slug" :href="`${baseUrl}ru/${petType}/${dog.slug}`" target="_blank" rel="noopener noreferrer" class="aspect grid-card">
+      <a v-for="volunteer in paginatedVolunteers" :key="volunteer.slug" :href="`${baseUrl}ru/${humanType}/${volunteer.slug}`" target="_blank" rel="noopener noreferrer" class="aspect grid-card">
         <div class="grid-meta">
-          <span v-if="dog.gender" class="tag gender-tag" :data-gender="dog.gender">{{ dog.gender }}</span>
-          <span v-if="dog.age" class="tag age-tag">{{ dog.age }}</span>
-          <span v-if="dog.size" class="tag size-tag">{{ dog.size }}</span>
+          <span v-if="volunteer.direction" class="tag direction-tag">{{ volunteer.direction }}</span>
+          <span v-if="volunteer.experience" class="tag experience-tag">{{ volunteer.experience }}</span>
         </div>
-        <img :src="dog.image" :alt="dog.name" loading="lazy" />
+        <img :src="volunteer.image" :alt="volunteer.name" loading="lazy" />
         <div class="grid-card-body">
-          <h3>{{ dog.name }}</h3>
-          <p>{{ dog.description }}</p>
+          <h3>{{ volunteer.name }}</h3>
+          <p>{{ volunteer.description }}</p>
         </div>
       </a>
       <div v-if="hasMoreItems" class="load-more-card" @click="loadMore">
@@ -55,7 +57,7 @@
           <span class="load-more-text">Загрузить ещё</span>
           <span class="load-more-count">{{ remaining }} осталось</span>
           <div class="load-more-progress">
-            <div class="progress-bar" :style="{ width: `${(visibleCount / filteredDogs.length) * 100}%` }"></div>
+            <div class="progress-bar" :style="{ width: `${(visibleCount / filteredVolunteers.length) * 100}%` }"></div>
           </div>
         </div>
       </div>
@@ -68,21 +70,20 @@
           </svg>
         </button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-          <div v-for="(dog, index) in paginatedDogs" :key="dog.slug" class="carousel-slide" :class="{ center: index === currentIndex }" >
-            <a :href="`${baseUrl}ru/${petType}/${dog.slug}`" target="_blank" rel="noopener noreferrer" class="aspect grid-card">
+          <div v-for="(volunteer, index) in paginatedVolunteers" :key="volunteer.slug" class="carousel-slide" :class="{ center: index === currentIndex }" >
+            <a :href="`${baseUrl}ru/${humanType}/${volunteer.slug}`" target="_blank" rel="noopener noreferrer" class="aspect grid-card">
               <div class="grid-meta">
-                <span v-if="dog.gender" class="tag gender-tag" :data-gender="dog.gender">{{ dog.gender }}</span>
-                <span v-if="dog.age" class="tag age-tag">{{ dog.age }}</span>
-                <span v-if="dog.size" class="tag size-tag">{{ dog.size }}</span>
+                <span v-if="volunteer.direction" class="tag direction-tag">{{ volunteer.direction }}</span>
+                <span v-if="volunteer.experience" class="tag experience-tag">{{ volunteer.experience }}</span>
               </div>
-              <img :src="dog.image" :alt="dog.name" loading="lazy" />
+              <img :src="volunteer.image" :alt="volunteer.name" loading="lazy" />
               <div class="grid-card-body">
-                <h3>{{ dog.name }}</h3>
-                <p>{{ dog.description }}</p>
+                <h3>{{ volunteer.name }}</h3>
+                <p>{{ volunteer.description }}</p>
               </div>
             </a>
           </div>
-          <div v-if="hasMoreItems" class="carousel-slide load-more-slide" :class="{ center: currentIndex === paginatedDogs.length }">
+          <div v-if="hasMoreItems" class="carousel-slide load-more-slide" :class="{ center: currentIndex === paginatedVolunteers.length }">
             <div class="load-more-card" @click="loadMore">
               <div class="load-more-content">
                 <div class="load-more-icon">
@@ -94,7 +95,7 @@
                 <span class="load-more-text">Загрузить ещё</span>
                 <span class="load-more-count">{{ remaining }} осталось</span>
                 <div class="load-more-progress">
-                  <div class="progress-bar" :style="{ width: `${(visibleCount / filteredDogs.length) * 100}%` }"></div>
+                  <div class="progress-bar" :style="{ width: `${(visibleCount / filteredVolunteers.length) * 100}%` }"></div>
                 </div>
               </div>
             </div>
@@ -107,7 +108,7 @@
         </button>
       </div>
     </div>
-    <div v-if="filteredDogs.length === 0 && !isLoading" class="no-results">
+    <div v-if="filteredVolunteers.length === 0 && !isLoading" class="no-results">
       <p>По выбранным фильтрам ничего не найдено</p>
     </div>
   </div>
@@ -122,17 +123,17 @@ const MOBILE_BREAKPOINT = 736
 
 export default {
   props: {
-    petType: {
+    humanType: {
       type: String,
       required: true,
-      default: 'dogs'
+      default: 'volunteers'
     }
   },
   setup(props) {
     const touchStartX = ref(0);
     const touchEndX = ref(0);
     const isSwiping = ref(false);
-    const allDogs = ref([])
+    const allVolunteers = ref([])
     const visibleCount = ref(perPage)
     const isLoading = ref(true)
     const isMobile = ref(false)
@@ -151,22 +152,20 @@ export default {
     }
 
     // Фильтры
-    const filterAge = ref('')
-    const filterGender = ref('')
-    const filterSize = ref('')
+    const filterExperience = ref('')
+    const filterDirection = ref('')
 
     // Карусель
     const carouselRef = ref(null)
     const currentIndex = ref(0)
 
     const isFilterActive = computed(() => {
-      return filterAge.value !== '' || filterGender.value !== '' || filterSize.value !== ''
+      return filterExperience.value !== '' || filterDirection.value !== ''
     })
 
     const resetFilters = () => {
-      filterAge.value = ''
-      filterGender.value = ''
-      filterSize.value = ''
+      filterExperience.value = ''
+      filterDirection.value = ''
     }
 
     // Загрузка данных
@@ -178,30 +177,63 @@ export default {
         // Динамически получаем все md файлы
         const allModules = import.meta.glob('/ru/*/*.md')
         
-        // Фильтруем только те, что относятся к нашему petType
+        // Фильтруем только те, что относятся к нашему humanType
         const filteredModules = Object.entries(allModules).filter(([path]) => {
-          return path.includes(`/ru/${props.petType}/`) && !path.endsWith(`${props.petType}_index.md`)
+          return path.includes(`/ru/${props.humanType}/`) && !path.endsWith(`${props.humanType}_index.md`)
         })
         
         const loaded = await Promise.all(
           filteredModules.map(async ([path, loader]) => {
             const mod = await loader()
-            // Динамически заменяем путь
-            const slug = path.replace(`/ru/${props.petType}/`, '').replace('.md', '')
+            const slug = path.replace(`/ru/${props.humanType}/`, '').replace('.md', '')
             const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
+            
+            // Определяем категорию опыта
+            let experienceCategory = ''
+            const expValue = fm.experience || ''
+            
+            if (expValue.includes('лет') || expValue.includes('год')) {
+              const match = expValue.match(/(\d+)/)
+              if (match) {
+                const num = parseInt(match[1])
+                if (num <= 1) experienceCategory = 'Начинающий'
+                else if (num <= 3) experienceCategory = 'Опытный'
+                else experienceCategory = 'Эксперт'
+              }
+            } else if (expValue.includes('месяц')) {
+              const match = expValue.match(/(\d+)/)
+              if (match) {
+                const num = parseInt(match[1])
+                experienceCategory = num < 12 ? 'Начинающий' : 'Опытный'
+              }
+            } else if (expValue) {
+              if (expValue.toLowerCase().includes('начин')) experienceCategory = 'Начинающий'
+              else if (expValue.toLowerCase().includes('опыт')) experienceCategory = 'Опытный'
+              else if (expValue.toLowerCase().includes('эксперт')) experienceCategory = 'Эксперт'
+            }
+
+            // Обработка направления
+            let directionValue = fm.direction || ''
+            if (directionValue.includes('/') || directionValue.includes(',')) {
+              const parts = directionValue.replace(/,/g, '/').split('/')
+              const uniqueDirections = [...new Set(parts.map(d => d.trim()))]
+              directionValue = uniqueDirections.join(' / ')
+            }
+
             return {
               slug,
               name: fm.title || slug.charAt(0).toUpperCase() + slug.slice(1),
               description: fm.description || '',
-              age: fm.age || '',
-              gender: fm.gender || '',
-              size: fm.size || '',
+              experience: experienceCategory || fm.experience || 'Нет опыта',
+              experienceYears: fm.experience || '',
+              direction: directionValue,
+              directionRaw: fm.direction || '',
               tags: fm.tags || [],
-              image: fm.image || '/placeholder-dog.svg'
+              image: fm.image || '/placeholder-volunteer.svg'
             }
           })
         )
-        allDogs.value = loaded
+        allVolunteers.value = loaded
       } catch (error) {
         console.error('Ошибка загрузки данных:', error)
       } finally {
@@ -213,39 +245,37 @@ export default {
       }
     })
 
-    const getAgeCategory = (ageStr) => {
-      if (!ageStr) return ''
-      const match = ageStr.match(/(\d+)/)
-      if (!match) return ''
-      const num = parseInt(match[1])
-      if (ageStr.includes('месяц') || num < 1) return 'Щенок'
-      if (num <= 3) return 'Молодая'
-      return 'Взрослая'
-    }
-
-    const filteredDogs = computed(() => {
-      return allDogs.value.filter(dog => {
-        if (filterAge.value && getAgeCategory(dog.age) !== filterAge.value) return false
-        if (filterGender.value && dog.gender !== filterGender.value) return false
-        if (filterSize.value && dog.size !== filterSize.value) return false
+    // Фильтрованные волонтеры
+    const filteredVolunteers = computed(() => {
+      return allVolunteers.value.filter(volunteer => {
+        if (filterExperience.value && volunteer.experience !== filterExperience.value) return false
+        
+        if (filterDirection.value) {
+          const directionStr = volunteer.directionRaw || volunteer.direction || ''
+          const directions = directionStr.replace(/,/g, '/').split('/').map(d => d.trim())
+          if (!directions.includes(filterDirection.value)) {
+            return false
+          }
+        }
+        
         return true
       })
     })
 
-    const paginatedDogs = computed(() => {
-      return filteredDogs.value.slice(0, visibleCount.value)
+    const paginatedVolunteers = computed(() => {
+      return filteredVolunteers.value.slice(0, visibleCount.value)
     })
 
     const remaining = computed(() => {
-      return filteredDogs.value.length - visibleCount.value
+      return filteredVolunteers.value.length - visibleCount.value
     })
 
     const hasMoreItems = computed(() => {
-      return filteredDogs.value.length > visibleCount.value
+      return filteredVolunteers.value.length > visibleCount.value
     })
 
     const carouselTotalSlides = computed(() => {
-      return paginatedDogs.value.length + (hasMoreItems.value ? 1 : 0)
+      return paginatedVolunteers.value.length + (hasMoreItems.value ? 1 : 0)
     })
 
     const loadMore = async () => {
@@ -261,7 +291,7 @@ export default {
       
       if (isMobile.value) {
         nextTick(() => {
-          if (carouselRef.value && paginatedDogs.value.length) {
+          if (carouselRef.value && paginatedVolunteers.value.length) {
             let targetIndex = savedIndex.value
             const maxIndex = carouselTotalSlides.value - 1
             
@@ -309,7 +339,7 @@ export default {
     }
 
     // === ОТСЛЕЖИВАНИЕ ИЗМЕНЕНИЙ ФИЛЬТРОВ ===
-    watch([filterAge, filterGender, filterSize], () => {
+    watch([filterExperience, filterDirection], () => {
       currentIndex.value = 0
       savedIndex.value = 0
       visibleCount.value = perPage
@@ -356,7 +386,7 @@ export default {
     }
 
     // === ОБРАБОТЧИКИ СОБЫТИЙ СВАЙПА ===
-const handleTouchStart = (e) => {
+    const handleTouchStart = (e) => {
       touchStartX.value = e.touches[0].clientX;
       isSwiping.value = true;
     };
@@ -399,7 +429,7 @@ const handleTouchStart = (e) => {
     }
 
     watch(isMobile, (newVal, oldVal) => {
-      if (isClient.value && newVal && paginatedDogs.value.length) {
+      if (isClient.value && newVal && paginatedVolunteers.value.length) {
         nextTick(() => {
           if (carouselRef.value) {
             resetToFirstSlide()
@@ -408,7 +438,7 @@ const handleTouchStart = (e) => {
       }
     })
 
-    watch(() => paginatedDogs.value, (newVal, oldVal) => {
+    watch(() => paginatedVolunteers.value, (newVal, oldVal) => {
       if (isClient.value && isMobile.value && newVal.length) {
         nextTick(() => {
           if (carouselRef.value) {
@@ -431,11 +461,10 @@ const handleTouchStart = (e) => {
     })
 
     return {
-      paginatedDogs,
-      filteredDogs,
-      filterAge,
-      filterGender,
-      filterSize,
+      paginatedVolunteers,
+      filteredVolunteers,
+      filterExperience,
+      filterDirection,
       isFilterActive,
       resetFilters,
       visibleCount,
@@ -457,7 +486,7 @@ const handleTouchStart = (e) => {
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
-      petType: props.petType,
+      humanType: props.humanType,
     }
   }
 }
