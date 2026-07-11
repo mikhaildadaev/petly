@@ -74,21 +74,6 @@ export default {
       }
     }
 
-    // === РАНДОМНЫЕ ЦВЕТА ДЛЯ ИМЁН ===
-    const randomClassCache = new Map()
-    const getRandomVolunteerClass = (slug) => {
-      if (randomClassCache.has(slug)) {
-        return randomClassCache.get(slug)
-      }
-      
-      const num = Math.floor(Math.random() * 30) + 1
-      const formattedNum = num.toString().padStart(2, '0')
-      const className = `rand-${formattedNum}`
-      
-      randomClassCache.set(slug, className)
-      return className
-    }
-
     // === КАРУСЕЛЬ ===
     const carouselRef = ref(null)
     const currentIndex = ref(0)
@@ -236,6 +221,21 @@ export default {
         v.uuid && props.guardianUuids.includes(v.uuid)
       )
     })
+
+    // === РАНДОМНЫЕ ЦВЕТА ДЛЯ ИМЁН СОБАК ===
+    const randomClassCache = new Map()
+    const getRandomVolunteerClass = (slug) => {
+      if (randomClassCache.has(slug)) {
+        return randomClassCache.get(slug)
+      }
+      
+      const num = Math.floor(Math.random() * 30) + 1
+      const formattedNum = num.toString().padStart(2, '0')
+      const className = `rand-${formattedNum}`
+      
+      randomClassCache.set(slug, className)
+      return className
+    }
 
     return {
       guardians,

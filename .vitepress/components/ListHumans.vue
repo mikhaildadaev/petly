@@ -1,39 +1,39 @@
 <template>
-  <div>
-    <div class="filters-bar">
-      <div class="filters">
-        <select v-model="filterExperience" class="filter-select">
-          <option value="">Все уровни</option>
-          <option value="Начинающий">Начинающий (до 1 года)</option>
-          <option value="Опытный">Опытный (1–3 года)</option>
-          <option value="Эксперт">Эксперт (от 3 лет)</option>
-        </select>
-        <select v-model="filterDirection" class="filter-select">
-          <option value="">Все направления</option>
-          <option value="Выгул">Выгул</option>
-          <option value="Социализация">Социализация</option>
-          <option value="Лечение">Лечение</option>
-          <option value="Передержка">Передержка</option>
-          <option value="Фото/Видео">Фото/Видео</option>
-          <option value="Реклама">Реклама</option>
-          <option value="SMM">SMM</option>
-          <option value="Дизайн">Дизайн</option>
-          <option value="Юридическая помощь">Юридическая помощь</option>
-          <option value="Ветеринария">Ветеринария</option>
-          <option value="Фандрайзинг">Фандрайзинг</option>
-        </select>
-        <button v-if="isFilterActive" @click="resetFilters" class="btn-reset" title="Сбросить все фильтры">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 6h18" />
-            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-            <path d="M10 11v6" />
-            <path d="M14 11v6" />
-          </svg>
-          Сбросить
-        </button>
-      </div>
+  <div class="filters-bar">
+    <div class="filters">
+      <select v-model="filterExperience" class="filter-select">
+        <option value="">Все уровни</option>
+        <option value="Начинающий">Начинающий (до 1 года)</option>
+        <option value="Опытный">Опытный (1–3 года)</option>
+        <option value="Эксперт">Эксперт (от 3 лет)</option>
+      </select>
+      <select v-model="filterDirection" class="filter-select">
+        <option value="">Все направления</option>
+        <option value="Выгул">Выгул</option>
+        <option value="Социализация">Социализация</option>
+        <option value="Лечение">Лечение</option>
+        <option value="Передержка">Передержка</option>
+        <option value="Фото/Видео">Фото/Видео</option>
+        <option value="Реклама">Реклама</option>
+        <option value="SMM">SMM</option>
+        <option value="Дизайн">Дизайн</option>
+        <option value="Юридическая помощь">Юридическая помощь</option>
+        <option value="Ветеринария">Ветеринария</option>
+        <option value="Фандрайзинг">Фандрайзинг</option>
+      </select>
+      <button v-if="isFilterActive" @click="resetFilters" class="btn-reset" title="Сбросить все фильтры">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 6h18" />
+          <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+          <path d="M10 11v6" />
+          <path d="M14 11v6" />
+        </svg>
+        Сбросить
+      </button>
     </div>
+  </div>
+  <div v-if="paginatedHumans && paginatedHumans.length > 0" class="grid-list">
     <div v-if="!isMobile" class="grid-cards">
       <a v-for="human in paginatedHumans" :key="human.slug" :href="`${baseUrl}ru/${humanType}/${human.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
         <div class="grid-meta">
@@ -111,6 +111,9 @@
     <div v-if="filteredHumans.length === 0 && !isLoading" class="no-results">
       <p>По выбранным фильтрам ничего не найдено</p>
     </div>
+  </div>
+  <div v-else-if="paginatedHumans && paginatedHumans.length === 0" class="no-guardians">
+    <p>Данный раздел еще не заполнен</p>
   </div>
 </template>
 
