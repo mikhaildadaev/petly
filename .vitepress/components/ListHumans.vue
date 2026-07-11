@@ -33,7 +33,7 @@
       </button>
     </div>
   </div>
-  <div v-if="paginatedHumans && paginatedHumans.length > 0" class="grid-list">
+  <div class="grid-list">
     <div v-if="!isMobile" class="grid-cards">
       <a v-for="human in paginatedHumans" :key="human.slug" :href="`${baseUrl}ru/${humanType}/${human.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
         <div class="grid-meta">
@@ -111,9 +111,6 @@
     <div v-if="filteredHumans.length === 0 && !isLoading" class="no-results">
       <p>По выбранным фильтрам ничего не найдено</p>
     </div>
-  </div>
-  <div v-else-if="paginatedHumans && paginatedHumans.length === 0" class="no-guardians">
-    <p>Данный раздел еще не заполнен</p>
   </div>
 </template>
 

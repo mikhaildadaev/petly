@@ -148,17 +148,14 @@ export default {
             })
         )
         allVolunteers.value = loaded
-        
-        console.log('✅ Загружены волонтеры:', loaded.map(v => ({
-          name: v.name,
-          uuid: v.uuid,
-          slug: v.slug
-        })))
-        
       } catch (error) {
         console.error('Ошибка загрузки данных волонтеров:', error)
       } finally {
         isLoading.value = false
+      }
+
+      if (typeof window !== 'undefined') {
+        window.addEventListener('resize', handleResize)
       }
     })
 
