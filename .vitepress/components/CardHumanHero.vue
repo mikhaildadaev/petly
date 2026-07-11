@@ -1,5 +1,5 @@
 <template>
-  <div class="hero-card">
+  <div class="aspect hero-card">
     <div class="hero-meta">
       <span v-if="gender" class="tag gender-tag" :data-gender="gender">{{ gender }}</span>
       <span v-if="age" class="tag age-tag">{{ age }}</span>
