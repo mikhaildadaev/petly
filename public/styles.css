@@ -621,36 +621,36 @@ h1,h2,h3 {
    РАНДОМНОСТЬ
    ============================================ */
 
-.rand-01 { background: #ef5350; color: var(--vp-rand-light); }
-.rand-02 { background: #ec407a; color: var(--vp-rand-light); }
-.rand-03 { background: #ab47bc; color: var(--vp-rand-light); }
-.rand-04 { background: #7e57c2; color: var(--vp-rand-light); }
-.rand-05 { background: #5c6bc0; color: var(--vp-rand-light); }
-.rand-06 { background: #42a5f5; color: var(--vp-rand-light); }
-.rand-07 { background: #26c6da; color: var(--vp-rand-light); }
-.rand-08 { background: #26a69a; color: var(--vp-rand-light); }
-.rand-09 { background: #66bb6a; color: var(--vp-rand-light); }
-.rand-10 { background: #d4e157; color: var(--vp-rand-dark); }
-.rand-11 { background: #ffee58; color: var(--vp-rand-dark); }
-.rand-12 { background: #ffca28; color: var(--vp-rand-dark); }
-.rand-13 { background: #ffa726; color: var(--vp-rand-dark); }
-.rand-14 { background: #ff7043; color: var(--vp-rand-light); }
-.rand-15 { background: #8d6e63; color: var(--vp-rand-light); }
-.rand-16 { background: #bdbdbd; color: var(--vp-rand-dark); }
-.rand-17 { background: #78909c; color: var(--vp-rand-light); }
-.rand-18 { background: #1a1a2e; color: var(--vp-rand-light); }
-.rand-19 { background: #16213e; color: var(--vp-rand-light); }
-.rand-20 { background: #2d1b69; color: var(--vp-rand-light); }
-.rand-21 { background: #f5e6d3; color: var(--vp-rand-dark); }
-.rand-22 { background: #e8f0fe; color: var(--vp-rand-dark); }
-.rand-23 { background: #ff6b6b; color: var(--vp-rand-light); }
-.rand-24 { background: #70c1b3; color: var(--vp-rand-dark); }
-.rand-25 { background: #b39ddb; color: var(--vp-rand-dark); }
-.rand-26 { background: #ffd8b1; color: var(--vp-rand-dark); }
-.rand-27 { background: #87ceeb; color: var(--vp-rand-dark); }
-.rand-28 { background: #ffb7c5; color: var(--vp-rand-dark); }
-.rand-29 { background: #ffd700; color: var(--vp-rand-dark); }
-.rand-30 { background: #cd7f32; color: var(--vp-rand-light); }
+.rand-01 { background: #ef5350!important; color: var(--vp-rand-light)!important; }
+.rand-02 { background: #ec407a!important; color: var(--vp-rand-light)!important; }
+.rand-03 { background: #ab47bc!important; color: var(--vp-rand-light)!important; }
+.rand-04 { background: #7e57c2!important; color: var(--vp-rand-light)!important; }
+.rand-05 { background: #5c6bc0!important; color: var(--vp-rand-light)!important; }
+.rand-06 { background: #42a5f5!important; color: var(--vp-rand-light)!important; }
+.rand-07 { background: #26c6da!important; color: var(--vp-rand-light)!important; }
+.rand-08 { background: #26a69a!important; color: var(--vp-rand-light)!important; }
+.rand-09 { background: #66bb6a!important; color: var(--vp-rand-light)!important; }
+.rand-10 { background: #d4e157!important; color: var(--vp-rand-dark)!important; }
+.rand-11 { background: #ffee58!important; color: var(--vp-rand-dark)!important; }
+.rand-12 { background: #ffca28!important; color: var(--vp-rand-dark)!important; }
+.rand-13 { background: #ffa726!important; color: var(--vp-rand-dark)!important; }
+.rand-14 { background: #ff7043!important; color: var(--vp-rand-light)!important; }
+.rand-15 { background: #8d6e63!important; color: var(--vp-rand-light)!important; }
+.rand-16 { background: #bdbdbd!important; color: var(--vp-rand-dark)!important; }
+.rand-17 { background: #78909c!important; color: var(--vp-rand-light)!important; }
+.rand-18 { background: #1a1a2e!important; color: var(--vp-rand-light)!important; }
+.rand-19 { background: #16213e!important; color: var(--vp-rand-light)!important; }
+.rand-20 { background: #2d1b69!important; color: var(--vp-rand-light)!important; }
+.rand-21 { background: #f5e6d3!important; color: var(--vp-rand-dark)!important; }
+.rand-22 { background: #e8f0fe!important; color: var(--vp-rand-dark)!important; }
+.rand-23 { background: #ff6b6b!important; color: var(--vp-rand-light)!important; }
+.rand-24 { background: #70c1b3!important; color: var(--vp-rand-dark)!important; }
+.rand-25 { background: #b39ddb!important; color: var(--vp-rand-dark)!important; }
+.rand-26 { background: #ffd8b1!important; color: var(--vp-rand-dark)!important; }
+.rand-27 { background: #87ceeb!important; color: var(--vp-rand-dark)!important; }
+.rand-28 { background: #ffb7c5!important; color: var(--vp-rand-dark)!important; }
+.rand-29 { background: #ffd700!important; color: var(--vp-rand-dark)!important; }
+.rand-30 { background: #cd7f32!important; color: var(--vp-rand-light)!important; }
 
 /* ============================================
    АДАПТИВНОСТЬ
