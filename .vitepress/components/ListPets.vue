@@ -437,7 +437,6 @@ export default {
     })
 
     // === РАНДОМНЫЕ ЦВЕТА ДЛЯ ИМЁН СОБАК ===
-    const randomClassCache = new Map()
     const getRandomPetClass = (slug) => {
       if (randomClassCache.has(slug)) {
         return randomClassCache.get(slug)
