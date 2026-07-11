@@ -1,7 +1,7 @@
 <template>
   <div v-if="guardians && guardians.length > 0" class="grid-list">
     <div v-if="!isMobile" class="grid-cards">
-      <a v-for="guardian in guardians" :key="guardian.uuid" :href="`${baseUrl}ru/volunteers/${guardian.slug}`" class="grid-card">
+      <a v-for="guardian in guardians" :key="guardian.uuid" :href="`${baseUrl}ru/volunteers/${guardian.slug}`" class="aspect-list grid-card">
         <div class="grid-meta">
           <span v-if="guardian.direction" class="tag direction-tag">{{ guardian.direction }}</span>
           <span v-if="guardian.experience" class="tag experience-tag">{{ guardian.experience }}</span>
@@ -22,7 +22,7 @@
         </button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(guardian, index) in guardians" :key="guardian.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="`${baseUrl}ru/volunteers/${guardian.slug}`" target="_blank" rel="noopener noreferrer" class="grid-card">
+            <a :href="`${baseUrl}ru/volunteers/${guardian.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
               <div class="grid-meta">
                 <span v-if="guardian.direction" class="tag direction-tag">{{ guardian.direction }}</span>
                 <span v-if="guardian.experience" class="tag experience-tag">{{ guardian.experience }}</span>
