@@ -35,7 +35,7 @@
       </div>
     </div>
     <div v-if="!isMobile" class="grid-cards">
-      <a v-for="volunteer in paginatedVolunteers" :key="volunteer.slug" :href="`${baseUrl}ru/${humanType}/${volunteer.slug}`" target="_blank" rel="noopener noreferrer" class="aspect grid-card">
+      <a v-for="volunteer in paginatedVolunteers" :key="volunteer.slug" :href="`${baseUrl}ru/${humanType}/${volunteer.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
         <div class="grid-meta">
           <span v-if="volunteer.direction" class="tag direction-tag">{{ volunteer.direction }}</span>
           <span v-if="volunteer.experience" class="tag experience-tag">{{ volunteer.experience }}</span>
@@ -71,7 +71,7 @@
         </button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(volunteer, index) in paginatedVolunteers" :key="volunteer.slug" class="carousel-slide" :class="{ center: index === currentIndex }" >
-            <a :href="`${baseUrl}ru/${humanType}/${volunteer.slug}`" target="_blank" rel="noopener noreferrer" class="aspect grid-card">
+            <a :href="`${baseUrl}ru/${humanType}/${volunteer.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
               <div class="grid-meta">
                 <span v-if="volunteer.direction" class="tag direction-tag">{{ volunteer.direction }}</span>
                 <span v-if="volunteer.experience" class="tag experience-tag">{{ volunteer.experience }}</span>
