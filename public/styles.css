@@ -641,9 +641,6 @@ a {
   .aspect-card {
     aspect-ratio: 9/15;
   }
-  .aspect-list {
-    aspect-ratio: 15/9;
-  }
   .grid-card-body p {
     font-size: 0.9rem;
   }
