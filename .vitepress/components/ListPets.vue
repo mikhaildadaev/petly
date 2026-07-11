@@ -32,16 +32,16 @@
       </div>
     </div>
     <div v-if="!isMobile" class="grid-cards">
-      <a v-for="dog in paginatedDogs" :key="dog.slug" :href="`${baseUrl}ru/${petType}/${dog.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+      <a v-for="pet in paginatedPets" :key="pet.slug" :href="`${baseUrl}ru/${petType}/${pet.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
         <div class="grid-meta">
-          <span v-if="dog.gender" class="tag gender-tag" :data-gender="dog.gender">{{ dog.gender }}</span>
-          <span v-if="dog.age" class="tag age-tag">{{ dog.age }}</span>
-          <span v-if="dog.size" class="tag size-tag">{{ dog.size }}</span>
+          <span v-if="pet.gender" class="tag gender-tag" :data-gender="pet.gender">{{ pet.gender }}</span>
+          <span v-if="pet.age" class="tag age-tag">{{ pet.age }}</span>
+          <span v-if="pet.size" class="tag size-tag">{{ pet.size }}</span>
         </div>
-        <img :src="dog.image" :alt="dog.name" loading="lazy" />
-        <div class="grid-card-body">
-          <div class="name">{{ dog.name }}</div>
-          <p>{{ dog.description }}</p>
+        <img :src="pet.image" :alt="pet.name" loading="lazy" />
+        <div :class="['grid-card-body', getRandomPetClass(pet.slug)]">
+          <div class="name">{{ pet.name }}</div>
+          <p>{{ pet.description }}</p>
         </div>
       </a>
       <div v-if="hasMoreItems" class="load-more-card" @click="loadMore">
@@ -55,7 +55,7 @@
           <span class="load-more-text">Загрузить ещё</span>
           <span class="load-more-count">{{ remaining }} осталось</span>
           <div class="load-more-progress">
-            <div class="progress-bar" :style="{ width: `${(visibleCount / filteredDogs.length) * 100}%` }"></div>
+            <div class="progress-bar" :style="{ width: `${(visibleCount / filteredPets.length) * 100}%` }"></div>
           </div>
         </div>
       </div>
@@ -68,21 +68,21 @@
           </svg>
         </button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-          <div v-for="(dog, index) in paginatedDogs" :key="dog.slug" class="carousel-slide" :class="{ center: index === currentIndex }" >
-            <a :href="`${baseUrl}ru/${petType}/${dog.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+          <div v-for="(pet, index) in paginatedPets" :key="pet.slug" class="carousel-slide" :class="{ center: index === currentIndex }" >
+            <a :href="`${baseUrl}ru/${petType}/${pet.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
               <div class="grid-meta">
-                <span v-if="dog.gender" class="tag gender-tag" :data-gender="dog.gender">{{ dog.gender }}</span>
-                <span v-if="dog.age" class="tag age-tag">{{ dog.age }}</span>
-                <span v-if="dog.size" class="tag size-tag">{{ dog.size }}</span>
+                <span v-if="pet.gender" class="tag gender-tag" :data-gender="pet.gender">{{ pet.gender }}</span>
+                <span v-if="pet.age" class="tag age-tag">{{ pet.age }}</span>
+                <span v-if="pet.size" class="tag size-tag">{{ pet.size }}</span>
               </div>
-              <img :src="dog.image" :alt="dog.name" loading="lazy" />
-              <div class="grid-card-body">
-                <div class="name">{{ dog.name }}</div>
-                <p>{{ dog.description }}</p>
+              <img :src="pet.image" :alt="pet.name" loading="lazy" />
+              <div :class="['grid-card-body', getRandomPetClass(pet.slug)]">
+                <div class="name">{{ pet.name }}</div>
+                <p>{{ pet.description }}</p>
               </div>
             </a>
           </div>
-          <div v-if="hasMoreItems" class="carousel-slide load-more-slide" :class="{ center: currentIndex === paginatedDogs.length }">
+          <div v-if="hasMoreItems" class="carousel-slide load-more-slide" :class="{ center: currentIndex === paginatedPets.length }">
             <div class="load-more-card" @click="loadMore">
               <div class="load-more-content">
                 <div class="load-more-icon">
@@ -94,7 +94,7 @@
                 <span class="load-more-text">Загрузить ещё</span>
                 <span class="load-more-count">{{ remaining }} осталось</span>
                 <div class="load-more-progress">
-                  <div class="progress-bar" :style="{ width: `${(visibleCount / filteredDogs.length) * 100}%` }"></div>
+                  <div class="progress-bar" :style="{ width: `${(visibleCount / filteredPets.length) * 100}%` }"></div>
                 </div>
               </div>
             </div>
@@ -107,7 +107,7 @@
         </button>
       </div>
     </div>
-    <div v-if="filteredDogs.length === 0 && !isLoading" class="no-results">
+    <div v-if="filteredPets.length === 0 && !isLoading" class="no-results">
       <p>По выбранным фильтрам ничего не найдено</p>
     </div>
   </div>
@@ -132,7 +132,7 @@ export default {
     const touchStartX = ref(0);
     const touchEndX = ref(0);
     const isSwiping = ref(false);
-    const allDogs = ref([])
+    const allPets = ref([])
     const visibleCount = ref(perPage)
     const isLoading = ref(true)
     const isMobile = ref(false)
@@ -197,11 +197,11 @@ export default {
               gender: fm.gender || '',
               size: fm.size || '',
               tags: fm.tags || [],
-              image: fm.image || '/placeholder-dog.svg'
+              image: fm.image || '/placeholder-pet.svg'
             }
           })
         )
-        allDogs.value = loaded
+        allPets.value = loaded
       } catch (error) {
         console.error('Ошибка загрузки данных:', error)
       } finally {
@@ -223,29 +223,29 @@ export default {
       return 'Взрослая'
     }
 
-    const filteredDogs = computed(() => {
-      return allDogs.value.filter(dog => {
-        if (filterAge.value && getAgeCategory(dog.age) !== filterAge.value) return false
-        if (filterGender.value && dog.gender !== filterGender.value) return false
-        if (filterSize.value && dog.size !== filterSize.value) return false
+    const filteredPets = computed(() => {
+      return allPets.value.filter(pet => {
+        if (filterAge.value && getAgeCategory(pet.age) !== filterAge.value) return false
+        if (filterGender.value && pet.gender !== filterGender.value) return false
+        if (filterSize.value && pet.size !== filterSize.value) return false
         return true
       })
     })
 
-    const paginatedDogs = computed(() => {
-      return filteredDogs.value.slice(0, visibleCount.value)
+    const paginatedPets = computed(() => {
+      return filteredPets.value.slice(0, visibleCount.value)
     })
 
     const remaining = computed(() => {
-      return filteredDogs.value.length - visibleCount.value
+      return filteredPets.value.length - visibleCount.value
     })
 
     const hasMoreItems = computed(() => {
-      return filteredDogs.value.length > visibleCount.value
+      return filteredPets.value.length > visibleCount.value
     })
 
     const carouselTotalSlides = computed(() => {
-      return paginatedDogs.value.length + (hasMoreItems.value ? 1 : 0)
+      return paginatedPets.value.length + (hasMoreItems.value ? 1 : 0)
     })
 
     const loadMore = async () => {
@@ -261,7 +261,7 @@ export default {
       
       if (isMobile.value) {
         nextTick(() => {
-          if (carouselRef.value && paginatedDogs.value.length) {
+          if (carouselRef.value && paginatedPets.value.length) {
             let targetIndex = savedIndex.value
             const maxIndex = carouselTotalSlides.value - 1
             
@@ -356,7 +356,7 @@ export default {
     }
 
     // === ОБРАБОТЧИКИ СОБЫТИЙ СВАЙПА ===
-const handleTouchStart = (e) => {
+    const handleTouchStart = (e) => {
       touchStartX.value = e.touches[0].clientX;
       isSwiping.value = true;
     };
@@ -399,7 +399,7 @@ const handleTouchStart = (e) => {
     }
 
     watch(isMobile, (newVal, oldVal) => {
-      if (isClient.value && newVal && paginatedDogs.value.length) {
+      if (isClient.value && newVal && paginatedPets.value.length) {
         nextTick(() => {
           if (carouselRef.value) {
             resetToFirstSlide()
@@ -408,7 +408,7 @@ const handleTouchStart = (e) => {
       }
     })
 
-    watch(() => paginatedDogs.value, (newVal, oldVal) => {
+    watch(() => paginatedPets.value, (newVal, oldVal) => {
       if (isClient.value && isMobile.value && newVal.length) {
         nextTick(() => {
           if (carouselRef.value) {
@@ -430,9 +430,24 @@ const handleTouchStart = (e) => {
       }
     })
 
+    // === РАНДОМНЫЕ ЦВЕТА ДЛЯ ИМЁН СОБАК ===
+    const randomClassCache = new Map()
+    const getRandomPetClass = (slug) => {
+      if (randomClassCache.has(slug)) {
+        return randomClassCache.get(slug)
+      }
+      
+      const num = Math.floor(Math.random() * 30) + 1
+      const formattedNum = num.toString().padStart(2, '0')
+      const className = `rand-${formattedNum}`
+      
+      randomClassCache.set(slug, className)
+      return className
+    }
+
     return {
-      paginatedDogs,
-      filteredDogs,
+      paginatedPets,
+      filteredPets,
       filterAge,
       filterGender,
       filterSize,
@@ -458,6 +473,7 @@ const handleTouchStart = (e) => {
       handleTouchMove,
       handleTouchEnd,
       petType: props.petType,
+      getRandomPetClass,
     }
   }
 }

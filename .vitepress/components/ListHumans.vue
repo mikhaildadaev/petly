@@ -35,15 +35,15 @@
       </div>
     </div>
     <div v-if="!isMobile" class="grid-cards">
-      <a v-for="volunteer in paginatedVolunteers" :key="volunteer.slug" :href="`${baseUrl}ru/${humanType}/${volunteer.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+      <a v-for="human in paginatedHumans" :key="human.slug" :href="`${baseUrl}ru/${humanType}/${human.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
         <div class="grid-meta">
-          <span v-if="volunteer.direction" class="tag direction-tag">{{ volunteer.direction }}</span>
-          <span v-if="volunteer.experience" class="tag experience-tag">{{ volunteer.experience }}</span>
+          <span v-if="human.direction" class="tag direction-tag">{{ human.direction }}</span>
+          <span v-if="human.experience" class="tag experience-tag">{{ human.experience }}</span>
         </div>
-        <img :src="volunteer.image" :alt="volunteer.name" loading="lazy" />
-        <div class="grid-card-body">
-          <div class="name">{{ volunteer.name }}</div>
-          <p>{{ volunteer.description }}</p>
+        <img :src="human.image" :alt="human.name" loading="lazy" />
+        <div :class="['grid-card-body', getRandomHumanClass(human.slug)]">
+          <div class="name">{{ human.name }}</div>
+          <p>{{ human.description }}</p>
         </div>
       </a>
       <div v-if="hasMoreItems" class="load-more-card" @click="loadMore">
@@ -57,7 +57,7 @@
           <span class="load-more-text">Загрузить ещё</span>
           <span class="load-more-count">{{ remaining }} осталось</span>
           <div class="load-more-progress">
-            <div class="progress-bar" :style="{ width: `${(visibleCount / filteredVolunteers.length) * 100}%` }"></div>
+            <div class="progress-bar" :style="{ width: `${(visibleCount / filteredHumans.length) * 100}%` }"></div>
           </div>
         </div>
       </div>
@@ -70,20 +70,20 @@
           </svg>
         </button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-          <div v-for="(volunteer, index) in paginatedVolunteers" :key="volunteer.slug" class="carousel-slide" :class="{ center: index === currentIndex }" >
-            <a :href="`${baseUrl}ru/${humanType}/${volunteer.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+          <div v-for="(human, index) in paginatedHumans" :key="human.slug" class="carousel-slide" :class="{ center: index === currentIndex }" >
+            <a :href="`${baseUrl}ru/${humanType}/${human.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
               <div class="grid-meta">
-                <span v-if="volunteer.direction" class="tag direction-tag">{{ volunteer.direction }}</span>
-                <span v-if="volunteer.experience" class="tag experience-tag">{{ volunteer.experience }}</span>
+                <span v-if="human.direction" class="tag direction-tag">{{ human.direction }}</span>
+                <span v-if="human.experience" class="tag experience-tag">{{ human.experience }}</span>
               </div>
-              <img :src="volunteer.image" :alt="volunteer.name" loading="lazy" />
-              <div class="grid-card-body">
-                <div class="name">{{ volunteer.name }}</div>
-                <p>{{ volunteer.description }}</p>
+              <img :src="human.image" :alt="human.name" loading="lazy" />
+              <div :class="['grid-card-body', getRandomHumanClass(human.slug)]">
+                <div class="name">{{ human.name }}</div>
+                <p>{{ human.description }}</p>
               </div>
             </a>
           </div>
-          <div v-if="hasMoreItems" class="carousel-slide load-more-slide" :class="{ center: currentIndex === paginatedVolunteers.length }">
+          <div v-if="hasMoreItems" class="carousel-slide load-more-slide" :class="{ center: currentIndex === paginatedHumans.length }">
             <div class="load-more-card" @click="loadMore">
               <div class="load-more-content">
                 <div class="load-more-icon">
@@ -95,7 +95,7 @@
                 <span class="load-more-text">Загрузить ещё</span>
                 <span class="load-more-count">{{ remaining }} осталось</span>
                 <div class="load-more-progress">
-                  <div class="progress-bar" :style="{ width: `${(visibleCount / filteredVolunteers.length) * 100}%` }"></div>
+                  <div class="progress-bar" :style="{ width: `${(visibleCount / filteredHumans.length) * 100}%` }"></div>
                 </div>
               </div>
             </div>
@@ -108,7 +108,7 @@
         </button>
       </div>
     </div>
-    <div v-if="filteredVolunteers.length === 0 && !isLoading" class="no-results">
+    <div v-if="filteredHumans.length === 0 && !isLoading" class="no-results">
       <p>По выбранным фильтрам ничего не найдено</p>
     </div>
   </div>
@@ -133,7 +133,7 @@ export default {
     const touchStartX = ref(0);
     const touchEndX = ref(0);
     const isSwiping = ref(false);
-    const allVolunteers = ref([])
+    const allHumans = ref([])
     const visibleCount = ref(perPage)
     const isLoading = ref(true)
     const isMobile = ref(false)
@@ -229,11 +229,11 @@ export default {
               direction: directionValue,
               directionRaw: fm.direction || '',
               tags: fm.tags || [],
-              image: fm.image || '/placeholder-volunteer.svg'
+              image: fm.image || '/placeholder-human.svg'
             }
           })
         )
-        allVolunteers.value = loaded
+        allHumans.value = loaded
       } catch (error) {
         console.error('Ошибка загрузки данных:', error)
       } finally {
@@ -246,12 +246,12 @@ export default {
     })
 
     // Фильтрованные волонтеры
-    const filteredVolunteers = computed(() => {
-      return allVolunteers.value.filter(volunteer => {
-        if (filterExperience.value && volunteer.experience !== filterExperience.value) return false
+    const filteredHumans = computed(() => {
+      return allHumans.value.filter(human => {
+        if (filterExperience.value && human.experience !== filterExperience.value) return false
         
         if (filterDirection.value) {
-          const directionStr = volunteer.directionRaw || volunteer.direction || ''
+          const directionStr = human.directionRaw || human.direction || ''
           const directions = directionStr.replace(/,/g, '/').split('/').map(d => d.trim())
           if (!directions.includes(filterDirection.value)) {
             return false
@@ -262,20 +262,20 @@ export default {
       })
     })
 
-    const paginatedVolunteers = computed(() => {
-      return filteredVolunteers.value.slice(0, visibleCount.value)
+    const paginatedHumans = computed(() => {
+      return filteredHumans.value.slice(0, visibleCount.value)
     })
 
     const remaining = computed(() => {
-      return filteredVolunteers.value.length - visibleCount.value
+      return filteredHumans.value.length - visibleCount.value
     })
 
     const hasMoreItems = computed(() => {
-      return filteredVolunteers.value.length > visibleCount.value
+      return filteredHumans.value.length > visibleCount.value
     })
 
     const carouselTotalSlides = computed(() => {
-      return paginatedVolunteers.value.length + (hasMoreItems.value ? 1 : 0)
+      return paginatedHumans.value.length + (hasMoreItems.value ? 1 : 0)
     })
 
     const loadMore = async () => {
@@ -291,7 +291,7 @@ export default {
       
       if (isMobile.value) {
         nextTick(() => {
-          if (carouselRef.value && paginatedVolunteers.value.length) {
+          if (carouselRef.value && paginatedHumans.value.length) {
             let targetIndex = savedIndex.value
             const maxIndex = carouselTotalSlides.value - 1
             
@@ -429,7 +429,7 @@ export default {
     }
 
     watch(isMobile, (newVal, oldVal) => {
-      if (isClient.value && newVal && paginatedVolunteers.value.length) {
+      if (isClient.value && newVal && paginatedHumans.value.length) {
         nextTick(() => {
           if (carouselRef.value) {
             resetToFirstSlide()
@@ -438,7 +438,7 @@ export default {
       }
     })
 
-    watch(() => paginatedVolunteers.value, (newVal, oldVal) => {
+    watch(() => paginatedHumans.value, (newVal, oldVal) => {
       if (isClient.value && isMobile.value && newVal.length) {
         nextTick(() => {
           if (carouselRef.value) {
@@ -460,9 +460,24 @@ export default {
       }
     })
 
+    // === РАНДОМНЫЕ ЦВЕТА ДЛЯ ИМЁН СОБАК ===
+    const randomClassCache = new Map()
+    const getRandomHumanClass = (slug) => {
+      if (randomClassCache.has(slug)) {
+        return randomClassCache.get(slug)
+      }
+      
+      const num = Math.floor(Math.random() * 30) + 1
+      const formattedNum = num.toString().padStart(2, '0')
+      const className = `rand-${formattedNum}`
+      
+      randomClassCache.set(slug, className)
+      return className
+    }
+
     return {
-      paginatedVolunteers,
-      filteredVolunteers,
+      paginatedHumans,
+      filteredHumans,
       filterExperience,
       filterDirection,
       isFilterActive,
@@ -487,6 +502,7 @@ export default {
       handleTouchMove,
       handleTouchEnd,
       humanType: props.humanType,
+      getRandomHumanClass,
     }
   }
 }
