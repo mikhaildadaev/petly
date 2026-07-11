@@ -3,4 +3,4 @@ title: Волонтёры
 description: Люди, которые помогают делом
 ---
 
-<ListVolunteers />
+<ListHumans :humanType="'volunteers'"/>
