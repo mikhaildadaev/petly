@@ -54,7 +54,24 @@ a {
 }
 
 /* ============================================
-   ТЭГИ (общие)
+   СООТНОШЕНИЕ
+   ============================================ */
+.aspect{
+  aspect-ratio: 15/9;
+}
+
+/* ============================================
+   ИДЕНТИФИКАТОР
+   ============================================ */
+.uuid {
+  opacity: 0;
+  width: 100%;
+  height: 10px;
+  overflow: hidden;
+}
+
+/* ============================================
+   ТЭГИ
    ============================================ */
 .tag {
   display: inline-block;
@@ -69,20 +86,16 @@ a {
 /* ============================================
    ЦВЕТОВАЯ ДИФФЕРЕНЦИАЦИЯ ТЭГОВ
    ============================================ */
-/* Опыт / оранжевый */
 .experience-tag {
   background: #9422e6;
   color: var(--vp-c-bg);
   font-weight: 700;
 }
-/* Возраст / оранжевый */
 .age-tag {
   background: #e67e22;
   color: var(--vp-c-bg);
   font-weight: 700;
 }
-
-/* Пол — розовый/синий */
 .gender-tag {
   background: #e74c3c;
   color: var(--vp-c-bg);
@@ -91,15 +104,12 @@ a {
 .gender-tag[data-gender="Мальчик"] {
   background: #2980b9;
 }
-
-/* Размер / Направление — зелёный */
 .size-tag,
 .direction-tag {
   background: #27ae60;
   color: var(--vp-c-bg);
   font-weight: 700;
 }
-
 .extra-tag {
   background: #e67e22;
   color: var(--vp-c-bg);
@@ -334,7 +344,7 @@ a {
 }
 
 /* ============================================
-   КАРТОЧКИ
+   GRID КАРТОЧКИ
    ============================================ */
 .grid-card {
   display: grid;
@@ -345,9 +355,8 @@ a {
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
   position: relative;
-  min-height: 400px;
   height: 100%;
-  max-height: 480px;
+  aspect-ratio: 15/9;
 }
 .dark .grid-card {
   background: #252525;
@@ -374,7 +383,6 @@ a {
   backdrop-filter: blur(4px);
   pointer-events: none;
   z-index: 2;
-  /* Маска для SVG */
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'%3E%3C/path%3E%3Cpolyline points='15 3 21 3 21 9'%3E%3C/polyline%3E%3Cline x1='10' y1='14' x2='21' y2='3'%3E%3C/line%3E%3C/svg%3E");
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'%3E%3C/path%3E%3Cpolyline points='15 3 21 3 21 9'%3E%3C/polyline%3E%3Cline x1='10' y1='14' x2='21' y2='3'%3E%3C/line%3E%3C/svg%3E");
   -webkit-mask-size: 20px 20px;
@@ -467,7 +475,9 @@ a {
   color: var(--vp-c-text-light);
 }
 
-/* ===== КАРТОЧКА ЗАГРУЗКИ ===== */
+/* ============================================
+   КАРТОЧКА ЗАГРУЗКИ
+   ============================================ */
 .load-more-card {
   display: flex;
   align-items: center;
@@ -538,70 +548,36 @@ a {
 }
 
 /* ============================================
-   HERO
+   HERO КАРТОЧКИ
    ============================================ */
-.hero-wrapper {
+.hero-card {
   position: relative;
-  width: 100%;
+  margin: 0 -24px;
+  width: calc(100% + 48px);
+  aspect-ratio: 16 / 9;
   border-radius: 16px;
   overflow: hidden;
   margin-bottom: 2rem;
   background: #1a1a2e;
 }
-
-/* Базовая ориентация — по умолчанию 16:9 */
-.hero-wrapper {
-  aspect-ratio: 16 / 9;
+.hero-meta {
+  position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 0.8rem;
+    margin: 14px;
+    z-index: 1;
 }
-
-/* Вертикальная ориентация экрана */
-@media (orientation: portrait) {
-  .hero-wrapper {
-    aspect-ratio: 4 / 5;
-  }
-}
-
-/* Горизонтальная ориентация экрана */
-@media (orientation: landscape) {
-  .hero-wrapper {
-    aspect-ratio: 16 / 9;
-  }
-}
-
-/* Мобильные в портрете (очень узкие) */
-@media (max-width: 480px) and (orientation: portrait) {
-  .hero-wrapper {
-    aspect-ratio: 3 / 4;
-  }
-}
-
-/* Планшеты в портрете */
-@media (min-width: 736px) and (max-width: 1024px) and (orientation: portrait) {
-  .hero-wrapper {
-    aspect-ratio: 4 / 5;
-  }
-}
-
-/* Широкие десктопы */
-@media (min-width: 1400px) {
-  .hero-wrapper {
-    aspect-ratio: 21 / 9;
-  }
-}
-
-.hero-uuid {
-  opacity: 0;
-  width: 100%;
-  height: 10px;
-  overflow: hidden;
-}
-
 .hero-image {
+  position: absolute;
+  top: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  z-index: 0;
 }
-
 .hero-overlay {
   position: absolute;
   bottom: 0;
@@ -614,36 +590,15 @@ a {
   gap: 0.6rem;
 }
 
-.hero-name {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #fff;
-  line-height: 1.2;
-}
-
-.hero-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
-
-.hero-tag {
-  display: inline-block;
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-  padding: 0.3rem 0.8rem;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  backdrop-filter: blur(4px);
-}
-
 /* ============================================
    АДАПТИВНОСТЬ
    ============================================ */
 
 /* Планшеты */
-@media (max-width: 736px) {
+@media (min-width: 736px) and (max-width: 1124px) {
+  .aspect {
+    aspect-ratio: 1/1;
+  }
   .filters {
     gap: 0.75rem;
   }
@@ -663,8 +618,11 @@ a {
 
 
 
-/* Очень маленькие экраны */
-@media (max-width: 480px) {
+/* Телефоны */
+@media (max-width: 736px) {
+  .aspect {
+    aspect-ratio: 9/15;
+  }
   .grid-card-body p {
     font-size: 0.9rem;
   }
