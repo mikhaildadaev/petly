@@ -32,7 +32,7 @@
       </div>
     </div>
     <div v-if="!isMobile" class="grid-cards">
-      <a v-for="dog in paginatedDogs" :key="dog.slug" :href="`${baseUrl}ru/dogs/${dog.slug}`" target="_blank" rel="noopener noreferrer" class="aspect grid-card">
+      <a v-for="dog in paginatedDogs" :key="dog.slug" :href="`${baseUrl}ru/${petType}/${dog.slug}`" target="_blank" rel="noopener noreferrer" class="aspect grid-card">
         <div class="grid-meta">
           <span v-if="dog.gender" class="tag gender-tag" :data-gender="dog.gender">{{ dog.gender }}</span>
           <span v-if="dog.age" class="tag age-tag">{{ dog.age }}</span>
@@ -69,7 +69,7 @@
         </button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(dog, index) in paginatedDogs" :key="dog.slug" class="carousel-slide" :class="{ center: index === currentIndex }" >
-            <a :href="`${baseUrl}ru/dogs/${dog.slug}`" target="_blank" rel="noopener noreferrer" class="aspect grid-card">
+            <a :href="`${baseUrl}ru/${petType}/${dog.slug}`" target="_blank" rel="noopener noreferrer" class="aspect grid-card">
               <div class="grid-meta">
                 <span v-if="dog.gender" class="tag gender-tag" :data-gender="dog.gender">{{ dog.gender }}</span>
                 <span v-if="dog.age" class="tag age-tag">{{ dog.age }}</span>
@@ -117,12 +117,18 @@
 import { computed, ref, onMounted, watch, nextTick, onUnmounted } from 'vue'
 
 const baseUrl = import.meta.env.BASE_URL
-const modules = import.meta.glob('/ru/dogs/*.md')
 const perPage = 8
 const MOBILE_BREAKPOINT = 736
 
 export default {
-  setup() {
+  props: {
+    petType: {
+      type: String,
+      required: true,
+      default: 'dogs'
+    }
+  },
+  setup(props) {
     const touchStartX = ref(0);
     const touchEndX = ref(0);
     const isSwiping = ref(false);
@@ -169,24 +175,31 @@ export default {
       checkMobile()
       
       try {
+        // Динамически получаем все md файлы
+        const allModules = import.meta.glob('/ru/*/*.md')
+        
+        // Фильтруем только те, что относятся к нашему petType
+        const filteredModules = Object.entries(allModules).filter(([path]) => {
+          return path.includes(`/ru/${props.petType}/`) && !path.endsWith(`${props.petType}_index.md`)
+        })
+        
         const loaded = await Promise.all(
-          Object.entries(modules)
-            .filter(([path]) => !path.endsWith('dogs_index.md'))
-            .map(async ([path, loader]) => {
-              const mod = await loader()
-              const slug = path.replace('/ru/dogs/', '').replace('.md', '')
-              const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-              return {
-                slug,
-                name: fm.title || slug.charAt(0).toUpperCase() + slug.slice(1),
-                description: fm.description || '',
-                age: fm.age || '',
-                gender: fm.gender || '',
-                size: fm.size || '',
-                tags: fm.tags || [],
-                image: fm.image || '/placeholder-dog.svg'
-              }
-            })
+          filteredModules.map(async ([path, loader]) => {
+            const mod = await loader()
+            // Динамически заменяем путь
+            const slug = path.replace(`/ru/${props.petType}/`, '').replace('.md', '')
+            const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
+            return {
+              slug,
+              name: fm.title || slug.charAt(0).toUpperCase() + slug.slice(1),
+              description: fm.description || '',
+              age: fm.age || '',
+              gender: fm.gender || '',
+              size: fm.size || '',
+              tags: fm.tags || [],
+              image: fm.image || '/placeholder-dog.svg'
+            }
+          })
         )
         allDogs.value = loaded
       } catch (error) {
@@ -468,6 +481,7 @@ export default {
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
+      petType: props.petType,
     }
   }
 }

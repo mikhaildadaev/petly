@@ -16,6 +16,13 @@
 import { computed } from 'vue'
 import { useData } from 'vitepress'
 
+const props = defineProps({
+  petType: {
+    type: String,
+    required: false,
+    default: 'dogs'
+  }
+})
 const { frontmatter } = useData()
 
 // Безопасное получение frontmatter
