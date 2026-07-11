@@ -48,186 +48,211 @@
   </div>
 </template>
 
-<script setup>
+<script>
 import { computed, ref, onMounted, onUnmounted, nextTick } from 'vue'
 
-  const props = defineProps({
+const baseUrl = import.meta.env.BASE_URL
+
+export default {
+  props: {
     guardianUuids: {
       type: Array,
       default: () => []
     }
-  })
+  },
+  setup(props) {
+    const allVolunteers = ref([])
+    const isLoading = ref(true)
 
-  const baseUrl = import.meta.env.BASE_URL
-  const allVolunteers = ref([])
-  const isLoading = ref(true)
+    // === МОБИЛЬНАЯ ВЕРСИЯ ===
+    const MOBILE_BREAKPOINT = 736
+    const isMobile = ref(false)
 
-  // === МОБИЛЬНАЯ ВЕРСИЯ ===
-  const MOBILE_BREAKPOINT = 736
-  const isMobile = ref(false)
-
-  const checkMobile = () => {
-    if (typeof window !== 'undefined') {
-      isMobile.value = window.innerWidth < MOBILE_BREAKPOINT
-    }
-  }
-
-  const getRandomVolunteerClass = (uuid) => {
-    if (!uuid) return ''
-    
-    const num = Math.floor(Math.random() * 30) + 1
-    const formattedNum = num.toString().padStart(2, '0')
-    const className = `rand-${formattedNum}`
-    
-    return className
-  }
-
-  // === КАРУСЕЛЬ ===
-  const carouselRef = ref(null)
-  const currentIndex = ref(0)
-  const touchStartX = ref(0)
-  const touchEndX = ref(0)
-  const isSwiping = ref(false)
-
-  const scrollToSlide = (index) => {
-    if (!carouselRef.value || !guardians.value) return
-    const container = carouselRef.value
-    const slides = container.querySelectorAll('.carousel-slide')
-    if (!slides.length || index < 0 || index >= slides.length) return
-
-    const slide = slides[index]
-    const containerWidth = container.offsetWidth
-    const slideWidth = slide.offsetWidth
-    const scrollPosition = slide.offsetLeft - (containerWidth - slideWidth) / 2
-
-    container.scrollTo({
-      left: Math.max(0, scrollPosition),
-      behavior: 'smooth'
-    })
-
-    currentIndex.value = index
-  }
-
-  const nextSlide = () => {
-    if (!guardians.value) return
-    if (currentIndex.value < guardians.value.length - 1) {
-      scrollToSlide(currentIndex.value + 1)
-    }
-  }
-
-  const prevSlide = () => {
-    if (currentIndex.value > 0) {
-      scrollToSlide(currentIndex.value - 1)
-    }
-  }
-
-  const goToSlide = (index) => {
-    scrollToSlide(index)
-  }
-
-  // === ОБРАБОТЧИКИ СВАЙПА ===
-  const handleTouchStart = (e) => {
-    touchStartX.value = e.touches[0].clientX;
-    isSwiping.value = true;
-  }
-
-  const handleTouchMove = (e) => {
-    if (!isSwiping.value) return;
-    e.preventDefault();
-  }
-
-  const handleTouchEnd = (e) => {
-    if (!isSwiping.value) return;
-    isSwiping.value = false;
-
-    touchEndX.value = e.changedTouches[0].clientX;
-    const diffX = touchStartX.value - touchEndX.value;
-    const minSwipeDistance = 50;
-
-    if (diffX > minSwipeDistance) {
-      nextSlide();
-    } else if (diffX < -minSwipeDistance) {
-      prevSlide();
+    const checkMobile = () => {
+      if (typeof window !== 'undefined') {
+        isMobile.value = window.innerWidth < MOBILE_BREAKPOINT
+      }
     }
 
-    touchStartX.value = 0;
-    touchEndX.value = 0;
-  }
-
-  // === ОБРАБОТЧИК RESIZE ===
-  let resizeTimeout = null
-
-  const handleResize = () => {
-    if (resizeTimeout) {
-      clearTimeout(resizeTimeout)
-    }
-    
-    resizeTimeout = setTimeout(() => {
-      checkMobile()
-      resizeTimeout = null
-    }, 100)
-  }
-
-  // === ЗАГРУЗКА ДАННЫХ ===
-  onMounted(async () => {
-    checkMobile()
-    
-    if (typeof window !== 'undefined') {
-      window.addEventListener('resize', handleResize)
-    }
-    
-    try {
-      const modules = import.meta.glob('/ru/volunteers/*.md')
+    // === РАНДОМНЫЕ ЦВЕТА ДЛЯ ИМЁН ===
+    const randomClassCache = new Map()
+    const getRandomVolunteerClass = (slug) => {
+      if (randomClassCache.has(slug)) {
+        return randomClassCache.get(slug)
+      }
       
-      const loaded = await Promise.all(
-        Object.entries(modules)
-          .filter(([path]) => !path.endsWith('volunteers_index.md'))
-          .map(async ([path, loader]) => {
-            const mod = await loader()
-            const slug = path.replace('/ru/volunteers/', '').replace('.md', '')
-            const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            
-            return {
-              slug,
-              uuid: fm.uuid || '',
-              name: fm.title || slug.charAt(0).toUpperCase() + slug.slice(1),
-              description: fm.description || '',
-              experience: fm.experience || '',
-              direction: fm.direction || '',
-              image: fm.image || '/placeholder-volunteer.svg'
-            }
-          })
-      )
-      allVolunteers.value = loaded
-    } catch (error) {
-      console.error('Ошибка загрузки данных волонтеров:', error)
-    } finally {
-      isLoading.value = false
+      const num = Math.floor(Math.random() * 30) + 1
+      const formattedNum = num.toString().padStart(2, '0')
+      const className = `rand-${formattedNum}`
+      
+      randomClassCache.set(slug, className)
+      return className
     }
-  })
 
-  onUnmounted(() => {
-    if (typeof window !== 'undefined') {
-      window.removeEventListener('resize', handleResize)
+    // === КАРУСЕЛЬ ===
+    const carouselRef = ref(null)
+    const currentIndex = ref(0)
+    const touchStartX = ref(0)
+    const touchEndX = ref(0)
+    const isSwiping = ref(false)
+
+    const scrollToSlide = (index) => {
+      if (!carouselRef.value || !guardians.value) return
+      const container = carouselRef.value
+      const slides = container.querySelectorAll('.carousel-slide')
+      if (!slides.length || index < 0 || index >= slides.length) return
+
+      const slide = slides[index]
+      const containerWidth = container.offsetWidth
+      const slideWidth = slide.offsetWidth
+      const scrollPosition = slide.offsetLeft - (containerWidth - slideWidth) / 2
+
+      container.scrollTo({
+        left: Math.max(0, scrollPosition),
+        behavior: 'smooth'
+      })
+
+      currentIndex.value = index
+    }
+
+    const nextSlide = () => {
+      if (!guardians.value) return
+      if (currentIndex.value < guardians.value.length - 1) {
+        scrollToSlide(currentIndex.value + 1)
+      }
+    }
+
+    const prevSlide = () => {
+      if (currentIndex.value > 0) {
+        scrollToSlide(currentIndex.value - 1)
+      }
+    }
+
+    const goToSlide = (index) => {
+      scrollToSlide(index)
+    }
+
+    // === ОБРАБОТЧИКИ СВАЙПА ===
+    const handleTouchStart = (e) => {
+      touchStartX.value = e.touches[0].clientX;
+      isSwiping.value = true;
+    }
+
+    const handleTouchMove = (e) => {
+      if (!isSwiping.value) return;
+      e.preventDefault();
+    }
+
+    const handleTouchEnd = (e) => {
+      if (!isSwiping.value) return;
+      isSwiping.value = false;
+
+      touchEndX.value = e.changedTouches[0].clientX;
+      const diffX = touchStartX.value - touchEndX.value;
+      const minSwipeDistance = 50;
+
+      if (diffX > minSwipeDistance) {
+        nextSlide();
+      } else if (diffX < -minSwipeDistance) {
+        prevSlide();
+      }
+
+      touchStartX.value = 0;
+      touchEndX.value = 0;
+    }
+
+    // === ОБРАБОТЧИК RESIZE ===
+    let resizeTimeout = null
+
+    const handleResize = () => {
       if (resizeTimeout) {
         clearTimeout(resizeTimeout)
       }
+      
+      resizeTimeout = setTimeout(() => {
+        checkMobile()
+        resizeTimeout = null
+      }, 100)
     }
-  })
 
-  // === ФИЛЬТРАЦИЯ ===
-  const guardians = computed(() => {
-    // Проверяем, что массив загружен и есть UUID для фильтрации
-    if (!allVolunteers.value || allVolunteers.value.length === 0) {
-      return []
+    // === ЗАГРУЗКА ДАННЫХ ===
+    onMounted(async () => {
+      checkMobile()
+      
+      if (typeof window !== 'undefined') {
+        window.addEventListener('resize', handleResize)
+      }
+      
+      try {
+        const modules = import.meta.glob('/ru/volunteers/*.md')
+        
+        const loaded = await Promise.all(
+          Object.entries(modules)
+            .filter(([path]) => !path.endsWith('volunteers_index.md'))
+            .map(async ([path, loader]) => {
+              const mod = await loader()
+              const slug = path.replace('/ru/volunteers/', '').replace('.md', '')
+              const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
+              
+              return {
+                slug,
+                uuid: fm.uuid || '',
+                name: fm.title || slug.charAt(0).toUpperCase() + slug.slice(1),
+                description: fm.description || '',
+                experience: fm.experience || '',
+                direction: fm.direction || '',
+                image: fm.image || '/placeholder-volunteer.svg'
+              }
+            })
+        )
+        allVolunteers.value = loaded
+      } catch (error) {
+        console.error('Ошибка загрузки данных волонтеров:', error)
+      } finally {
+        isLoading.value = false
+      }
+    })
+
+    onUnmounted(() => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', handleResize)
+        if (resizeTimeout) {
+          clearTimeout(resizeTimeout)
+        }
+      }
+    })
+
+    // === ФИЛЬТРАЦИЯ ===
+    const guardians = computed(() => {
+      if (!allVolunteers.value || allVolunteers.value.length === 0) {
+        return []
+      }
+      
+      if (!props.guardianUuids || props.guardianUuids.length === 0) {
+        return []
+      }
+      
+      return allVolunteers.value.filter(v => 
+        v.uuid && props.guardianUuids.includes(v.uuid)
+      )
+    })
+
+    return {
+      guardians,
+      isLoading,
+      isMobile,
+      carouselRef,
+      currentIndex,
+      scrollToSlide,
+      nextSlide,
+      prevSlide,
+      goToSlide,
+      handleTouchStart,
+      handleTouchMove,
+      handleTouchEnd,
+      getRandomVolunteerClass,
+      baseUrl,
     }
-    
-    if (!props.guardianUuids || props.guardianUuids.length === 0) {
-      return []
-    }
-    
-    return allVolunteers.value.filter(v => 
-      v.uuid && props.guardianUuids.includes(v.uuid)
-    )
-  })
+  }
+}
 </script>
