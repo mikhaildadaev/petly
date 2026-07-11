@@ -120,9 +120,12 @@
 <script>
 import { computed, ref, onMounted, watch, nextTick, onUnmounted } from 'vue'
 
+const MOBILE_BREAKPOINT = 736
 const baseUrl = import.meta.env.BASE_URL
 const perPage = 8
-const MOBILE_BREAKPOINT = 736
+
+// === ГЛОБАЛЬНЫЙ КЭШ ДЛЯ ЦВЕТОВ ===
+const randomClassCache = new Map()
 
 export default {
   props: {

@@ -1,7 +1,7 @@
 <template>
   <div v-if="guardians && guardians.length > 0" class="grid-list">
     <div v-if="!isMobile" class="grid-cards">
-      <a v-for="guardian in guardians" :key="guardian.uuid" :href="`${baseUrl}ru/volunteers/${guardian.slug}`" class="aspect-list grid-card">
+      <a v-for="guardian in guardians" :key="guardian.uuid" :href="`${baseUrl}ru/volunteers/${guardian.slug}`" class="grid-card">
         <div class="grid-meta">
           <span v-if="guardian.direction" class="tag direction-tag">{{ guardian.direction }}</span>
           <span v-if="guardian.experience" class="tag experience-tag">{{ guardian.experience }}</span>
@@ -22,7 +22,7 @@
         </button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(guardian, index) in guardians" :key="guardian.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="`${baseUrl}ru/volunteers/${guardian.slug}`" class="aspect-list grid-card">
+            <a :href="`${baseUrl}ru/volunteers/${guardian.slug}`" target="_blank" rel="noopener noreferrer" class="grid-card">
               <div class="grid-meta">
                 <span v-if="guardian.direction" class="tag direction-tag">{{ guardian.direction }}</span>
                 <span v-if="guardian.experience" class="tag experience-tag">{{ guardian.experience }}</span>
@@ -51,7 +51,12 @@
 <script>
 import { computed, ref, onMounted, onUnmounted, nextTick } from 'vue'
 
+const MOBILE_BREAKPOINT = 736
 const baseUrl = import.meta.env.BASE_URL
+const perPage = 0
+
+// === ГЛОБАЛЬНЫЙ КЭШ ДЛЯ ЦВЕТОВ ===
+const randomClassCache = new Map()
 
 export default {
   props: {
@@ -61,17 +66,37 @@ export default {
     }
   },
   setup(props) {
+    // Все переменные ОБЪЯВЛЯЕМ ВНУТРИ setup()
     const allVolunteers = ref([])
     const isLoading = ref(true)
-
-    // === МОБИЛЬНАЯ ВЕРСИЯ ===
-    const MOBILE_BREAKPOINT = 736
     const isMobile = ref(false)
 
     const checkMobile = () => {
       if (typeof window !== 'undefined') {
-        isMobile.value = window.innerWidth < MOBILE_BREAKPOINT
+        const newIsMobile = window.innerWidth < MOBILE_BREAKPOINT
+        if (isMobile.value !== newIsMobile) {
+          isMobile.value = newIsMobile
+        }
       }
+    }
+
+    // === РАНДОМНЫЕ ЦВЕТА ===
+    const getRandomVolunteerClass = (uuid) => {
+      if (!uuid) {
+        console.warn('UUID отсутствует!')
+        return 'rand-01'
+      }
+      
+      if (randomClassCache.has(uuid)) {
+        return randomClassCache.get(uuid)
+      }
+      
+      const num = Math.floor(Math.random() * 30) + 1
+      const formattedNum = num.toString().padStart(2, '0')
+      const className = `rand-${formattedNum}`
+      
+      randomClassCache.set(uuid, className)
+      return className
     }
 
     // === КАРУСЕЛЬ ===
@@ -81,8 +106,65 @@ export default {
     const touchEndX = ref(0)
     const isSwiping = ref(false)
 
+    // === ФИЛЬТРАЦИЯ ===
+    const guardians = computed(() => {
+      if (isLoading.value) return []
+      if (!allVolunteers.value || allVolunteers.value.length === 0) return []
+      if (!props.guardianUuids || props.guardianUuids.length === 0) return []
+      
+      return allVolunteers.value.filter(v => 
+        v.uuid && props.guardianUuids.includes(v.uuid)
+      )
+    })
+
+    // === ЗАГРУЗКА ДАННЫХ ===
+    onMounted(async () => {
+      checkMobile()
+      
+      if (typeof window !== 'undefined') {
+        window.addEventListener('resize', handleResize)
+      }
+      
+      try {
+        const modules = import.meta.glob('/ru/volunteers/*.md')
+        
+        const loaded = await Promise.all(
+          Object.entries(modules)
+            .filter(([path]) => !path.endsWith('volunteers_index.md'))
+            .map(async ([path, loader]) => {
+              const mod = await loader()
+              const slug = path.replace('/ru/volunteers/', '').replace('.md', '')
+              const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
+              
+              return {
+                slug,
+                uuid: fm.uuid || slug,
+                name: fm.title || slug.charAt(0).toUpperCase() + slug.slice(1),
+                description: fm.description || '',
+                experience: fm.experience || '',
+                direction: fm.direction || '',
+                image: fm.image || '/placeholder-volunteer.svg'
+              }
+            })
+        )
+        allVolunteers.value = loaded
+        
+        console.log('✅ Загружены волонтеры:', loaded.map(v => ({
+          name: v.name,
+          uuid: v.uuid,
+          slug: v.slug
+        })))
+        
+      } catch (error) {
+        console.error('Ошибка загрузки данных волонтеров:', error)
+      } finally {
+        isLoading.value = false
+      }
+    })
+
+    // === ЛОГИКА КАРУСЕЛИ ===
     const scrollToSlide = (index) => {
-      if (!carouselRef.value || !guardians.value) return
+      if (!carouselRef.value || !guardians.value || guardians.value.length === 0) return
       const container = carouselRef.value
       const slides = container.querySelectorAll('.carousel-slide')
       if (!slides.length || index < 0 || index >= slides.length) return
@@ -101,7 +183,7 @@ export default {
     }
 
     const nextSlide = () => {
-      if (!guardians.value) return
+      if (!guardians.value || guardians.value.length === 0) return
       if (currentIndex.value < guardians.value.length - 1) {
         scrollToSlide(currentIndex.value + 1)
       }
@@ -146,7 +228,7 @@ export default {
       touchEndX.value = 0;
     }
 
-    // === ОБРАБОТЧИК RESIZE ===
+    // === RESIZE ===
     let resizeTimeout = null
 
     const handleResize = () => {
@@ -160,44 +242,6 @@ export default {
       }, 100)
     }
 
-    // === ЗАГРУЗКА ДАННЫХ ===
-    onMounted(async () => {
-      checkMobile()
-      
-      if (typeof window !== 'undefined') {
-        window.addEventListener('resize', handleResize)
-      }
-      
-      try {
-        const modules = import.meta.glob('/ru/volunteers/*.md')
-        
-        const loaded = await Promise.all(
-          Object.entries(modules)
-            .filter(([path]) => !path.endsWith('volunteers_index.md'))
-            .map(async ([path, loader]) => {
-              const mod = await loader()
-              const slug = path.replace('/ru/volunteers/', '').replace('.md', '')
-              const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-              
-              return {
-                slug,
-                uuid: fm.uuid || '',
-                name: fm.title || slug.charAt(0).toUpperCase() + slug.slice(1),
-                description: fm.description || '',
-                experience: fm.experience || '',
-                direction: fm.direction || '',
-                image: fm.image || '/placeholder-volunteer.svg'
-              }
-            })
-        )
-        allVolunteers.value = loaded
-      } catch (error) {
-        console.error('Ошибка загрузки данных волонтеров:', error)
-      } finally {
-        isLoading.value = false
-      }
-    })
-
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)
@@ -207,36 +251,7 @@ export default {
       }
     })
 
-    // === ФИЛЬТРАЦИЯ ===
-    const guardians = computed(() => {
-      if (!allVolunteers.value || allVolunteers.value.length === 0) {
-        return []
-      }
-      
-      if (!props.guardianUuids || props.guardianUuids.length === 0) {
-        return []
-      }
-      
-      return allVolunteers.value.filter(v => 
-        v.uuid && props.guardianUuids.includes(v.uuid)
-      )
-    })
-
-    // === РАНДОМНЫЕ ЦВЕТА ДЛЯ ИМЁН СОБАК ===
-    const randomClassCache = new Map()
-    const getRandomVolunteerClass = (slug) => {
-      if (randomClassCache.has(slug)) {
-        return randomClassCache.get(slug)
-      }
-      
-      const num = Math.floor(Math.random() * 30) + 1
-      const formattedNum = num.toString().padStart(2, '0')
-      const className = `rand-${formattedNum}`
-      
-      randomClassCache.set(slug, className)
-      return className
-    }
-
+    // === ВОЗВРАЩАЕМ ВСЕ НУЖНЫЕ ПЕРЕМЕННЫЕ ===
     return {
       guardians,
       isLoading,
