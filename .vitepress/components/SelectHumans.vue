@@ -1,15 +1,15 @@
 <template>
-  <div v-if="guardians && guardians.length > 0" class="grid-list">
+  <div v-if="humans && humans.length > 0" class="grid-list">
     <div v-if="!isMobile" class="grid-cards">
-      <a v-for="guardian in guardians" :key="guardian.uuid" :href="`${baseUrl}ru/${humanType}/${guardian.slug}`" class="aspect-list grid-card">
+      <a v-for="humans in humans" :key="humans.uuid" :href="`${baseUrl}ru/${humanType}/${humans.slug}`" class="aspect-list grid-card">
         <div class="grid-meta">
-          <span v-if="guardian.direction" class="tag direction-tag">{{ guardian.direction }}</span>
-          <span v-if="guardian.experience" class="tag experience-tag">{{ guardian.experience }}</span>
+          <span v-if="humans.direction" class="tag direction-tag">{{ humans.direction }}</span>
+          <span v-if="humans.experience" class="tag experience-tag">{{ humans.experience }}</span>
         </div>
-        <img :src="guardian.image" :alt="guardian.name" loading="lazy" />
-        <div :class="['grid-card-body', getRandomVolunteerClass(guardian.uuid)]">
-          <div class="name">{{ guardian.name }}</div>
-          <p>{{ guardian.description }}</p>
+        <img :src="humans.image" :alt="humans.name" loading="lazy" />
+        <div :class="['grid-card-body', getRandomVolunteerClass(humans.uuid)]">
+          <div class="name">{{ humans.name }}</div>
+          <p>{{ humans.description }}</p>
         </div>
       </a>
     </div>
@@ -21,21 +21,21 @@
           </svg>
         </button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-          <div v-for="(guardian, index) in guardians" :key="guardian.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="`${baseUrl}ru/${humanType}/${guardian.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+          <div v-for="(humans, index) in humans" :key="humans.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
+            <a :href="`${baseUrl}ru/${humanType}/${humans.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
               <div class="grid-meta">
-                <span v-if="guardian.direction" class="tag direction-tag">{{ guardian.direction }}</span>
-                <span v-if="guardian.experience" class="tag experience-tag">{{ guardian.experience }}</span>
+                <span v-if="humans.direction" class="tag direction-tag">{{ humans.direction }}</span>
+                <span v-if="humans.experience" class="tag experience-tag">{{ humans.experience }}</span>
               </div>
-              <img :src="guardian.image" :alt="guardian.name" loading="lazy" />
-              <div :class="['grid-card-body', getRandomVolunteerClass(guardian.uuid)]">
-                <div class="name">{{ guardian.name }}</div>
-                <p>{{ guardian.description }}</p>
+              <img :src="humans.image" :alt="humans.name" loading="lazy" />
+              <div :class="['grid-card-body', getRandomVolunteerClass(humans.uuid)]">
+                <div class="name">{{ humans.name }}</div>
+                <p>{{ humans.description }}</p>
               </div>
             </a>
           </div>
         </div>
-        <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= (guardians ? guardians.length - 1 : 0)">
+        <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= (humans ? humans.length - 1 : 0)">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
             <path d="M9 18l6-6-6-6" />
           </svg>
@@ -43,7 +43,7 @@
       </div>
     </div>
   </div>
-  <div v-else-if="guardians && guardians.length === 0" class="no-guardians">
+  <div v-else-if="humans && humans.length === 0" class="no-humans">
     <p>Нет назначенных опекунов</p>
   </div>
 </template>
@@ -60,7 +60,7 @@ const randomClassCache = new Map()
 
 export default {
   props: {
-    guardianUuids: {
+    humanUUIDs: {
       type: Array,
       default: () => []
     },
@@ -109,13 +109,13 @@ export default {
     const currentIndex = ref(0)
 
     // === ФИЛЬТРАЦИЯ ===
-    const guardians = computed(() => {
+    const humans = computed(() => {
       if (isLoading.value) return []
       if (!allHumans.value || allHumans.value.length === 0) return []
-      if (!props.guardianUuids || props.guardianUuids.length === 0) return []
+      if (!props.humanUUIDs || props.humanUUIDs.length === 0) return []
       
       return allHumans.value.filter(v => 
-        v.uuid && props.guardianUuids.includes(v.uuid)
+        v.uuid && props.humanUUIDs.includes(v.uuid)
       )
     })
 
@@ -166,7 +166,7 @@ export default {
 
     // === ЛОГИКА КАРУСЕЛИ ===
     const scrollToSlide = (index) => {
-      if (!carouselRef.value || !guardians.value || guardians.value.length === 0) return
+      if (!carouselRef.value || !humans.value || humans.value.length === 0) return
       const container = carouselRef.value
       const slides = container.querySelectorAll('.carousel-slide')
       if (!slides.length || index < 0 || index >= slides.length) return
@@ -185,8 +185,8 @@ export default {
     }
 
     const nextSlide = () => {
-      if (!guardians.value || guardians.value.length === 0) return
-      if (currentIndex.value < guardians.value.length - 1) {
+      if (!humans.value || humans.value.length === 0) return
+      if (currentIndex.value < humans.value.length - 1) {
         scrollToSlide(currentIndex.value + 1)
       }
     }
@@ -279,7 +279,7 @@ export default {
 
     // === ВОЗВРАЩАЕМ ВСЕ НУЖНЫЕ ПЕРЕМЕННЫЕ ===
     return {
-      guardians,
+      humans,
       isLoading,
       isMobile,
       carouselRef,
