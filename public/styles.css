@@ -356,7 +356,6 @@ a {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
   position: relative;
   height: 100%;
-  aspect-ratio: 15/9;
 }
 .dark .grid-card {
   background: #252525;
@@ -554,7 +553,6 @@ a {
   position: relative;
   margin: 0 -24px;
   width: calc(100% + 48px);
-  aspect-ratio: 16 / 9;
   border-radius: 16px;
   overflow: hidden;
   margin-bottom: 2rem;
