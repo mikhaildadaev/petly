@@ -102,9 +102,6 @@ export default {
     // === КАРУСЕЛЬ ===
     const carouselRef = ref(null)
     const currentIndex = ref(0)
-    const touchStartX = ref(0)
-    const touchEndX = ref(0)
-    const isSwiping = ref(false)
 
     // === ФИЛЬТРАЦИЯ ===
     const guardians = computed(() => {
@@ -196,22 +193,44 @@ export default {
       scrollToSlide(index)
     }
 
-    // === ОБРАБОТЧИКИ СВАЙПА ===
+    // === ОБРАБОТЧИКИ СОБЫТИЙ СВАЙПА ===
+    const touchStartX = ref(0);
+    const touchStartY = ref(0);
+    const touchEndX = ref(0);
+    const touchEndY = ref(0);
+    const isSwiping = ref(false);
+
     const handleTouchStart = (e) => {
-      touchStartX.value = e.touches[0].clientX;
+      const touch = e.touches[0];
+      touchStartX.value = touch.clientX;
+      touchStartY.value = touch.clientY;
       isSwiping.value = true;
-    }
+    };
 
     const handleTouchMove = (e) => {
       if (!isSwiping.value) return;
+      
+      const touch = e.touches[0];
+      const deltaX = touch.clientX - touchStartX.value;
+      const deltaY = touch.clientY - touchStartY.value;
+      
+      // Если вертикальное движение больше - прокручиваем страницу
+      if (Math.abs(deltaY) > Math.abs(deltaX)) {
+        isSwiping.value = false;
+        return;
+      }
+      
       e.preventDefault();
-    }
+    };
 
     const handleTouchEnd = (e) => {
       if (!isSwiping.value) return;
       isSwiping.value = false;
 
-      touchEndX.value = e.changedTouches[0].clientX;
+      const touch = e.changedTouches[0];
+      touchEndX.value = touch.clientX;
+      touchEndY.value = touch.clientY;
+      
       const diffX = touchStartX.value - touchEndX.value;
       const minSwipeDistance = 50;
 
@@ -222,8 +241,10 @@ export default {
       }
 
       touchStartX.value = 0;
+      touchStartY.value = 0;
       touchEndX.value = 0;
-    }
+      touchEndY.value = 0;
+    };
 
     // === RESIZE ===
     let resizeTimeout = null
@@ -264,6 +285,10 @@ export default {
       handleTouchEnd,
       getRandomVolunteerClass,
       baseUrl,
+      touchStartX,
+      touchStartY,
+      touchEndX,
+      touchEndY,
     }
   }
 }
