@@ -7,7 +7,7 @@
     </div>
     <img :src="image" :alt="name" class="hero-image" loading="lazy" @error="handleImageError"/>
     <div class="hero-overlay">
-      <h1 class="name">{{ name }}</h1>
+      <div class="name">{{ name }}</div>
     </div>
   </div>
 </template>

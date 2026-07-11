@@ -8,7 +8,7 @@
         </div>
         <img :src="guardian.image" :alt="guardian.name" loading="lazy" />
         <div class="grid-card-body">
-          <h3>{{ guardian.name }}</h3>
+          <div class="name">{{ guardian.name }}</div>
           <p>{{ guardian.description }}</p>
         </div>
       </a>
