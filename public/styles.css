@@ -523,11 +523,6 @@ h1,h2,h3 {
 }
 .load-more-card:hover {
   border-color: var(--vp-c-brand-light);
-  transform: scale(1.02);
-  box-shadow: var(--shadow-hover);
-}
-.load-more-card:active {
-  transform: scale(0.98);
 }
 .load-more-content {
   display: flex;
