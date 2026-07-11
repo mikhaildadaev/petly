@@ -78,7 +78,7 @@
               </div>
               <img :src="volunteer.image" :alt="volunteer.name" loading="lazy" />
               <div class="grid-card-body">
-                <h3>{{ volunteer.name }}</h3>
+                <div class="name">{{ volunteer.name }}</div>
                 <p>{{ volunteer.description }}</p>
               </div>
             </a>

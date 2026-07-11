@@ -40,7 +40,7 @@
         </div>
         <img :src="dog.image" :alt="dog.name" loading="lazy" />
         <div class="grid-card-body">
-          <h3>{{ dog.name }}</h3>
+          <div class="name">{{ dog.name }}</div>
           <p>{{ dog.description }}</p>
         </div>
       </a>
