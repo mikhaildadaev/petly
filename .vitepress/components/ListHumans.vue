@@ -1,6 +1,6 @@
 <template>
-  <div class="filters-bar">
-    <div class="filters">
+  <div class="filters-compact">
+    <div class="filter-group">
       <select v-model="filterExperience" class="filter-select">
         <option value="">Все уровни</option>
         <option value="Начинающий">Начинающий (до 1 года)</option>
@@ -21,96 +21,94 @@
         <option value="Ветеринария">Ветеринария</option>
         <option value="Фандрайзинг">Фандрайзинг</option>
       </select>
-      <button v-if="isFilterActive" @click="resetFilters" class="btn-reset" title="Сбросить все фильтры">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 6h18" />
-          <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-          <path d="M10 11v6" />
-          <path d="M14 11v6" />
-        </svg>
-        СБРОСИТЬ
-      </button>
     </div>
+    <button v-if="!areAllActive" class="btn-reset-compact" @click="resetAllFilters" title="Включить все фильтры">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 6h18" />
+        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+        <path d="M10 11v6" />
+        <path d="M14 11v6" />
+      </svg>
+      СБРОСИТЬ
+    </button>
   </div>
-  <div class="grid-list">
-    <div v-if="!isMobile" class="grid-cards">
-      <a v-for="human in paginatedHumans" :key="human.slug" :href="`${baseUrl}ru/${humanType}/${human.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
-        <div class="grid-meta">
-          <span v-if="human.direction" class="tag direction-tag">{{ human.direction }}</span>
-          <span v-if="human.experience" class="tag experience-tag">{{ human.experience }}</span>
+  <div v-if="!isMobile" class="grid-cards">
+    <a v-for="human in paginatedHumans" :key="human.slug" :href="`${baseUrl}ru/${humanType}/${human.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+      <div class="grid-meta">
+        <span v-if="human.direction" class="tag direction-tag">{{ human.direction }}</span>
+        <span v-if="human.experience" class="tag experience-tag">{{ human.experience }}</span>
+      </div>
+      <img :src="human.image" :alt="human.name" loading="lazy" />
+      <div :class="['grid-card-body', getRandomHumanClass(human.slug)]">
+        <div class="name">{{ human.name }}</div>
+        <p>{{ human.description }}</p>
+      </div>
+    </a>
+    <div v-if="hasMoreItems" class="load-more" @click="loadMore">
+      <div class="load-more-content">
+        <div class="load-more-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 5v14" />
+            <path d="M5 12h14" />
+          </svg>
         </div>
-        <img :src="human.image" :alt="human.name" loading="lazy" />
-        <div :class="['grid-card-body', getRandomHumanClass(human.slug)]">
-          <div class="name">{{ human.name }}</div>
-          <p>{{ human.description }}</p>
-        </div>
-      </a>
-      <div v-if="hasMoreItems" class="load-more" @click="loadMore">
-        <div class="load-more-content">
-          <div class="load-more-icon">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 5v14" />
-              <path d="M5 12h14" />
-            </svg>
-          </div>
-          <span class="load-more-text">Загрузить ещё</span>
-          <span class="load-more-count">{{ remaining }} осталось</span>
-          <div class="load-more-progress">
-            <div class="progress-bar" :style="{ width: `${(visibleCount / filteredHumans.length) * 100}%` }"></div>
-          </div>
+        <span class="load-more-text">Загрузить ещё</span>
+        <span class="load-more-count">{{ remaining }} осталось</span>
+        <div class="load-more-progress">
+          <div class="progress-bar" :style="{ width: `${(visibleCount / filteredHumans.length) * 100}%` }"></div>
         </div>
       </div>
     </div>
-    <div v-else class="carousel-container">
-      <div class="carousel-wrapper">
-        <button class="carousel-btn prev" @click="prevSlide" :disabled="currentIndex === 0">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
-        </button>      
-        <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-          <div v-for="(human, index) in paginatedHumans" :key="human.slug" class="carousel-slide" :class="{ center: index === currentIndex }" >
-            <a :href="`${baseUrl}ru/${humanType}/${human.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
-              <div class="grid-meta">
-                <span v-if="human.direction" class="tag direction-tag">{{ human.direction }}</span>
-                <span v-if="human.experience" class="tag experience-tag">{{ human.experience }}</span>
+  </div>
+  <div v-else class="carousel-cards">
+    <div class="carousel-wrapper">
+      <button class="carousel-btn prev" @click="prevSlide" :disabled="currentIndex === 0">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
+      </button>      
+      <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
+        <div v-for="(human, index) in paginatedHumans" :key="human.slug" class="carousel-slide" :class="{ center: index === currentIndex }" >
+          <a :href="`${baseUrl}ru/${humanType}/${human.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+            <div class="grid-meta">
+              <span v-if="human.direction" class="tag direction-tag">{{ human.direction }}</span>
+              <span v-if="human.experience" class="tag experience-tag">{{ human.experience }}</span>
+            </div>
+            <img :src="human.image" :alt="human.name" loading="lazy" />
+            <div :class="['grid-card-body', getRandomHumanClass(human.slug)]">
+              <div class="name">{{ human.name }}</div>
+              <p>{{ human.description }}</p>
+            </div>
+          </a>
+        </div>
+        <div v-if="hasMoreItems" class="carousel-slide load-more-slide" :class="{ center: currentIndex === paginatedHumans.length }">
+          <div class="load-more" @click="loadMore">
+            <div class="load-more-content">
+              <div class="load-more-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 5v14" />
+                  <path d="M5 12h14" />
+                </svg>
               </div>
-              <img :src="human.image" :alt="human.name" loading="lazy" />
-              <div :class="['grid-card-body', getRandomHumanClass(human.slug)]">
-                <div class="name">{{ human.name }}</div>
-                <p>{{ human.description }}</p>
-              </div>
-            </a>
-          </div>
-          <div v-if="hasMoreItems" class="carousel-slide load-more-slide" :class="{ center: currentIndex === paginatedHumans.length }">
-            <div class="load-more" @click="loadMore">
-              <div class="load-more-content">
-                <div class="load-more-icon">
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 5v14" />
-                    <path d="M5 12h14" />
-                  </svg>
-                </div>
-                <span class="load-more-text">Загрузить ещё</span>
-                <span class="load-more-count">{{ remaining }} осталось</span>
-                <div class="load-more-progress">
-                  <div class="progress-bar" :style="{ width: `${(visibleCount / filteredHumans.length) * 100}%` }"></div>
-                </div>
+              <span class="load-more-text">Загрузить ещё</span>
+              <span class="load-more-count">{{ remaining }} осталось</span>
+              <div class="load-more-progress">
+                <div class="progress-bar" :style="{ width: `${(visibleCount / filteredHumans.length) * 100}%` }"></div>
               </div>
             </div>
           </div>
-        </div> 
-        <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
-            <path d="M9 18l6-6-6-6" />
-          </svg>
-        </button>
-      </div>
+        </div>
+      </div> 
+      <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
+          <path d="M9 18l6-6-6-6" />
+        </svg>
+      </button>
     </div>
-    <div v-if="filteredHumans.length === 0 && !isLoading" class="no-results">
-      <p>По выбранным фильтрам ничего не найдено</p>
-    </div>
+  </div>
+  <div v-if="filteredHumans.length === 0 && !isLoading" class="no-results">
+    <p>По выбранным фильтрам ничего не найдено</p>
   </div>
 </template>
 
