@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted, watch } from 'vue'
+import { computed, ref, onMounted, watch, nextTick } from 'vue'
 import { useData } from 'vitepress'
 
 const props = defineProps({
@@ -32,18 +32,10 @@ const props = defineProps({
 const { frontmatter } = useData()
 
 // === БЕЗОПАСНОЕ ПОЛУЧЕНИЕ FRONTMATTER ===
-// Добавляем проверку на существование frontmatter
 const fm = computed(() => {
-  // Проверяем, что frontmatter существует
   if (!frontmatter) return {}
-  // Проверяем, что frontmatter не null/undefined
   const data = frontmatter.value || frontmatter || {}
   return data
-})
-
-// Добавляем проверку на существование данных
-const hasData = computed(() => {
-  return fm.value && Object.keys(fm.value).length > 0
 })
 
 const name = computed(() => fm.value?.title || 'Безымянный друг')
@@ -56,13 +48,15 @@ const uuid = computed(() => fm.value?.uuid || '')
 // === ИЗБРАННОЕ ===
 const STORAGE_KEY = 'pets_favorites'
 const isFavorite = ref(false)
+const isInitialized = ref(false)
 
 // Загрузка избранных из localStorage
 const loadFavorites = () => {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
     return stored ? JSON.parse(stored) : []
-  } catch {
+  } catch (error) {
+    console.error('Ошибка загрузки избранного:', error)
     return []
   }
 }
@@ -78,11 +72,18 @@ const saveFavorites = (favorites) => {
 
 // Проверка, добавлен ли текущий питомец в избранное
 const checkIsFavorite = () => {
-  if (!uuid.value) return false
+  if (!uuid.value) {
+    console.log('UUID отсутствует')
+    return false
+  }
+  
   try {
     const favorites = loadFavorites()
-    return favorites.includes(uuid.value)
-  } catch {
+    const result = favorites.includes(uuid.value)
+    console.log(`Проверка UUID ${uuid.value}: ${result}`) // ← Отладка
+    return result
+  } catch (error) {
+    console.error('Ошибка проверки избранного:', error)
     return false
   }
 }
@@ -102,9 +103,11 @@ const toggleFavorite = (e) => {
     if (index > -1) {
       favorites.splice(index, 1)
       isFavorite.value = false
+      console.log(`Удален из избранного: ${uuid.value}`)
     } else {
       favorites.push(uuid.value)
       isFavorite.value = true
+      console.log(`Добавлен в избранное: ${uuid.value}`)
     }
     
     saveFavorites(favorites)
@@ -113,23 +116,42 @@ const toggleFavorite = (e) => {
   }
 }
 
-// Инициализация при монтировании
+// === ИНИЦИАЛИЗАЦИЯ ===
+// 1. При монтировании компонента
 onMounted(() => {
-  try {
-    isFavorite.value = checkIsFavorite()
-  } catch (error) {
-    console.error('Ошибка инициализации избранного:', error)
-  }
+  console.log('Компонент смонтирован, UUID:', uuid.value)
+  
+  // Ждем, пока UUID загрузится
+  nextTick(() => {
+    const favStatus = checkIsFavorite()
+    isFavorite.value = favStatus
+    isInitialized.value = true
+    console.log('Инициализация завершена, isFavorite:', favStatus)
+  })
 })
 
-// Обновляем при изменении uuid
-watch(uuid, (newUuid) => {
-  try {
-    isFavorite.value = newUuid ? checkIsFavorite() : false
-  } catch (error) {
-    console.error('Ошибка обновления избранного:', error)
+// 2. Следим за изменением UUID
+watch(uuid, (newUuid, oldUuid) => {
+  console.log('UUID изменился:', oldUuid, '→', newUuid)
+  
+  if (newUuid) {
+    // Небольшая задержка для уверенности, что все данные загружены
+    setTimeout(() => {
+      const favStatus = checkIsFavorite()
+      isFavorite.value = favStatus
+      console.log('Обновлен isFavorite:', favStatus)
+    }, 50)
   }
 }, { immediate: true })
+
+// 3. Дополнительная проверка при изменении frontmatter
+watch(fm, (newFm) => {
+  if (newFm?.uuid) {
+    console.log('Frontmatter обновлен, UUID:', newFm.uuid)
+    const favStatus = checkIsFavorite()
+    isFavorite.value = favStatus
+  }
+}, { deep: true })
 
 // Обработчик ошибки загрузки изображения
 const handleImageError = (e) => {
