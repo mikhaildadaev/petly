@@ -789,7 +789,7 @@ h1,h2,h3 {
 .gallery-item:hover video {
   transform: scale(1.1);
 }
-.gallery-item.video-preview {
+.gallery-item .video-preview {
   position: relative;
   width: 100%;
   height: 100%;
