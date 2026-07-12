@@ -1,34 +1,33 @@
 <template>
-  <div class="filters-bar">
-    <div class="filters">
-      <select v-model="filterGender" class="filter-select">
-        <option value="">Все гендеры</option>
-        <option value="Девочка">Девочки</option>
-        <option value="Мальчик">Мальчики</option>
-      </select>
-      <select v-model="filterAge" class="filter-select">
-        <option value="">Все возрасты</option>
-        <option value="Щенок">Щенки (до 1 года)</option>
-        <option value="Молодая">Молодые (1–3 года)</option>
-        <option value="Взрослая">Взрослые (от 3 лет)</option>
-      </select>
-      <select v-model="filterSize" class="filter-select">
-        <option value="">Все размеры</option>
-        <option value="Маленькая">Маленькие (до 10 кг)</option>
-        <option value="Средняя">Средние (10–25 кг)</option>
-        <option value="Крупная">Крупные (от 25 кг)</option>
-      </select>
-      <button v-if="isFilterActive" @click="resetFilters" class="btn-reset" title="Сбросить все фильтры">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 6h18" />
-          <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-          <path d="M10 11v6" />
-          <path d="M14 11v6" />
-        </svg>
-        Сбросить
-      </button>
+  <div class="filters-compact">
+    <div class="filter-group">
+      <span class="filter-label">Пол</span>
+      <div class="filter-chips">
+        <button v-for="option in genderOptions" :key="option.value" class="chip" :class="{ active: filters.gender[option.value] }" @click="toggleFilter('gender', option.value)" :title="option.label" v-html="option.icon"/>
+      </div>
     </div>
+    <div class="filter-group">
+      <span class="filter-label">Возраст</span>
+      <div class="filter-chips">
+        <button v-for="option in ageOptions" :key="option.value" class="chip" :class="{ active: filters.age[option.value] }" @click="toggleFilter('age', option.value)" :title="option.label" v-html="option.icon"/>
+      </div>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">Размер</span>
+      <div class="filter-chips">
+        <button v-for="option in sizeOptions" :key="option.value" class="chip" :class="{ active: filters.size[option.value] }" @click="toggleFilter('size', option.value)" :title="option.label" v-html="option.icon"/>
+      </div>
+    </div>
+    <button v-if="!areAllActive" class="btn-reset-compact" @click="resetAllFilters" title="Включить все фильтры">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 6h18" />
+        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+        <path d="M10 11v6" />
+        <path d="M14 11v6" />
+      </svg>
+      Сбросить
+    </button>
   </div>
   <div class="grid-list">
     <div v-if="!isMobile" class="grid-cards">
@@ -117,7 +116,7 @@
 // ============================================================
 //  ИМПОРТЫ
 // ============================================================
-import { computed, ref, onMounted, watch, nextTick, onUnmounted } from 'vue'
+import { computed, ref, onMounted, watch, nextTick, onUnmounted, reactive } from 'vue'
 
 // ============================================================
 //  КОНСТАНТЫ
@@ -131,9 +130,6 @@ const randomClassCache = new Map()
 //  УТИЛИТЫ
 // ============================================================
 
-/**
- * Обработка пути к изображению
- */
 const processImage = (imagePath, type, uuid) => {
   if (!imagePath) {
     return uuid ? `${baseUrl}images/${type}/${uuid}.webp` : `${baseUrl}placeholder-${type}.svg`
@@ -147,15 +143,10 @@ const processImage = (imagePath, type, uuid) => {
   return imagePath
 }
 
-/**
- * Определение возрастной категории
- */
 const getAgeCategory = (ageStr) => {
   if (!ageStr) return ''
-  
   const match = ageStr.match(/(\d+)/)
   if (!match) return ''
-  
   const num = parseInt(match[1])
   if (ageStr.includes('месяц') || num < 1) return 'Щенок'
   if (num <= 3) return 'Молодая'
@@ -172,8 +163,7 @@ export default {
     petType: {
       type: String,
       required: true,
-      default: 'dogs',
-      description: 'Тип питомца (dogs, cats, и т.д.)'
+      default: 'dogs'
     }
   },
 
@@ -189,11 +179,6 @@ export default {
     const isClient = ref(false)
     const savedIndex = ref(0)
 
-    // Фильтры
-    const filterAge = ref('')
-    const filterGender = ref('')
-    const filterSize = ref('')
-
     // Карусель
     const carouselRef = ref(null)
     const currentIndex = ref(0)
@@ -206,31 +191,114 @@ export default {
     const isSwiping = ref(false)
 
     // ============================================================
-    //  ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+    //  ФИЛЬТРЫ (ЧЕКБОКСЫ)
     // ============================================================
-
-    const checkMobile = () => {
-      if (typeof window !== 'undefined') {
-        const newIsMobile = window.innerWidth < MOBILE_BREAKPOINT
-        if (isMobile.value !== newIsMobile) {
-          isMobile.value = newIsMobile
-        }
+    const genderOptions = [
+      { 
+        value: 'Девочка', 
+        label: 'Девочки', 
+        icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><text x="12" y="16" text-anchor="middle" font-size="12" font-weight="100" fill="currentColor">♀</text></svg>`
+      },
+      { 
+        value: 'Мальчик', 
+        label: 'Мальчики', 
+        icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><text x="12" y="16" text-anchor="middle" font-size="12" font-weight="100" fill="currentColor">♂</text></svg>`
       }
-    }
+    ]
+    const ageOptions = [
+      { 
+        value: 'Щенок', 
+        label: 'Щенки (до 1 года)', 
+        icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 10c0-1.5.8-3 2-3s2 1.5 2 3-.8 2.5-2 2.5S6 11.5 6 10z"/>
+            <path d="M14 10c0-1.5.8-3 2-3s2 1.5 2 3-.8 2.5-2 2.5-2-1-2-2.5z"/>
+            <path d="M4 14.5c0-1.5 1.5-2.5 3.5-2.5h9c2 0 3.5 1 3.5 2.5v1.5H4z"/>
+            <path d="M7.5 17v2"/><path d="M16.5 17v2"/>
+          </svg>`
+      },
+      { 
+        value: 'Молодая', 
+        label: 'Молодые (1–3 года)', 
+        icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10c0-2 1-4 3-4s3 2 3 4-1 3-3 3-3-1-3-3z"/><path d="M17 10c0-2-1-4-3-4s-3 2-3 4 1 3 3 3 3-1 3-3z"/><path d="M5 16c0-3 2-4 5-4h4c3 0 5 1 5 4v2H5z"/><path d="M9 18v2"/><path d="M15 18v2"/></svg>`
+      },
+      { 
+        value: 'Взрослая', 
+        label: 'Взрослые (от 3 лет)', 
+        icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10c0-3 2-5 4-5s4 2 4 5-2 4-4 4-4-1-4-4z"/><path d="M18 10c0-3-2-5-4-5s-4 2-4 5 2 4 4 4 4-1 4-4z"/><path d="M4 16c0-4 3-5 6-5h4c3 0 6 1 6 5v2H4z"/><path d="M8 18v2"/><path d="M16 18v2"/></svg>`
+      }
+    ]
+    const sizeOptions = [
+      { 
+        value: 'Маленькая', 
+        label: 'Маленькие (до 10 кг)', 
+        icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><text x="12" y="16" text-anchor="middle" font-size="12" font-weight="100" fill="currentColor">S</text></svg>`
+      },
+      { 
+        value: 'Средняя', 
+        label: 'Средние (10–25 кг)', 
+        icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><text x="12" y="16" text-anchor="middle" font-size="12" font-weight="100" fill="currentColor">M</text></svg>`
+      },
+      { 
+        value: 'Крупная', 
+        label: 'Крупные (от 25 кг)', 
+        icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><text x="12" y="16" text-anchor="middle" font-size="12" font-weight="100" fill="currentColor">L</text></svg>`
+      }
+    ]
 
-    // ============================================================
-    //  ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
-    // ============================================================
-
-    const isFilterActive = computed(() => {
-      return filterAge.value !== '' || filterGender.value !== '' || filterSize.value !== ''
+    // Состояние фильтров (все активны по умолчанию)
+    const filters = reactive({
+      gender: {
+        'Девочка': true,
+        'Мальчик': true
+      },
+      age: {
+        'Щенок': true,
+        'Молодая': true,
+        'Взрослая': true
+      },
+      size: {
+        'Маленькая': true,
+        'Средняя': true,
+        'Крупная': true
+      }
     })
+
+    // ============================================================
+    //  ВЫЧИСЛЯЕМЫЕ (ФИЛЬТРЫ)
+    // ============================================================
+
+    const areAllActive = computed(() => {
+      return (
+        filters.gender['Девочка'] && filters.gender['Мальчик'] &&
+        filters.age['Щенок'] && filters.age['Молодая'] && filters.age['Взрослая'] &&
+        filters.size['Маленькая'] && filters.size['Средняя'] && filters.size['Крупная']
+      )
+    })
+
+    const activeCount = computed(() => {
+      let count = 0
+      Object.values(filters.gender).forEach(v => { if (v) count++ })
+      Object.values(filters.age).forEach(v => { if (v) count++ })
+      Object.values(filters.size).forEach(v => { if (v) count++ })
+      return count
+    })
+
+    const hintText = computed(() => {
+      const total = 2 + 3 + 3
+      if (areAllActive.value) return 'Все фильтры включены'
+      if (activeCount.value === 0) return 'Ни один фильтр не выбран'
+      return `Выбрано ${activeCount.value} из ${total}`
+    })
+
+    // ============================================================
+    //  ВЫЧИСЛЯЕМЫЕ (ПИТОМЦЫ)
+    // ============================================================
 
     const filteredPets = computed(() => {
       return allPets.value.filter(pet => {
-        if (filterAge.value && getAgeCategory(pet.age) !== filterAge.value) return false
-        if (filterGender.value && pet.gender !== filterGender.value) return false
-        if (filterSize.value && pet.size !== filterSize.value) return false
+        if (!filters.gender[pet.gender]) return false
+        if (!filters.age[getAgeCategory(pet.age)]) return false
+        if (!filters.size[pet.size]) return false
         return true
       })
     })
@@ -252,13 +320,35 @@ export default {
     })
 
     // ============================================================
-    //  МЕТОДЫ
+    //  МЕТОДЫ (ФИЛЬТРЫ)
     // ============================================================
 
-    const resetFilters = () => {
-      filterAge.value = ''
-      filterGender.value = ''
-      filterSize.value = ''
+    const toggleFilter = (group, value) => {
+      filters[group][value] = !filters[group][value]
+      // Сбрасываем пагинацию при изменении фильтров
+      visibleCount.value = perPage
+      currentIndex.value = 0
+    }
+
+    const resetAllFilters = () => {
+      Object.keys(filters.gender).forEach(k => filters.gender[k] = true)
+      Object.keys(filters.age).forEach(k => filters.age[k] = true)
+      Object.keys(filters.size).forEach(k => filters.size[k] = true)
+      visibleCount.value = perPage
+      currentIndex.value = 0
+    }
+
+    // ============================================================
+    //  МЕТОДЫ (ОСТАЛЬНЫЕ)
+    // ============================================================
+
+    const checkMobile = () => {
+      if (typeof window !== 'undefined') {
+        const newIsMobile = window.innerWidth < MOBILE_BREAKPOINT
+        if (isMobile.value !== newIsMobile) {
+          isMobile.value = newIsMobile
+        }
+      }
     }
 
     const loadMore = async () => {
@@ -277,10 +367,8 @@ export default {
           if (carouselRef.value && paginatedPets.value.length) {
             let targetIndex = savedIndex.value
             const maxIndex = carouselTotalSlides.value - 1
-
             if (targetIndex > maxIndex) targetIndex = maxIndex
             if (targetIndex < 0) targetIndex = 0
-
             scrollToSlide(targetIndex)
             savedIndex.value = 0
           }
@@ -305,7 +393,6 @@ export default {
             const containerWidth = container.offsetWidth
             const slideWidth = firstSlide.offsetWidth
             const scrollPosition = firstSlide.offsetLeft - (containerWidth - slideWidth) / 2
-
             container.scrollTo({
               left: Math.max(0, scrollPosition),
               behavior: 'smooth'
@@ -315,7 +402,6 @@ export default {
       }
     }
 
-    // --- Карусель ---
     const scrollToSlide = (index) => {
       if (!carouselRef.value) return
       const container = carouselRef.value
@@ -351,7 +437,6 @@ export default {
       scrollToSlide(index)
     }
 
-    // --- Обработчики свайпа ---
     const handleTouchStart = (e) => {
       const touch = e.touches[0]
       touchStartX.value = touch.clientX
@@ -361,52 +446,42 @@ export default {
 
     const handleTouchMove = (e) => {
       if (!isSwiping.value) return
-
       const touch = e.touches[0]
       const deltaX = touch.clientX - touchStartX.value
       const deltaY = touch.clientY - touchStartY.value
-
       if (Math.abs(deltaY) > Math.abs(deltaX)) {
         isSwiping.value = false
         return
       }
-
       e.preventDefault()
     }
 
     const handleTouchEnd = (e) => {
       if (!isSwiping.value) return
       isSwiping.value = false
-
       const touch = e.changedTouches[0]
       touchEndX.value = touch.clientX
       touchEndY.value = touch.clientY
-
       const diffX = touchStartX.value - touchEndX.value
       const minSwipeDistance = 50
-
       if (diffX > minSwipeDistance) {
         nextSlide()
       } else if (diffX < -minSwipeDistance) {
         prevSlide()
       }
-
       touchStartX.value = 0
       touchStartY.value = 0
       touchEndX.value = 0
       touchEndY.value = 0
     }
 
-    // --- Рандомные цвета ---
     const getRandomPetClass = (slug) => {
       if (randomClassCache.has(slug)) {
         return randomClassCache.get(slug)
       }
-
       const num = Math.floor(Math.random() * 30) + 1
       const formattedNum = num.toString().padStart(2, '0')
       const className = `rand-${formattedNum}`
-
       randomClassCache.set(slug, className)
       return className
     }
@@ -420,7 +495,6 @@ export default {
       if (resizeTimeout) {
         clearTimeout(resizeTimeout)
       }
-
       resizeTimeout = setTimeout(() => {
         checkMobile()
         resizeTimeout = null
@@ -441,7 +515,6 @@ export default {
 
       try {
         const allModules = import.meta.glob('/ru/*/*.md')
-
         const filteredModules = Object.entries(allModules).filter(([path]) => {
           return path.includes(`/ru/${props.petType}/`) && !path.endsWith(`${props.petType}_index.md`)
         })
@@ -466,7 +539,6 @@ export default {
             }
           })
         )
-
         allPets.value = loaded
       } catch (error) {
         console.error('Ошибка загрузки данных:', error)
@@ -475,16 +547,9 @@ export default {
       }
     })
 
-    // --- Watchers ---
-    watch([filterAge, filterGender, filterSize], () => {
-      currentIndex.value = 0
-      savedIndex.value = 0
-      visibleCount.value = perPage
-
-      nextTick(() => {
-        resetToFirstSlide()
-      })
-    })
+    watch([() => filters.gender, () => filters.age, () => filters.size], () => {
+      // Фильтры уже обновлены через toggleFilter
+    }, { deep: true })
 
     watch(isMobile, (newVal) => {
       if (isClient.value && newVal && paginatedPets.value.length) {
@@ -513,7 +578,6 @@ export default {
       { deep: true }
     )
 
-    // --- Unmount ---
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)
@@ -527,21 +591,29 @@ export default {
     //  ВОЗВРАТ
     // ============================================================
     return {
+      // Фильтры
+      filters,
+      genderOptions,
+      ageOptions,
+      sizeOptions,
+      areAllActive,
+      activeCount,
+      hintText,
+      toggleFilter,
+      resetAllFilters,
+
+      // Питомцы
       paginatedPets,
       filteredPets,
-      filterAge,
-      filterGender,
-      filterSize,
-      isFilterActive,
-      resetFilters,
+      isLoading,
+      isMobile,
       visibleCount,
       remaining,
       hasMoreItems,
       loadMore,
       isLoadingMore,
-      isLoading,
-      isMobile,
-      baseUrl,
+
+      // Карусель
       carouselRef,
       currentIndex,
       carouselTotalSlides,
@@ -550,6 +622,8 @@ export default {
       prevSlide,
       goToSlide,
       resetToFirstSlide,
+
+      // Свайп
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
@@ -557,9 +631,12 @@ export default {
       touchStartY,
       touchEndX,
       touchEndY,
+
+      // Прочее
+      baseUrl,
       petType: props.petType,
       getRandomPetClass,
     }
-  },
+  }
 }
 </script>
