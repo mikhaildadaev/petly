@@ -5,11 +5,6 @@
         <img  v-if="item.type === 'image'" :src="item.src" :alt="'Медиа ' + (index + 1)" loading="lazy" />
         <div v-else class="video-preview">
           <video  :src="item.src"  muted  playsinline @mouseenter="playVideo" @mouseleave="pauseVideo" ref="videoPreviewRefs" />
-          <div class="play-icon">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="2">
-              <polygon points="5,3 19,12 5,21" />
-            </svg>
-          </div>
         </div>
         <div class="media-badge">{{ index + 1 }} / {{ mediaItems.length }}</div>
       </div>
