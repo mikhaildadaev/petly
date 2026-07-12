@@ -58,7 +58,7 @@
       </div>
     </div>
   </div>
-  <div v-else class="carousel-container">
+  <div v-else class="carousel-cards">
     <div class="carousel-wrapper">
       <button class="carousel-btn prev" @click="prevSlide" :disabled="currentIndex === 0">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
