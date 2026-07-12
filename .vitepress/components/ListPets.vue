@@ -547,9 +547,20 @@ export default {
       }
     })
 
-    watch([() => filters.gender, () => filters.age, () => filters.size], () => {
-      // Фильтры уже обновлены через toggleFilter
-    }, { deep: true })
+    watch(
+      [() => filters.gender, () => filters.age, () => filters.size],
+      () => {
+        // Сбрасываем на первую позицию при изменении фильтров
+        currentIndex.value = 0
+        savedIndex.value = 0
+        visibleCount.value = perPage
+        
+        nextTick(() => {
+          resetToFirstSlide()
+        })
+      },
+      { deep: true }
+    )
 
     watch(isMobile, (newVal) => {
       if (isClient.value && newVal && paginatedPets.value.length) {
