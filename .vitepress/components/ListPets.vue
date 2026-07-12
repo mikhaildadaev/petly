@@ -114,41 +114,80 @@
 </template>
 
 <script>
+// ============================================================
+//  ИМПОРТЫ
+// ============================================================
 import { computed, ref, onMounted, watch, nextTick, onUnmounted } from 'vue'
 
+// ============================================================
+//  КОНСТАНТЫ
+// ============================================================
 const MOBILE_BREAKPOINT = 736
 const baseUrl = import.meta.env.BASE_URL
 const perPage = 8
-
-// === ГЛОБАЛЬНЫЙ КЭШ ДЛЯ ЦВЕТОВ ===
 const randomClassCache = new Map()
 
+// ============================================================
+//  УТИЛИТЫ
+// ============================================================
+
+/**
+ * Обработка пути к изображению
+ */
+const processImage = (imagePath, type, uuid) => {
+  if (!imagePath) {
+    return uuid ? `${baseUrl}photos/${type}/${uuid}.webp` : `${baseUrl}placeholder-${type}.svg`
+  }
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath
+  }
+  if (imagePath.startsWith('/')) {
+    return `${baseUrl}${imagePath.slice(1)}`
+  }
+  return imagePath
+}
+
+/**
+ * Определение возрастной категории
+ */
+const getAgeCategory = (ageStr) => {
+  if (!ageStr) return ''
+  
+  const match = ageStr.match(/(\d+)/)
+  if (!match) return ''
+  
+  const num = parseInt(match[1])
+  if (ageStr.includes('месяц') || num < 1) return 'Щенок'
+  if (num <= 3) return 'Молодая'
+  return 'Взрослая'
+}
+
+// ============================================================
+//  КОМПОНЕНТ
+// ============================================================
 export default {
+  name: 'ListPets',
+
   props: {
     petType: {
       type: String,
       required: true,
-      default: 'dogs'
+      default: 'dogs',
+      description: 'Тип питомца (dogs, cats, и т.д.)'
     }
   },
+
   setup(props) {
+    // ============================================================
+    //  СОСТОЯНИЕ
+    // ============================================================
     const allPets = ref([])
     const visibleCount = ref(perPage)
     const isLoading = ref(true)
     const isMobile = ref(false)
     const isLoadingMore = ref(false)
     const isClient = ref(false)
-    
     const savedIndex = ref(0)
-    
-    const checkMobile = () => {
-      if (typeof window !== 'undefined') {
-        const newIsMobile = window.innerWidth < MOBILE_BREAKPOINT
-        if (isMobile.value !== newIsMobile) {
-          isMobile.value = newIsMobile
-        }
-      }
-    }
 
     // Фильтры
     const filterAge = ref('')
@@ -159,69 +198,33 @@ export default {
     const carouselRef = ref(null)
     const currentIndex = ref(0)
 
+    // Свайп
+    const touchStartX = ref(0)
+    const touchStartY = ref(0)
+    const touchEndX = ref(0)
+    const touchEndY = ref(0)
+    const isSwiping = ref(false)
+
+    // ============================================================
+    //  ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+    // ============================================================
+
+    const checkMobile = () => {
+      if (typeof window !== 'undefined') {
+        const newIsMobile = window.innerWidth < MOBILE_BREAKPOINT
+        if (isMobile.value !== newIsMobile) {
+          isMobile.value = newIsMobile
+        }
+      }
+    }
+
+    // ============================================================
+    //  ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
+    // ============================================================
+
     const isFilterActive = computed(() => {
       return filterAge.value !== '' || filterGender.value !== '' || filterSize.value !== ''
     })
-
-    const resetFilters = () => {
-      filterAge.value = ''
-      filterGender.value = ''
-      filterSize.value = ''
-    }
-
-    // Загрузка данных
-    onMounted(async () => {
-      isClient.value = true
-      checkMobile()
-      
-      try {
-        // Динамически получаем все md файлы
-        const allModules = import.meta.glob('/ru/*/*.md')
-        
-        // Фильтруем только те, что относятся к нашему petType
-        const filteredModules = Object.entries(allModules).filter(([path]) => {
-          return path.includes(`/ru/${props.petType}/`) && !path.endsWith(`${props.petType}_index.md`)
-        })
-        
-        const loaded = await Promise.all(
-          filteredModules.map(async ([path, loader]) => {
-            const mod = await loader()
-            // Динамически заменяем путь
-            const slug = path.replace(`/ru/${props.petType}/`, '').replace('.md', '')
-            const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            return {
-              slug,
-              name: fm.title || slug.charAt(0).toUpperCase() + slug.slice(1),
-              description: fm.description || '',
-              age: fm.age || '',
-              gender: fm.gender || '',
-              size: fm.size || '',
-              tags: fm.tags || [],
-              image: fm.image || '/placeholder-pet.svg'
-            }
-          })
-        )
-        allPets.value = loaded
-      } catch (error) {
-        console.error('Ошибка загрузки данных:', error)
-      } finally {
-        isLoading.value = false
-      }
-      
-      if (typeof window !== 'undefined') {
-        window.addEventListener('resize', handleResize)
-      }
-    })
-
-    const getAgeCategory = (ageStr) => {
-      if (!ageStr) return ''
-      const match = ageStr.match(/(\d+)/)
-      if (!match) return ''
-      const num = parseInt(match[1])
-      if (ageStr.includes('месяц') || num < 1) return 'Щенок'
-      if (num <= 3) return 'Молодая'
-      return 'Взрослая'
-    }
 
     const filteredPets = computed(() => {
       return allPets.value.filter(pet => {
@@ -248,31 +251,36 @@ export default {
       return paginatedPets.value.length + (hasMoreItems.value ? 1 : 0)
     })
 
+    // ============================================================
+    //  МЕТОДЫ
+    // ============================================================
+
+    const resetFilters = () => {
+      filterAge.value = ''
+      filterGender.value = ''
+      filterSize.value = ''
+    }
+
     const loadMore = async () => {
       if (isLoadingMore.value || !hasMoreItems.value) return
-      
+
       isLoadingMore.value = true
       savedIndex.value = currentIndex.value
-      
+
       await new Promise(resolve => setTimeout(resolve, 500))
-      
+
       visibleCount.value += perPage
       isLoadingMore.value = false
-      
+
       if (isMobile.value) {
         nextTick(() => {
           if (carouselRef.value && paginatedPets.value.length) {
             let targetIndex = savedIndex.value
             const maxIndex = carouselTotalSlides.value - 1
-            
-            if (targetIndex > maxIndex) {
-              targetIndex = maxIndex
-            }
-            
-            if (targetIndex < 0) {
-              targetIndex = 0
-            }
-            
+
+            if (targetIndex > maxIndex) targetIndex = maxIndex
+            if (targetIndex < 0) targetIndex = 0
+
             scrollToSlide(targetIndex)
             savedIndex.value = 0
           }
@@ -280,16 +288,15 @@ export default {
       }
     }
 
-    // === НАДЕЖНЫЙ СБРОС НА ПЕРВУЮ ПОЗИЦИЮ ===
     const resetToFirstSlide = () => {
       currentIndex.value = 0
       savedIndex.value = 0
       visibleCount.value = perPage
-      
+
       if (carouselRef.value) {
         const container = carouselRef.value
         container.scrollLeft = 0
-        
+
         nextTick(() => {
           container.scrollLeft = 0
           const slides = container.querySelectorAll('.carousel-slide')
@@ -298,7 +305,7 @@ export default {
             const containerWidth = container.offsetWidth
             const slideWidth = firstSlide.offsetWidth
             const scrollPosition = firstSlide.offsetLeft - (containerWidth - slideWidth) / 2
-            
+
             container.scrollTo({
               left: Math.max(0, scrollPosition),
               behavior: 'smooth'
@@ -308,18 +315,7 @@ export default {
       }
     }
 
-    // === ОТСЛЕЖИВАНИЕ ИЗМЕНЕНИЙ ФИЛЬТРОВ ===
-    watch([filterAge, filterGender, filterSize], () => {
-      currentIndex.value = 0
-      savedIndex.value = 0
-      visibleCount.value = perPage
-      
-      nextTick(() => {
-        resetToFirstSlide()
-      })
-    })
-
-    // === ЛОГИКА КАРУСЕЛИ ===
+    // --- Карусель ---
     const scrollToSlide = (index) => {
       if (!carouselRef.value) return
       const container = carouselRef.value
@@ -355,74 +351,142 @@ export default {
       scrollToSlide(index)
     }
 
-    // === ОБРАБОТЧИКИ СОБЫТИЙ СВАЙПА ===
-    const touchStartX = ref(0);
-    const touchStartY = ref(0);
-    const touchEndX = ref(0);
-    const touchEndY = ref(0);
-    const isSwiping = ref(false);
-
+    // --- Обработчики свайпа ---
     const handleTouchStart = (e) => {
-      const touch = e.touches[0];
-      touchStartX.value = touch.clientX;
-      touchStartY.value = touch.clientY;
-      isSwiping.value = true;
-    };
+      const touch = e.touches[0]
+      touchStartX.value = touch.clientX
+      touchStartY.value = touch.clientY
+      isSwiping.value = true
+    }
 
     const handleTouchMove = (e) => {
-      if (!isSwiping.value) return;
-      
-      const touch = e.touches[0];
-      const deltaX = touch.clientX - touchStartX.value;
-      const deltaY = touch.clientY - touchStartY.value;
-      
-      // Если вертикальное движение больше - прокручиваем страницу
+      if (!isSwiping.value) return
+
+      const touch = e.touches[0]
+      const deltaX = touch.clientX - touchStartX.value
+      const deltaY = touch.clientY - touchStartY.value
+
       if (Math.abs(deltaY) > Math.abs(deltaX)) {
-        isSwiping.value = false;
-        return;
+        isSwiping.value = false
+        return
       }
-      
-      e.preventDefault();
-    };
+
+      e.preventDefault()
+    }
 
     const handleTouchEnd = (e) => {
-      if (!isSwiping.value) return;
-      isSwiping.value = false;
+      if (!isSwiping.value) return
+      isSwiping.value = false
 
-      const touch = e.changedTouches[0];
-      touchEndX.value = touch.clientX;
-      touchEndY.value = touch.clientY;
-      
-      const diffX = touchStartX.value - touchEndX.value;
-      const minSwipeDistance = 50;
+      const touch = e.changedTouches[0]
+      touchEndX.value = touch.clientX
+      touchEndY.value = touch.clientY
+
+      const diffX = touchStartX.value - touchEndX.value
+      const minSwipeDistance = 50
 
       if (diffX > minSwipeDistance) {
-        nextSlide();
+        nextSlide()
       } else if (diffX < -minSwipeDistance) {
-        prevSlide();
+        prevSlide()
       }
 
-      touchStartX.value = 0;
-      touchStartY.value = 0;
-      touchEndX.value = 0;
-      touchEndY.value = 0;
-    };
+      touchStartX.value = 0
+      touchStartY.value = 0
+      touchEndX.value = 0
+      touchEndY.value = 0
+    }
 
-    // === ОТСЛЕЖИВАНИЕ ИЗМЕНЕНИЙ РАЗМЕРА ===
+    // --- Рандомные цвета ---
+    const getRandomPetClass = (slug) => {
+      if (randomClassCache.has(slug)) {
+        return randomClassCache.get(slug)
+      }
+
+      const num = Math.floor(Math.random() * 30) + 1
+      const formattedNum = num.toString().padStart(2, '0')
+      const className = `rand-${formattedNum}`
+
+      randomClassCache.set(slug, className)
+      return className
+    }
+
+    // ============================================================
+    //  RESIZE
+    // ============================================================
     let resizeTimeout = null
-    
+
     const handleResize = () => {
       if (resizeTimeout) {
         clearTimeout(resizeTimeout)
       }
-      
+
       resizeTimeout = setTimeout(() => {
         checkMobile()
         resizeTimeout = null
       }, 100)
     }
 
-    watch(isMobile, (newVal, oldVal) => {
+    // ============================================================
+    //  ЖИЗНЕННЫЙ ЦИКЛ
+    // ============================================================
+
+    onMounted(async () => {
+      isClient.value = true
+      checkMobile()
+
+      if (typeof window !== 'undefined') {
+        window.addEventListener('resize', handleResize)
+      }
+
+      try {
+        const allModules = import.meta.glob('/ru/*/*.md')
+
+        const filteredModules = Object.entries(allModules).filter(([path]) => {
+          return path.includes(`/ru/${props.petType}/`) && !path.endsWith(`${props.petType}_index.md`)
+        })
+
+        const loaded = await Promise.all(
+          filteredModules.map(async ([path, loader]) => {
+            const mod = await loader()
+            const slug = path.replace(`/ru/${props.petType}/`, '').replace('.md', '')
+            const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
+            const uuid = fm.uuid || slug
+
+            return {
+              slug,
+              uuid,
+              name: fm.title || slug.charAt(0).toUpperCase() + slug.slice(1),
+              description: fm.description || '',
+              age: fm.age || '',
+              gender: fm.gender || '',
+              size: fm.size || '',
+              tags: fm.tags || [],
+              image: processImage(fm.image, props.petType, uuid),
+            }
+          })
+        )
+
+        allPets.value = loaded
+      } catch (error) {
+        console.error('Ошибка загрузки данных:', error)
+      } finally {
+        isLoading.value = false
+      }
+    })
+
+    // --- Watchers ---
+    watch([filterAge, filterGender, filterSize], () => {
+      currentIndex.value = 0
+      savedIndex.value = 0
+      visibleCount.value = perPage
+
+      nextTick(() => {
+        resetToFirstSlide()
+      })
+    })
+
+    watch(isMobile, (newVal) => {
       if (isClient.value && newVal && paginatedPets.value.length) {
         nextTick(() => {
           if (carouselRef.value) {
@@ -432,19 +496,24 @@ export default {
       }
     })
 
-    watch(() => paginatedPets.value, (newVal, oldVal) => {
-      if (isClient.value && isMobile.value && newVal.length) {
-        nextTick(() => {
-          if (carouselRef.value) {
-            const maxIndex = carouselTotalSlides.value - 1
-            if (currentIndex.value > maxIndex) {
-              resetToFirstSlide()
+    watch(
+      () => paginatedPets.value,
+      (newVal) => {
+        if (isClient.value && isMobile.value && newVal.length) {
+          nextTick(() => {
+            if (carouselRef.value) {
+              const maxIndex = carouselTotalSlides.value - 1
+              if (currentIndex.value > maxIndex) {
+                resetToFirstSlide()
+              }
             }
-          }
-        })
-      }
-    }, { deep: true })
+          })
+        }
+      },
+      { deep: true }
+    )
 
+    // --- Unmount ---
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)
@@ -454,20 +523,9 @@ export default {
       }
     })
 
-    // === РАНДОМНЫЕ ЦВЕТА ДЛЯ ИМЁН СОБАК ===
-    const getRandomPetClass = (slug) => {
-      if (randomClassCache.has(slug)) {
-        return randomClassCache.get(slug)
-      }
-      
-      const num = Math.floor(Math.random() * 30) + 1
-      const formattedNum = num.toString().padStart(2, '0')
-      const className = `rand-${formattedNum}`
-      
-      randomClassCache.set(slug, className)
-      return className
-    }
-
+    // ============================================================
+    //  ВОЗВРАТ
+    // ============================================================
     return {
       paginatedPets,
       filteredPets,
@@ -481,9 +539,9 @@ export default {
       hasMoreItems,
       loadMore,
       isLoadingMore,
-      baseUrl,
       isLoading,
       isMobile,
+      baseUrl,
       carouselRef,
       currentIndex,
       carouselTotalSlides,
@@ -495,13 +553,13 @@ export default {
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
-      petType: props.petType,
-      getRandomPetClass,
       touchStartX,
       touchStartY,
       touchEndX,
       touchEndY,
+      petType: props.petType,
+      getRandomPetClass,
     }
-  }
+  },
 }
 </script>

@@ -115,41 +115,115 @@
 </template>
 
 <script>
+// ============================================================
+//  ИМПОРТЫ
+// ============================================================
 import { computed, ref, onMounted, watch, nextTick, onUnmounted } from 'vue'
 
+// ============================================================
+//  КОНСТАНТЫ
+// ============================================================
 const MOBILE_BREAKPOINT = 736
 const baseUrl = import.meta.env.BASE_URL
 const perPage = 8
-
-// === ГЛОБАЛЬНЫЙ КЭШ ДЛЯ ЦВЕТОВ ===
 const randomClassCache = new Map()
 
+// ============================================================
+//  УТИЛИТЫ
+// ============================================================
+
+/**
+ * Обработка пути к изображению
+ */
+const processImage = (imagePath, type, uuid) => {
+  if (!imagePath) {
+    return uuid ? `${baseUrl}photos/${type}/${uuid}.webp` : `${baseUrl}placeholder-${type}.svg`
+  }
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath
+  }
+  if (imagePath.startsWith('/')) {
+    return `${baseUrl}${imagePath.slice(1)}`
+  }
+  return imagePath
+}
+
+/**
+ * Определение категории опыта
+ */
+const getExperienceCategory = (expValue) => {
+  if (!expValue) return 'Нет опыта'
+
+  // Проверяем годы
+  if (expValue.includes('лет') || expValue.includes('год')) {
+    const match = expValue.match(/(\d+)/)
+    if (match) {
+      const num = parseInt(match[1])
+      if (num <= 1) return 'Начинающий'
+      if (num <= 3) return 'Опытный'
+      return 'Эксперт'
+    }
+  }
+
+  // Проверяем месяцы
+  if (expValue.includes('месяц')) {
+    const match = expValue.match(/(\d+)/)
+    if (match) {
+      const num = parseInt(match[1])
+      return num < 12 ? 'Начинающий' : 'Опытный'
+    }
+  }
+
+  // Проверяем ключевые слова
+  const lower = expValue.toLowerCase()
+  if (lower.includes('начин')) return 'Начинающий'
+  if (lower.includes('опыт')) return 'Опытный'
+  if (lower.includes('эксперт')) return 'Эксперт'
+
+  return expValue || 'Нет опыта'
+}
+
+/**
+ * Обработка направления (удаление дубликатов)
+ */
+const processDirection = (directionValue) => {
+  if (!directionValue) return ''
+  
+  if (directionValue.includes('/') || directionValue.includes(',')) {
+    const parts = directionValue.replace(/,/g, '/').split('/')
+    const uniqueDirections = [...new Set(parts.map(d => d.trim()))]
+    return uniqueDirections.join(' / ')
+  }
+  
+  return directionValue
+}
+
+// ============================================================
+//  КОМПОНЕНТ
+// ============================================================
 export default {
+  name: 'ListHumans',
+
   props: {
     humanType: {
       type: String,
       required: true,
-      default: 'volunteers'
+      default: 'volunteers',
+      description: 'Тип людей (volunteers, staff, и т.д.)'
     }
   },
+
   setup(props) {
+    // ============================================================
+    //  СОСТОЯНИЕ
+    // ============================================================
     const allHumans = ref([])
     const visibleCount = ref(perPage)
     const isLoading = ref(true)
     const isMobile = ref(false)
     const isLoadingMore = ref(false)
     const isClient = ref(false)
-    
     const savedIndex = ref(0)
-    
-    const checkMobile = () => {
-      if (typeof window !== 'undefined') {
-        const newIsMobile = window.innerWidth < MOBILE_BREAKPOINT
-        if (isMobile.value !== newIsMobile) {
-          isMobile.value = newIsMobile
-        }
-      }
-    }
 
     // Фильтры
     const filterExperience = ref('')
@@ -159,97 +233,42 @@ export default {
     const carouselRef = ref(null)
     const currentIndex = ref(0)
 
+    // Свайп
+    const touchStartX = ref(0)
+    const touchStartY = ref(0)
+    const touchEndX = ref(0)
+    const touchEndY = ref(0)
+    const isSwiping = ref(false)
+
+    // ============================================================
+    //  ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+    // ============================================================
+
+    const checkMobile = () => {
+      if (typeof window !== 'undefined') {
+        const newIsMobile = window.innerWidth < MOBILE_BREAKPOINT
+        if (isMobile.value !== newIsMobile) {
+          isMobile.value = newIsMobile
+        }
+      }
+    }
+
+    // ============================================================
+    //  ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
+    // ============================================================
+
     const isFilterActive = computed(() => {
       return filterExperience.value !== '' || filterDirection.value !== ''
     })
 
-    const resetFilters = () => {
-      filterExperience.value = ''
-      filterDirection.value = ''
-    }
-
-    // Загрузка данных
-    onMounted(async () => {
-      isClient.value = true
-      checkMobile()
-      
-      try {
-        // Динамически получаем все md файлы
-        const allModules = import.meta.glob('/ru/*/*.md')
-        
-        // Фильтруем только те, что относятся к нашему humanType
-        const filteredModules = Object.entries(allModules).filter(([path]) => {
-          return path.includes(`/ru/${props.humanType}/`) && !path.endsWith(`${props.humanType}_index.md`)
-        })
-        
-        const loaded = await Promise.all(
-          filteredModules.map(async ([path, loader]) => {
-            const mod = await loader()
-            const slug = path.replace(`/ru/${props.humanType}/`, '').replace('.md', '')
-            const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            
-            // Определяем категорию опыта
-            let experienceCategory = ''
-            const expValue = fm.experience || ''
-            
-            if (expValue.includes('лет') || expValue.includes('год')) {
-              const match = expValue.match(/(\d+)/)
-              if (match) {
-                const num = parseInt(match[1])
-                if (num <= 1) experienceCategory = 'Начинающий'
-                else if (num <= 3) experienceCategory = 'Опытный'
-                else experienceCategory = 'Эксперт'
-              }
-            } else if (expValue.includes('месяц')) {
-              const match = expValue.match(/(\d+)/)
-              if (match) {
-                const num = parseInt(match[1])
-                experienceCategory = num < 12 ? 'Начинающий' : 'Опытный'
-              }
-            } else if (expValue) {
-              if (expValue.toLowerCase().includes('начин')) experienceCategory = 'Начинающий'
-              else if (expValue.toLowerCase().includes('опыт')) experienceCategory = 'Опытный'
-              else if (expValue.toLowerCase().includes('эксперт')) experienceCategory = 'Эксперт'
-            }
-
-            // Обработка направления
-            let directionValue = fm.direction || ''
-            if (directionValue.includes('/') || directionValue.includes(',')) {
-              const parts = directionValue.replace(/,/g, '/').split('/')
-              const uniqueDirections = [...new Set(parts.map(d => d.trim()))]
-              directionValue = uniqueDirections.join(' / ')
-            }
-
-            return {
-              slug,
-              name: fm.title || slug.charAt(0).toUpperCase() + slug.slice(1),
-              description: fm.description || '',
-              experience: experienceCategory || fm.experience || 'Нет опыта',
-              experienceYears: fm.experience || '',
-              direction: directionValue,
-              directionRaw: fm.direction || '',
-              tags: fm.tags || [],
-              image: fm.image || '/placeholder-human.svg'
-            }
-          })
-        )
-        allHumans.value = loaded
-      } catch (error) {
-        console.error('Ошибка загрузки данных:', error)
-      } finally {
-        isLoading.value = false
-      }
-      
-      if (typeof window !== 'undefined') {
-        window.addEventListener('resize', handleResize)
-      }
-    })
-
-    // Фильтрованные волонтеры
     const filteredHumans = computed(() => {
       return allHumans.value.filter(human => {
-        if (filterExperience.value && human.experience !== filterExperience.value) return false
-        
+        // Фильтр по опыту
+        if (filterExperience.value && human.experience !== filterExperience.value) {
+          return false
+        }
+
+        // Фильтр по направлению
         if (filterDirection.value) {
           const directionStr = human.directionRaw || human.direction || ''
           const directions = directionStr.replace(/,/g, '/').split('/').map(d => d.trim())
@@ -257,7 +276,7 @@ export default {
             return false
           }
         }
-        
+
         return true
       })
     })
@@ -278,31 +297,35 @@ export default {
       return paginatedHumans.value.length + (hasMoreItems.value ? 1 : 0)
     })
 
+    // ============================================================
+    //  МЕТОДЫ
+    // ============================================================
+
+    const resetFilters = () => {
+      filterExperience.value = ''
+      filterDirection.value = ''
+    }
+
     const loadMore = async () => {
       if (isLoadingMore.value || !hasMoreItems.value) return
-      
+
       isLoadingMore.value = true
       savedIndex.value = currentIndex.value
-      
+
       await new Promise(resolve => setTimeout(resolve, 500))
-      
+
       visibleCount.value += perPage
       isLoadingMore.value = false
-      
+
       if (isMobile.value) {
         nextTick(() => {
           if (carouselRef.value && paginatedHumans.value.length) {
             let targetIndex = savedIndex.value
             const maxIndex = carouselTotalSlides.value - 1
-            
-            if (targetIndex > maxIndex) {
-              targetIndex = maxIndex
-            }
-            
-            if (targetIndex < 0) {
-              targetIndex = 0
-            }
-            
+
+            if (targetIndex > maxIndex) targetIndex = maxIndex
+            if (targetIndex < 0) targetIndex = 0
+
             scrollToSlide(targetIndex)
             savedIndex.value = 0
           }
@@ -310,16 +333,15 @@ export default {
       }
     }
 
-    // === НАДЕЖНЫЙ СБРОС НА ПЕРВУЮ ПОЗИЦИЮ ===
     const resetToFirstSlide = () => {
       currentIndex.value = 0
       savedIndex.value = 0
       visibleCount.value = perPage
-      
+
       if (carouselRef.value) {
         const container = carouselRef.value
         container.scrollLeft = 0
-        
+
         nextTick(() => {
           container.scrollLeft = 0
           const slides = container.querySelectorAll('.carousel-slide')
@@ -328,7 +350,7 @@ export default {
             const containerWidth = container.offsetWidth
             const slideWidth = firstSlide.offsetWidth
             const scrollPosition = firstSlide.offsetLeft - (containerWidth - slideWidth) / 2
-            
+
             container.scrollTo({
               left: Math.max(0, scrollPosition),
               behavior: 'smooth'
@@ -338,18 +360,7 @@ export default {
       }
     }
 
-    // === ОТСЛЕЖИВАНИЕ ИЗМЕНЕНИЙ ФИЛЬТРОВ ===
-    watch([filterExperience, filterDirection], () => {
-      currentIndex.value = 0
-      savedIndex.value = 0
-      visibleCount.value = perPage
-      
-      nextTick(() => {
-        resetToFirstSlide()
-      })
-    })
-
-    // === ЛОГИКА КАРУСЕЛИ ===
+    // --- Карусель ---
     const scrollToSlide = (index) => {
       if (!carouselRef.value) return
       const container = carouselRef.value
@@ -385,74 +396,143 @@ export default {
       scrollToSlide(index)
     }
 
-    // === ОБРАБОТЧИКИ СОБЫТИЙ СВАЙПА ===
-    const touchStartX = ref(0);
-    const touchStartY = ref(0);
-    const touchEndX = ref(0);
-    const touchEndY = ref(0);
-    const isSwiping = ref(false);
-
+    // --- Обработчики свайпа ---
     const handleTouchStart = (e) => {
-      const touch = e.touches[0];
-      touchStartX.value = touch.clientX;
-      touchStartY.value = touch.clientY;
-      isSwiping.value = true;
-    };
+      const touch = e.touches[0]
+      touchStartX.value = touch.clientX
+      touchStartY.value = touch.clientY
+      isSwiping.value = true
+    }
 
     const handleTouchMove = (e) => {
-      if (!isSwiping.value) return;
-      
-      const touch = e.touches[0];
-      const deltaX = touch.clientX - touchStartX.value;
-      const deltaY = touch.clientY - touchStartY.value;
-      
-      // Если вертикальное движение больше - прокручиваем страницу
+      if (!isSwiping.value) return
+
+      const touch = e.touches[0]
+      const deltaX = touch.clientX - touchStartX.value
+      const deltaY = touch.clientY - touchStartY.value
+
       if (Math.abs(deltaY) > Math.abs(deltaX)) {
-        isSwiping.value = false;
-        return;
+        isSwiping.value = false
+        return
       }
-      
-      e.preventDefault();
-    };
+
+      e.preventDefault()
+    }
 
     const handleTouchEnd = (e) => {
-      if (!isSwiping.value) return;
-      isSwiping.value = false;
+      if (!isSwiping.value) return
+      isSwiping.value = false
 
-      const touch = e.changedTouches[0];
-      touchEndX.value = touch.clientX;
-      touchEndY.value = touch.clientY;
-      
-      const diffX = touchStartX.value - touchEndX.value;
-      const minSwipeDistance = 50;
+      const touch = e.changedTouches[0]
+      touchEndX.value = touch.clientX
+      touchEndY.value = touch.clientY
+
+      const diffX = touchStartX.value - touchEndX.value
+      const minSwipeDistance = 50
 
       if (diffX > minSwipeDistance) {
-        nextSlide();
+        nextSlide()
       } else if (diffX < -minSwipeDistance) {
-        prevSlide();
+        prevSlide()
       }
 
-      touchStartX.value = 0;
-      touchStartY.value = 0;
-      touchEndX.value = 0;
-      touchEndY.value = 0;
-    };
+      touchStartX.value = 0
+      touchStartY.value = 0
+      touchEndX.value = 0
+      touchEndY.value = 0
+    }
 
-    // === ОТСЛЕЖИВАНИЕ ИЗМЕНЕНИЙ РАЗМЕРА ===
+    // --- Рандомные цвета ---
+    const getRandomHumanClass = (slug) => {
+      if (randomClassCache.has(slug)) {
+        return randomClassCache.get(slug)
+      }
+
+      const num = Math.floor(Math.random() * 30) + 1
+      const formattedNum = num.toString().padStart(2, '0')
+      const className = `rand-${formattedNum}`
+
+      randomClassCache.set(slug, className)
+      return className
+    }
+
+    // ============================================================
+    //  RESIZE
+    // ============================================================
     let resizeTimeout = null
-    
+
     const handleResize = () => {
       if (resizeTimeout) {
         clearTimeout(resizeTimeout)
       }
-      
+
       resizeTimeout = setTimeout(() => {
         checkMobile()
         resizeTimeout = null
       }, 100)
     }
 
-    watch(isMobile, (newVal, oldVal) => {
+    // ============================================================
+    //  ЖИЗНЕННЫЙ ЦИКЛ
+    // ============================================================
+
+    onMounted(async () => {
+      isClient.value = true
+      checkMobile()
+
+      if (typeof window !== 'undefined') {
+        window.addEventListener('resize', handleResize)
+      }
+
+      try {
+        const allModules = import.meta.glob('/ru/*/*.md')
+
+        const filteredModules = Object.entries(allModules).filter(([path]) => {
+          return path.includes(`/ru/${props.humanType}/`) && !path.endsWith(`${props.humanType}_index.md`)
+        })
+
+        const loaded = await Promise.all(
+          filteredModules.map(async ([path, loader]) => {
+            const mod = await loader()
+            const slug = path.replace(`/ru/${props.humanType}/`, '').replace('.md', '')
+            const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
+            const uuid = fm.uuid || slug
+
+            return {
+              slug,
+              uuid,
+              name: fm.title || slug.charAt(0).toUpperCase() + slug.slice(1),
+              description: fm.description || '',
+              experience: getExperienceCategory(fm.experience),
+              experienceYears: fm.experience || '',
+              direction: processDirection(fm.direction),
+              directionRaw: fm.direction || '',
+              tags: fm.tags || [],
+              image: processImage(fm.image, props.humanType, uuid),
+            }
+          })
+        )
+
+        allHumans.value = loaded
+      } catch (error) {
+        console.error('Ошибка загрузки данных:', error)
+      } finally {
+        isLoading.value = false
+      }
+    })
+
+    // --- Watchers ---
+    watch([filterExperience, filterDirection], () => {
+      currentIndex.value = 0
+      savedIndex.value = 0
+      visibleCount.value = perPage
+
+      nextTick(() => {
+        resetToFirstSlide()
+      })
+    })
+
+    watch(isMobile, (newVal) => {
       if (isClient.value && newVal && paginatedHumans.value.length) {
         nextTick(() => {
           if (carouselRef.value) {
@@ -462,19 +542,24 @@ export default {
       }
     })
 
-    watch(() => paginatedHumans.value, (newVal, oldVal) => {
-      if (isClient.value && isMobile.value && newVal.length) {
-        nextTick(() => {
-          if (carouselRef.value) {
-            const maxIndex = carouselTotalSlides.value - 1
-            if (currentIndex.value > maxIndex) {
-              resetToFirstSlide()
+    watch(
+      () => paginatedHumans.value,
+      (newVal) => {
+        if (isClient.value && isMobile.value && newVal.length) {
+          nextTick(() => {
+            if (carouselRef.value) {
+              const maxIndex = carouselTotalSlides.value - 1
+              if (currentIndex.value > maxIndex) {
+                resetToFirstSlide()
+              }
             }
-          }
-        })
-      }
-    }, { deep: true })
+          })
+        }
+      },
+      { deep: true }
+    )
 
+    // --- Unmount ---
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)
@@ -484,20 +569,9 @@ export default {
       }
     })
 
-    // === РАНДОМНЫЕ ЦВЕТА ДЛЯ ИМЁН СОБАК ===
-    const getRandomHumanClass = (slug) => {
-      if (randomClassCache.has(slug)) {
-        return randomClassCache.get(slug)
-      }
-      
-      const num = Math.floor(Math.random() * 30) + 1
-      const formattedNum = num.toString().padStart(2, '0')
-      const className = `rand-${formattedNum}`
-      
-      randomClassCache.set(slug, className)
-      return className
-    }
-
+    // ============================================================
+    //  ВОЗВРАТ
+    // ============================================================
     return {
       paginatedHumans,
       filteredHumans,
@@ -510,9 +584,9 @@ export default {
       hasMoreItems,
       loadMore,
       isLoadingMore,
-      baseUrl,
       isLoading,
       isMobile,
+      baseUrl,
       carouselRef,
       currentIndex,
       carouselTotalSlides,
@@ -524,13 +598,13 @@ export default {
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
-      humanType: props.humanType,
-      getRandomHumanClass,
       touchStartX,
       touchStartY,
       touchEndX,
       touchEndY,
+      humanType: props.humanType,
+      getRandomHumanClass,
     }
-  }
+  },
 }
 </script>

@@ -49,32 +49,81 @@
 </template>
 
 <script>
+// ============================================================
+//  ИМПОРТЫ
+// ============================================================
 import { computed, ref, onMounted, onUnmounted, nextTick } from 'vue'
 
+// ============================================================
+//  КОНСТАНТЫ
+// ============================================================
 const MOBILE_BREAKPOINT = 736
 const baseUrl = import.meta.env.BASE_URL
 const perPage = 0
-
-// === ГЛОБАЛЬНЫЙ КЭШ ДЛЯ ЦВЕТОВ ===
 const randomClassCache = new Map()
 
+// ============================================================
+//  УТИЛИТЫ
+// ============================================================
+
+/**
+ * Обработка пути к изображению
+ */
+const processImage = (imagePath, type, uuid) => {
+  if (!imagePath) {
+    return uuid ? `${baseUrl}photos/${type}/${uuid}.webp` : `${baseUrl}placeholder-${type}.svg`
+  }
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath
+  }
+  if (imagePath.startsWith('/')) {
+    return `${baseUrl}${imagePath.slice(1)}`
+  }
+  return imagePath
+}
+
+// ============================================================
+//  КОМПОНЕНТ
+// ============================================================
 export default {
+  name: 'ListGuardians',
+
   props: {
     humanUUIDs: {
       type: Array,
-      default: () => []
+      default: () => [],
+      description: 'Массив UUID людей для отображения'
     },
     humanType: {
       type: String,
       required: true,
-      default: 'volunteers'
+      default: 'volunteers',
+      description: 'Тип людей (volunteers, staff, и т.д.)'
     }
   },
+
   setup(props) {
-    // Все переменные ОБЪЯВЛЯЕМ ВНУТРИ setup()
+    // ============================================================
+    //  СОСТОЯНИЕ
+    // ============================================================
     const allHumans = ref([])
     const isLoading = ref(true)
     const isMobile = ref(false)
+
+    // Карусель
+    const carouselRef = ref(null)
+    const currentIndex = ref(0)
+
+    // Свайп
+    const touchStartX = ref(0)
+    const touchStartY = ref(0)
+    const touchEndX = ref(0)
+    const touchEndY = ref(0)
+    const isSwiping = ref(false)
+
+    // ============================================================
+    //  ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+    // ============================================================
 
     const checkMobile = () => {
       if (typeof window !== 'undefined') {
@@ -85,86 +134,44 @@ export default {
       }
     }
 
-    // === РАНДОМНЫЕ ЦВЕТА ===
+    // ============================================================
+    //  ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
+    // ============================================================
+
+    const humans = computed(() => {
+      if (isLoading.value) return []
+      if (!allHumans.value || allHumans.value.length === 0) return []
+      if (!props.humanUUIDs || props.humanUUIDs.length === 0) return []
+
+      return allHumans.value.filter(v =>
+        v.uuid && props.humanUUIDs.includes(v.uuid)
+      )
+    })
+
+    // ============================================================
+    //  МЕТОДЫ
+    // ============================================================
+
+    // --- Рандомные цвета ---
     const getRandomVolunteerClass = (uuid) => {
       if (!uuid) {
         console.warn('UUID отсутствует!')
         return 'rand-01'
       }
-      
+
       if (randomClassCache.has(uuid)) {
         return randomClassCache.get(uuid)
       }
-      
+
       const num = Math.floor(Math.random() * 30) + 1
       const formattedNum = num.toString().padStart(2, '0')
       const className = `rand-${formattedNum}`
-      
+
       randomClassCache.set(uuid, className)
       return className
     }
 
-    // === КАРУСЕЛЬ ===
-    const carouselRef = ref(null)
-    const currentIndex = ref(0)
-
-    // === ФИЛЬТРАЦИЯ ===
-    const humans = computed(() => {
-      if (isLoading.value) return []
-      if (!allHumans.value || allHumans.value.length === 0) return []
-      if (!props.humanUUIDs || props.humanUUIDs.length === 0) return []
-      
-      return allHumans.value.filter(v => 
-        v.uuid && props.humanUUIDs.includes(v.uuid)
-      )
-    })
-
-    // === ЗАГРУЗКА ДАННЫХ ===
-    onMounted(async () => {
-      checkMobile()
-      
-      if (typeof window !== 'undefined') {
-        window.addEventListener('resize', handleResize)
-      }
-      
-      try {
-        const modules = import.meta.glob('/ru/*/*.md')
-        
-        // Фильтруем по humanType
-        const filteredModules = Object.entries(modules).filter(([path]) => {
-          return path.includes(`/ru/${props.humanType}/`) && !path.endsWith(`${props.humanType}_index.md`)
-        })
-        
-        const loaded = await Promise.all(
-          filteredModules.map(async ([path, loader]) => {
-            const mod = await loader()
-            const slug = path.replace(`/ru/${props.humanType}/`, '').replace('.md', '')
-            const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            
-            return {
-              slug,
-              uuid: fm.uuid || slug,
-              name: fm.title || slug.charAt(0).toUpperCase() + slug.slice(1),
-              description: fm.description || '',
-              experience: fm.experience || '',
-              direction: fm.direction || '',
-              image: fm.image || `/placeholder-${props.humanType}.svg`
-            }
-          })
-        )
-        allHumans.value = loaded
-      } catch (error) {
-        console.error('Ошибка загрузки данных:', error)
-      } finally {
-        isLoading.value = false
-      }
-
-      if (typeof window !== 'undefined') {
-        window.addEventListener('resize', handleResize)
-      }
-    })
-
-    // === ЛОГИКА КАРУСЕЛИ ===
+    // --- Карусель ---
     const scrollToSlide = (index) => {
       if (!carouselRef.value || !humans.value || humans.value.length === 0) return
       const container = carouselRef.value
@@ -201,73 +208,114 @@ export default {
       scrollToSlide(index)
     }
 
-    // === ОБРАБОТЧИКИ СОБЫТИЙ СВАЙПА ===
-    const touchStartX = ref(0);
-    const touchStartY = ref(0);
-    const touchEndX = ref(0);
-    const touchEndY = ref(0);
-    const isSwiping = ref(false);
-
+    // --- Обработчики свайпа ---
     const handleTouchStart = (e) => {
-      const touch = e.touches[0];
-      touchStartX.value = touch.clientX;
-      touchStartY.value = touch.clientY;
-      isSwiping.value = true;
-    };
+      const touch = e.touches[0]
+      touchStartX.value = touch.clientX
+      touchStartY.value = touch.clientY
+      isSwiping.value = true
+    }
 
     const handleTouchMove = (e) => {
-      if (!isSwiping.value) return;
-      
-      const touch = e.touches[0];
-      const deltaX = touch.clientX - touchStartX.value;
-      const deltaY = touch.clientY - touchStartY.value;
-      
-      // Если вертикальное движение больше - прокручиваем страницу
+      if (!isSwiping.value) return
+
+      const touch = e.touches[0]
+      const deltaX = touch.clientX - touchStartX.value
+      const deltaY = touch.clientY - touchStartY.value
+
       if (Math.abs(deltaY) > Math.abs(deltaX)) {
-        isSwiping.value = false;
-        return;
+        isSwiping.value = false
+        return
       }
-      
-      e.preventDefault();
-    };
+
+      e.preventDefault()
+    }
 
     const handleTouchEnd = (e) => {
-      if (!isSwiping.value) return;
-      isSwiping.value = false;
+      if (!isSwiping.value) return
+      isSwiping.value = false
 
-      const touch = e.changedTouches[0];
-      touchEndX.value = touch.clientX;
-      touchEndY.value = touch.clientY;
-      
-      const diffX = touchStartX.value - touchEndX.value;
-      const minSwipeDistance = 50;
+      const touch = e.changedTouches[0]
+      touchEndX.value = touch.clientX
+      touchEndY.value = touch.clientY
+
+      const diffX = touchStartX.value - touchEndX.value
+      const minSwipeDistance = 50
 
       if (diffX > minSwipeDistance) {
-        nextSlide();
+        nextSlide()
       } else if (diffX < -minSwipeDistance) {
-        prevSlide();
+        prevSlide()
       }
 
-      touchStartX.value = 0;
-      touchStartY.value = 0;
-      touchEndX.value = 0;
-      touchEndY.value = 0;
-    };
+      touchStartX.value = 0
+      touchStartY.value = 0
+      touchEndX.value = 0
+      touchEndY.value = 0
+    }
 
-    // === RESIZE ===
+    // ============================================================
+    //  RESIZE
+    // ============================================================
     let resizeTimeout = null
 
     const handleResize = () => {
       if (resizeTimeout) {
         clearTimeout(resizeTimeout)
       }
-      
+
       resizeTimeout = setTimeout(() => {
         checkMobile()
         resizeTimeout = null
       }, 100)
     }
 
+    // ============================================================
+    //  ЖИЗНЕННЫЙ ЦИКЛ
+    // ============================================================
+
+    onMounted(async () => {
+      checkMobile()
+
+      if (typeof window !== 'undefined') {
+        window.addEventListener('resize', handleResize)
+      }
+
+      try {
+        const modules = import.meta.glob('/ru/*/*.md')
+
+        const filteredModules = Object.entries(modules).filter(([path]) => {
+          return path.includes(`/ru/${props.humanType}/`) && !path.endsWith(`${props.humanType}_index.md`)
+        })
+
+        const loaded = await Promise.all(
+          filteredModules.map(async ([path, loader]) => {
+            const mod = await loader()
+            const slug = path.replace(`/ru/${props.humanType}/`, '').replace('.md', '')
+            const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
+            const uuid = fm.uuid || slug
+
+            return {
+              slug,
+              uuid: uuid,
+              name: fm.title || slug.charAt(0).toUpperCase() + slug.slice(1),
+              description: fm.description || '',
+              experience: fm.experience || '',
+              direction: fm.direction || '',
+              image: processImage(fm.image, props.humanType, uuid),
+            }
+          })
+        )
+
+        allHumans.value = loaded
+      } catch (error) {
+        console.error('Ошибка загрузки данных:', error)
+      } finally {
+        isLoading.value = false
+      }
+    })
+
+    // --- Unmount ---
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)
@@ -277,7 +325,9 @@ export default {
       }
     })
 
-    // === ВОЗВРАЩАЕМ ВСЕ НУЖНЫЕ ПЕРЕМЕННЫЕ ===
+    // ============================================================
+    //  ВОЗВРАТ
+    // ============================================================
     return {
       humans,
       isLoading,
@@ -291,14 +341,14 @@ export default {
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
-      humanType: props.humanType,
-      getRandomVolunteerClass,
-      baseUrl,
       touchStartX,
       touchStartY,
       touchEndX,
       touchEndY,
+      humanType: props.humanType,
+      getRandomVolunteerClass,
+      baseUrl,
     }
-  }
+  },
 }
 </script>
