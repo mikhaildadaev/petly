@@ -35,36 +35,31 @@ const baseUrl = import.meta.env.BASE_URL
  * @returns {string} - полный URL изображения
  */
 const processImage = (imagePath, type, uuid) => {
-  // 1. Если изображение не указано — формируем по UUID
   if (!imagePath) {
-    return uuid 
-      ? `${baseUrl}photos/${type}/${uuid}.webp` 
-      : `${baseUrl}placeholder-${type}.svg`
+    return uuid ? `${baseUrl}images/${type}/${uuid}.webp` : `${baseUrl}placeholder-${type}.svg`
   }
-
-  // 2. Если полный URL — оставляем как есть
   if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
     return imagePath
   }
-
-  // 3. Если путь с / — добавляем baseUrl
   if (imagePath.startsWith('/')) {
     return `${baseUrl}${imagePath.slice(1)}`
   }
-
-  // 4. Относительный путь
   return imagePath
 }
 
+// ============================================================
+//  УТИЛИТЫ
+// ============================================================
+
 /**
  * Преобразование опыта в уровень
- * @param {string} experience - строка с опытом
+ * @param {string} experienceRaw - строка с опытом
  * @returns {string} - уровень (Начинающий, Опытный, Эксперт)
  */
-const getExperienceLevel = (experience) => {
-  if (!experience) return 'Нет опыта'
+const getExperienceLevel = (experienceRaw) => {
+  if (!experienceRaw) return 'Нет опыта'
   
-  const exp = experience.toLowerCase()
+  const exp = experienceRaw.toLowerCase()
 
   // Проверяем ключевые слова
   if (exp.includes('эксперт')) return 'Эксперт'
@@ -88,7 +83,7 @@ const getExperienceLevel = (experience) => {
     return 'Опытный'
   }
 
-  return experience || 'Нет опыта'
+  return experienceRaw || 'Нет опыта'
 }
 
 // ============================================================
@@ -115,10 +110,8 @@ export default {
     
     const name = computed(() => fm.value?.title || 'Безымянный друг')
     const direction = computed(() => fm.value?.direction || '')
-    const experienceRaw = computed(() => fm.value?.experience || '')
+    const experience = computed(() => getExperienceLevel(fm.value?.experience))
     const uuid = computed(() => fm.value?.uuid || '')
-    
-    const experienceLevel = computed(() => getExperienceLevel(experienceRaw.value))
     
     const image = computed(() => processImage(
       fm.value?.image, 
@@ -130,7 +123,7 @@ export default {
     return {
       name,
       direction,
-      experienceLevel,
+      experience,
       image,
       baseUrl,
     }

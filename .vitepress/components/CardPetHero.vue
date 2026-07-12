@@ -39,7 +39,7 @@ const STORAGE_KEY = 'pets_favorites'
  */
 const processImage = (imagePath, type, uuid) => {
   if (!imagePath) {
-    return uuid ? `${baseUrl}photos/${type}/${uuid}.webp` : `${baseUrl}placeholder-${type}.svg`
+    return uuid ? `${baseUrl}images/${type}/${uuid}.webp` : `${baseUrl}placeholder-${type}.svg`
   }
   if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
     return imagePath
