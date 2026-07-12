@@ -1,22 +1,22 @@
 <template>
   <div class="filters-compact">
     <div class="filter-group">
-      <span class="filter-label">Пол</span>
       <div class="filter-chips">
         <button v-for="option in genderOptions" :key="option.value" class="chip" :class="{ active: filters.gender[option.value] }" @click="toggleFilter('gender', option.value)" :title="option.label" v-html="option.icon"/>
       </div>
+      <span class="filter-label">Пол</span>
     </div>
     <div class="filter-group">
-      <span class="filter-label">Возраст</span>
       <div class="filter-chips">
         <button v-for="option in ageOptions" :key="option.value" class="chip" :class="{ active: filters.age[option.value] }" @click="toggleFilter('age', option.value)" :title="option.label" v-html="option.icon"/>
       </div>
+      <span class="filter-label">Возраст</span>
     </div>
     <div class="filter-group">
-      <span class="filter-label">Размер</span>
       <div class="filter-chips">
         <button v-for="option in sizeOptions" :key="option.value" class="chip" :class="{ active: filters.size[option.value] }" @click="toggleFilter('size', option.value)" :title="option.label" v-html="option.icon"/>
       </div>
+      <span class="filter-label">Размер</span>
     </div>
     <button v-if="!areAllActive" class="btn-reset-compact" @click="resetAllFilters" title="Включить все фильтры">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
