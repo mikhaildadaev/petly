@@ -6,7 +6,7 @@
       <span v-if="size" class="tag size-tag">{{ size }}</span>
     </div>
     <img :src="image" :alt="name" class="hero-image" loading="lazy" @error="handleImageError"/>
-    <div class="hero-overlay">
+    <div class="hero-overlay glass">
       <div class="name">{{ name }}</div>
     </div>
   </div>
