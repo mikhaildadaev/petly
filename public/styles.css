@@ -154,14 +154,16 @@ h1,h2,h3 {
    ============================================================ */
 .filters-compact {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap:wrap;
+  flex-flow: row;
   align-items: center;
-  gap: 8px 16px;
-  padding: 12px 16px;
+  gap: 14px;
+  padding: 14px;
   background: var(--vp-c-bg-soft, #f5efe6);
-  border-radius: 14px;
+  border-radius: var(--radius);;
   min-height: 56px;
   margin-bottom: 24px;
+  overflow-y: hidden;
 }
 .filters-compact .btn-reset-compact {
   display: inline-flex;
@@ -191,7 +193,9 @@ h1,h2,h3 {
   display: flex;
   align-items: center;
   gap: 6px;
-  flex-wrap: wrap;
+  padding: 4px 8px;
+  border: 2px solid var(--vp-c-border, #d5c8b8);
+  border-radius: var(--radius);
 }
 .filter-label {
   font-size: 11px;
