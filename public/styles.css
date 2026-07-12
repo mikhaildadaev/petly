@@ -154,23 +154,22 @@ h1,h2,h3 {
    ============================================================ */
 .filters-compact {
   display: flex;
-  flex-wrap:wrap;
+  margin: 0 -24px;
+  padding: 0 24px;
+  flex-wrap: wrap;
   flex-flow: row;
   align-items: center;
   gap: 14px;
-  padding: 14px;
-  background: var(--vp-c-bg-soft, #f5efe6);
-  border-radius: var(--radius);;
-  min-height: 56px;
-  margin-bottom: 24px;
+  height: 48px;
   overflow-y: hidden;
 }
 .filters-compact .btn-reset-compact {
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  height: 100%;
   padding: 4px 14px;
-  border: 1px solid var(--vp-c-border, #d5c8b8);
+  border: 1px solid var(--vp-c-border);
   border-radius: 30px;
   background: transparent;
   font-size: 12px;
@@ -192,19 +191,21 @@ h1,h2,h3 {
 .filter-group {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  height: 100%;
   padding: 4px 8px;
-  border: 2px solid var(--vp-c-border, #d5c8b8);
+  border: 1px solid var(--vp-c-border);
   border-radius: var(--radius);
+  background: var(--vp-c-bg-soft);
 }
 .filter-label {
   font-size: 11px;
   font-weight: 600;
-  color: var(--vp-c-text-light, #6b5b5b);
+  color: var(--vp-c-text-2);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  opacity: 0.6;
-  margin-right: 2px;
+  margin-left: 4px;
+  margin-right: 14px;
 }
 .filter-chips {
   display: flex;
@@ -214,11 +215,8 @@ h1,h2,h3 {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border: 2px solid var(--vp-c-border, #d5c8b8);
-  border-radius: 50%;
-  background: transparent;
+  width: 32px;
+  height: 32px;
   font-size: 16px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -229,7 +227,7 @@ h1,h2,h3 {
   font-family: inherit;
 }
 .filter-chips .chip:hover {
-  border-color: var(--vp-c-brand, #e67e22);
+  color: var(--vp-c-brand, #e67e22);
   transform: scale(1.08);
   opacity: 0.7;
 }
@@ -237,14 +235,8 @@ h1,h2,h3 {
   transform: scale(0.92);
 }
 .filter-chips .chip.active {
-  border-color: var(--vp-c-brand, #e67e22);
-  background: var(--vp-c-brand, #e67e22);
-  color: white;
-  box-shadow: 0 2px 12px rgba(230, 126, 34, 0.25);
+  color: var(--vp-c-brand, #e67e22);
   opacity: 1;
-}
-.filter-chips .chip.active:hover {
-  box-shadow: 0 4px 20px rgba(230, 126, 34, 0.35);
 }
 
 /* ============================================
@@ -588,11 +580,10 @@ h1,h2,h3 {
   background: var(--vp-c-bg-soft);
   border-radius: var(--radius);
   border: 1px solid var(--vp-c-border);
-  margin: 2rem 0;
 }
 .no-results p {
   font-size: 1.2rem;
-  color: var(--vp-c-text-light);
+  color: var(--vp-c-text-2);
   margin-bottom: 1rem;
 }
 
