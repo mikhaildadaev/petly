@@ -1,7 +1,8 @@
 ---
 layout: home
 hero:
-  text: "С ПИТОМЦЕМ - ты"
+  text: "В ДОБРОЛОГИЯХ"
+  subtext: "- ты"
   image:
     src: https://yandex.ru/youngcon/static/images/2026/tech/list/search_active.webp
     alt: Собака из приюта
