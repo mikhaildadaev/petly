@@ -80,15 +80,17 @@ export default {
      */
     const mediaItems = computed(() => {
       const items = []
-
-      props.photos.forEach(src => {
-        items.push({ type: 'image', src })
-      })
-
-      props.videos.forEach(src => {
-        items.push({ type: 'video', src })
-      })
-
+      const maxLength = Math.max(props.photos.length, props.videos.length)
+      
+      for (let i = 0; i < maxLength; i++) {
+        if (i < props.photos.length) {
+          items.push({ type: 'image', src: props.photos[i] })
+        }
+        if (i < props.videos.length) {
+          items.push({ type: 'video', src: props.videos[i] })
+        }
+      }
+      
       return items
     })
 
