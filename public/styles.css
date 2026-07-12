@@ -524,6 +524,7 @@ h1,h2,h3 {
 .grid-card-body p {
   font-size: 1rem;
   line-height: 1.6;
+  margin-top: 0;
   margin-bottom: 1.2rem;
 }
 
