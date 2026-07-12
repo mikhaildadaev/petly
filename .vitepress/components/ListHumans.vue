@@ -29,7 +29,7 @@
           <path d="M10 11v6" />
           <path d="M14 11v6" />
         </svg>
-        Сбросить
+        СБРОСИТЬ
       </button>
     </div>
   </div>
