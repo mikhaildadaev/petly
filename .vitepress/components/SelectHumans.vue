@@ -1,7 +1,7 @@
 <template>
   <div v-if="humans && humans.length > 0" class="grid-list">
     <div v-if="!isMobile" class="grid-cards">
-      <a v-for="humans in humans" :key="humans.uuid" :href="`${baseUrl}ru/${humanType}/${humans.slug}`" class="aspect-list grid-card">
+      <a v-for="humans in humans" :key="humans.uuid" :href="`${baseUrl}ru/${humanType}/${humans.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
         <div class="grid-meta">
           <span v-if="humans.direction" class="tag direction-tag">{{ humans.direction }}</span>
           <span v-if="humans.experience" class="tag experience-tag">{{ humans.experience }}</span>

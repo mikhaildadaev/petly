@@ -1,36 +1,35 @@
 <template>
   <div>
     <div class="gallery-media">
-      <div  v-for="(item, index) in mediaItems" :key="index"  class="gallery-item" :style="{ '--delay': index * 0.05 + 's' }" @click="openLightbox(index)">
+      <div  v-for="(item, index) in mediaItems" :key="index"  class="gallery-item" :style="{ '--delay': index * 0.05 + 's' }" @click="openFullslider(index)">
         <img  v-if="item.type === 'image'" :src="item.src" :alt="'Медиа ' + (index + 1)" loading="lazy" />
         <div v-else class="video-preview">
           <video  :src="item.src"  muted  playsinline @mouseenter="playVideo" @mouseleave="pauseVideo" ref="videoPreviewRefs" />
         </div>
-        <div class="media-badge">{{ index + 1 }} / {{ mediaItems.length }}</div>
       </div>
     </div>
-    <div v-if="lightboxOpen" class="lightbox" @click.self="closeLightbox">
-      <button class="lightbox-close" @click="closeLightbox" aria-label="Закрыть">
+    <div v-if="fullsliderOpen" class="fullslider" @click.self="closeFullslider">
+      <button class="fullslider-close" @click="closeFullslider" aria-label="Закрыть">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M18 6L6 18M6 6l12 12" />
         </svg>
       </button>
-      <button v-if="mediaItems.length > 1" class="lightbox-prev" @click="prevImage" aria-label="Предыдущее">
+      <button v-if="mediaItems.length > 1" class="fullslider-prev" @click="prevImage" aria-label="Предыдущее">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M15 18l-6-6 6-6" />
         </svg>
       </button>
-      <button v-if="mediaItems.length > 1" class="lightbox-next" @click="nextImage" aria-label="Следующее">
+      <button v-if="mediaItems.length > 1" class="fullslider-next" @click="nextImage" aria-label="Следующее">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M9 18l6-6-6-6" />
         </svg>
       </button>
-      <div class="lightbox-content">
+      <div class="fullslider-content">
         <img v-if="currentMedia.type === 'image'" :src="currentMedia.src" :alt="'Медиа ' + (currentIndex + 1)" />
-        <video v-else :src="currentMedia.src" controls autoplay playsinline class="lightbox-video"ref="lightboxVideoRef"/>
+        <video v-else :src="currentMedia.src" controls autoplay playsinline class="fullslider-video"ref="fullsliderVideoRef"/>
       </div>
-      <div class="lightbox-footer">
-        <div class="lightbox-dots">
+      <div class="fullslider-footer">
+        <div class="fullslider-dots">
           <span v-for="(_, index) in mediaItems" :key="index" class="dot" :class="{ active: index === currentIndex }" @click="goToImage(index)"/>
         </div>
       </div>
@@ -67,9 +66,9 @@ export default {
     // ============================================================
     //  СОСТОЯНИЕ
     // ============================================================
-    const lightboxOpen = ref(false)
+    const fullsliderOpen = ref(false)
     const currentIndex = ref(0)
-    const lightboxVideoRef = ref(null)
+    const fullsliderVideoRef = ref(null)
 
     // ============================================================
     //  ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
@@ -113,21 +112,21 @@ export default {
     /**
      * Открыть лайтбокс
      */
-    const openLightbox = (index) => {
+    const openFullslider = (index) => {
       if (!hasMedia.value) return
       currentIndex.value = index
-      lightboxOpen.value = true
+      fullsliderOpen.value = true
       document.body.style.overflow = 'hidden'
     }
 
     /**
      * Закрыть лайтбокс
      */
-    const closeLightbox = () => {
-      lightboxOpen.value = false
+    const closeFullslider = () => {
+      fullsliderOpen.value = false
       document.body.style.overflow = ''
-      if (lightboxVideoRef.value) {
-        lightboxVideoRef.value.pause()
+      if (fullsliderVideoRef.value) {
+        fullsliderVideoRef.value.pause()
       }
     }
 
@@ -173,9 +172,9 @@ export default {
      * Остановка видео при смене слайда
      */
     const stopCurrentVideo = () => {
-      if (lightboxVideoRef.value) {
-        lightboxVideoRef.value.pause()
-        lightboxVideoRef.value.currentTime = 0
+      if (fullsliderVideoRef.value) {
+        fullsliderVideoRef.value.pause()
+        fullsliderVideoRef.value.currentTime = 0
       }
     }
 
@@ -183,9 +182,9 @@ export default {
      * Воспроизведение видео при смене слайда
      */
     const playCurrentVideo = () => {
-      if (lightboxVideoRef.value && currentMedia.value.type === 'video') {
+      if (fullsliderVideoRef.value && currentMedia.value.type === 'video') {
         setTimeout(() => {
-          lightboxVideoRef.value?.play().catch(() => {})
+          fullsliderVideoRef.value?.play().catch(() => {})
         }, 100)
       }
     }
@@ -194,11 +193,11 @@ export default {
      * Обработка клавиатуры
      */
     const handleKeydown = (e) => {
-      if (!lightboxOpen.value) return
+      if (!fullsliderOpen.value) return
 
       switch (e.key) {
         case 'Escape':
-          closeLightbox()
+          closeFullslider()
           break
         case 'ArrowRight':
           nextImage()
@@ -238,14 +237,14 @@ export default {
     //  ВОЗВРАТ
     // ============================================================
     return {
-      lightboxOpen,
+      fullsliderOpen,
       currentIndex,
-      lightboxVideoRef,
+      fullsliderVideoRef,
       mediaItems,
       currentMedia,
       hasMedia,
-      openLightbox,
-      closeLightbox,
+      openFullslider,
+      closeFullslider,
       nextImage,
       prevImage,
       goToImage,
