@@ -450,7 +450,7 @@ h1,h2,h3 {
   transform: scale(1.05);
   border-color: #e67e22;
 }
-.grid-card::after {
+.grid-card .grid-card-body::after {
   content: '';
   position: absolute;
   top: 16px;
@@ -473,11 +473,11 @@ h1,h2,h3 {
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
 }
-.grid-card:hover::after {
+.grid-card:hover .grid-card-body::after {
   opacity: 1;
   transform: translateX(4px) scale(1.1);
 }
-.dark .grid-card::after {
+.dark .grid-card .grid-card-body::after {
   background: rgba(37, 37, 37, 0.9);
 }
 .grid-meta {
