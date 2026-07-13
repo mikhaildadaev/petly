@@ -51,13 +51,11 @@ export default defineConfig({
             ]
           },
           { 
-            text: 'Волонтёрство', 
+            text: 'Добрология', 
             items: [
-              { text: 'Стать волонтёром', link: '/ru/help/go' },
-              { text: 'Помощь делом', link: '/ru/help/deed' },
-              { text: 'Помощь вещами', link: '/ru/help/things' },
-              { text: 'Помощь деньгами', link: '/ru/help/money' },
               { text: 'Волонтёры', link: '/ru/volunteers' }
+              { text: 'Стать волонтёром', link: '/ru/dobro/go' },
+              { text: 'Помощь', link: '/ru/dobro/help' }
             ]
           },
           { 
@@ -79,13 +77,11 @@ export default defineConfig({
             ]
           },
           {
-            text: 'Волонтёрство',
+            text: 'Добрология',
             items: [
-              { text: 'Стать волонтёром', link: '/ru/help/go' },
-              { text: 'Помощь делом', link: '/ru/help/deed' },
-              { text: 'Помощь вещами', link: '/ru/help/things' },
-              { text: 'Помощь деньгами', link: '/ru/help/money' },
-              { text: 'Волонтёры', link: '/ru/volunteers' }
+              { text: 'Волонтёры', link: '/ru/volunteers' },
+              { text: 'Стать волонтёром', link: '/ru/dobro/go' },
+              { text: 'Помощь', link: '/ru/dobro/help' }
             ]
           },
           {
