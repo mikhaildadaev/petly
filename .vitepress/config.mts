@@ -73,7 +73,6 @@ export default defineConfig({
         sidebar: [
           {
             text: 'Питомцы',
-            collapsed: true,
             items: [
               { text: 'Кошки', link: '/ru/cats' },
               { text: 'Собаки', link: '/ru/dogs' }
@@ -81,7 +80,6 @@ export default defineConfig({
           },
           {
             text: 'Волонтёрство',
-            collapsed: true,
             items: [
               { text: 'Стать волонтёром', link: '/ru/help/go' },
               { text: 'Помощь делом', link: '/ru/help/deed' },
@@ -92,7 +90,6 @@ export default defineConfig({
           },
           {
             text: 'Советы',
-            collapsed: true,
             items: [
               { text: 'Взять питомца', link: '/ru/recommendations/go' },
               { text: 'Здоровье', link: '/ru/recommendations/health' },
