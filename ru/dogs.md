@@ -4,3 +4,4 @@ description: Собака — лучший друг человека.
 ---
 
 <ListPets :petType="'dogs'"/>
+<img src="../public/assets/webp/dogFilter.webp" width="284" align="right"/>
