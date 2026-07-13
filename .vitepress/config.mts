@@ -53,9 +53,9 @@ export default defineConfig({
           { 
             text: 'Добрология', 
             items: [
-              { text: 'Волонтёры', link: '/ru/volunteers' }
-              { text: 'Стать волонтёром', link: '/ru/dobro/go' },
-              { text: 'Помощь', link: '/ru/dobro/help' }
+              { text: 'Волонтёры', link: '/ru/volunteers' },
+              { text: 'Стать волонтёром', link: '/ru/dobrology/go' },
+              { text: 'Помощь', link: '/ru/dobrology/help' }
             ]
           },
           { 
@@ -80,8 +80,8 @@ export default defineConfig({
             text: 'Добрология',
             items: [
               { text: 'Волонтёры', link: '/ru/volunteers' },
-              { text: 'Стать волонтёром', link: '/ru/dobro/go' },
-              { text: 'Помощь', link: '/ru/dobro/help' }
+              { text: 'Стать волонтёром', link: '/ru/dobrology/go' },
+              { text: 'Помощь', link: '/ru/dobrology/help' }
             ]
           },
           {
