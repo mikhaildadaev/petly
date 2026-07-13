@@ -151,8 +151,6 @@ const processImage = (imagePath, type, uuid) => {
  */
 const getExperienceCategory = (expValue) => {
   if (!expValue) return 'Нет опыта'
-
-  // Проверяем годы
   if (expValue.includes('лет') || expValue.includes('год')) {
     const match = expValue.match(/(\d+)/)
     if (match) {
@@ -162,8 +160,6 @@ const getExperienceCategory = (expValue) => {
       return 'Эксперт'
     }
   }
-
-  // Проверяем месяцы
   if (expValue.includes('месяц')) {
     const match = expValue.match(/(\d+)/)
     if (match) {
@@ -171,8 +167,6 @@ const getExperienceCategory = (expValue) => {
       return num < 12 ? 'Начинающий' : 'Опытный'
     }
   }
-
-  // Проверяем ключевые слова
   const lower = expValue.toLowerCase()
   if (lower.includes('начин')) return 'Начинающий'
   if (lower.includes('опыт')) return 'Опытный'

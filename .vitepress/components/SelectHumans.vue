@@ -82,6 +82,35 @@ const processImage = (imagePath, type, uuid) => {
   return imagePath
 }
 
+/**
+ * Определение категории опыта
+ */
+const getExperienceCategory = (expValue) => {
+  if (!expValue) return 'Нет опыта'
+  if (expValue.includes('лет') || expValue.includes('год')) {
+    const match = expValue.match(/(\d+)/)
+    if (match) {
+      const num = parseInt(match[1])
+      if (num <= 1) return 'Начинающий'
+      if (num <= 3) return 'Опытный'
+      return 'Эксперт'
+    }
+  }
+  if (expValue.includes('месяц')) {
+    const match = expValue.match(/(\d+)/)
+    if (match) {
+      const num = parseInt(match[1])
+      return num < 12 ? 'Начинающий' : 'Опытный'
+    }
+  }
+  const lower = expValue.toLowerCase()
+  if (lower.includes('начин')) return 'Начинающий'
+  if (lower.includes('опыт')) return 'Опытный'
+  if (lower.includes('эксперт')) return 'Эксперт'
+
+  return expValue || 'Нет опыта'
+}
+
 // ============================================================
 //  КОМПОНЕНТ
 // ============================================================
@@ -300,7 +329,7 @@ export default {
               uuid: uuid,
               name: fm.title || slug.charAt(0).toUpperCase() + slug.slice(1),
               description: fm.description || '',
-              experience: fm.experience || '',
+              experience: getExperienceCategory(fm.experience),
               direction: fm.direction || '',
               image: processImage(fm.image, props.humanType, uuid),
             }
