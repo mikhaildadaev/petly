@@ -44,12 +44,61 @@ export default defineConfig({
             link: '/ru/' 
           },
           { 
-            text: 'Волонтеры', 
-            link: '/ru/volunteers' 
+            text: 'Питомцы', 
+            items: [
+              { text: 'Кошки', link: '/ru/cats' },
+              { text: 'Собаки', link: '/ru/dogs' }
+            ]
           },
           { 
-            text: 'Собаки', 
-            link: '/ru/dogs' 
+            text: 'Волонтёрство', 
+            items: [
+              { text: 'Стать волонтёром', link: '/ru/help/go' },
+              { text: 'Помощь делом', link: '/ru/help/deed' },
+              { text: 'Помощь вещами', link: '/ru/help/things' },
+              { text: 'Помощь деньгами', link: '/ru/help/money' },
+              { text: 'Волонтёры', link: '/ru/volunteers' }
+            ]
+          },
+          { 
+            text: 'Советы', 
+            items: [
+              { text: 'Взять питомца', link: '/ru/recommendations/go' },
+              { text: 'Здоровье', link: '/ru/recommendations/health' },
+              { text: 'Неприятности', link: '/ru/recommendations/trouble' },
+              { text: 'Права и защита', link: '/ru/recommendations/welfare' }
+            ]
+          }
+        ],
+        sidebar: [
+          {
+            text: 'Питомцы',
+            collapsed: true,
+            items: [
+              { text: 'Кошки', link: '/ru/cats' },
+              { text: 'Собаки', link: '/ru/dogs' }
+            ]
+          },
+          {
+            text: 'Волонтёрство',
+            collapsed: true,
+            items: [
+              { text: 'Стать волонтёром', link: '/ru/help/go' },
+              { text: 'Помощь делом', link: '/ru/help/deed' },
+              { text: 'Помощь вещами', link: '/ru/help/things' },
+              { text: 'Помощь деньгами', link: '/ru/help/money' },
+              { text: 'Волонтёры', link: '/ru/volunteers' }
+            ]
+          },
+          {
+            text: 'Советы',
+            collapsed: true,
+            items: [
+              { text: 'Взять питомца', link: '/ru/recommendations/go' },
+              { text: 'Здоровье', link: '/ru/recommendations/health' },
+              { text: 'Неприятности', link: '/ru/recommendations/trouble' },
+              { text: 'Права и защита', link: '/ru/recommendations/welfare' }
+            ]
           }
         ],
         darkModeSwitchLabel: "Внешний вид",
