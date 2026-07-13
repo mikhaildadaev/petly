@@ -108,7 +108,7 @@
     </div>
   </div>
   <div v-if="filteredHumans.length === 0 && !isLoading" class="no-results">
-    <p>По выбранным фильтрам ничего не найдено</p>
+    <p>По выбранным фильтрам никого не найдено</p>
   </div>
 </template>
 
