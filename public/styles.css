@@ -94,6 +94,31 @@ h1,h2,h3 {
   overflow: hidden;
 }
 
+/* ============================================================
+   СТИЛИ ИЗОБРАЖЕНИЙ СТРАНИЦ
+   ============================================================ */
+.page-image {
+  position: relative;
+  width: 100%;
+  margin-bottom: -48px;
+  border-bottom: 1px solid var(--vp-c-divider);
+  line-height: 0;
+}
+.page-image.left {
+  text-align: left;
+}
+.page-image.center {
+  text-align: center;
+}
+.page-image.right {
+  text-align: right;
+}
+.page-image img {
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
+}
+
 /* ============================================
    ТЭГИ
    ============================================ */
