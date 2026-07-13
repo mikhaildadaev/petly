@@ -5,6 +5,7 @@ import GalleryMedia from '../components/GalleryMedia.vue'
 import ListHumans from '../components/ListHumans.vue'
 import ListPets from '../components/ListPets.vue'
 import SelectHumans from '../components/SelectHumans.vue'
+import StyleImagePage from '../components/StyleImagePage.vue'
 
 export default {
   extends: DefaultTheme,
@@ -15,5 +16,6 @@ export default {
     app.component('ListHumans', ListHumans)
     app.component('ListPets', ListPets)
     app.component('SelectHumans', SelectHumans)
+    app.component('StyleImagePage', StyleImagePage)
   }
 }
