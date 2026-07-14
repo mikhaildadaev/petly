@@ -133,6 +133,15 @@ h1,h2,h3 {
 }
 
 /* ============================================
+   ИМЕНОВАНИЕ
+   ============================================ */
+.name {
+  font-size: 2.2rem;
+  font-weight: 600;
+  font-family: var(--vp-font-family-written);
+}
+
+/* ============================================
    ТЭГИ
    ============================================ */
 .tag {
@@ -141,17 +150,7 @@ h1,h2,h3 {
   border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 600;
-  margin: 0 0.3rem 0.3rem 0;
   width: fit-content;
-}
-
-/* ============================================
-   ИМЕНОВАНИЕ
-   ============================================ */
-.name {
-  font-size: 2.2rem;
-  font-weight: 600;
-  font-family: var(--vp-font-family-written);
 }
 
 /* ============================================
@@ -1013,10 +1012,6 @@ h1,h2,h3 {
   }
   .grid-card-body p {
     font-size: 0.9rem;
-  }
-  .tag {
-    font-size: 0.75rem;
-    padding: 0.2rem 0.6rem;
   }
   .no-results {
     padding: 2rem 1rem;
