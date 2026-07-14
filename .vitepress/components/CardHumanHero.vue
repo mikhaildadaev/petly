@@ -5,7 +5,7 @@
       <span v-if="experience" class="tag experience-tag">{{ experience }}</span>
     </div>
     <img :src="image" :alt="name" class="hero-image" loading="lazy" />
-    <div :class="['hero-overlay', getRandomHumanClass(slug)]">
+    <div :class="['hero-overlay', getRandomHumanClass(uuid)]">
       <div class="name">{{ name }}</div>
       <p>{{ description }}</p>
     </div>
@@ -93,21 +93,21 @@ const getExperienceLevel = (experienceRaw) => {
 
 /**
  * Получение случайного класса для карточки
- * @param {string} slug - slug сущности
+ * @param {string} uuid - UUID сущности
  * @returns {string} - случайный класс rand-XX
  */
-const getRandomHumanClass = (slug) => {
-  if (!slug) return 'rand-01'
+const getRandomHumanClass = (uuid) => {
+  if (!uuid) return 'rand-01'
   
-  if (randomClassCache.has(slug)) {
-    return randomClassCache.get(slug)
+  if (randomClassCache.has(uuid)) {
+    return randomClassCache.get(uuid)
   }
   
   const num = Math.floor(Math.random() * 30) + 1
   const formattedNum = num.toString().padStart(2, '0')
   const className = `rand-${formattedNum}`
   
-  randomClassCache.set(slug, className)
+  randomClassCache.set(uuid, className)
   return className
 }
 
@@ -145,7 +145,6 @@ export default {
       return data
     })
 
-    const slug = computed(() => fm.value?.slug || '')
     const uuid = computed(() => fm.value?.uuid || '')
     const name = computed(() => fm.value?.title || 'Безымянный друг')
     const description = computed(() => fm.value?.description || '')
@@ -164,7 +163,6 @@ export default {
     // ============================================================
     return {
       // Данные человека
-      slug,
       uuid,
       name,
       description,

@@ -1,7 +1,7 @@
 <template>
   <div v-if="humans && humans.length > 0" class="grid-list">
     <div v-if="!isMobile" class="grid-cards">
-      <a v-for="humans in humans" :key="humans.uuid" :href="`${baseUrl}ru/${humanType}/${humans.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+      <a v-for="humans in humans" :key="humans.uuid" :href="`${baseUrl}ru/${humanType}/${humans.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
         <div class="grid-meta">
           <span v-if="humans.direction" class="tag direction-tag">{{ humans.direction }}</span>
           <span v-if="humans.experience" class="tag experience-tag">{{ humans.experience }}</span>
@@ -22,7 +22,7 @@
         </button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(humans, index) in humans" :key="humans.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="`${baseUrl}ru/${humanType}/${humans.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+            <a :href="`${baseUrl}ru/${humanType}/${humans.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
               <div class="grid-meta">
                 <span v-if="humans.direction" class="tag direction-tag">{{ humans.direction }}</span>
                 <span v-if="humans.experience" class="tag experience-tag">{{ humans.experience }}</span>
@@ -320,14 +320,12 @@ export default {
         const loaded = await Promise.all(
           filteredModules.map(async ([path, loader]) => {
             const mod = await loader()
-            const slug = path.replace(`/ru/${props.humanType}/`, '').replace('.md', '')
             const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || slug
+            const uuid = fm.uuid || path.replace(`/ru/${props.humanType}/`, '').replace('.md', '')
 
             return {
-              slug,
               uuid: uuid,
-              name: fm.title || slug.charAt(0).toUpperCase() + slug.slice(1),
+              name: fm.title || '',
               description: fm.description || '',
               experience: getExperienceCategory(fm.experience),
               direction: fm.direction || '',

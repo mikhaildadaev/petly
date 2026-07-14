@@ -30,14 +30,14 @@
     </button>
   </div>
   <div v-if="!isMobile" class="grid-cards">
-    <a v-for="pet in paginatedPets" :key="pet.slug" :href="`${baseUrl}ru/${petType}/${pet.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+    <a v-for="pet in paginatedPets" :key="pet.uuid" :href="`${baseUrl}ru/${petType}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
       <div class="grid-meta">
         <span v-if="pet.gender" class="tag gender-tag" :data-gender="pet.gender">{{ pet.gender }}</span>
         <span v-if="pet.age" class="tag age-tag">{{ pet.age }}</span>
         <span v-if="pet.size" class="tag size-tag">{{ pet.size }}</span>
       </div>
       <img :src="pet.image" :alt="pet.name" loading="lazy" />
-      <div :class="['grid-card-body', getRandomPetClass(pet.slug)]">
+      <div :class="['grid-card-body', getRandomPetClass(pet.uuid)]">
         <div class="name">{{ pet.name }}</div>
         <p>{{ pet.description }}</p>
       </div>
@@ -66,15 +66,15 @@
         </svg>
       </button>      
       <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-        <div v-for="(pet, index) in paginatedPets" :key="pet.slug" class="carousel-slide" :class="{ center: index === currentIndex }" >
-          <a :href="`${baseUrl}ru/${petType}/${pet.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+        <div v-for="(pet, index) in paginatedPets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }" >
+          <a :href="`${baseUrl}ru/${petType}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
             <div class="grid-meta">
               <span v-if="pet.gender" class="tag gender-tag" :data-gender="pet.gender">{{ pet.gender }}</span>
               <span v-if="pet.age" class="tag age-tag">{{ pet.age }}</span>
               <span v-if="pet.size" class="tag size-tag">{{ pet.size }}</span>
             </div>
             <img :src="pet.image" :alt="pet.name" loading="lazy" />
-            <div :class="['grid-card-body', getRandomPetClass(pet.slug)]">
+            <div :class="['grid-card-body', getRandomPetClass(pet.uuid)]">
               <div class="name">{{ pet.name }}</div>
               <p>{{ pet.description }}</p>
             </div>
@@ -473,14 +473,14 @@ export default {
       touchEndY.value = 0
     }
 
-    const getRandomPetClass = (slug) => {
-      if (randomClassCache.has(slug)) {
-        return randomClassCache.get(slug)
+    const getRandomPetClass = (uuid) => {
+      if (randomClassCache.has(uuid)) {
+        return randomClassCache.get(uuid)
       }
       const num = Math.floor(Math.random() * 30) + 1
       const formattedNum = num.toString().padStart(2, '0')
       const className = `rand-${formattedNum}`
-      randomClassCache.set(slug, className)
+      randomClassCache.set(uuid, className)
       return className
     }
 
@@ -520,14 +520,12 @@ export default {
         const loaded = await Promise.all(
           filteredModules.map(async ([path, loader]) => {
             const mod = await loader()
-            const slug = path.replace(`/ru/${props.petType}/`, '').replace('.md', '')
             const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || slug
+            const uuid = fm.uuid || path.replace(`/ru/${props.humanType}/`, '').replace('.md', '')
 
             return {
-              slug,
               uuid,
-              name: fm.title || slug.charAt(0).toUpperCase() + slug.slice(1),
+              name: fm.title || '',
               description: fm.description || '',
               age: fm.age || '',
               gender: fm.gender || '',

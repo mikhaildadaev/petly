@@ -34,13 +34,13 @@
     </button>
   </div>
   <div v-if="!isMobile" class="grid-cards">
-    <a v-for="human in paginatedHumans" :key="human.slug" :href="`${baseUrl}ru/${humanType}/${human.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+    <a v-for="human in paginatedHumans" :key="human.uuid" :href="`${baseUrl}ru/${humanType}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
       <div class="grid-meta">
         <span v-if="human.direction" class="tag direction-tag">{{ human.direction }}</span>
         <span v-if="human.experience" class="tag experience-tag">{{ human.experience }}</span>
       </div>
       <img :src="human.image" :alt="human.name" loading="lazy" />
-      <div :class="['grid-card-body', getRandomHumanClass(human.slug)]">
+      <div :class="['grid-card-body', getRandomHumanClass(human.uuid)]">
         <div class="name">{{ human.name }}</div>
         <p>{{ human.description }}</p>
       </div>
@@ -69,14 +69,14 @@
         </svg>
       </button>      
       <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-        <div v-for="(human, index) in paginatedHumans" :key="human.slug" class="carousel-slide" :class="{ center: index === currentIndex }" >
-          <a :href="`${baseUrl}ru/${humanType}/${human.slug}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+        <div v-for="(human, index) in paginatedHumans" :key="human.uuid" class="carousel-slide" :class="{ center: index === currentIndex }" >
+          <a :href="`${baseUrl}ru/${humanType}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
             <div class="grid-meta">
               <span v-if="human.direction" class="tag direction-tag">{{ human.direction }}</span>
               <span v-if="human.experience" class="tag experience-tag">{{ human.experience }}</span>
             </div>
             <img :src="human.image" :alt="human.name" loading="lazy" />
-            <div :class="['grid-card-body', getRandomHumanClass(human.slug)]">
+            <div :class="['grid-card-body', getRandomHumanClass(human.uuid)]">
               <div class="name">{{ human.name }}</div>
               <p>{{ human.description }}</p>
             </div>
@@ -435,16 +435,16 @@ export default {
     }
 
     // --- Рандомные цвета ---
-    const getRandomHumanClass = (slug) => {
-      if (randomClassCache.has(slug)) {
-        return randomClassCache.get(slug)
+    const getRandomHumanClass = (uuid) => {
+      if (randomClassCache.has(uuid)) {
+        return randomClassCache.get(uuid)
       }
 
       const num = Math.floor(Math.random() * 30) + 1
       const formattedNum = num.toString().padStart(2, '0')
       const className = `rand-${formattedNum}`
 
-      randomClassCache.set(slug, className)
+      randomClassCache.set(uuid, className)
       return className
     }
 
@@ -486,14 +486,12 @@ export default {
         const loaded = await Promise.all(
           filteredModules.map(async ([path, loader]) => {
             const mod = await loader()
-            const slug = path.replace(`/ru/${props.humanType}/`, '').replace('.md', '')
             const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || slug
+            const uuid = fm.uuid || path.replace(`/ru/${props.humanType}/`, '').replace('.md', '')
 
             return {
-              slug,
               uuid,
-              name: fm.title || slug.charAt(0).toUpperCase() + slug.slice(1),
+              name: fm.title || '',
               description: fm.description || '',
               experience: getExperienceCategory(fm.experience),
               experienceYears: fm.experience || '',

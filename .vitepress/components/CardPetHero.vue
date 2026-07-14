@@ -6,7 +6,7 @@
       <span v-if="size" class="tag size-tag">{{ size }}</span>
     </div>
     <img :src="image" :alt="name" class="hero-image" loading="lazy" />
-    <div :class="['hero-overlay', getRandomPetClass(slug)]">
+    <div :class="['hero-overlay', getRandomPetClass(uuid)]">
       <div class="name">{{ name }}</div>
       <button v-if="uuid" class="favorite-btn" :class="{ 'is-favorite': isFavorite }" @click.stop="toggleFavorite" aria-label="Добавить в избранное" title="Добавить в избранное">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -129,7 +129,6 @@ export default {
       return data
     })
 
-    const slug = computed(() => fm.value?.slug || '')
     const uuid = computed(() => fm.value?.uuid || '')
     const name = computed(() => fm.value?.title || 'Безымянный друг')
     const description = computed(() => fm.value?.description || '')
@@ -193,14 +192,14 @@ export default {
       }
     }
 
-    const getRandomPetClass = (slug) => {
-      if (randomClassCache.has(slug)) {
-        return randomClassCache.get(slug)
+    const getRandomPetClass = (uuid) => {
+      if (randomClassCache.has(uuid)) {
+        return randomClassCache.get(uuid)
       }
       const num = Math.floor(Math.random() * 30) + 1
       const formattedNum = num.toString().padStart(2, '0')
       const className = `rand-${formattedNum}`
-      randomClassCache.set(slug, className)
+      randomClassCache.set(uuid, className)
       return className
     }
 
@@ -238,7 +237,6 @@ export default {
     // ============================================================
     return {
       // Данные питомца
-      slug,
       uuid,
       name,
       description,
@@ -253,11 +251,11 @@ export default {
       isInitialized,
       
       // Методы
+      getRandomPetClass,
       toggleFavorite,
       
       // Константы
-      baseUrl,
-      getRandomPetClass
+      baseUrl
     }
   }
 }
