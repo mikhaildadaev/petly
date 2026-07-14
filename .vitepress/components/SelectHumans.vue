@@ -1,15 +1,15 @@
 <template>
   <div v-if="humans && humans.length > 0" class="grid-list">
     <div v-if="!isMobile" class="grid-cards">
-      <a v-for="humans in humans" :key="humans.uuid" :href="`${baseUrl}ru/${humanType}/${humans.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+      <a v-for="human in humans" :key="human.uuid" :href="`${baseUrl}ru/${humanType}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
         <div class="grid-meta">
-          <span v-if="humans.direction" class="tag direction-tag">{{ humans.direction }}</span>
-          <span v-if="humans.experience" class="tag experience-tag">{{ humans.experience }}</span>
+          <span v-if="human.direction" class="tag direction-tag">{{ human.direction }}</span>
+          <span v-if="human.experience" class="tag experience-tag">{{ human.experience }}</span>
         </div>
-        <img :src="humans.image" :alt="humans.name" loading="lazy" />
-        <div :class="['grid-card-body', getRandomVolunteerClass(humans.uuid)]">
-          <div class="name">{{ humans.name }}</div>
-          <p>{{ humans.description }}</p>
+        <img :src="human.image" :alt="human.name" loading="lazy" />
+        <div :class="['grid-card-body', getRandomVolunteerClass(human.uuid)]">
+          <div class="name">{{ human.name }}</div>
+          <p>{{ human.description }}</p>
         </div>
       </a>
     </div>
@@ -21,16 +21,16 @@
           </svg>
         </button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-          <div v-for="(humans, index) in humans" :key="humans.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="`${baseUrl}ru/${humanType}/${humans.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+          <div v-for="(human, index) in humans" :key="human.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
+            <a :href="`${baseUrl}ru/${humanType}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
               <div class="grid-meta">
-                <span v-if="humans.direction" class="tag direction-tag">{{ humans.direction }}</span>
-                <span v-if="humans.experience" class="tag experience-tag">{{ humans.experience }}</span>
+                <span v-if="human.direction" class="tag direction-tag">{{ human.direction }}</span>
+                <span v-if="human.experience" class="tag experience-tag">{{ human.experience }}</span>
               </div>
-              <img :src="humans.image" :alt="humans.name" loading="lazy" />
-              <div :class="['grid-card-body', getRandomVolunteerClass(humans.uuid)]">
-                <div class="name">{{ humans.name }}</div>
-                <p>{{ humans.description }}</p>
+              <img :src="human.image" :alt="human.name" loading="lazy" />
+              <div :class="['grid-card-body', getRandomVolunteerClass(human.uuid)]">
+                <div class="name">{{ human.name }}</div>
+                <p>{{ human.description }}</p>
               </div>
             </a>
           </div>
@@ -115,7 +115,7 @@ const getExperienceCategory = (expValue) => {
 //  КОМПОНЕНТ
 // ============================================================
 export default {
-  name: 'ListGuardians',
+  name: 'ListHumans',
 
   props: {
     humanUUIDs: {

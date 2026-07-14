@@ -1,13 +1,16 @@
 <template>
   <div v-if="pets && pets.length > 0" class="grid-list">
     <div v-if="!isMobile" class="grid-cards">
-      <a v-for="pets in pets" :key="pets.uuid" :href="`${baseUrl}ru/${petType}/${pets.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+      <a v-for="pet in pets" :key="pet.uuid" :href="`${baseUrl}ru/${petType}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
         <div class="grid-meta">
+          <span v-if="pet.gender" class="tag gender-tag" :data-gender="pet.gender">{{ pet.gender }}</span>
+          <span v-if="pet.age" class="tag age-tag">{{ pet.age }}</span>
+          <span v-if="pet.size" class="tag size-tag">{{ pet.size }}</span>
         </div>
-        <img :src="pets.image" :alt="pets.name" loading="lazy" />
-        <div :class="['grid-card-body', getRandomVolunteerClass(pets.uuid)]">
-          <div class="name">{{ pets.name }}</div>
-          <p>{{ pets.description }}</p>
+        <img :src="pet.image" :alt="pet.name" loading="lazy" />
+        <div :class="['grid-card-body', getRandomPetClass(pet.uuid)]">
+          <div class="name">{{ pet.name }}</div>
+          <p>{{ pet.description }}</p>
         </div>
       </a>
     </div>
@@ -19,14 +22,17 @@
           </svg>
         </button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-          <div v-for="(pets, index) in pets" :key="pets.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="`${baseUrl}ru/${petType}/${pets.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+          <div v-for="(pet, index) in pets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
+            <a :href="`${baseUrl}ru/${petType}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
               <div class="grid-meta">
+                <span v-if="pet.gender" class="tag gender-tag" :data-gender="pet.gender">{{ pet.gender }}</span>
+                <span v-if="pet.age" class="tag age-tag">{{ pet.age }}</span>
+                <span v-if="pet.size" class="tag size-tag">{{ pet.size }}</span>
               </div>
-              <img :src="pets.image" :alt="pets.name" loading="lazy" />
-              <div :class="['grid-card-body', getRandomVolunteerClass(pets.uuid)]">
-                <div class="name">{{ pets.name }}</div>
-                <p>{{ pets.description }}</p>
+              <img :src="pet.image" :alt="pet.name" loading="lazy" />
+              <div :class="['grid-card-body', getRandomPetClass(pet.uuid)]">
+                <div class="name">{{ pet.name }}</div>
+                <p>{{ pet.description }}</p>
               </div>
             </a>
           </div>
@@ -81,48 +87,32 @@ const processImage = (imagePath, type, uuid) => {
 /**
  * Определение категории опыта
  */
-const getExperienceCategory = (expValue) => {
-  if (!expValue) return 'Нет опыта'
-  if (expValue.includes('лет') || expValue.includes('год')) {
-    const match = expValue.match(/(\d+)/)
-    if (match) {
-      const num = parseInt(match[1])
-      if (num <= 1) return 'Начинающий'
-      if (num <= 3) return 'Опытный'
-      return 'Эксперт'
-    }
-  }
-  if (expValue.includes('месяц')) {
-    const match = expValue.match(/(\d+)/)
-    if (match) {
-      const num = parseInt(match[1])
-      return num < 12 ? 'Начинающий' : 'Опытный'
-    }
-  }
-  const lower = expValue.toLowerCase()
-  if (lower.includes('начин')) return 'Начинающий'
-  if (lower.includes('опыт')) return 'Опытный'
-  if (lower.includes('эксперт')) return 'Эксперт'
-
-  return expValue || 'Нет опыта'
+const getAgeCategory = (ageStr) => {
+  if (!ageStr) return ''
+  const match = ageStr.match(/(\d+)/)
+  if (!match) return ''
+  const num = parseInt(match[1])
+  if (ageStr.includes('месяц') || num < 1) return 'Щенок'
+  if (num <= 3) return 'Молодая'
+  return 'Взрослая'
 }
 
 // ============================================================
 //  КОМПОНЕНТ
 // ============================================================
 export default {
-  name: 'ListGuardians',
+  name: 'ListPets',
 
   props: {
     petUUIDs: {
       type: Array,
       default: () => [],
-      description: 'Массив UUID людей для отображения'
+      description: 'Массив UUID питомцев для отображения'
     },
     petType: {
       type: String,
       required: true,
-      default: 'volunteers'
+      default: 'pets'
     }
   },
 
@@ -178,7 +168,7 @@ export default {
 
     // --- Рандомные цвета ---
     let previousColor = 0
-    const getRandomVolunteerClass = (uuid) => {
+    const getRandomPetClass = (uuid) => {
       if (!uuid) return 'rand-01'
       
       if (randomClassCache.has(uuid)) {
@@ -322,8 +312,9 @@ export default {
               uuid: uuid,
               name: fm.title || '',
               description: fm.description || '',
-              experience: getExperienceCategory(fm.experience),
-              direction: fm.direction || '',
+              age: fm.age || '',
+              gender: fm.gender || '',
+              size: fm.size || '',
               image: processImage(fm.image, props.petType, uuid),
             }
           })
@@ -368,7 +359,7 @@ export default {
       touchEndX,
       touchEndY,
       petType: props.petType,
-      getRandomVolunteerClass,
+      getRandomPetClass,
       baseUrl,
     }
   },
