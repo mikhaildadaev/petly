@@ -1,38 +1,28 @@
 <template>
   <div class="filters-compact hide-scrollbar">
-    <div class="filter-group">
-      <select v-model="filterExperience" class="filter-select">
-        <option value="">Все уровни</option>
-        <option value="Начинающий">Начинающий (до 1 года)</option>
-        <option value="Опытный">Опытный (1–3 года)</option>
-        <option value="Эксперт">Эксперт (от 3 лет)</option>
-      </select>
-      <select v-model="filterDirection" class="filter-select">
-        <option value="">Все направления</option>
-        <option value="Выгул">Выгул</option>
-        <option value="Социализация">Социализация</option>
-        <option value="Лечение">Лечение</option>
-        <option value="Передержка">Передержка</option>
-        <option value="Фото/Видео">Фото/Видео</option>
-        <option value="Реклама">Реклама</option>
-        <option value="SMM">SMM</option>
-        <option value="Дизайн">Дизайн</option>
-        <option value="Юридическая помощь">Юридическая помощь</option>
-        <option value="Ветеринария">Ветеринария</option>
-        <option value="Фандрайзинг">Фандрайзинг</option>
-      </select>
+      <div class="filter-group">
+        <div class="filter-chips">
+          <button v-for="option in experienceOptions" :key="option.value" class="chip" :class="{ active: filterExperience[option.value] }" @click="toggleFilter('experience', option.value)" :title="option.label" v-html="option.icon"/>
+        </div>
+        <span class="filter-label">Опыт</span>
+      </div>
+      <div class="filter-group">
+        <div class="filter-chips">
+          <button v-for="option in directionOptions" :key="option.value" class="chip" :class="{ active: filterDirection[option.value] }" @click="toggleFilter('direction', option.value)" :title="option.label" v-html="option.icon"/>
+        </div>
+        <span class="filter-label">Направление</span>
+      </div>
+      <button v-if="isFilterActive" class="btn-reset-compact" @click="resetFilters" title="Сбросить все фильтры">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 6h18" />
+          <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+          <path d="M10 11v6" />
+          <path d="M14 11v6" />
+        </svg>
+        СБРОСИТЬ
+      </button>
     </div>
-    <button v-if="!areAllActive" class="btn-reset-compact" @click="resetAllFilters" title="Включить все фильтры">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M3 6h18" />
-        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-        <path d="M10 11v6" />
-        <path d="M14 11v6" />
-      </svg>
-      СБРОСИТЬ
-    </button>
-  </div>
   <div v-if="!isMobile" class="grid-cards">
     <a v-for="human in paginatedHumans" :key="human.uuid" :href="`${baseUrl}ru/${humanType}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
       <div class="grid-meta">
@@ -116,7 +106,7 @@
 // ============================================================
 //  ИМПОРТЫ
 // ============================================================
-import { computed, ref, onMounted, watch, nextTick, onUnmounted } from 'vue'
+import { computed, ref, onMounted, watch, nextTick, onUnmounted, reactive } from 'vue'
 
 // ============================================================
 //  КОНСТАНТЫ
@@ -207,6 +197,64 @@ export default {
 
   setup(props) {
     // ============================================================
+    //  ОПЦИИ ФИЛЬТРОВ
+    // ============================================================
+    const experienceOptions = [
+      { 
+        value: 'Начинающий', 
+        label: 'Начинающий', 
+        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="8" cy="9" r="1.5" fill="currentColor"/><circle cx="16" cy="9" r="1.5" fill="currentColor"/><path d="M8 14c1.5 2 3 2 4 2s2.5 0 4-2"/></svg>`
+      },
+      { 
+        value: 'Опытный', 
+        label: 'Опытный', 
+        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/><circle cx="9" cy="10" r="1.5" fill="currentColor"/><circle cx="15" cy="10" r="1.5" fill="currentColor"/></svg>`
+      },
+      { 
+        value: 'Эксперт', 
+        label: 'Эксперт', 
+        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/><path d="M8 4L6 6"/><path d="M16 4l2 2"/><circle cx="9" cy="10" r="1.5" fill="currentColor"/><circle cx="15" cy="10" r="1.5" fill="currentColor"/></svg>`
+      }
+    ]
+    const directionOptions = [
+      { 
+        value: 'Выгул', 
+        label: 'Выгул', 
+        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`
+      },
+      { 
+        value: 'Социализация', 
+        label: 'Социализация', 
+        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>`
+      },
+      { 
+        value: 'Лечение', 
+        label: 'Лечение', 
+        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9-4-18-3 9H2"/></svg>`
+      },
+      { 
+        value: 'Передержка', 
+        label: 'Передержка', 
+        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1"/></svg>`
+      },
+      { 
+        value: 'Креатив', 
+        label: 'Креатив', 
+        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>`
+      },
+      { 
+        value: 'Фандрайзинг', 
+        label: 'Фандрайзинг', 
+        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v12"/><path d="M8 8l4 4 4-4"/></svg>`
+      },
+      { 
+        value: 'Юридическая помощь', 
+        label: 'Юридическая', 
+        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`
+      }
+    ]
+
+    // ============================================================
     //  СОСТОЯНИЕ
     // ============================================================
     const allHumans = ref([])
@@ -217,9 +265,22 @@ export default {
     const isClient = ref(false)
     const savedIndex = ref(0)
 
-    // Фильтры
-    const filterExperience = ref('')
-    const filterDirection = ref('')
+    // Фильтры (как в ListPets — объект с true/false)
+    const filterExperience = reactive({
+      'Начинающий': true,
+      'Опытный': true,
+      'Эксперт': true
+    })
+    
+    const filterDirection = reactive({
+      'Выгул': true,
+      'Социализация': true,
+      'Лечение': true,
+      'Передержка': true,
+      'Креатив': true,
+      'Фандрайзинг': true,
+      'Юридическая помощь': true
+    })
 
     // Карусель
     const carouselRef = ref(null)
@@ -249,24 +310,29 @@ export default {
     //  ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
     // ============================================================
 
+    // Проверка, все ли фильтры активны
+    const areAllActive = computed(() => {
+      return (
+        filterExperience['Начинающий'] && filterExperience['Опытный'] && filterExperience['Эксперт'] && filterDirection['Выгул'] && filterDirection['Социализация'] && filterDirection['Лечение'] && filterDirection['Передержка'] && filterDirection['Креатив'] && filterDirection['Фандрайзинг'] && filterDirection['Юридическая помощь']
+      )
+    })
+
     const isFilterActive = computed(() => {
-      return filterExperience.value !== '' || filterDirection.value !== ''
+      return !areAllActive.value
     })
 
     const filteredHumans = computed(() => {
       return allHumans.value.filter(human => {
-        // Фильтр по опыту
-        if (filterExperience.value && human.experience !== filterExperience.value) {
-          return false
-        }
-
-        // Фильтр по направлению
-        if (filterDirection.value) {
+        // Проверяем опыт
+        if (!filterExperience[human.experience]) return false
+        
+        // Проверяем направление
+        if (filterDirection.value !== null) {
           const directionStr = human.directionRaw || human.direction || ''
           const directions = directionStr.replace(/,/g, '/').split('/').map(d => d.trim())
-          if (!directions.includes(filterDirection.value)) {
-            return false
-          }
+          // Проверяем, есть ли хоть одно активное направление у человека
+          const hasActiveDirection = directions.some(d => filterDirection[d] === true)
+          if (!hasActiveDirection) return false
         }
 
         return true
@@ -293,9 +359,22 @@ export default {
     //  МЕТОДЫ
     // ============================================================
 
+    const toggleFilter = (group, value) => {
+      if (group === 'experience') {
+        filterExperience[value] = !filterExperience[value]
+      } else if (group === 'direction') {
+        filterDirection[value] = !filterDirection[value]
+      }
+      // Сбрасываем пагинацию
+      visibleCount.value = perPage
+      currentIndex.value = 0
+    }
+
     const resetFilters = () => {
-      filterExperience.value = ''
-      filterDirection.value = ''
+      Object.keys(filterExperience).forEach(k => filterExperience[k] = true)
+      Object.keys(filterDirection).forEach(k => filterDirection[k] = true)
+      visibleCount.value = perPage
+      currentIndex.value = 0
     }
 
     const loadMore = async () => {
@@ -517,15 +596,9 @@ export default {
     })
 
     // --- Watchers ---
-    watch([filterExperience, filterDirection], () => {
-      currentIndex.value = 0
-      savedIndex.value = 0
-      visibleCount.value = perPage
-
-      nextTick(() => {
-        resetToFirstSlide()
-      })
-    })
+    watch([() => filterExperience, () => filterDirection], () => {
+      // Фильтры уже обновлены через toggleFilter
+    }, { deep: true })
 
     watch(isMobile, (newVal) => {
       if (isClient.value && newVal && paginatedHumans.value.length) {
@@ -568,20 +641,35 @@ export default {
     //  ВОЗВРАТ
     // ============================================================
     return {
+      // Опции фильтров
+      experienceOptions,
+      directionOptions,
+      
+      // Данные
       paginatedHumans,
       filteredHumans,
+      
+      // Фильтры
       filterExperience,
       filterDirection,
       isFilterActive,
+      areAllActive,
+      toggleFilter,
       resetFilters,
+      
+      // Пагинация
       visibleCount,
       remaining,
       hasMoreItems,
       loadMore,
       isLoadingMore,
+      
+      // Состояние
       isLoading,
       isMobile,
       baseUrl,
+      
+      // Карусель
       carouselRef,
       currentIndex,
       carouselTotalSlides,
@@ -590,6 +678,8 @@ export default {
       prevSlide,
       goToSlide,
       resetToFirstSlide,
+      
+      // Свайп
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
@@ -597,6 +687,8 @@ export default {
       touchStartY,
       touchEndX,
       touchEndY,
+      
+      // Прочее
       humanType: props.humanType,
       getRandomHumanClass,
     }

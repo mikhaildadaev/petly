@@ -270,9 +270,7 @@ export default {
 
     const areAllActive = computed(() => {
       return (
-        filters.gender['Девочка'] && filters.gender['Мальчик'] &&
-        filters.age['Щенок'] && filters.age['Молодая'] && filters.age['Взрослая'] &&
-        filters.size['Маленькая'] && filters.size['Средняя'] && filters.size['Крупная']
+        filters.gender['Девочка'] && filters.gender['Мальчик'] && filters.age['Щенок'] && filters.age['Молодая'] && filters.age['Взрослая'] && filters.size['Маленькая'] && filters.size['Средняя'] && filters.size['Крупная']
       )
     })
 
