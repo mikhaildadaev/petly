@@ -66,6 +66,10 @@ export default defineConfig({
               { text: 'Неприятности', link: '/ru/recommendations/trouble' },
               { text: 'Права и защита', link: '/ru/recommendations/welfare' }
             ]
+          },
+          { 
+            text: 'Любимцы', 
+            link: '/ru/favorites' 
           }
         ],
         sidebar: [
@@ -92,6 +96,10 @@ export default defineConfig({
               { text: 'Неприятности', link: '/ru/recommendations/trouble' },
               { text: 'Права и защита', link: '/ru/recommendations/welfare' }
             ]
+          },
+          { 
+            text: 'Любимцы', 
+            link: '/ru/favorites' 
           }
         ],
         darkModeSwitchLabel: "Внешний вид",
