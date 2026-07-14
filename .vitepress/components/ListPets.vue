@@ -529,7 +529,7 @@ export default {
             }
           })
         )
-        allPets.value = loaded
+        allPets.value = loaded.reverse()
       } catch (error) {
         console.error('Ошибка загрузки данных:', error)
       } finally {
