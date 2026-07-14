@@ -17,6 +17,7 @@ export default {
     app.component('GalleryMedia', GalleryMedia)
     app.component('ListHumans', ListHumans)
     app.component('ListPets', ListPets)
+    app.component('RandomPets', RandomPets)
     app.component('SelectHumans', SelectHumans)
     app.component('SelectPets', SelectPets)
     app.component('StyleImagePage', StyleImagePage)
