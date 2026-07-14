@@ -642,4 +642,40 @@ export default {
     font-size: 16px;
   }
 }
+
+/* ============================================================
+   КАРУСЕЛЬ С АДАПТИВНОЙ ШИРИНОЙ
+   ============================================================ */
+
+/* --- Десктоп (3 карточки) --- */
+.carousel-slide {
+  flex: 0 0 calc(33.333% - 14px); /* 3 карточки */
+  min-width: 220px;
+  scroll-snap-align: start;
+}
+
+/* --- Планшет (2 карточки) --- */
+@media (max-width: 1024px) {
+  .carousel-slide {
+    flex: 0 0 calc(50% - 14px); /* 2 карточки */
+    min-width: 180px;
+  }
+}
+
+/* --- Телефон (1 карточка) --- */
+@media (max-width: 640px) {
+  .carousel-slide {
+    flex: 0 0 calc(100% - 48px); /* 1 карточка */
+    min-width: unset;
+  }
+  
+  .carousel-slide:first-child {
+    margin-left: 24px;
+  }
+  
+  .carousel-slide:last-child {
+    margin-right: 24px;
+  }
+}
+
 </style>
