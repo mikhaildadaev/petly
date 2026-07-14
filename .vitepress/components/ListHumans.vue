@@ -1,5 +1,5 @@
 <template>
-  <div class="filters-compact">
+  <div class="filters-compact hide-scrollbar">
     <div class="filter-group">
       <select v-model="filterExperience" class="filter-select">
         <option value="">Все уровни</option>

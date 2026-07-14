@@ -1,5 +1,5 @@
 <template>
-  <div class="filters-compact">
+  <div class="filters-compact hide-scrollbar">
     <div class="filter-group">
       <div class="filter-chips">
         <button v-for="option in genderOptions" :key="option.value" class="chip" :class="{ active: filters.gender[option.value] }" @click="toggleFilter('gender', option.value)" :title="option.label" v-html="option.icon"/>
