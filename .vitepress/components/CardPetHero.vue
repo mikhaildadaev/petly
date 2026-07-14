@@ -5,14 +5,15 @@
       <span v-if="age" class="tag age-tag">{{ age }}</span>
       <span v-if="size" class="tag size-tag">{{ size }}</span>
     </div>
-    <button class="favorite-btn" :class="{ 'is-favorite': isFavorite }" @click.stop="toggleFavorite" aria-label="Добавить в избранное" title="Добавить в избранное">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-      </svg>
-    </button>
     <img :src="image" :alt="name" class="hero-image" loading="lazy" />
-    <div class="hero-overlay glass">
+    <div :class="['hero-overlay', getRandomPetClass(slug)]">
       <div class="name">{{ name }}</div>
+      <button v-if="uuid" class="favorite-btn" :class="{ 'is-favorite': isFavorite }" @click.stop="toggleFavorite" aria-label="Добавить в избранное" title="Добавить в избранное">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+      </button>
+      <p>{{ description }}</p>
     </div>
   </div>
 </template>
@@ -29,6 +30,7 @@ import { useData } from 'vitepress'
 // ============================================================
 const baseUrl = import.meta.env.BASE_URL
 const STORAGE_KEY = 'pets_favorites'
+const randomClassCache = new Map()
 
 // ============================================================
 //  УТИЛИТЫ
@@ -36,22 +38,34 @@ const STORAGE_KEY = 'pets_favorites'
 
 /**
  * Обработка пути к изображению
+ * @param {string} imagePath - путь из frontmatter
+ * @param {string} type - тип (dogs, cats, и т.д.)
+ * @param {string} uuid - UUID сущности
+ * @returns {string} - полный URL изображения
  */
 const processImage = (imagePath, type, uuid) => {
+  // 1. Если изображение не указано — формируем по UUID
   if (!imagePath) {
     return uuid ? `${baseUrl}images/${type}/${uuid}.webp` : `${baseUrl}placeholder-${type}.svg`
   }
+
+  // 2. Если полный URL — оставляем как есть
   if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
     return imagePath
   }
+
+  // 3. Если путь с / — добавляем baseUrl
   if (imagePath.startsWith('/')) {
     return `${baseUrl}${imagePath.slice(1)}`
   }
+
+  // 4. Относительный путь
   return imagePath
 }
 
 /**
  * Загрузка избранных из localStorage
+ * @returns {Array} - массив UUID избранных питомцев
  */
 const loadFavorites = () => {
   try {
@@ -65,6 +79,7 @@ const loadFavorites = () => {
 
 /**
  * Сохранение избранных в localStorage
+ * @param {Array} favorites - массив UUID
  */
 const saveFavorites = (favorites) => {
   try {
@@ -90,31 +105,54 @@ export default {
   },
 
   setup(props) {
-    // --- Данные ---
+    // ============================================================
+    //  ДАННЫЕ
+    // ============================================================
     const { frontmatter } = useData()
     
-    // --- Состояние ---
+    // ============================================================
+    //  СОСТОЯНИЕ
+    // ============================================================
     const isFavorite = ref(false)
     const isInitialized = ref(false)
 
-    // --- Вычисляемые свойства ---
+    // ============================================================
+    //  ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
+    // ============================================================
+
+    /**
+     * Безопасное получение frontmatter
+     */
     const fm = computed(() => {
       if (!frontmatter) return {}
       const data = frontmatter.value || frontmatter || {}
       return data
     })
 
+    const slug = computed(() => fm.value?.slug || '')
+    const uuid = computed(() => fm.value?.uuid || '')
     const name = computed(() => fm.value?.title || 'Безымянный друг')
+    const description = computed(() => fm.value?.description || '')
     const gender = computed(() => fm.value?.gender || '')
     const age = computed(() => fm.value?.age || '')
     const size = computed(() => fm.value?.size || '')
-    const uuid = computed(() => fm.value?.uuid || '')
-
+    const tags = computed(() => fm.value?.tags || [])
+    
+    /**
+     * Обработка изображения (консистентно с ListPets)
+     */
     const image = computed(() => {
       return processImage(fm.value?.image, props.petType, uuid.value)
     })
 
-    // --- Методы ---
+    // ============================================================
+    //  МЕТОДЫ
+    // ============================================================
+
+    /**
+     * Проверка, добавлен ли питомец в избранное
+     * @returns {boolean}
+     */
     const checkIsFavorite = () => {
       if (!uuid.value) return false
       
@@ -127,6 +165,9 @@ export default {
       }
     }
 
+    /**
+     * Переключение состояния избранного
+     */
     const toggleFavorite = (e) => {
       if (e) e.stopPropagation()
       if (!uuid.value) {
@@ -152,7 +193,21 @@ export default {
       }
     }
 
-    // --- Жизненный цикл ---
+    const getRandomPetClass = (slug) => {
+      if (randomClassCache.has(slug)) {
+        return randomClassCache.get(slug)
+      }
+      const num = Math.floor(Math.random() * 30) + 1
+      const formattedNum = num.toString().padStart(2, '0')
+      const className = `rand-${formattedNum}`
+      randomClassCache.set(slug, className)
+      return className
+    }
+
+    // ============================================================
+    //  ЖИЗНЕННЫЙ ЦИКЛ
+    // ============================================================
+
     onMounted(() => {
       nextTick(() => {
         isFavorite.value = checkIsFavorite()
@@ -160,7 +215,10 @@ export default {
       })
     })
 
-    // --- Watchers ---
+    // ============================================================
+    //  WATCHERS
+    // ============================================================
+
     watch(uuid, (newUuid) => {
       if (newUuid) {
         setTimeout(() => {
@@ -175,18 +233,31 @@ export default {
       }
     }, { deep: true })
 
-    // --- Возврат ---
+    // ============================================================
+    //  ВОЗВРАТ
+    // ============================================================
     return {
+      // Данные питомца
+      slug,
+      uuid,
       name,
+      description,
       gender,
       age,
       size,
-      uuid,
+      tags,
       image,
+      
+      // Состояние избранного
       isFavorite,
       isInitialized,
+      
+      // Методы
       toggleFavorite,
+      
+      // Константы
       baseUrl,
+      getRandomPetClass
     }
   }
 }
