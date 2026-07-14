@@ -1,7 +1,17 @@
 ---
 title: Любимцы
-description: Люди, которые помогают делом
+description: Питомцы, что покорили ваше сердце.
 ---
+
+## Кошки
+
+<SelectPets :petUUIDs="favoriteUUIDs" :petType="'cats'"/>
+
+## Собаки
+
+<SelectPets :petUUIDs="favoriteUUIDs" :petType="'dogs'"/>
+
+<StyleImagePage src="/assets/webp/dogWithCat.webp" width="284" float="center"/>
 
 <script setup>
 import { ref, onMounted } from 'vue'
@@ -19,13 +29,3 @@ onMounted(() => {
   }
 })
 </script>
-
-## Кошки
-
-<SelectPets :petUUIDs="favoriteUUIDs" :petType="'cats'"/>
-
-## Собаки
-
-<SelectPets :petUUIDs="favoriteUUIDs" :petType="'dogs'"/>
-
-<StyleImagePage src="/assets/webp/dogWithCat.webp" width="284" float="center"/>
