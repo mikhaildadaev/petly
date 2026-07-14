@@ -241,48 +241,49 @@ export default {
 
     // --- Загрузка данных ---
     onMounted(async () => {
-      try {
-        const modules = import.meta.glob('/ru/*/*.md')
-        const loaded = await Promise.all(
-          Object.entries(modules)
-            .filter(([path]) => !path.includes('_index.md'))
-            .map(async ([path, loader]) => {
-              const mod = await loader()
-              const slug = path.replace(/^\/ru\/[^/]+\//, '').replace('.md', '')
-              const fm = mod.default?.frontmatter || mod.frontmatter || {}
-              const petType = path.split('/')[3] || 'dogs'
-              const uuid = fm.uuid || slug
-
-              return {
-                slug,
-                uuid,
-                petType,
-                name: fm.title || slug.charAt(0).toUpperCase() + slug.slice(1),
-                description: fm.description || '',
-                gender: fm.gender || '',
-                age: fm.age || '',
-                size: fm.size || '',
-                image: processImage(fm.image, petType, uuid),
-              }
-            })
-        )
-
-        let filtered = loaded
-        if (props.petType !== 'all') {
-          filtered = loaded.filter(p => p.petType === props.petType)
-        }
-
-        const shuffled = shuffleArray(filtered)
-        randomPets.value = shuffled.slice(0, props.count)
-        
-        // Сбрасываем индекс после загрузки
-        currentIndex.value = 0
-      } catch (error) {
-        console.error('Ошибка загрузки данных:', error)
-      } finally {
-        isLoading.value = false
-      }
+  try {
+    // 1. Загружаем модули так же, как в ListPets
+    const allModules = import.meta.glob('/ru/*/*.md')
+    const filteredModules = Object.entries(allModules).filter(([path]) => {
+      // Фильтруем по petType, как в рабочем компоненте
+      return path.includes(`/ru/${props.petType}/`) && !path.endsWith(`${props.petType}_index.md`)
     })
+
+    const loaded = await Promise.all(
+      filteredModules.map(async ([path, loader]) => {
+        const mod = await loader()
+        const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
+        // Извлекаем slug из пути
+        const slug = path.replace(`/ru/${props.petType}/`, '').replace('.md', '')
+        const uuid = fm.uuid || slug
+
+        return {
+          uuid,
+          name: fm.title || slug.charAt(0).toUpperCase() + slug.slice(1),
+          description: fm.description || '',
+          gender: fm.gender || '',
+          age: fm.age || '',
+          size: fm.size || '',
+          tags: fm.tags || [],
+          image: processImage(fm.image, props.petType, uuid),
+          petType: props.petType, // Добавляем для ссылок
+          slug: slug,             // Добавляем для ссылок
+        }
+      })
+    )
+
+    // Перемешиваем и берем нужное количество
+    const shuffled = shuffleArray(loaded)
+    randomPets.value = shuffled.slice(0, props.count)
+
+    // Сбрасываем индекс после загрузки
+    currentIndex.value = 0
+  } catch (error) {
+    console.error('Ошибка загрузки данных:', error)
+  } finally {
+    isLoading.value = false
+  }
+})
 
     return {
       randomPets,
