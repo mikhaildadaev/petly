@@ -552,7 +552,7 @@ export default {
             }
           })
         )
-        allHumans.value = loaded
+        allHumans.value = loaded.reverse()
       } catch (error) {
         console.error('Ошибка загрузки данных:', error)
       } finally {
