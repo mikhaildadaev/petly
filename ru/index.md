@@ -1,5 +1,5 @@
 ---
-layout: home
+#layout: home
 hero:
   text: "В ДОБРОЛОГИЯХ"
   subtext: "- ты"
