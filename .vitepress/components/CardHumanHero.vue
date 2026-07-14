@@ -31,35 +31,22 @@ const randomClassCache = new Map()
 
 /**
  * Обработка пути к изображению
- * @param {string} imagePath - путь из frontmatter
- * @param {string} type - тип (dogs, cats, volunteers и т.д.)
- * @param {string} uuid - UUID сущности
- * @returns {string} - полный URL изображения
  */
 const processImage = (imagePath, type, uuid) => {
-  // 1. Если изображение не указано — формируем по UUID
   if (!imagePath) {
     return uuid ? `${baseUrl}images/${type}/${uuid}.webp` : `${baseUrl}placeholder-${type}.svg`
   }
-
-  // 2. Если полный URL — оставляем как есть
   if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
     return imagePath
   }
-
-  // 3. Если путь с / — добавляем baseUrl
   if (imagePath.startsWith('/')) {
     return `${baseUrl}${imagePath.slice(1)}`
   }
-
-  // 4. Относительный путь
   return imagePath
 }
 
 /**
  * Преобразование опыта в уровень
- * @param {string} experienceRaw - строка с опытом
- * @returns {string} - уровень (Начинающий, Опытный, Эксперт)
  */
 const getExperienceLevel = (experienceRaw) => {
   if (!experienceRaw) return 'Нет опыта'
@@ -89,26 +76,6 @@ const getExperienceLevel = (experienceRaw) => {
   }
 
   return experienceRaw || 'Нет опыта'
-}
-
-/**
- * Получение случайного класса для карточки
- * @param {string} uuid - UUID сущности
- * @returns {string} - случайный класс rand-XX
- */
-const getRandomHumanClass = (uuid) => {
-  if (!uuid) return 'rand-01'
-  
-  if (randomClassCache.has(uuid)) {
-    return randomClassCache.get(uuid)
-  }
-  
-  const num = Math.floor(Math.random() * 30) + 1
-  const formattedNum = num.toString().padStart(2, '0')
-  const className = `rand-${formattedNum}`
-  
-  randomClassCache.set(uuid, className)
-  return className
 }
 
 // ============================================================
@@ -157,6 +124,26 @@ export default {
     const image = computed(() => {
       return processImage(fm.value?.image, props.petType, uuid.value)
     })
+
+    // ============================================================
+    //  РАНДОМНЫЕ ЦВЕТА (ВНУТРИ SETUP)
+    // ============================================================
+    let previousColor = 0
+    const getRandomHumanClass = (uuid) => {
+      if (!uuid) return 'rand-01'
+      if (randomClassCache.has(uuid)) {
+        return randomClassCache.get(uuid)
+      }
+      let num
+      do {
+        num = Math.floor(Math.random() * 30) + 1
+      } while (num === previousColor)
+      previousColor = num
+      const formattedNum = num.toString().padStart(2, '0')
+      const className = `rand-${formattedNum}`
+      randomClassCache.set(uuid, className)
+      return className
+    }
 
     // ============================================================
     //  ВОЗВРАТ

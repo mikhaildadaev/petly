@@ -435,15 +435,20 @@ export default {
     }
 
     // --- Рандомные цвета ---
+    let previousColor = 0
     const getRandomHumanClass = (uuid) => {
+      if (!uuid) return 'rand-01'
+      
       if (randomClassCache.has(uuid)) {
         return randomClassCache.get(uuid)
       }
-
-      const num = Math.floor(Math.random() * 30) + 1
+      let num
+      do {
+        num = Math.floor(Math.random() * 30) + 1
+      } while (num === previousColor)
+      previousColor = num
       const formattedNum = num.toString().padStart(2, '0')
       const className = `rand-${formattedNum}`
-
       randomClassCache.set(uuid, className)
       return className
     }

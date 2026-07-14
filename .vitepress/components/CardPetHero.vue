@@ -38,34 +38,22 @@ const randomClassCache = new Map()
 
 /**
  * Обработка пути к изображению
- * @param {string} imagePath - путь из frontmatter
- * @param {string} type - тип (dogs, cats, и т.д.)
- * @param {string} uuid - UUID сущности
- * @returns {string} - полный URL изображения
  */
 const processImage = (imagePath, type, uuid) => {
-  // 1. Если изображение не указано — формируем по UUID
   if (!imagePath) {
     return uuid ? `${baseUrl}images/${type}/${uuid}.webp` : `${baseUrl}placeholder-${type}.svg`
   }
-
-  // 2. Если полный URL — оставляем как есть
   if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
     return imagePath
   }
-
-  // 3. Если путь с / — добавляем baseUrl
   if (imagePath.startsWith('/')) {
     return `${baseUrl}${imagePath.slice(1)}`
   }
-
-  // 4. Относительный путь
   return imagePath
 }
 
 /**
  * Загрузка избранных из localStorage
- * @returns {Array} - массив UUID избранных питомцев
  */
 const loadFavorites = () => {
   try {
@@ -79,7 +67,6 @@ const loadFavorites = () => {
 
 /**
  * Сохранение избранных в localStorage
- * @param {Array} favorites - массив UUID
  */
 const saveFavorites = (favorites) => {
   try {
@@ -192,11 +179,18 @@ export default {
       }
     }
 
+    // --- Рандомные цвета ---
+    let previousColor = 0
     const getRandomPetClass = (uuid) => {
+      if (!uuid) return 'rand-01'
       if (randomClassCache.has(uuid)) {
         return randomClassCache.get(uuid)
       }
-      const num = Math.floor(Math.random() * 30) + 1
+      let num
+      do {
+        num = Math.floor(Math.random() * 30) + 1
+      } while (num === previousColor)
+      previousColor = num
       const formattedNum = num.toString().padStart(2, '0')
       const className = `rand-${formattedNum}`
       randomClassCache.set(uuid, className)
