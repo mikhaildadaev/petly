@@ -264,11 +264,6 @@ export default {
         value: 'Фандрайзинг', 
         label: 'Фандрайзинг', 
         icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v12"/><path d="M8 8l4 4 4-4"/></svg>`
-      },
-      { 
-        value: 'Юридическая помощь', 
-        label: 'Юридическая помощь', 
-        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`
       }
     ]
 
@@ -285,8 +280,7 @@ export default {
         'Лечение': true,
         'Передержка': true,
         'Креатив': true,
-        'Фандрайзинг': true,
-        'Юридическая помощь': true
+        'Фандрайзинг': true
       }
     })
 
@@ -296,7 +290,7 @@ export default {
 
     const areAllActive = computed(() => {
   return (
-    filters.experience['Начинающий'] && filters.experience['Опытный'] && filters.experience['Эксперт'] && filters.direction['Выгул'] && filters.direction['Социализация'] && filters.direction['Лечение'] && filters.direction['Передержка'] && filters.direction['Креатив'] && filters.direction['Фандрайзинг'] && filters.direction['Юридическая помощь']
+    filters.experience['Начинающий'] && filters.experience['Опытный'] && filters.experience['Эксперт'] && filters.direction['Выгул'] && filters.direction['Социализация'] && filters.direction['Лечение'] && filters.direction['Передержка'] && filters.direction['Креатив'] && filters.direction['Фандрайзинг']
   )
 })
 
