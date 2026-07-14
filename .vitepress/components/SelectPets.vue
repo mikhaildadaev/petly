@@ -1,15 +1,13 @@
 <template>
-  <div v-if="humans && humans.length > 0" class="grid-list">
+  <div v-if="pets && pets.length > 0" class="grid-list">
     <div v-if="!isMobile" class="grid-cards">
-      <a v-for="humans in humans" :key="humans.uuid" :href="`${baseUrl}ru/${humanType}/${humans.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+      <a v-for="pets in pets" :key="pets.uuid" :href="`${baseUrl}ru/${petType}/${pets.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
         <div class="grid-meta">
-          <span v-if="humans.direction" class="tag direction-tag">{{ humans.direction }}</span>
-          <span v-if="humans.experience" class="tag experience-tag">{{ humans.experience }}</span>
         </div>
-        <img :src="humans.image" :alt="humans.name" loading="lazy" />
-        <div :class="['grid-card-body', getRandomVolunteerClass(humans.uuid)]">
-          <div class="name">{{ humans.name }}</div>
-          <p>{{ humans.description }}</p>
+        <img :src="pets.image" :alt="pets.name" loading="lazy" />
+        <div :class="['grid-card-body', getRandomVolunteerClass(pets.uuid)]">
+          <div class="name">{{ pets.name }}</div>
+          <p>{{ pets.description }}</p>
         </div>
       </a>
     </div>
@@ -21,21 +19,19 @@
           </svg>
         </button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-          <div v-for="(humans, index) in humans" :key="humans.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="`${baseUrl}ru/${humanType}/${humans.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+          <div v-for="(pets, index) in pets" :key="pets.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
+            <a :href="`${baseUrl}ru/${petType}/${pets.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
               <div class="grid-meta">
-                <span v-if="humans.direction" class="tag direction-tag">{{ humans.direction }}</span>
-                <span v-if="humans.experience" class="tag experience-tag">{{ humans.experience }}</span>
               </div>
-              <img :src="humans.image" :alt="humans.name" loading="lazy" />
-              <div :class="['grid-card-body', getRandomVolunteerClass(humans.uuid)]">
-                <div class="name">{{ humans.name }}</div>
-                <p>{{ humans.description }}</p>
+              <img :src="pets.image" :alt="pets.name" loading="lazy" />
+              <div :class="['grid-card-body', getRandomVolunteerClass(pets.uuid)]">
+                <div class="name">{{ pets.name }}</div>
+                <p>{{ pets.description }}</p>
               </div>
             </a>
           </div>
         </div>
-        <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= (humans ? humans.length - 1 : 0)">
+        <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= (pets ? pets.length - 1 : 0)">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
             <path d="M9 18l6-6-6-6" />
           </svg>
@@ -43,8 +39,8 @@
       </div>
     </div>
   </div>
-  <div v-else-if="humans && humans.length === 0" class="no-humans">
-    <p>Нет назначенных опекунов</p>
+  <div v-else-if="pets && pets.length === 0" class="no-results">
+    <p>Нет выбранных любимчиков</p>
   </div>
 </template>
 
@@ -118,12 +114,12 @@ export default {
   name: 'ListGuardians',
 
   props: {
-    humanUUIDs: {
+    petUUIDs: {
       type: Array,
       default: () => [],
       description: 'Массив UUID людей для отображения'
     },
-    humanType: {
+    petType: {
       type: String,
       required: true,
       default: 'volunteers'
@@ -134,7 +130,7 @@ export default {
     // ============================================================
     //  СОСТОЯНИЕ
     // ============================================================
-    const allHumans = ref([])
+    const allpets = ref([])
     const isLoading = ref(true)
     const isMobile = ref(false)
 
@@ -166,13 +162,13 @@ export default {
     //  ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
     // ============================================================
 
-    const humans = computed(() => {
+    const pets = computed(() => {
       if (isLoading.value) return []
-      if (!allHumans.value || allHumans.value.length === 0) return []
-      if (!props.humanUUIDs || props.humanUUIDs.length === 0) return []
+      if (!allpets.value || allpets.value.length === 0) return []
+      if (!props.petUUIDs || props.petUUIDs.length === 0) return []
 
-      return allHumans.value.filter(v =>
-        v.uuid && props.humanUUIDs.includes(v.uuid)
+      return allpets.value.filter(v =>
+        v.uuid && props.petUUIDs.includes(v.uuid)
       )
     })
 
@@ -201,7 +197,7 @@ export default {
 
     // --- Карусель ---
     const scrollToSlide = (index) => {
-      if (!carouselRef.value || !humans.value || humans.value.length === 0) return
+      if (!carouselRef.value || !pets.value || pets.value.length === 0) return
       const container = carouselRef.value
       const slides = container.querySelectorAll('.carousel-slide')
       if (!slides.length || index < 0 || index >= slides.length) return
@@ -220,8 +216,8 @@ export default {
     }
 
     const nextSlide = () => {
-      if (!humans.value || humans.value.length === 0) return
-      if (currentIndex.value < humans.value.length - 1) {
+      if (!pets.value || pets.value.length === 0) return
+      if (currentIndex.value < pets.value.length - 1) {
         scrollToSlide(currentIndex.value + 1)
       }
     }
@@ -313,14 +309,14 @@ export default {
         const modules = import.meta.glob('/ru/*/*.md')
 
         const filteredModules = Object.entries(modules).filter(([path]) => {
-          return path.includes(`/ru/${props.humanType}/`) && !path.endsWith(`${props.humanType}_index.md`)
+          return path.includes(`/ru/${props.petType}/`) && !path.endsWith(`${props.petType}_index.md`)
         })
 
         const loaded = await Promise.all(
           filteredModules.map(async ([path, loader]) => {
             const mod = await loader()
             const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || path.replace(`/ru/${props.humanType}/`, '').replace('.md', '')
+            const uuid = fm.uuid || path.replace(`/ru/${props.petType}/`, '').replace('.md', '')
 
             return {
               uuid: uuid,
@@ -328,12 +324,12 @@ export default {
               description: fm.description || '',
               experience: getExperienceCategory(fm.experience),
               direction: fm.direction || '',
-              image: processImage(fm.image, props.humanType, uuid),
+              image: processImage(fm.image, props.petType, uuid),
             }
           })
         )
 
-        allHumans.value = loaded
+        allpets.value = loaded
       } catch (error) {
         console.error('Ошибка загрузки данных:', error)
       } finally {
@@ -355,7 +351,7 @@ export default {
     //  ВОЗВРАТ
     // ============================================================
     return {
-      humans,
+      pets,
       isLoading,
       isMobile,
       carouselRef,
@@ -371,7 +367,7 @@ export default {
       touchStartY,
       touchEndX,
       touchEndY,
-      humanType: props.humanType,
+      petType: props.petType,
       getRandomVolunteerClass,
       baseUrl,
     }
