@@ -30,4 +30,12 @@ features:
 
 ## Собаки
 
-<RandomPets pet-type="dogs" :count="8" />
+## Собаки
+
+<RandomPets 
+  pet-type="dogs" 
+  :count="6" 
+  link-url="/ru/dogs" 
+  link-text="Все собаки" 
+  link-icon="🐕"
+/>
