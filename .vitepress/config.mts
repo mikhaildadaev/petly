@@ -54,8 +54,8 @@ export default defineConfig({
             text: 'Добрология', 
             items: [
               { text: 'Волонтёры', link: '/ru/volunteers' },
-              { text: 'Стать волонтёром', link: '/ru/dobrology/go' },
-              { text: 'Помощь', link: '/ru/dobrology/help' }
+              { text: 'Присоединиться', link: '/ru/dobrology/join' },
+              { text: 'Поддержать', link: '/ru/dobrology/support' }
             ]
           },
           { 
@@ -80,8 +80,8 @@ export default defineConfig({
             text: 'Добрология',
             items: [
               { text: 'Волонтёры', link: '/ru/volunteers' },
-              { text: 'Стать волонтёром', link: '/ru/dobrology/go' },
-              { text: 'Помощь', link: '/ru/dobrology/help' }
+              { text: 'Присоединиться', link: '/ru/dobrology/join' },
+              { text: 'Поддержать', link: '/ru/dobrology/support' }
             ]
           },
           {
