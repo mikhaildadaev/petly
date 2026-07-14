@@ -5,8 +5,9 @@
       <span v-if="experience" class="tag experience-tag">{{ experience }}</span>
     </div>
     <img :src="image" :alt="name" class="hero-image" loading="lazy" />
-    <div class="hero-overlay glass">
+    <div :class="['hero-overlay', getRandomHumanClass(slug)]">
       <div class="name">{{ name }}</div>
+      <p>{{ description }}</p>
     </div>
   </div>
 </template>
@@ -22,6 +23,7 @@ import { useData } from 'vitepress'
 //  КОНСТАНТЫ
 // ============================================================
 const baseUrl = import.meta.env.BASE_URL
+const randomClassCache = new Map()
 
 // ============================================================
 //  УТИЛИТЫ
@@ -35,21 +37,24 @@ const baseUrl = import.meta.env.BASE_URL
  * @returns {string} - полный URL изображения
  */
 const processImage = (imagePath, type, uuid) => {
+  // 1. Если изображение не указано — формируем по UUID
   if (!imagePath) {
     return uuid ? `${baseUrl}images/${type}/${uuid}.webp` : `${baseUrl}placeholder-${type}.svg`
   }
+
+  // 2. Если полный URL — оставляем как есть
   if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
     return imagePath
   }
+
+  // 3. Если путь с / — добавляем baseUrl
   if (imagePath.startsWith('/')) {
     return `${baseUrl}${imagePath.slice(1)}`
   }
+
+  // 4. Относительный путь
   return imagePath
 }
-
-// ============================================================
-//  УТИЛИТЫ
-// ============================================================
 
 /**
  * Преобразование опыта в уровень
@@ -86,6 +91,26 @@ const getExperienceLevel = (experienceRaw) => {
   return experienceRaw || 'Нет опыта'
 }
 
+/**
+ * Получение случайного класса для карточки
+ * @param {string} slug - slug сущности
+ * @returns {string} - случайный класс rand-XX
+ */
+const getRandomHumanClass = (slug) => {
+  if (!slug) return 'rand-01'
+  
+  if (randomClassCache.has(slug)) {
+    return randomClassCache.get(slug)
+  }
+  
+  const num = Math.floor(Math.random() * 30) + 1
+  const formattedNum = num.toString().padStart(2, '0')
+  const className = `rand-${formattedNum}`
+  
+  randomClassCache.set(slug, className)
+  return className
+}
+
 // ============================================================
 //  КОМПОНЕНТ
 // ============================================================
@@ -97,34 +122,60 @@ export default {
       type: String,
       required: false,
       default: 'dogs',
-      description: 'Тип питомца (dogs, cats, volunteers и т.д.)'
+      description: 'Тип (dogs, cats, volunteers и т.д.)'
     }
   },
 
   setup(props) {
-    // --- Данные ---
+    // ============================================================
+    //  ДАННЫЕ
+    // ============================================================
     const { frontmatter } = useData()
     
-    // --- Вычисляемые свойства ---
-    const fm = computed(() => frontmatter?.value || frontmatter || {})
-    
+    // ============================================================
+    //  ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
+    // ============================================================
+
+    /**
+     * Безопасное получение frontmatter
+     */
+    const fm = computed(() => {
+      if (!frontmatter) return {}
+      const data = frontmatter.value || frontmatter || {}
+      return data
+    })
+
+    const slug = computed(() => fm.value?.slug || '')
+    const uuid = computed(() => fm.value?.uuid || '')
     const name = computed(() => fm.value?.title || 'Безымянный друг')
+    const description = computed(() => fm.value?.description || '')
     const direction = computed(() => fm.value?.direction || '')
     const experience = computed(() => getExperienceLevel(fm.value?.experience))
-    const uuid = computed(() => fm.value?.uuid || '')
     
-    const image = computed(() => processImage(
-      fm.value?.image, 
-      props.petType, 
-      uuid.value
-    ))
+    /**
+     * Обработка изображения (консистентно с ListPets)
+     */
+    const image = computed(() => {
+      return processImage(fm.value?.image, props.petType, uuid.value)
+    })
 
-    // --- Возврат ---
+    // ============================================================
+    //  ВОЗВРАТ
+    // ============================================================
     return {
+      // Данные человека
+      slug,
+      uuid,
       name,
+      description,
       direction,
       experience,
       image,
+      
+      // Методы
+      getRandomHumanClass,
+      
+      // Константы
       baseUrl,
     }
   }
