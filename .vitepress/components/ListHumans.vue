@@ -2,17 +2,17 @@
   <div class="filters-compact hide-scrollbar">
       <div class="filter-group">
         <div class="filter-chips">
-          <button v-for="option in experienceOptions" :key="option.value" class="chip" :class="{ active: filterExperience[option.value] }" @click="toggleFilter('experience', option.value)" :title="option.label" v-html="option.icon"/>
+          <button v-for="option in experienceOptions" :key="option.value" class="chip" :class="{ active: filters.experience[option.value] }" @click="toggleFilter('experience', option.value)" :title="option.label" v-html="option.icon"/>
         </div>
         <span class="filter-label">Опыт</span>
       </div>
       <div class="filter-group">
         <div class="filter-chips">
-          <button v-for="option in directionOptions" :key="option.value" class="chip" :class="{ active: filterDirection[option.value] }" @click="toggleFilter('direction', option.value)" :title="option.label" v-html="option.icon"/>
+          <button v-for="option in directionOptions" :key="option.value" class="chip" :class="{ active: filters.direction[option.value] }" @click="toggleFilter('direction', option.value)" :title="option.label" v-html="option.icon"/>
         </div>
         <span class="filter-label">Направление</span>
       </div>
-      <button v-if="isFilterActive" class="btn-reset-compact" @click="resetFilters" title="Сбросить все фильтры">
+      <button v-if="!areAllActive" class="btn-reset-compact" @click="resetFilters" title="Включить все фильтры">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M3 6h18" />
           <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
@@ -136,9 +136,6 @@ const processImage = (imagePath, type, uuid) => {
   return imagePath
 }
 
-/**
- * Определение категории опыта
- */
 const getExperienceCategory = (expValue) => {
   if (!expValue) return 'Нет опыта'
   if (expValue.includes('лет') || expValue.includes('год')) {
@@ -190,14 +187,35 @@ export default {
     humanType: {
       type: String,
       required: true,
-      default: 'volunteers',
-      description: 'Тип людей (volunteers, staff, и т.д.)'
+      default: 'volunteers'
     }
   },
 
   setup(props) {
     // ============================================================
-    //  ОПЦИИ ФИЛЬТРОВ
+    //  СОСТОЯНИЕ
+    // ============================================================
+    const allHumans = ref([])
+    const visibleCount = ref(perPage)
+    const isLoading = ref(true)
+    const isMobile = ref(false)
+    const isLoadingMore = ref(false)
+    const isClient = ref(false)
+    const savedIndex = ref(0)
+
+    // Карусель
+    const carouselRef = ref(null)
+    const currentIndex = ref(0)
+
+    // Свайп
+    const touchStartX = ref(0)
+    const touchStartY = ref(0)
+    const touchEndX = ref(0)
+    const touchEndY = ref(0)
+    const isSwiping = ref(false)
+
+    // ============================================================
+    //  ФИЛЬТРЫ (ЧЕКБОКСЫ)
     // ============================================================
     const experienceOptions = [
       { 
@@ -254,87 +272,46 @@ export default {
       }
     ]
 
-    // ============================================================
-    //  СОСТОЯНИЕ
-    // ============================================================
-    const allHumans = ref([])
-    const visibleCount = ref(perPage)
-    const isLoading = ref(true)
-    const isMobile = ref(false)
-    const isLoadingMore = ref(false)
-    const isClient = ref(false)
-    const savedIndex = ref(0)
-
-    // Фильтры (как в ListPets — объект с true/false)
-    const filterExperience = reactive({
-      'Начинающий': true,
-      'Опытный': true,
-      'Эксперт': true
-    })
-    
-    const filterDirection = reactive({
-      'Выгул': true,
-      'Социализация': true,
-      'Лечение': true,
-      'Передержка': true,
-      'Креатив': true,
-      'Фандрайзинг': true,
-      'Юридическая помощь': true
-    })
-
-    // Карусель
-    const carouselRef = ref(null)
-    const currentIndex = ref(0)
-
-    // Свайп
-    const touchStartX = ref(0)
-    const touchStartY = ref(0)
-    const touchEndX = ref(0)
-    const touchEndY = ref(0)
-    const isSwiping = ref(false)
-
-    // ============================================================
-    //  ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
-    // ============================================================
-
-    const checkMobile = () => {
-      if (typeof window !== 'undefined') {
-        const newIsMobile = window.innerWidth < MOBILE_BREAKPOINT
-        if (isMobile.value !== newIsMobile) {
-          isMobile.value = newIsMobile
-        }
+    // Состояние фильтров (все активны по умолчанию)
+    const filters = reactive({
+      experience: {
+        'Начинающий': true,
+        'Опытный': true,
+        'Эксперт': true
+      },
+      direction: {
+        'Выгул': true,
+        'Социализация': true,
+        'Лечение': true,
+        'Передержка': true,
+        'Креатив': true,
+        'Фандрайзинг': true,
+        'Юридическая помощь': true
       }
-    }
+    })
 
     // ============================================================
-    //  ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
+    //  ВЫЧИСЛЯЕМЫЕ (ФИЛЬТРЫ)
     // ============================================================
 
-    // Проверка, все ли фильтры активны
     const areAllActive = computed(() => {
-      return (
-        filterExperience['Начинающий'] && filterExperience['Опытный'] && filterExperience['Эксперт'] && filterDirection['Выгул'] && filterDirection['Социализация'] && filterDirection['Лечение'] && filterDirection['Передержка'] && filterDirection['Креатив'] && filterDirection['Фандрайзинг'] && filterDirection['Юридическая помощь']
-      )
-    })
+  return (
+    filters.experience['Начинающий'] && filters.experience['Опытный'] && filters.experience['Эксперт'] && filters.direction['Выгул'] && filters.direction['Социализация'] && filters.direction['Лечение'] && filters.direction['Передержка'] && filters.direction['Креатив'] && filters.direction['Фандрайзинг'] && filters.direction['Юридическая помощь']
+  )
+})
 
-    const isFilterActive = computed(() => {
-      return !areAllActive.value
-    })
+    // ============================================================
+    //  ВЫЧИСЛЯЕМЫЕ (ЛЮДИ)
+    // ============================================================
+
 
     const filteredHumans = computed(() => {
       return allHumans.value.filter(human => {
-        // Проверяем опыт
-        if (!filterExperience[human.experience]) return false
-        
-        // Проверяем направление
-        if (filterDirection.value !== null) {
-          const directionStr = human.directionRaw || human.direction || ''
-          const directions = directionStr.replace(/,/g, '/').split('/').map(d => d.trim())
-          // Проверяем, есть ли хоть одно активное направление у человека
-          const hasActiveDirection = directions.some(d => filterDirection[d] === true)
-          if (!hasActiveDirection) return false
-        }
-
+        if (!filters.experience[human.experience]) return false
+        const directionStr = human.directionRaw || human.direction || ''
+        const directions = directionStr.replace(/,/g, '/').split('/').map(d => d.trim())
+        const hasActiveDirection = directions.some(d => filters.direction[d] === true)
+        if (!hasActiveDirection) return false
         return true
       })
     })
@@ -356,25 +333,34 @@ export default {
     })
 
     // ============================================================
-    //  МЕТОДЫ
+    //  МЕТОДЫ (ФИЛЬТРЫ)
     // ============================================================
 
     const toggleFilter = (group, value) => {
-      if (group === 'experience') {
-        filterExperience[value] = !filterExperience[value]
-      } else if (group === 'direction') {
-        filterDirection[value] = !filterDirection[value]
-      }
-      // Сбрасываем пагинацию
+      filters[group][value] = !filters[group][value]
+      // Сбрасываем пагинацию при изменении фильтров
       visibleCount.value = perPage
       currentIndex.value = 0
     }
 
     const resetFilters = () => {
-      Object.keys(filterExperience).forEach(k => filterExperience[k] = true)
-      Object.keys(filterDirection).forEach(k => filterDirection[k] = true)
+      Object.keys(filters.experience).forEach(k => filters.experience[k] = true)
+      Object.keys(filters.direction).forEach(k => filters.direction[k] = true)
       visibleCount.value = perPage
       currentIndex.value = 0
+    }
+    
+    // ============================================================
+    //  МЕТОДЫ (ОСТАЛЬНЫЕ)
+    // ============================================================
+
+    const checkMobile = () => {
+      if (typeof window !== 'undefined') {
+        const newIsMobile = window.innerWidth < MOBILE_BREAKPOINT
+        if (isMobile.value !== newIsMobile) {
+          isMobile.value = newIsMobile
+        }
+      }
     }
 
     const loadMore = async () => {
@@ -393,10 +379,8 @@ export default {
           if (carouselRef.value && paginatedHumans.value.length) {
             let targetIndex = savedIndex.value
             const maxIndex = carouselTotalSlides.value - 1
-
             if (targetIndex > maxIndex) targetIndex = maxIndex
             if (targetIndex < 0) targetIndex = 0
-
             scrollToSlide(targetIndex)
             savedIndex.value = 0
           }
@@ -421,7 +405,6 @@ export default {
             const containerWidth = container.offsetWidth
             const slideWidth = firstSlide.offsetWidth
             const scrollPosition = firstSlide.offsetLeft - (containerWidth - slideWidth) / 2
-
             container.scrollTo({
               left: Math.max(0, scrollPosition),
               behavior: 'smooth'
@@ -431,7 +414,6 @@ export default {
       }
     }
 
-    // --- Карусель ---
     const scrollToSlide = (index) => {
       if (!carouselRef.value) return
       const container = carouselRef.value
@@ -467,7 +449,6 @@ export default {
       scrollToSlide(index)
     }
 
-    // --- Обработчики свайпа ---
     const handleTouchStart = (e) => {
       const touch = e.touches[0]
       touchStartX.value = touch.clientX
@@ -477,36 +458,29 @@ export default {
 
     const handleTouchMove = (e) => {
       if (!isSwiping.value) return
-
       const touch = e.touches[0]
       const deltaX = touch.clientX - touchStartX.value
       const deltaY = touch.clientY - touchStartY.value
-
       if (Math.abs(deltaY) > Math.abs(deltaX)) {
         isSwiping.value = false
         return
       }
-
       e.preventDefault()
     }
 
     const handleTouchEnd = (e) => {
       if (!isSwiping.value) return
       isSwiping.value = false
-
       const touch = e.changedTouches[0]
       touchEndX.value = touch.clientX
       touchEndY.value = touch.clientY
-
       const diffX = touchStartX.value - touchEndX.value
       const minSwipeDistance = 50
-
       if (diffX > minSwipeDistance) {
         nextSlide()
       } else if (diffX < -minSwipeDistance) {
         prevSlide()
       }
-
       touchStartX.value = 0
       touchStartY.value = 0
       touchEndX.value = 0
@@ -541,7 +515,6 @@ export default {
       if (resizeTimeout) {
         clearTimeout(resizeTimeout)
       }
-
       resizeTimeout = setTimeout(() => {
         checkMobile()
         resizeTimeout = null
@@ -562,7 +535,6 @@ export default {
 
       try {
         const allModules = import.meta.glob('/ru/*/*.md')
-
         const filteredModules = Object.entries(allModules).filter(([path]) => {
           return path.includes(`/ru/${props.humanType}/`) && !path.endsWith(`${props.humanType}_index.md`)
         })
@@ -586,7 +558,6 @@ export default {
             }
           })
         )
-
         allHumans.value = loaded
       } catch (error) {
         console.error('Ошибка загрузки данных:', error)
@@ -595,10 +566,18 @@ export default {
       }
     })
 
-    // --- Watchers ---
-    watch([() => filterExperience, () => filterDirection], () => {
-      // Фильтры уже обновлены через toggleFilter
-    }, { deep: true })
+    watch(
+      [() => filters.experience, () => filters.direction],
+      () => {
+        currentIndex.value = 0
+        savedIndex.value = 0
+        visibleCount.value = perPage
+        nextTick(() => {
+          resetToFirstSlide()
+        })
+      },
+      { deep: true }
+    )
 
     watch(isMobile, (newVal) => {
       if (isClient.value && newVal && paginatedHumans.value.length) {
@@ -627,7 +606,6 @@ export default {
       { deep: true }
     )
 
-    // --- Unmount ---
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)
@@ -650,9 +628,7 @@ export default {
       filteredHumans,
       
       // Фильтры
-      filterExperience,
-      filterDirection,
-      isFilterActive,
+      filters,
       areAllActive,
       toggleFilter,
       resetFilters,

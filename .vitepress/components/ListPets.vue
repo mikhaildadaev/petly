@@ -18,7 +18,7 @@
       </div>
       <span class="filter-label">Размер</span>
     </div>
-    <button v-if="!areAllActive" class="btn-reset-compact" @click="resetAllFilters" title="Включить все фильтры">
+    <button v-if="!areAllActive" class="btn-reset-compact" @click="resetFilters" title="Включить все фильтры">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M3 6h18" />
         <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
@@ -274,21 +274,6 @@ export default {
       )
     })
 
-    const activeCount = computed(() => {
-      let count = 0
-      Object.values(filters.gender).forEach(v => { if (v) count++ })
-      Object.values(filters.age).forEach(v => { if (v) count++ })
-      Object.values(filters.size).forEach(v => { if (v) count++ })
-      return count
-    })
-
-    const hintText = computed(() => {
-      const total = 2 + 3 + 3
-      if (areAllActive.value) return 'Все фильтры включены'
-      if (activeCount.value === 0) return 'Ни один фильтр не выбран'
-      return `Выбрано ${activeCount.value} из ${total}`
-    })
-
     // ============================================================
     //  ВЫЧИСЛЯЕМЫЕ (ПИТОМЦЫ)
     // ============================================================
@@ -329,7 +314,7 @@ export default {
       currentIndex.value = 0
     }
 
-    const resetAllFilters = () => {
+    const resetFilters = () => {
       Object.keys(filters.gender).forEach(k => filters.gender[k] = true)
       Object.keys(filters.age).forEach(k => filters.age[k] = true)
       Object.keys(filters.size).forEach(k => filters.size[k] = true)
@@ -555,11 +540,9 @@ export default {
     watch(
       [() => filters.gender, () => filters.age, () => filters.size],
       () => {
-        // Сбрасываем на первую позицию при изменении фильтров
         currentIndex.value = 0
         savedIndex.value = 0
         visibleCount.value = perPage
-        
         nextTick(() => {
           resetToFirstSlide()
         })
@@ -607,27 +590,30 @@ export default {
     //  ВОЗВРАТ
     // ============================================================
     return {
-      // Фильтры
-      filters,
+      // Опции фильтров
       genderOptions,
       ageOptions,
       sizeOptions,
-      areAllActive,
-      activeCount,
-      hintText,
-      toggleFilter,
-      resetAllFilters,
-
-      // Питомцы
+      // Данные
       paginatedPets,
       filteredPets,
-      isLoading,
-      isMobile,
+      // Фильтры
+      filters,
+      areAllActive,
+      toggleFilter,
+      resetFilters,
+
+      // Пагинация
       visibleCount,
       remaining,
       hasMoreItems,
       loadMore,
       isLoadingMore,
+
+      // Состояние
+      isLoading,
+      isMobile,
+      baseUrl,
 
       // Карусель
       carouselRef,
@@ -649,7 +635,6 @@ export default {
       touchEndY,
 
       // Прочее
-      baseUrl,
       petType: props.petType,
       getRandomPetClass,
     }
