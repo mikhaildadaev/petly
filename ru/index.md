@@ -8,11 +8,11 @@ hero:
     alt: Собака из приюта
   actions:
     - theme: brand
+      text: Посмотреть кошек
+      link: /ru/cats
+    - theme: brand
       text: Посмотреть собак
       link: /ru/dogs
-    - theme: alt
-      text: Стать волонтёром
-      link: /ru/volunteers
 features:
   - icon: 🐕
     title: Познакомься
@@ -20,20 +20,19 @@ features:
   - icon: 🤝
     title: Подружись
     details: Приходи на прогулку. Посиди рядом. Дай себя обнюхать. Доверие строится шаг за шагом.
-  - icon: 🏠
-    title: Забери домой
-    details: Стань для кого-то целым миром. Это проще, чем кажется — и важнее, чем что-либо ещё.
   - icon: 💛
     title: Помоги делом
     details: Корм, лекарства, тёплые руки. Даже час твоего времени может изменить чью-то жизнь.
+  - icon: 🏠
+    title: Забери домой
+    details: Стань для кого-то целым миром. Это проще, чем кажется — и важнее, чем что-либо ещё.
 ---
+
+
+## Кошки
+
+<RandomPets petType="cats" :count="8"/>
 
 ## Собаки
 
-<RandomPets 
-  petType="dogs" 
-  :count="8" 
-  link-url="/ru/dogs" 
-  link-text="Все собаки" 
-  link-icon="🐕"
-/>
+<RandomPets petType="dogs" :count="8"/>
