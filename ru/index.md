@@ -6,10 +6,10 @@ hero:
   actions:
     - theme: brand
       text: Посмотреть кошек
-      link: /ru/cats
+      link: /ru/pets/cats
     - theme: brand
       text: Посмотреть собак
-      link: /ru/dogs
+      link: /ru/pets/dogs
 features:
   - icon: 🐕
     title: Познакомься
