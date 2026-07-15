@@ -1,8 +1,8 @@
 <template>
   <div class="aspect-card hero-card">
     <div class="hero-meta">
-      <span v-if="direction" class="tag direction-tag">{{ direction }}</span>
-      <span v-if="experience" class="tag experience-tag">{{ experience }}</span>
+      <span v-if="direction" class="tag direction-tag">{{ translateDirection(direction) }}</span>
+      <span v-if="experience" class="tag experience-tag">{{ translate('experience', experience) }}</span>
     </div>
     <img :src="image" :alt="name" class="hero-image" loading="lazy" />
     <div :class="['hero-overlay', getRandomHumanClass(uuid)]">
@@ -18,6 +18,8 @@
 // ============================================================
 import { computed } from 'vue'
 import { useData } from 'vitepress'
+import { useLang } from '../composables/useLang'
+import { translations, getTranslate, getTranslateDirection } from '../composables/i18n'
 
 // ============================================================
 //  КОНСТАНТЫ
@@ -97,6 +99,9 @@ export default {
     //  ДАННЫЕ
     // ============================================================
     const { frontmatter } = useData()
+    const { lang } = useLang()
+    const translate = (category, key) => getTranslate(lang.value, category, key)
+    const translateDirection = (directionStr) => getTranslateDirection(lang.value, directionStr)
     
     // ============================================================
     //  ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
@@ -155,6 +160,11 @@ export default {
       direction,
       experience,
       image,
+
+      // Язык
+      lang,
+      translate,
+      translateDirection,
       
       // Методы
       getRandomHumanClass,

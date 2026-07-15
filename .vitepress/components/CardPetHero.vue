@@ -1,14 +1,14 @@
 <template>
   <div class="aspect-card hero-card">
     <div class="hero-meta">
-      <span v-if="gender" class="tag gender-tag" :data-gender="gender">{{ gender }}</span>
-      <span v-if="age" class="tag age-tag">{{ age }}</span>
-      <span v-if="size" class="tag size-tag">{{ size }}</span>
+      <span v-if="gender" class="tag gender-tag" :data-gender="gender">{{ translate('gender', gender) }}</span>
+      <span v-if="age" class="tag age-tag">{{ translateAge(age) }}</span>
+      <span v-if="size" class="tag size-tag">{{ translate('size', size) }}</span>
     </div>
     <img :src="image" :alt="name" class="hero-image" loading="lazy" />
     <div :class="['hero-overlay', getRandomPetClass(uuid)]">
       <div class="name">{{ name }}</div>
-      <button v-if="uuid" class="favorite-btn" :class="{ 'is-favorite': isFavorite }" @click.stop="toggleFavorite" aria-label="Добавить в избранное" title="Добавить в избранное">
+      <button v-if="uuid" class="favorite-btn" :class="{ 'is-favorite': isFavorite }" @click.stop="toggleFavorite" :title="translate('ui', 'Добавить в избранное')">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
         </svg>
@@ -24,6 +24,8 @@
 // ============================================================
 import { computed, ref, onMounted, watch, nextTick } from 'vue'
 import { useData } from 'vitepress'
+import { useLang } from '../composables/useLang'
+import { translations, getTranslate, getTranslateAge } from '../composables/i18n'
 
 // ============================================================
 //  КОНСТАНТЫ
@@ -95,6 +97,9 @@ export default {
     //  ДАННЫЕ
     // ============================================================
     const { frontmatter } = useData()
+    const { lang } = useLang()
+    const translate = (category, key) => getTranslate(lang.value, category, key)
+    const translateAge = (ageStr) => getTranslateAge(lang.value, ageStr)
     
     // ============================================================
     //  СОСТОЯНИЕ
@@ -243,6 +248,11 @@ export default {
       isFavorite,
       isInitialized,
       
+      // Язык
+      lang,
+      translate,
+      translateAge,
+
       // Методы
       getRandomPetClass,
       toggleFavorite,
