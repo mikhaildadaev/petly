@@ -48,7 +48,8 @@ export const translations = {
       'Загрузить ещё': 'Загрузить ещё',
       'Посмотреть ещё': 'Посмотреть ещё',
       'Все питомцы': 'Все питомцы',
-      'Нет результатов': 'Нет результатов'
+      'Нет результатов': 'Нет результатов',
+      'Включить все фильтры': 'Включить все фильтры'
     }
   },
   en: {
@@ -100,7 +101,8 @@ export const translations = {
       'Загрузить ещё': 'Load more',
       'Посмотреть ещё': 'View more',
       'Все питомцы': 'All pets',
-      'Нет результатов': 'No results found'
+      'Нет результатов': 'No results found',
+      'Включить все фильтры': 'Enable all filters'
     }
   },
   ru: {
@@ -122,12 +124,12 @@ export const translations = {
       'Взрослая': 'Erwachsen'
     },
     ageUnits: {
-      'год': 'jahr',
-      'года': 'jahre',
-      'лет': 'jahre',
-      'месяц': 'monat',
-      'месяца': 'monate',
-      'месяцев': 'monate'
+      'год': 'Jahr',
+      'года': 'Jahre',
+      'лет': 'Jahre',
+      'месяц': 'Monat',
+      'месяца': 'Monate',
+      'месяцев': 'Monate'
     },
     size: {
       'Маленькая': 'Klein',
@@ -152,7 +154,8 @@ export const translations = {
       'Загрузить ещё': 'Mehr laden',
       'Посмотреть ещё': 'Mehr anzeigen',
       'Все питомцы': 'Alle Tiere',
-      'Нет результатов': 'Keine Ergebnisse gefunden'
+      'Нет результатов': 'Keine Ergebnisse gefunden',
+      'Включить все фильтры': 'Alle Filter aktivieren'
     }
   }
 }
