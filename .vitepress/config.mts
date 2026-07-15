@@ -6,8 +6,8 @@ export default defineConfig({
   head: [
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap' }],
-    ['link', { rel: 'stylesheet', href: '/public/styles.css' }],
-    ['script', { src: '/public/scripts.js' }]
+    ['link', { rel: 'stylesheet', href: '/petly/styles.css' }],
+    ['script', { src: '/petly/scripts.js' }]
   ],
   lastUpdated: true,
   locales: {
