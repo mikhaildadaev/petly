@@ -44,7 +44,7 @@
     </div>
   </div>
   <div v-else-if="humans && humans.length === 0" class="no-results">
-    <p>{{ translate('ui', 'Нет назначенных опекунов') }}</p>
+    <p>{{ translate('ui', 'Нет назначенных волонтеров') }}</p>
   </div>
 </template>
 
