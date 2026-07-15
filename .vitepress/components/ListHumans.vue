@@ -536,13 +536,13 @@ export default {
         let modules
         switch (lang.value) {
           case 'en':
-            modules = import.meta.glob('/en/pets/*/*.md')
+            modules = import.meta.glob('/en/humans/*/*.md')
             break
           case 'de':
-            modules = import.meta.glob('/de/pets/*/*.md')
+            modules = import.meta.glob('/de/humans/*/*.md')
             break
           default:
-            modules = import.meta.glob('/ru/pets/*/*.md')
+            modules = import.meta.glob('/ru/humans/*/*.md')
         }
         const filteredModules = Object.entries(modules).filter(([path]) => {
           return path.includes(`/${lang.value}/humans/${props.humanType}/`) && !path.endsWith(`${props.humanType}_index.md`)

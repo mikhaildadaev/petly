@@ -85,10 +85,10 @@ export default {
   name: 'CardHumanHero',
 
   props: {
-    petType: {
+    humanType: {
       type: String,
       required: false,
-      default: 'dogs',
+      default: 'volunteers',
     }
   },
 
@@ -118,10 +118,10 @@ export default {
     const experience = computed(() => getExperienceLevel(fm.value?.experience))
     
     /**
-     * Обработка изображения (консистентно с ListPets)
+     * Обработка изображения
      */
     const image = computed(() => {
-      return processImage(fm.value?.image, props.petType, uuid.value)
+      return processImage(fm.value?.image, props.humanType, uuid.value)
     })
 
     // ============================================================
