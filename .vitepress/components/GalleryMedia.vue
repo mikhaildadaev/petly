@@ -53,12 +53,10 @@ export default {
     photos: {
       type: Array,
       default: () => [],
-      description: 'Массив URL изображений'
     },
     videos: {
       type: Array,
       default: () => [],
-      description: 'Массив URL видео'
     }
   },
 

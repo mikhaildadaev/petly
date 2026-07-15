@@ -115,27 +115,22 @@ export default {
     petType: {
       type: String,
       default: 'all',
-      description: 'Тип питомца (dogs, cats, all)'
     },
     count: {
       type: Number,
       default: 8,
-      description: 'Количество карточек'
     },
     linkUrl: {
       type: String,
       default: '/ru/pets',
-      description: 'Ссылка на раздел'
     },
     linkText: {
       type: String,
       default: 'Все питомцы',
-      description: 'Текст на карточке-ссылке'
     },
     linkIcon: {
       type: String,
       default: '🐾',
-      description: 'Иконка на карточке-ссылке'
     }
   },
 
@@ -324,7 +319,7 @@ export default {
       
       // Язык
       lang,
-      
+
       // Состояние
       isLoading,
       

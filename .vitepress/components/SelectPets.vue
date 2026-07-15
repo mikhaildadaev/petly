@@ -108,7 +108,6 @@ export default {
     petUUIDs: {
       type: Array,
       default: () => [],
-      description: 'Массив UUID питомцев для отображения'
     },
     petType: {
       type: String,

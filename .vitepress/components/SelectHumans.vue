@@ -122,7 +122,6 @@ export default {
     humanUUIDs: {
       type: Array,
       default: () => [],
-      description: 'Массив UUID людей для отображения'
     },
     humanType: {
       type: String,

@@ -25,22 +25,18 @@ export default {
     src: {
       type: String,
       required: true,
-      description: 'Путь изображения'
     },
     float: {
       type: String,
       default: 'none',
-      description: 'Положение изображения'
     },
     width: {
       type: [String, Number],
       default: '100%',
-      description: 'Ширина изображения'
     },
     height: {
       type: [String, Number],
       default: 'auto',
-      description: 'Высота изображения'
     }
   },
 
