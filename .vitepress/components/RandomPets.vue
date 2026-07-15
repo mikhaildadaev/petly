@@ -138,6 +138,14 @@ export default {
     const randomPets = ref([])
     const isLoading = ref(true)
 
+    // ============================================================
+    //  ССЫЛКА ДЛЯ "ПОСМОТРЕТЬ ЕЩЁ"
+    // ============================================================
+    const linkUrl = computed(() => {
+      const langPath = lang.value || 'ru'
+      return `/${langPath}/${props.petType}`
+    })
+
     // Карусель
     const carouselRef = ref(null)
     const currentIndex = ref(0)
@@ -159,7 +167,7 @@ export default {
     //  ПЕРЕХОД (ССЫЛКА)
     // ============================================================
     const goToLink = () => {
-      window.location.href = props.linkUrl
+      window.location.href = linkUrl.value
     }
 
     // ============================================================
@@ -340,6 +348,7 @@ export default {
       
       // Прочее
       baseUrl,
+      linkUrl,
       getRandomClass,
     }
   },
