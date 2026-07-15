@@ -3,9 +3,6 @@ layout: home
 hero:
   text: "В ДОБРОЛОГИЯХ"
   subtext: "- ты"
-  image:
-    src: https://yandex.ru/youngcon/static/images/2026/tech/list/search_active.webp
-    alt: Собака из приюта
   actions:
     - theme: brand
       text: Посмотреть кошек
