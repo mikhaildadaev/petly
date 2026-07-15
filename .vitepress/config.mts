@@ -6,8 +6,8 @@ export default defineConfig({
   head: [
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap' }],
-    ['link', { rel: 'stylesheet', href: '/pets/styles.css' }],
-    ['script', { src: '/pets/scripts.js' }]
+    ['link', { rel: 'stylesheet', href: '/public/styles.css' }],
+    ['script', { src: '/public/scripts.js' }]
   ],
   lastUpdated: true,
   locales: {
@@ -16,7 +16,7 @@ export default defineConfig({
       label: 'Русский',
       lang: 'ru',
       link: '/ru/',
-      title: 'PETS',
+      title: 'PETLY',
       themeConfig: {
         search: {
           provider: 'local',
@@ -135,7 +135,7 @@ export default defineConfig({
     socialLinks: [
       { 
         icon: 'github', 
-        link: 'https://github.com/mikhaildadaev/pets' 
+        link: 'https://github.com/mikhaildadaev/petly' 
       }
     ],
   }

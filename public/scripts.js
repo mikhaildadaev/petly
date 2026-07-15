@@ -1,6 +1,6 @@
 (function() {
   'use strict';
-  const base = '/pets/';
+  const base = '/petly/';
   const currentPath = window.location.pathname;
   const savedLang = localStorage.getItem('vitepress-lang');
   const supportedLangs = ['en', 'ru', 'zh'];
