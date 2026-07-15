@@ -111,7 +111,7 @@ import { computed, ref, onMounted, watch, nextTick, onUnmounted, reactive } from
 // ============================================================
 //  КОНСТАНТЫ
 // ============================================================
-const MOBILE_BREAKPOINT = 736
+const MOBILE_BREAKPOINT = 735
 const baseUrl = import.meta.env.BASE_URL
 const perPage = 8
 const randomClassCache = new Map()

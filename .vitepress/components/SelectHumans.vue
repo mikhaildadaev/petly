@@ -57,7 +57,7 @@ import { computed, ref, onMounted, onUnmounted, nextTick } from 'vue'
 // ============================================================
 //  КОНСТАНТЫ
 // ============================================================
-const MOBILE_BREAKPOINT = 736
+const MOBILE_BREAKPOINT = 735
 const baseUrl = import.meta.env.BASE_URL
 const perPage = 0
 const randomClassCache = new Map()
