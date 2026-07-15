@@ -46,14 +46,14 @@ export default defineConfig({
           { 
             text: 'Питомцы', 
             items: [
-              { text: 'Кошки', link: '/ru/cats' },
-              { text: 'Собаки', link: '/ru/dogs' }
+              { text: 'Кошки', link: '/ru/pets/cats' },
+              { text: 'Собаки', link: '/ru/pets/dogs' }
             ]
           },
           { 
             text: 'Добрология', 
             items: [
-              { text: 'Волонтёры', link: '/ru/volunteers' },
+              { text: 'Волонтёры', link: '/ru/humans/volunteers' },
               { text: 'Присоединиться', link: '/ru/dobrology/join' },
               { text: 'Поддержать', link: '/ru/dobrology/support' }
             ]
@@ -69,21 +69,21 @@ export default defineConfig({
           },
           { 
             text: 'Любимцы', 
-            link: '/ru/favorites' 
+            link: '/ru/chance/favorites' 
           }
         ],
         sidebar: [
           {
             text: 'Питомцы',
             items: [
-              { text: 'Кошки', link: '/ru/cats' },
-              { text: 'Собаки', link: '/ru/dogs' }
+              { text: 'Кошки', link: '/ru/pets/cats' },
+              { text: 'Собаки', link: '/ru/pets/dogs' }
             ]
           },
           {
             text: 'Добрология',
             items: [
-              { text: 'Волонтёры', link: '/ru/volunteers' },
+              { text: 'Волонтёры', link: '/ru/humans/volunteers' },
               { text: 'Присоединиться', link: '/ru/dobrology/join' },
               { text: 'Поддержать', link: '/ru/dobrology/support' }
             ]
@@ -99,7 +99,7 @@ export default defineConfig({
           },
           { 
             text: 'Любимцы', 
-            link: '/ru/favorites' 
+            link: '/ru/chance/favorites' 
           }
         ],
         darkModeSwitchLabel: "Внешний вид",
