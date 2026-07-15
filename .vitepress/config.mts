@@ -139,16 +139,16 @@ export default defineConfig({
           options: {
             translations: {
               button: {
-                buttonText: 'Поиск',
-                buttonAriaLabel: 'Поиск'
+                buttonText: 'Search',
+                buttonAriaLabel: 'Search'
               },
               modal: {
-                noResultsText: 'Ничего не найдено',
-                resetButtonTitle: 'Очистить поиск',
+                noResultsText: 'No results found',
+                resetButtonTitle: 'Clear search',
                 footer: {
-                  selectText: 'выбрать',
-                  navigateText: 'перейти',
-                  closeText: 'закрыть'
+                  selectText: 'to select',
+                  navigateText: 'to navigate',
+                  closeText: 'to close'
                 }
               }
             }
@@ -218,24 +218,24 @@ export default defineConfig({
             link: '/en/chance/favorites' 
           }
         ],
-        darkModeSwitchLabel: "Внешний вид",
-        darkModeSwitchTitle: "Переключиться на тёмную тему",
-        lightModeSwitchTitle: "Переключиться на светлую тему",
-        sidebarMenuLabel: "Меню",
-        returnToTopLabel: "Вернуться наверх",
+        darkModeSwitchLabel: "Appearance",
+        darkModeSwitchTitle: "Switch to dark theme",
+        lightModeSwitchTitle: "Switch to light theme",
+        sidebarMenuLabel: "Menu",
+        returnToTopLabel: "Return to top",
         outline: {
-          label: "Содержание страницы"
+          label: "On this page"
         },
         lastUpdated: {
-          text: "Последние изменения",
+          text: "Last Updated",
           formatOptions: {
             dateStyle: "short",
             timeStyle: "short"
           }
         },
         docFooter: {
-          prev: "Предыдущая страница",
-          next: "Следующая страница"
+          prev: "Previous page",
+          next: "Next page"
         },
         footer: {
           message: 'Every pet deserves a home',
