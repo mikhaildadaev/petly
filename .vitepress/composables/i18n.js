@@ -50,6 +50,7 @@ export const translations = {
       'Все питомцы': 'Все питомцы',
       'Нет результатов': 'Нет результатов',
       'Включить все фильтры': 'Включить все фильтры',
+      'Добавить в избранное': 'В любимцы',
       'Нет назначенных опекунов': 'Нет назначенных опекунов',
       'Нет выбранных любимцев': 'Нет выбранных любимцев'
     }
@@ -105,6 +106,7 @@ export const translations = {
       'Все питомцы': 'All pets',
       'Нет результатов': 'No results found',
       'Включить все фильтры': 'Enable all filters',
+      'Добавить в избранное': 'Add to favorites',
       'Нет назначенных опекунов': 'No assigned guardians',
       'Нет выбранных любимцев': 'No favorites selected'
     }
@@ -160,6 +162,7 @@ export const translations = {
       'Все питомцы': 'Alle Tiere',
       'Нет результатов': 'Keine Ergebnisse gefunden',
       'Включить все фильтры': 'Alle Filter aktivieren',
+      'Добавить в избранное': 'Zu Favoriten',
       'Нет назначенных опекунов': 'Keine zugewiesenen Betreuer',
       'Нет выбранных любимцев': 'Keine Favoriten ausgewählt'
     }
