@@ -24,7 +24,7 @@
       </button>
     </div>
   <div v-if="!isMobile" class="grid-cards">
-    <a v-for="human in paginatedHumans" :key="human.uuid" :href="`${baseUrl}ru/${humanType}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+    <a v-for="human in paginatedHumans" :key="human.uuid" :href="`${baseUrl}${lang}/humans/${humanType}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
       <div class="grid-meta">
         <span v-if="human.direction" class="tag direction-tag">{{ human.direction }}</span>
         <span v-if="human.experience" class="tag experience-tag">{{ human.experience }}</span>
@@ -60,7 +60,7 @@
       </button>      
       <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
         <div v-for="(human, index) in paginatedHumans" :key="human.uuid" class="carousel-slide" :class="{ center: index === currentIndex }" >
-          <a :href="`${baseUrl}ru/${humanType}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+          <a :href="`${baseUrl}${lang}/humans/${humanType}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
             <div class="grid-meta">
               <span v-if="human.direction" class="tag direction-tag">{{ human.direction }}</span>
               <span v-if="human.experience" class="tag experience-tag">{{ human.experience }}</span>
@@ -107,6 +107,7 @@
 //  ИМПОРТЫ
 // ============================================================
 import { computed, ref, onMounted, watch, nextTick, onUnmounted, reactive } from 'vue'
+import { useLang } from '../composables/useLang'
 
 // ============================================================
 //  КОНСТАНТЫ
@@ -192,6 +193,11 @@ export default {
   },
 
   setup(props) {
+    // ============================================================
+    //  ЯЗЫК
+    // ============================================================
+    const { lang } = useLang()
+
     // ============================================================
     //  СОСТОЯНИЕ
     // ============================================================
@@ -528,16 +534,16 @@ export default {
       }
 
       try {
-        const allModules = import.meta.glob('/ru/*/*.md')
-        const filteredModules = Object.entries(allModules).filter(([path]) => {
-          return path.includes(`/ru/${props.humanType}/`) && !path.endsWith(`${props.humanType}_index.md`)
+        const modules = import.meta.glob('/{ru,en,de}/humans/*/*.md')
+        const filteredModules = Object.entries(modules).filter(([path]) => {
+          return path.includes(`/${lang.value}/humans/${props.humanType}/`) && !path.endsWith(`${props.humanType}_index.md`)
         })
 
         const loaded = await Promise.all(
           filteredModules.map(async ([path, loader]) => {
             const mod = await loader()
             const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || path.replace(`/ru/${props.humanType}/`, '').replace('.md', '')
+            const uuid = fm.uuid || path.replace(`/${lang.value}/humans/${props.humanType}/`, '').replace('.md', '')
 
             return {
               uuid,
@@ -633,7 +639,10 @@ export default {
       hasMoreItems,
       loadMore,
       isLoadingMore,
-      
+
+      // Язык
+      lang,
+
       // Состояние
       isLoading,
       isMobile,

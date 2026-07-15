@@ -89,7 +89,6 @@ export default {
       type: String,
       required: false,
       default: 'dogs',
-      description: 'Тип (dogs, cats, volunteers и т.д.)'
     }
   },
 

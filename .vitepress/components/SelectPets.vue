@@ -1,7 +1,7 @@
 <template>
   <div v-if="pets && pets.length > 0" class="grid-list">
     <div v-if="!isMobile" class="grid-cards">
-      <a v-for="pet in pets" :key="pet.uuid" :href="`${baseUrl}ru/${petType}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+      <a v-for="pet in pets" :key="pet.uuid" :href="`${baseUrl}${lang}/pets/${petType}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
         <div class="grid-meta">
           <span v-if="pet.gender" class="tag gender-tag" :data-gender="pet.gender">{{ pet.gender }}</span>
           <span v-if="pet.age" class="tag age-tag">{{ pet.age }}</span>
@@ -23,7 +23,7 @@
         </button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(pet, index) in pets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="`${baseUrl}ru/${petType}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+            <a :href="`${baseUrl}${lang}/pets/${petType}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
               <div class="grid-meta">
                 <span v-if="pet.gender" class="tag gender-tag" :data-gender="pet.gender">{{ pet.gender }}</span>
                 <span v-if="pet.age" class="tag age-tag">{{ pet.age }}</span>
@@ -55,6 +55,7 @@
 //  ИМПОРТЫ
 // ============================================================
 import { computed, ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { useLang } from '../composables/useLang'
 
 // ============================================================
 //  КОНСТАНТЫ
@@ -117,6 +118,11 @@ export default {
   },
 
   setup(props) {
+    // ============================================================
+    //  ЯЗЫК
+    // ============================================================
+    const { lang } = useLang()
+
     // ============================================================
     //  СОСТОЯНИЕ
     // ============================================================
@@ -296,17 +302,16 @@ export default {
       }
 
       try {
-        const modules = import.meta.glob('/ru/*/*.md')
-
+        const modules = import.meta.glob('/{ru,en,de}/pets/*/*.md')
         const filteredModules = Object.entries(modules).filter(([path]) => {
-          return path.includes(`/ru/${props.petType}/`) && !path.endsWith(`${props.petType}_index.md`)
+          return path.includes(`/${lang.value}/pets/${props.petType}/`) && !path.endsWith(`${props.petType}_index.md`)
         })
 
         const loaded = await Promise.all(
           filteredModules.map(async ([path, loader]) => {
             const mod = await loader()
             const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || path.replace(`/ru/${props.petType}/`, '').replace('.md', '')
+            const uuid = fm.uuid || path.replace(`/${lang.value}/pets/${props.petType}/`, '').replace('.md', '')
 
             return {
               uuid: uuid,
@@ -342,15 +347,25 @@ export default {
     //  ВОЗВРАТ
     // ============================================================
     return {
+      // Данные
       pets,
+      
+      // Язык
+      lang,
+
+      // Состояние
       isLoading,
       isMobile,
+      
+      // Карусель
       carouselRef,
       currentIndex,
       scrollToSlide,
       nextSlide,
       prevSlide,
       goToSlide,
+      
+      // Свайп
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
@@ -358,6 +373,8 @@ export default {
       touchStartY,
       touchEndX,
       touchEndY,
+      
+      // Прочее
       petType: props.petType,
       getRandomPetClass,
       baseUrl,
