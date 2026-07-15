@@ -3,9 +3,9 @@
     <div v-if="!isMobile" class="grid-cards">
       <a v-for="pet in pets" :key="pet.uuid" :href="`${baseUrl}${lang}/pets/${petType}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
         <div class="grid-meta">
-          <span v-if="pet.gender" class="tag gender-tag" :data-gender="pet.gender">{{ pet.gender }}</span>
-          <span v-if="pet.age" class="tag age-tag">{{ pet.age }}</span>
-          <span v-if="pet.size" class="tag size-tag">{{ pet.size }}</span>
+          <span v-if="pet.gender" class="tag gender-tag" :data-gender="pet.gender">{{ translate('gender', pet.gender) }}</span>
+          <span v-if="pet.age" class="tag age-tag">{{ translateAge(pet.age) }}</span>
+          <span v-if="pet.size" class="tag size-tag">{{ translate('size', pet.size) }}</span>
         </div>
         <img :src="pet.image" :alt="pet.name" loading="lazy" />
         <div :class="['grid-card-body', getRandomPetClass(pet.uuid)]">
@@ -56,6 +56,7 @@
 // ============================================================
 import { computed, ref, onMounted, onUnmounted, nextTick } from 'vue'
 import { useLang } from '../composables/useLang'
+import { translations, getTranslate, getTranslateAge } from '../composables/i18n'
 
 // ============================================================
 //  КОНСТАНТЫ
@@ -121,6 +122,8 @@ export default {
     //  ЯЗЫК
     // ============================================================
     const { lang } = useLang()
+    const translate = (category, key) => getTranslate(lang.value, category, key)
+    const translateAge = (ageStr) => getTranslateAge(lang.value, ageStr)
 
     // ============================================================
     //  СОСТОЯНИЕ
@@ -361,6 +364,8 @@ export default {
       
       // Язык
       lang,
+      translate,
+      translateAge,
 
       // Состояние
       isLoading,

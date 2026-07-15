@@ -10,9 +10,9 @@
         <div v-for="(pet, index) in randomPets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
           <a :href="`${baseUrl}${lang}/pets/${pet.petType}/${pet.uuid}`" class="grid-card">
             <div class="grid-meta">
-              <span v-if="pet.gender" class="tag gender-tag" :data-gender="pet.gender">{{ pet.gender }}</span>
-              <span v-if="pet.age" class="tag age-tag">{{ pet.age }}</span>
-              <span v-if="pet.size" class="tag size-tag">{{ pet.size }}</span>
+              <span v-if="pet.gender" class="tag gender-tag" :data-gender="pet.gender">{{ translate('gender', pet.gender) }}</span>
+              <span v-if="pet.age" class="tag age-tag">{{ translateAge(pet.age) }}</span>
+              <span v-if="pet.size" class="tag size-tag">{{ translate('size', pet.size) }}</span>
             </div>
             <img :src="pet.image" :alt="pet.name" loading="lazy" />
             <div :class="['grid-card-body', getRandomClass(pet.uuid)]">
@@ -30,7 +30,7 @@
                   <path d="M5 12h14" />
                 </svg>
               </div>
-              <span class="load-more-text">Посмотреть ещё</span>
+              <span class="load-more-text">{{ translate('ui', 'Посмотреть ещё') }}</span>
             </div>
           </div>
         </div>
@@ -50,6 +50,7 @@
 // ============================================================
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useLang } from '../composables/useLang'
+import { translations, getTranslate, getTranslateAge } from '../composables/i18n'
 
 // ============================================================
 //  КОНСТАНТЫ
@@ -131,6 +132,8 @@ export default {
     //  ЯЗЫК
     // ============================================================
     const { lang } = useLang()
+    const translate = (category, key) => getTranslate(lang.value, category, key)
+    const translateAge = (ageStr) => getTranslateAge(lang.value, ageStr)
 
     // ============================================================
     //  СОСТОЯНИЕ
@@ -335,6 +338,8 @@ export default {
       
       // Язык
       lang,
+      translate,
+      translateAge,
 
       // Состояние
       isLoading,

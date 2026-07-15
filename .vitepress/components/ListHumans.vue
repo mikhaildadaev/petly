@@ -4,13 +4,13 @@
         <div class="filter-chips">
           <button v-for="option in experienceOptions" :key="option.value" class="chip" :class="{ active: filters.experience[option.value] }" @click="toggleFilter('experience', option.value)" :title="option.label" v-html="option.icon"/>
         </div>
-        <span class="filter-label">Опыт</span>
+        <span class="filter-label">{{ translate('filter', 'Опыт') }}</span>
       </div>
       <div class="filter-group">
         <div class="filter-chips">
           <button v-for="option in directionOptions" :key="option.value" class="chip" :class="{ active: filters.direction[option.value] }" @click="toggleFilter('direction', option.value)" :title="option.label" v-html="option.icon"/>
         </div>
-        <span class="filter-label">Направление</span>
+        <span class="filter-label">{{ translate('filter', 'Направление') }}</span>
       </div>
       <button v-if="!areAllActive" class="btn-reset-compact" @click="resetFilters" title="Включить все фильтры">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -20,14 +20,14 @@
           <path d="M10 11v6" />
           <path d="M14 11v6" />
         </svg>
-        СБРОСИТЬ
+        {{ translate('filter', 'Сбросить') }}
       </button>
     </div>
   <div v-if="!isMobile" class="grid-cards">
     <a v-for="human in paginatedHumans" :key="human.uuid" :href="`${baseUrl}${lang}/humans/${humanType}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
       <div class="grid-meta">
-        <span v-if="human.direction" class="tag direction-tag">{{ human.direction }}</span>
-        <span v-if="human.experience" class="tag experience-tag">{{ human.experience }}</span>
+        <span v-if="human.direction" class="tag direction-tag">{{ translateDirection(human.direction) }}</span>
+        <span v-if="human.experience" class="tag experience-tag">{{ translate('experience', human.experience) }}</span>
       </div>
       <img :src="human.image" :alt="human.name" loading="lazy" />
       <div :class="['grid-card-body', getRandomHumanClass(human.uuid)]">
@@ -43,8 +43,8 @@
             <path d="M5 12h14" />
           </svg>
         </div>
-        <span class="load-more-text">Загрузить ещё</span>
-        <span class="load-more-count">{{ remaining }} осталось</span>
+        <span class="load-more-text">{{ translate('ui', 'Загрузить ещё') }}</span>
+        <span class="load-more-count">{{ remaining }} {{ translate('ui', 'осталось') }}</span>
         <div class="load-more-progress">
           <div class="progress-bar" :style="{ width: `${(visibleCount / filteredHumans.length) * 100}%` }"></div>
         </div>
@@ -62,8 +62,8 @@
         <div v-for="(human, index) in paginatedHumans" :key="human.uuid" class="carousel-slide" :class="{ center: index === currentIndex }" >
           <a :href="`${baseUrl}${lang}/humans/${humanType}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
             <div class="grid-meta">
-              <span v-if="human.direction" class="tag direction-tag">{{ human.direction }}</span>
-              <span v-if="human.experience" class="tag experience-tag">{{ human.experience }}</span>
+              <span v-if="human.direction" class="tag direction-tag">{{ translateDirection(human.direction) }}</span>
+              <span v-if="human.experience" class="tag experience-tag">{{ translate('experience', human.experience) }}</span>
             </div>
             <img :src="human.image" :alt="human.name" loading="lazy" />
             <div :class="['grid-card-body', getRandomHumanClass(human.uuid)]">
@@ -81,8 +81,8 @@
                   <path d="M5 12h14" />
                 </svg>
               </div>
-              <span class="load-more-text">Загрузить ещё</span>
-              <span class="load-more-count">{{ remaining }} осталось</span>
+              <span class="load-more-text">{{ translate('ui', 'Загрузить ещё') }}</span>
+              <span class="load-more-count">{{ remaining }} {{ translate('ui', 'осталось') }}</span>
               <div class="load-more-progress">
                 <div class="progress-bar" :style="{ width: `${(visibleCount / filteredHumans.length) * 100}%` }"></div>
               </div>
@@ -98,7 +98,7 @@
     </div>
   </div>
   <div v-if="filteredHumans.length === 0 && !isLoading" class="no-results">
-    <p>По выбранным фильтрам никого не найдено</p>
+    <p>{{ translate('ui', 'Нет результатов') }}</p>ы
   </div>
 </template>
 
@@ -108,6 +108,7 @@
 // ============================================================
 import { computed, ref, onMounted, watch, nextTick, onUnmounted, reactive } from 'vue'
 import { useLang } from '../composables/useLang'
+import { translations, getTranslate, getTranslateDirection } from '../composables/i18n'
 
 // ============================================================
 //  КОНСТАНТЫ
@@ -197,6 +198,8 @@ export default {
     //  ЯЗЫК
     // ============================================================
     const { lang } = useLang()
+    const translate = (category, key) => getTranslate(lang.value, category, key)
+    const translateDirection = (directionStr) => getTranslateDirection(lang.value, directionStr)
 
     // ============================================================
     //  СОСТОЯНИЕ
@@ -223,55 +226,36 @@ export default {
     // ============================================================
     //  ФИЛЬТРЫ (ЧЕКБОКСЫ)
     // ============================================================
-    const experienceOptions = [
-      { 
-        value: 'Начинающий', 
-        label: 'Начинающий', 
-        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="8" cy="9" r="1.5" fill="currentColor"/><circle cx="16" cy="9" r="1.5" fill="currentColor"/><path d="M8 14c1.5 2 3 2 4 2s2.5 0 4-2"/></svg>`
-      },
-      { 
-        value: 'Опытный', 
-        label: 'Опытный', 
-        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/><circle cx="9" cy="10" r="1.5" fill="currentColor"/><circle cx="15" cy="10" r="1.5" fill="currentColor"/></svg>`
-      },
-      { 
-        value: 'Эксперт', 
-        label: 'Эксперт', 
-        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/><path d="M8 4L6 6"/><path d="M16 4l2 2"/><circle cx="9" cy="10" r="1.5" fill="currentColor"/><circle cx="15" cy="10" r="1.5" fill="currentColor"/></svg>`
+    const EXPERIENCE_KEYS = ['Начинающий', 'Опытный', 'Эксперт']
+    const DIRECTION_KEYS = ['Выгул', 'Социализация', 'Лечение', 'Передержка', 'Креатив', 'Фандрайзинг']
+
+    const experienceOptions = computed(() => {
+      const experienceIcons = {
+        'Начинающий': `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="8" cy="9" r="1.5" fill="currentColor"/><circle cx="16" cy="9" r="1.5" fill="currentColor"/><path d="M8 14c1.5 2 3 2 4 2s2.5 0 4-2"/></svg>`,
+        'Опытный': `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/><circle cx="9" cy="10" r="1.5" fill="currentColor"/><circle cx="15" cy="10" r="1.5" fill="currentColor"/></svg>`,
+        'Эксперт': `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/><path d="M8 4L6 6"/><path d="M16 4l2 2"/><circle cx="9" cy="10" r="1.5" fill="currentColor"/><circle cx="15" cy="10" r="1.5" fill="currentColor"/></svg>`
       }
-    ]
-    const directionOptions = [
-      { 
-        value: 'Выгул', 
-        label: 'Выгул', 
-        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`
-      },
-      { 
-        value: 'Социализация', 
-        label: 'Социализация', 
-        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>`
-      },
-      { 
-        value: 'Лечение', 
-        label: 'Лечение', 
-        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9-4-18-3 9H2"/></svg>`
-      },
-      { 
-        value: 'Передержка', 
-        label: 'Передержка', 
-        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1"/></svg>`
-      },
-      { 
-        value: 'Креатив', 
-        label: 'Креатив', 
-        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>`
-      },
-      { 
-        value: 'Фандрайзинг', 
-        label: 'Фандрайзинг', 
-        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v12"/><path d="M8 8l4 4 4-4"/></svg>`
+      return EXPERIENCE_KEYS.map(key => ({
+        value: key,
+        label: translate('experience', key),
+        icon: experienceIcons[key] || ''
+      }))
+    })
+    const directionOptions = computed(() => {
+      const directionIcons = {
+        'Выгул': `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`,
+        'Социализация': `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>`,
+        'Лечение': `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9-4-18-3 9H2"/></svg>`,
+        'Передержка': `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1"/></svg>`,
+        'Креатив': `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>`,
+        'Фандрайзинг': `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v12"/><path d="M8 8l4 4 4-4"/></svg>`
       }
-    ]
+      return DIRECTION_KEYS.map(key => ({
+        value: key,
+        label: translate('direction', key),
+        icon: directionIcons[key] || ''
+      }))
+    })
 
     // Состояние фильтров (все активны по умолчанию)
     const filters = reactive({
@@ -652,6 +636,8 @@ export default {
 
       // Язык
       lang,
+      translate,
+      translateDirection,
 
       // Состояние
       isLoading,

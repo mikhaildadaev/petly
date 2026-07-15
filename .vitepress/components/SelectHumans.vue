@@ -54,6 +54,7 @@
 // ============================================================
 import { computed, ref, onMounted, onUnmounted, nextTick } from 'vue'
 import { useLang } from '../composables/useLang'
+import { translations, getTranslate } from '../composables/i18n'
 
 // ============================================================
 //  КОНСТАНТЫ
@@ -135,6 +136,7 @@ export default {
     //  ЯЗЫК
     // ============================================================
     const { lang } = useLang()
+    const translate = (category, key) => getTranslate(lang.value, category, key)
 
     // ============================================================
     //  СОСТОЯНИЕ
@@ -374,6 +376,7 @@ export default {
       
       // Язык
       lang,
+      translate,
       
       // Состояние
       isLoading,

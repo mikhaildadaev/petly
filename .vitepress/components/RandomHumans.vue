@@ -10,9 +10,8 @@
         <div v-for="(human, index) in randomHumans" :key="human.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
           <a :href="`${baseUrl}${lang}/humans/${human.humanType}/${human.uuid}`" class="grid-card">
             <div class="grid-meta">
-              <span v-if="human.gender" class="tag gender-tag" :data-gender="human.gender">{{ human.gender }}</span>
-              <span v-if="human.age" class="tag age-tag">{{ human.age }}</span>
-              <span v-if="human.size" class="tag size-tag">{{ human.size }}</span>
+              <span v-if="human.direction" class="tag direction-tag">{{ translateDirection(human.direction) }}</span>
+              <span v-if="human.experience" class="tag experience-tag">{{ translate('experience', human.experience) }}</span>
             </div>
             <img :src="human.image" :alt="human.name" loading="lazy" />
             <div :class="['grid-card-body', getRandomClass(human.uuid)]">
@@ -30,7 +29,7 @@
                   <path d="M5 12h14" />
                 </svg>
               </div>
-              <span class="load-more-text">Посмотреть ещё</span>
+              <span class="load-more-text">{{ translate('ui', 'Посмотреть ещё') }}</span>
             </div>
           </div>
         </div>
@@ -50,6 +49,7 @@
 // ============================================================
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useLang } from '../composables/useLang'
+import { translations, getTranslate, getTranslateDirection} from '../composables/i18n'
 
 // ============================================================
 //  КОНСТАНТЫ
@@ -131,6 +131,8 @@ export default {
     //  ЯЗЫК
     // ============================================================
     const { lang } = useLang()
+    const translate = (category, key) => getTranslate(lang.value, category, key)
+    const translateDirection = (directionStr) => getTranslateDirection(lang.value, directionStr)
 
     // ============================================================
     //  СОСТОЯНИЕ
@@ -294,9 +296,8 @@ export default {
               name: fm.title || '',
               description: fm.description || '',
               gender: fm.gender || '',
-              age: fm.age || '',
-              size: fm.size || '',
-              tags: fm.tags || [],
+              direction: fm.direction || '',
+              experience: fm.experience || '',
               image: processImage(fm.image, props.humanType, uuid),
               humanType: props.humanType,
             }
@@ -335,6 +336,8 @@ export default {
       
       // Язык
       lang,
+      translate,
+      translateDirection,
 
       // Состояние
       isLoading,
