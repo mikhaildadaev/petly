@@ -107,6 +107,7 @@
 //  ИМПОРТЫ
 // ============================================================
 import { computed, ref, onMounted, watch, nextTick, onUnmounted, reactive } from 'vue'
+import { useLang } from '../composables/useLang'
 
 // ============================================================
 //  КОНСТАНТЫ
