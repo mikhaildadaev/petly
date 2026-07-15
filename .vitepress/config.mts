@@ -102,24 +102,24 @@ export default defineConfig({
             link: '/de/chance/favorites' 
           }
         ],
-        darkModeSwitchLabel: "Внешний вид",
-        darkModeSwitchTitle: "Переключиться на тёмную тему",
-        lightModeSwitchTitle: "Переключиться на светлую тему",
-        sidebarMenuLabel: "Меню",
-        returnToTopLabel: "Вернуться наверх",
+        darkModeSwitchLabel: "Design",
+        darkModeSwitchTitle: "Zum dunklen Thema wechseln",
+        lightModeSwitchTitle: "Zum hellen Thema wechseln",
+        sidebarMenuLabel: "Menü",
+        returnToTopLabel: "Nach oben",
         outline: {
-          label: "Содержание страницы"
+          label: "Inhaltsverzeichnis"
         },
         lastUpdated: {
-          text: "Последние изменения",
+          text: "Zuletzt aktualisiert",
           formatOptions: {
             dateStyle: "short",
             timeStyle: "short"
           }
         },
         docFooter: {
-          prev: "Предыдущая страница",
-          next: "Следующая страница"
+          prev: "Vorherige Seite",
+          next: "Nächste Seite"
         },
         footer: {
           message: 'Jedes Tier verdient ein Zuhause',
