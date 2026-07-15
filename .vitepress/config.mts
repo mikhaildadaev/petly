@@ -205,7 +205,7 @@ export default defineConfig({
             ]
           },
           {
-            text: 'Советы',
+            text: 'Tips',
             items: [
               { text: 'Take a pet', link: '/en/recommendations/go' },
               { text: 'Health', link: '/en/recommendations/health' },
