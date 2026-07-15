@@ -8,7 +8,7 @@
       </button>
       <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
         <div v-for="(pet, index) in randomPets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-          <a :href="`${baseUrl}${pet.petType}/${pet.uuid}`" class="grid-card">
+          <a :href="`${baseUrl}${lang}/pets/${pet.petType}/${pet.uuid}`" class="grid-card">
             <div class="grid-meta">
               <span v-if="pet.gender" class="tag gender-tag" :data-gender="pet.gender">{{ pet.gender }}</span>
               <span v-if="pet.age" class="tag age-tag">{{ pet.age }}</span>
@@ -45,6 +45,7 @@
 //  ИМПОРТЫ
 // ============================================================
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useLang } from '../composables/useLang'
 
 // ============================================================
 //  КОНСТАНТЫ
@@ -57,6 +58,9 @@ let previousColor = 0
 //  УТИЛИТЫ
 // ============================================================
 
+/**
+ * Обработка пути к изображению
+ */
 const processImage = (imagePath, type, uuid) => {
   if (!imagePath) {
     return uuid ? `${baseUrl}images/${type}/${uuid}.webp` : `${baseUrl}placeholder-${type}.svg`
@@ -70,6 +74,9 @@ const processImage = (imagePath, type, uuid) => {
   return imagePath
 }
 
+/**
+ * Перемешивание массива (алгоритм Фишера-Йетса)
+ */
 const shuffleArray = (array) => {
   const shuffled = [...array]
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -79,6 +86,9 @@ const shuffleArray = (array) => {
   return shuffled
 }
 
+/**
+ * Получение случайного класса для карточки
+ */
 const getRandomClass = (uuid) => {
   if (!uuid) return 'rand-01'
   if (randomClassCache.has(uuid)) {
@@ -130,6 +140,14 @@ export default {
   },
 
   setup(props) {
+    // ============================================================
+    //  ЯЗЫК
+    // ============================================================
+    const { lang } = useLang()
+
+    // ============================================================
+    //  СОСТОЯНИЕ
+    // ============================================================
     const randomPets = ref([])
     const isLoading = ref(true)
 
@@ -142,11 +160,18 @@ export default {
     const touchStartY = ref(0)
     const isSwiping = ref(false)
 
+    // ============================================================
+    //  ВЫЧИСЛЯЕМЫЕ
+    // ============================================================
+
     const carouselTotalSlides = computed(() => {
-      return randomPets.value.length + 1 // +1 за карточку-ссылку
+      return randomPets.value.length + 1
     })
 
-    // --- Карусель ---
+    // ============================================================
+    //  МЕТОДЫ (КАРУСЕЛЬ)
+    // ============================================================
+
     const scrollToSlide = (index) => {
       if (!carouselRef.value) return
       const container = carouselRef.value
@@ -182,7 +207,10 @@ export default {
       scrollToSlide(index)
     }
 
-    // --- Свайп ---
+    // ============================================================
+    //  МЕТОДЫ (СВАЙП)
+    // ============================================================
+
     const handleTouchStart = (e) => {
       const touch = e.touches[0]
       touchStartX.value = touch.clientX
@@ -217,54 +245,90 @@ export default {
       touchStartY.value = 0
     }
 
-    // --- Загрузка данных ---
+    // ============================================================
+    //  RESIZE
+    // ============================================================
+    let resizeTimeout = null
+
+    const handleResize = () => {
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout)
+      }
+      resizeTimeout = setTimeout(() => {
+        checkMobile()
+        resizeTimeout = null
+      }, 100)
+    }
+
+    // ============================================================
+    //  ЖИЗНЕННЫЙ ЦИКЛ
+    // ============================================================
+
     onMounted(async () => {
-  try {
-    // 1. Загружаем модули так же, как в ListPets
-    const allModules = import.meta.glob('/ru/*/*.md')
-    const filteredModules = Object.entries(allModules).filter(([path]) => {
-      // Фильтруем по petType, как в рабочем компоненте
-      return path.includes(`/ru/${props.petType}/`) && !path.endsWith(`${props.petType}_index.md`)
+      try {
+        const modules = import.meta.glob('/{ru,en,de}/pets/*/*.md')
+        const filteredModules = Object.entries(modules).filter(([path]) => {
+          return path.includes(`/${lang.value}/pets/${props.petType}/`) && 
+                 !path.endsWith(`${props.petType}_index.md`)
+        })
+
+        const loaded = await Promise.all(
+          filteredModules.map(async ([path, loader]) => {
+            const mod = await loader()
+            const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
+            const uuid = fm.uuid || path.replace(`/${lang.value}/pets/${props.petType}/`, '').replace('.md', '')
+
+            return {
+              uuid,
+              name: fm.title || '',
+              description: fm.description || '',
+              gender: fm.gender || '',
+              age: fm.age || '',
+              size: fm.size || '',
+              tags: fm.tags || [],
+              image: processImage(fm.image, props.petType, uuid),
+              petType: props.petType,
+            }
+          })
+        )
+
+        // Перемешиваем и берем нужное количество
+        const shuffled = shuffleArray(loaded)
+        randomPets.value = shuffled.slice(0, props.count)
+
+        // Сбрасываем индекс после загрузки
+        currentIndex.value = 0
+      } catch (error) {
+        console.error('Ошибка загрузки данных:', error)
+      } finally {
+        isLoading.value = false
+      }
     })
 
-    const loaded = await Promise.all(
-      filteredModules.map(async ([path, loader]) => {
-        const mod = await loader()
-        const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-        const uuid = fm.uuid || path.replace(`/ru/${props.petType}/`, '').replace('.md', '')
-
-        return {
-          uuid,
-          name: fm.title || '',
-          description: fm.description || '',
-          gender: fm.gender || '',
-          age: fm.age || '',
-          size: fm.size || '',
-          tags: fm.tags || [],
-          image: processImage(fm.image, props.petType, uuid),
-          petType: props.petType,
+    // --- Unmount ---
+    onUnmounted(() => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', handleResize)
+        if (resizeTimeout) {
+          clearTimeout(resizeTimeout)
         }
-      })
-    )
+      }
+    })
 
-    // Перемешиваем и берем нужное количество
-    const shuffled = shuffleArray(loaded)
-    randomPets.value = shuffled.slice(0, props.count)
-
-    // Сбрасываем индекс после загрузки
-    currentIndex.value = 0
-  } catch (error) {
-    console.error('Ошибка загрузки данных:', error)
-  } finally {
-    isLoading.value = false
-  }
-})
-
+    // ============================================================
+    //  ВОЗВРАТ
+    // ============================================================
     return {
+      // Данные
       randomPets,
+      
+      // Язык
+      lang,
+      
+      // Состояние
       isLoading,
-      baseUrl,
-      getRandomClass,
+      
+      // Карусель
       carouselRef,
       currentIndex,
       carouselTotalSlides,
@@ -272,9 +336,17 @@ export default {
       nextSlide,
       prevSlide,
       goToSlide,
+      
+      // Свайп
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
+      touchStartX,
+      touchStartY,
+      
+      // Прочее
+      baseUrl,
+      getRandomClass,
       linkUrl: props.linkUrl,
       linkText: props.linkText,
       linkIcon: props.linkIcon,
@@ -282,46 +354,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-/* ============================================================
-   КАРУСЕЛЬ
-   ============================================================ */
-
-/* --- Карточка-ссылка --- */
-.link-card {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--vp-c-bg-soft);
-  border: 2px dashed var(--vp-c-border);
-  min-height: 280px;
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
-.link-card:hover {
-  border-color: var(--vp-c-brand);
-  transform: scale(1.02);
-  background: var(--vp-c-bg);
-}
-.link-card-content {
-  text-align: center;
-  padding: 20px;
-}
-.link-icon {
-  font-size: 48px;
-  margin-bottom: 12px;
-}
-.link-text {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--vp-c-text);
-  margin-bottom: 8px;
-}
-.link-arrow {
-  font-size: 32px;
-  color: var(--vp-c-brand);
-  animation: arrowMove 1.5s ease-in-out infinite;
-}
-
-</style>
