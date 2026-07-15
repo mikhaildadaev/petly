@@ -4,6 +4,7 @@ import CardPetHero from '../components/CardPetHero.vue'
 import GalleryMedia from '../components/GalleryMedia.vue'
 import ListHumans from '../components/ListHumans.vue'
 import ListPets from '../components/ListPets.vue'
+import RandomHumans from '../components/RandomHumans.vue'
 import RandomPets from '../components/RandomPets.vue'
 import SelectHumans from '../components/SelectHumans.vue'
 import SelectPets from '../components/SelectPets.vue'
@@ -17,6 +18,7 @@ export default {
     app.component('GalleryMedia', GalleryMedia)
     app.component('ListHumans', ListHumans)
     app.component('ListPets', ListPets)
+    app.component('RandomHumans', RandomHumans)
     app.component('RandomPets', RandomPets)
     app.component('SelectHumans', SelectHumans)
     app.component('SelectPets', SelectPets)
