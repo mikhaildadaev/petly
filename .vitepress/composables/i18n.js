@@ -51,7 +51,7 @@ export const translations = {
       'Нет результатов': 'Нет результатов',
       'Включить все фильтры': 'Включить все фильтры',
       'Добавить в избранное': 'В любимцы',
-      'Нет назначенных опекунов': 'Нет назначенных опекунов',
+      'Нет назначенных волонтеров': 'Нет назначенных волонтеров',
       'Нет выбранных любимцев': 'Нет выбранных любимцев'
     }
   },
@@ -107,7 +107,7 @@ export const translations = {
       'Нет результатов': 'No results found',
       'Включить все фильтры': 'Enable all filters',
       'Добавить в избранное': 'Add to favorites',
-      'Нет назначенных опекунов': 'No assigned guardians',
+      'Нет назначенных волонтеров': 'No assigned volunteers',
       'Нет выбранных любимцев': 'No favorites selected'
     }
   },
@@ -163,7 +163,7 @@ export const translations = {
       'Нет результатов': 'Keine Ergebnisse gefunden',
       'Включить все фильтры': 'Alle Filter aktivieren',
       'Добавить в избранное': 'Zu Favoriten',
-      'Нет назначенных опекунов': 'Keine zugewiesenen Betreuer',
+      'Нет назначенных волонтеров': 'Keine zugewiesenen Freiwilligen',
       'Нет выбранных любимцев': 'Keine Favoriten ausgewählt'
     }
   }
