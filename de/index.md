@@ -26,14 +26,14 @@ features:
 ---
 
 
-## Кошки
+## Katzen
 
 <RandomPets petType="cats" :count="8"/>
 
-## Собаки
+## Hunde
 
 <RandomPets petType="dogs" :count="8"/>
 
-## Волонтеры
+## Freiwillige
 
 <RandomHumans humanType="volunteers" :count="8"/>

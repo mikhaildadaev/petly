@@ -1,8 +1,8 @@
 ---
-title: Здоровье
-description: Как сохранить здоровье питомца — советы по уходу, питанию и профилактике.
+title: Gesundheit
+description: Wie Sie die Gesundheit Ihres Tieres erhalten – Tipps zur Pflege, Ernährung und Vorsorge.
 ---
 
-# Здоровье
+# Gesundheit
 
 <StyleImagePage src="/assets/webp/catWithDoctor.webp" width="320" float="center"/>

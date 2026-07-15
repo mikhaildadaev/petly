@@ -1,8 +1,8 @@
 ---
-title: Права и защита
-description: Как защитить своего питомца и что говорит закон о животных.
+title: Rechte & Schutz
+description: Wie Sie Ihr Tier schützen und was das Gesetz über Tiere sagt.
 ---
 
-# Права и защита
+# Rechte & Schutz
 
 <StyleImagePage src="/assets/webp/dogWithMan.webp" width="320" float="center"/>

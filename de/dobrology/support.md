@@ -1,8 +1,8 @@
 ---
-title: Поддержать
-description: Корм, лекарства, лежанки и игрушки — каждая вещь помогает животным жить лучше.
+title: Unterstützen
+description: Futter, Medikamente, Körbchen und Spielzeug – jeder Gegenstand hilft den Tieren, ein besseres Leben zu führen.
 ---
 
-# Поддержать
+# Unterstützen
 
 <StyleImagePage src="/assets/webp/womanWithRug.webp" width="320" float="center"/>

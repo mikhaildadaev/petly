@@ -1,9 +1,9 @@
 ---
-title: Волонтёры
-description: Люди, которые помогают делом
+title: Freiwillige
+description: Menschen, die mit Taten helfen.
 ---
 
-# Волонтеры
+# Freiwillige
 
 <ListHumans :humanType="'volunteers'"/>
 

@@ -1,8 +1,8 @@
 ---
-title: Неприятности
-description: Как действовать в экстренной ситуации — полезные советы для владельцев животных.
+title: Probleme
+description: Wie Sie in Notfällen handeln – nützliche Tipps für Tierhalter.
 ---
 
-# Неприятности
+# Probleme
 
 <StyleImagePage src="/assets/webp/responsibility.webp" width="320" float="right"/>

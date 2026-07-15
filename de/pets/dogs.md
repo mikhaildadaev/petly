@@ -1,9 +1,9 @@
 ---
-title: Собаки
-description: Собака — лучший друг человека.
+title: Hunde
+description: Der Hund ist der beste Freund des Menschen.
 ---
 
-# Собаки
+# Hunde
 
 <ListPets :petType="'dogs'"/>
 
