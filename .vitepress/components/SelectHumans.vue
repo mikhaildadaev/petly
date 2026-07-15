@@ -3,8 +3,8 @@
     <div v-if="!isMobile" class="grid-cards">
       <a v-for="human in humans" :key="human.uuid" :href="`${baseUrl}${lang}/humans/${humanType}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
         <div class="grid-meta">
-          <span v-if="human.direction" class="tag direction-tag">{{ human.direction }}</span>
-          <span v-if="human.experience" class="tag experience-tag">{{ human.experience }}</span>
+          <span v-if="human.direction" class="tag direction-tag">{{ translateDirection(human.direction) }}</span>
+          <span v-if="human.experience" class="tag experience-tag">{{ translate('experience', human.experience) }}</span>
         </div>
         <img :src="human.image" :alt="human.name" loading="lazy" />
         <div :class="['grid-card-body', getRandomVolunteerClass(human.uuid)]">
@@ -24,8 +24,8 @@
           <div v-for="(human, index) in humans" :key="human.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
             <a :href="`${baseUrl}${lang}/humans/${humanType}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
               <div class="grid-meta">
-                <span v-if="human.direction" class="tag direction-tag">{{ human.direction }}</span>
-                <span v-if="human.experience" class="tag experience-tag">{{ human.experience }}</span>
+                <span v-if="human.direction" class="tag direction-tag">{{ translateDirection(human.direction) }}</span>
+                <span v-if="human.experience" class="tag experience-tag">{{ translate('experience', human.experience) }}</span>
               </div>
               <img :src="human.image" :alt="human.name" loading="lazy" />
               <div :class="['grid-card-body', getRandomVolunteerClass(human.uuid)]">
@@ -43,8 +43,8 @@
       </div>
     </div>
   </div>
-  <div v-else-if="humans && humans.length === 0" class="no-humans">
-    <p>Нет назначенных опекунов</p>
+  <div v-else-if="humans && humans.length === 0" class="no-results">
+    <p>{{ translate('ui', 'Нет назначенных опекунов') }}</p>
   </div>
 </template>
 
@@ -54,7 +54,7 @@
 // ============================================================
 import { computed, ref, onMounted, onUnmounted, nextTick } from 'vue'
 import { useLang } from '../composables/useLang'
-import { translations, getTranslate } from '../composables/i18n'
+import { translations, getTranslate, getTranslateDirection } from '../composables/i18n'
 
 // ============================================================
 //  КОНСТАНТЫ
@@ -137,6 +137,7 @@ export default {
     // ============================================================
     const { lang } = useLang()
     const translate = (category, key) => getTranslate(lang.value, category, key)
+    const translateDirection = (directionStr) => getTranslateDirection(lang.value, directionStr)
 
     // ============================================================
     //  СОСТОЯНИЕ
@@ -377,6 +378,7 @@ export default {
       // Язык
       lang,
       translate,
+      translateDirection,
       
       // Состояние
       isLoading,

@@ -98,7 +98,7 @@
     </div>
   </div>
   <div v-if="filteredHumans.length === 0 && !isLoading" class="no-results">
-    <p>{{ translate('ui', 'Нет результатов') }}</p>ы
+    <p>{{ translate('ui', 'Нет результатов') }}</p>
   </div>
 </template>
 
