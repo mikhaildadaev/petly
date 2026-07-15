@@ -5,11 +5,11 @@ description: Tiere, die Ihr Herz erobert haben.
 
 # Favoriten ❤️
 
-Сердце — удивительная вещь. Оно не спрашивает, кто ты, где ты и почему. Оно просто начинает биться быстрее, когда видит те самые глаза, ту самую улыбку, тот самый взгляд, от которого становится тепло.
+Das Herz ist ein erstaunliches Ding. Es fragt nicht, wer du bist, wo du bist und warum. Es schlägt einfach schneller, wenn es jene Augen sieht, jenes Lächeln, jenen Blick, der einem so warm ums Herz werden lässt.
 
-Данный раздел - ваш личный уголок. Здесь живут только те, кто уже успел задеть что-то внутри вас. Те, чьи фотографии вы пересматриваете по несколько раз. Те, кого вы уже мысленно назвали своим.
+Dieser Bereich ist deine ganz persönliche Ecke. Hier leben nur diejenigen, die bereits etwas in dir berührt haben. Diejenigen, deren Fotos du immer wieder anschaust. Diejenigen, die du in Gedanken bereits dein Eigen genannt hast.
 
-Вернитесь к ним. Полистайте карточки. Может быть, именно сегодня вы решите: **«Это мой питомец»**.
+Komm zurück zu ihnen. Blättere durch die Karten. Vielleicht entscheidest du genau heute: **«Das ist mein Tier.»**
 
 ## Katzen
 
