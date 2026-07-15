@@ -30,7 +30,7 @@
                   <path d="M5 12h14" />
                 </svg>
               </div>
-              <span class="load-more-text">{{ translate('ui', 'Посмотреть ещё') }}</span>
+              <span class="load-more-text">{{ translate('ui', 'Перейти в раздел') }}</span>
             </div>
           </div>
         </div>
@@ -41,6 +41,9 @@
         </svg>
       </button>
     </div>
+  </div>
+  <div v-else-if="randomPets && randomPets.length === 0" class="no-results">
+    <p>{{ translate('ui', 'Нет результатов') }}</p>
   </div>
 </template>
 

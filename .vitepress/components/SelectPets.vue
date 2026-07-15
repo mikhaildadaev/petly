@@ -1,7 +1,7 @@
 <template>
-  <div v-if="pets && pets.length > 0" class="grid-list">
+  <div v-if="selectPets && selectPets.length > 0" class="grid-list">
     <div v-if="!isMobile" class="grid-cards">
-      <a v-for="pet in pets" :key="pet.uuid" :href="`${baseUrl}${lang}/pets/${petType}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+      <a v-for="pet in selectPets" :key="pet.uuid" :href="`${baseUrl}${lang}/pets/${petType}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
         <div class="grid-meta">
           <span v-if="pet.gender" class="tag gender-tag" :data-gender="pet.gender">{{ translate('gender', pet.gender) }}</span>
           <span v-if="pet.age" class="tag age-tag">{{ translateAge(pet.age) }}</span>
@@ -22,7 +22,7 @@
           </svg>
         </button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-          <div v-for="(pet, index) in pets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
+          <div v-for="(pet, index) in selectPets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
             <a :href="`${baseUrl}${lang}/pets/${petType}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
               <div class="grid-meta">
                 <span v-if="pet.gender" class="tag gender-tag" :data-gender="pet.gender">{{ translate('gender', pet.gender) }}</span>
@@ -37,7 +37,7 @@
             </a>
           </div>
         </div>
-        <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= (pets ? pets.length - 1 : 0)">
+        <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= (selectPets ? selectPets.length - 1 : 0)">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
             <path d="M9 18l6-6-6-6" />
           </svg>
@@ -45,7 +45,7 @@
       </div>
     </div>
   </div>
-  <div v-else-if="pets && pets.length === 0" class="no-results">
+  <div v-else-if="selectPets && selectPets.length === 0" class="no-results">
     <p>{{ translate('ui', 'Нет выбранных любимцев') }}</p>
   </div>
 </template>
@@ -103,7 +103,7 @@ const getAgeCategory = (ageStr) => {
 //  КОМПОНЕНТ
 // ============================================================
 export default {
-  name: 'ListPets',
+  name: 'SelectPets',
 
   props: {
     petUUIDs: {
@@ -160,7 +160,7 @@ export default {
     //  ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
     // ============================================================
 
-    const pets = computed(() => {
+    const selectPets = computed(() => {
       if (isLoading.value) return []
       if (!allpets.value || allpets.value.length === 0) return []
       if (!props.petUUIDs || props.petUUIDs.length === 0) return []
@@ -195,7 +195,7 @@ export default {
 
     // --- Карусель ---
     const scrollToSlide = (index) => {
-      if (!carouselRef.value || !pets.value || pets.value.length === 0) return
+      if (!carouselRef.value || !selectPets.value || selectPets.value.length === 0) return
       const container = carouselRef.value
       const slides = container.querySelectorAll('.carousel-slide')
       if (!slides.length || index < 0 || index >= slides.length) return
@@ -214,8 +214,8 @@ export default {
     }
 
     const nextSlide = () => {
-      if (!pets.value || pets.value.length === 0) return
-      if (currentIndex.value < pets.value.length - 1) {
+      if (!selectPets.value || selectPets.value.length === 0) return
+      if (currentIndex.value < selectPets.value.length - 1) {
         scrollToSlide(currentIndex.value + 1)
       }
     }
@@ -360,7 +360,7 @@ export default {
     // ============================================================
     return {
       // Данные
-      pets,
+      selectPets,
       
       // Язык
       lang,

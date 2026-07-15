@@ -1,7 +1,7 @@
 <template>
-  <div v-if="humans && humans.length > 0" class="grid-list">
+  <div v-if="selectHumans && selectHumans.length > 0" class="grid-list">
     <div v-if="!isMobile" class="grid-cards">
-      <a v-for="human in humans" :key="human.uuid" :href="`${baseUrl}${lang}/humans/${humanType}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+      <a v-for="human in selectHumans" :key="human.uuid" :href="`${baseUrl}${lang}/humans/${humanType}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
         <div class="grid-meta">
           <span v-if="human.direction" class="tag direction-tag">{{ translateDirection(human.direction) }}</span>
           <span v-if="human.experience" class="tag experience-tag">{{ translate('experience', human.experience) }}</span>
@@ -21,7 +21,7 @@
           </svg>
         </button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-          <div v-for="(human, index) in humans" :key="human.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
+          <div v-for="(human, index) in selectHumans" :key="human.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
             <a :href="`${baseUrl}${lang}/humans/${humanType}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
               <div class="grid-meta">
                 <span v-if="human.direction" class="tag direction-tag">{{ translateDirection(human.direction) }}</span>
@@ -35,7 +35,7 @@
             </a>
           </div>
         </div>
-        <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= (humans ? humans.length - 1 : 0)">
+        <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= (selectHumans ? selectHumans.length - 1 : 0)">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
             <path d="M9 18l6-6-6-6" />
           </svg>
@@ -43,7 +43,7 @@
       </div>
     </div>
   </div>
-  <div v-else-if="humans && humans.length === 0" class="no-results">
+  <div v-else-if="selectHumans && selectHumans.length === 0" class="no-results">
     <p>{{ translate('ui', 'Нет назначенных волонтеров') }}</p>
   </div>
 </template>
@@ -117,7 +117,7 @@ const getExperienceCategory = (expValue) => {
 //  КОМПОНЕНТ
 // ============================================================
 export default {
-  name: 'ListHumans',
+  name: 'SelectHumans',
 
   props: {
     humanUUIDs: {
@@ -174,7 +174,7 @@ export default {
     //  ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
     // ============================================================
 
-    const humans = computed(() => {
+    const selectHumans = computed(() => {
       if (isLoading.value) return []
       if (!allHumans.value || allHumans.value.length === 0) return []
       if (!props.humanUUIDs || props.humanUUIDs.length === 0) return []
@@ -209,7 +209,7 @@ export default {
 
     // --- Карусель ---
     const scrollToSlide = (index) => {
-      if (!carouselRef.value || !humans.value || humans.value.length === 0) return
+      if (!carouselRef.value || !selectHumans.value || selectHumans.value.length === 0) return
       const container = carouselRef.value
       const slides = container.querySelectorAll('.carousel-slide')
       if (!slides.length || index < 0 || index >= slides.length) return
@@ -228,8 +228,8 @@ export default {
     }
 
     const nextSlide = () => {
-      if (!humans.value || humans.value.length === 0) return
-      if (currentIndex.value < humans.value.length - 1) {
+      if (!selectHumans.value || selectHumans.value.length === 0) return
+      if (currentIndex.value < selectHumans.value.length - 1) {
         scrollToSlide(currentIndex.value + 1)
       }
     }
@@ -373,7 +373,7 @@ export default {
     // ============================================================
     return {
       // Данные
-      humans,
+      selectHumans,
       
       // Язык
       lang,
