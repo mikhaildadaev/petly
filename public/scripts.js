@@ -3,7 +3,7 @@
   const base = '/petly/';
   const currentPath = window.location.pathname;
   const savedLang = localStorage.getItem('vitepress-lang');
-  const supportedLangs = ['en', 'ru', 'zh'];
+  const supportedLangs = ['en', 'de', 'ru'];
   const targetLang = (savedLang && supportedLangs.includes(savedLang)) 
     ? savedLang 
     : 'ru';

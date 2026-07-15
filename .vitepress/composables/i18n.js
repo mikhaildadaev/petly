@@ -1,5 +1,5 @@
 export const translations = {
-  de: {
+  ru: {
     filter: {
       'Пол': 'ПОЛ',
       'Размер': 'РАЗМЕР',
@@ -111,7 +111,7 @@ export const translations = {
       'Нет выбранных любимцев': 'No favorites selected'
     }
   },
-  ru: {
+  de: {
     filter: {
       'Пол': 'GESCHLECHT',
       'Размер': 'GRÖSSE',
