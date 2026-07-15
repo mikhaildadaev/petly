@@ -1,8 +1,8 @@
 ---
-title: Присоединиться
-description: Подари свою заботу тем, кто ждёт — стань частью нашего волонтерского движения.
+title: Join us
+description: Share your care with those who are waiting — become part of our volunteer movement.
 ---
 
-# Присоединиться
+# Join us
 
 <StyleImagePage src="/assets/webp/womanWithRug.webp" width="320" float="center"/>

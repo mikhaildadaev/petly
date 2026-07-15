@@ -1,9 +1,9 @@
 ---
-title: Кошки
-description: Пушистые, ласковые и независимые
+title: Cats
+description: Fluffy, affectionate and independent.
 ---
 
-# Кошки
+# Cats
 
 <ListPets :petType="'cats'"/>
 

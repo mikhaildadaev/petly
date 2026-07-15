@@ -1,21 +1,21 @@
 ---
-title: Любимцы
-description: Питомцы, что покорили ваше сердце.
+title: Favorites
+description: Pets that have won your heart.
 ---
 
-# Любимцы ❤️
+# Favorites ❤️
 
-Сердце — удивительная вещь. Оно не спрашивает, кто ты, где ты и почему. Оно просто начинает биться быстрее, когда видит те самые глаза, ту самую улыбку, тот самый взгляд, от которого становится тепло.
+The heart is an amazing thing. It doesn't ask who you are, where you are or why. It just starts beating faster when it sees those eyes, that smile, that look that makes you feel so warm inside.
 
-Данный раздел - ваш личный уголок. Здесь живут только те, кто уже успел задеть что-то внутри вас. Те, чьи фотографии вы пересматриваете по несколько раз. Те, кого вы уже мысленно назвали своим.
+This section is your own personal space. Only those who have already touched something inside you live here. Those whose photos you look through again and again. Those you've already called your own in your mind.
 
-Вернитесь к ним. Полистайте карточки. Может быть, именно сегодня вы решите: **«Это мой питомец»**.
+Come back to them. Browse through the cards. Maybe today you'll decide: **«This is my pet.»**
 
-## Кошки
+## Cats
 
 <SelectPets :petUUIDs="favoriteUUIDs" :petType="'cats'"/>
 
-## Собаки
+## Dogs
 
 <SelectPets :petUUIDs="favoriteUUIDs" :petType="'dogs'"/>
 
