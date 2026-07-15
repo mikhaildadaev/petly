@@ -21,14 +21,18 @@
             </div>
           </a>
         </div>
-        <div class="carousel-slide" :class="{ center: currentIndex === randomPets.length }">
-          <a :href="linkUrl" class="grid-card link-card">
-            <div class="link-card-content">
-              <div class="link-icon">{{ linkIcon }}</div>
-              <div class="link-text">{{ linkText }}</div>
-              <div class="link-arrow">→</div>
+        <div class="carousel-slide load-more-slide" :class="{ center: currentIndex === randomPets.length }">
+          <div class="load-more" @click="goToLink">
+            <div class="load-more-content">
+              <div class="load-more-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 5v14" />
+                  <path d="M5 12h14" />
+                </svg>
+              </div>
+              <span class="load-more-text">Посмотреть ещё</span>
             </div>
-          </a>
+          </div>
         </div>
       </div>
       <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1">
@@ -119,18 +123,6 @@ export default {
     count: {
       type: Number,
       default: 8,
-    },
-    linkUrl: {
-      type: String,
-      default: '/ru/pets',
-    },
-    linkText: {
-      type: String,
-      default: 'Все питомцы',
-    },
-    linkIcon: {
-      type: String,
-      default: '🐾',
     }
   },
 
@@ -162,6 +154,13 @@ export default {
     const carouselTotalSlides = computed(() => {
       return randomPets.value.length + 1
     })
+
+    // ============================================================
+    //  ПЕРЕХОД (ССЫЛКА)
+    // ============================================================
+    const goToLink = () => {
+      window.location.href = props.linkUrl
+    }
 
     // ============================================================
     //  МЕТОДЫ (КАРУСЕЛЬ)
@@ -342,9 +341,6 @@ export default {
       // Прочее
       baseUrl,
       getRandomClass,
-      linkUrl: props.linkUrl,
-      linkText: props.linkText,
-      linkIcon: props.linkIcon,
     }
   },
 }
