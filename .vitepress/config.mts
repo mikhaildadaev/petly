@@ -23,16 +23,16 @@ export default defineConfig({
           options: {
             translations: {
               button: {
-                buttonText: 'Поиск',
-                buttonAriaLabel: 'Поиск'
+                buttonText: 'Suche',
+                buttonAriaLabel: 'Suche'
               },
               modal: {
-                noResultsText: 'Ничего не найдено',
-                resetButtonTitle: 'Очистить поиск',
+                noResultsText: 'Nichts gefunden',
+                resetButtonTitle: 'Suche löschen',
                 footer: {
-                  selectText: 'выбрать',
-                  navigateText: 'перейти',
-                  closeText: 'закрыть'
+                  selectText: 'auswählen',
+                  navigateText: 'gehe zu',
+                  closeText: 'schließen'
                 }
               }
             }
