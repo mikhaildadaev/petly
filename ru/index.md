@@ -33,3 +33,7 @@ features:
 ## Собаки
 
 <RandomPets petType="dogs" :count="8"/>
+
+## Волонтеры
+
+<RandomHumans humanType="volunteers" :count="8"/>
