@@ -700,6 +700,44 @@ h1,h2,h3 {
 }
 
 /* ============================================
+   КАРТОЧКА ССЫЛКИ
+   ============================================ */
+.link-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--vp-c-bg-soft);
+  border: 2px dashed var(--vp-c-border);
+  min-height: 280px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+.link-card:hover {
+  border-color: var(--vp-c-brand);
+  transform: scale(1.02);
+  background: var(--vp-c-bg);
+}
+.link-card-content {
+  text-align: center;
+  padding: 20px;
+}
+.link-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+.link-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--vp-c-text);
+  margin-bottom: 8px;
+}
+.link-arrow {
+  font-size: 32px;
+  color: var(--vp-c-brand);
+  animation: arrowMove 1.5s ease-in-out infinite;
+}
+
+/* ============================================
    HERO КАРТОЧКИ
    ============================================ */
 .hero-card {
