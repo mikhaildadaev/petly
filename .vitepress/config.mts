@@ -44,61 +44,61 @@ export default defineConfig({
             link: '/de/' 
           },
           { 
-            text: 'Питомцы', 
+            text: 'Tiere', 
             items: [
-              { text: 'Кошки', link: '/de/pets/cats' },
-              { text: 'Собаки', link: '/de/pets/dogs' }
+              { text: 'Katzen', link: '/de/pets/cats' },
+              { text: 'Hunde', link: '/de/pets/dogs' }
             ]
           },
           { 
-            text: 'Добрология', 
+            text: 'Dobrologie', 
             items: [
-              { text: 'Волонтёры', link: '/de/humans/volunteers' },
-              { text: 'Присоединиться', link: '/de/dobrology/join' },
-              { text: 'Поддержать', link: '/de/dobrology/support' }
+              { text: 'Freiwillige', link: '/de/humans/volunteers' },
+              { text: 'Mitmachen', link: '/de/dobrology/join' },
+              { text: 'Unterstützen', link: '/de/dobrology/support' }
             ]
           },
           { 
-            text: 'Советы', 
+            text: 'Tipps', 
             items: [
-              { text: 'Взять питомца', link: '/de/recommendations/go' },
-              { text: 'Здоровье', link: '/de/recommendations/health' },
-              { text: 'Неприятности', link: '/de/recommendations/trouble' },
-              { text: 'Права и защита', link: '/de/recommendations/welfare' }
+              { text: 'Tier aufnehmen', link: '/de/recommendations/go' },
+              { text: 'Gesundheit', link: '/de/recommendations/health' },
+              { text: 'Probleme', link: '/de/recommendations/trouble' },
+              { text: 'Rechte & Schutz', link: '/de/recommendations/welfare' }
             ]
           },
           { 
-            text: 'Любимцы', 
+            text: 'Favoriten', 
             link: '/de/chance/favorites' 
           }
         ],
         sidebar: [
           {
-            text: 'Питомцы',
+            text: 'Tiere',
             items: [
-              { text: 'Кошки', link: '/de/pets/cats' },
-              { text: 'Собаки', link: '/de/pets/dogs' }
+              { text: 'Katzen', link: '/de/pets/cats' },
+              { text: 'Hunde', link: '/de/pets/dogs' }
             ]
           },
           {
-            text: 'Добрология',
+            text: 'Dobrologie',
             items: [
-              { text: 'Волонтёры', link: '/de/humans/volunteers' },
-              { text: 'Присоединиться', link: '/de/dobrology/join' },
-              { text: 'Поддержать', link: '/de/dobrology/support' }
+              { text: 'Freiwillige', link: '/de/humans/volunteers' },
+              { text: 'Mitmachen', link: '/de/dobrology/join' },
+              { text: 'Unterstützen', link: '/de/dobrology/support' }
             ]
           },
           {
-            text: 'Советы',
+            text: 'Tipps',
             items: [
-              { text: 'Взять питомца', link: '/de/recommendations/go' },
-              { text: 'Здоровье', link: '/de/recommendations/health' },
-              { text: 'Неприятности', link: '/de/recommendations/trouble' },
-              { text: 'Права и защита', link: '/de/recommendations/welfare' }
+              { text: 'Tier aufnehmen', link: '/de/recommendations/go' },
+              { text: 'Gesundheit', link: '/de/recommendations/health' },
+              { text: 'Probleme', link: '/de/recommendations/trouble' },
+              { text: 'Rechte & Schutz', link: '/de/recommendations/welfare' }
             ]
           },
           { 
-            text: 'Любимцы', 
+            text: 'Favoriten', 
             link: '/de/chance/favorites' 
           }
         ],
@@ -160,61 +160,61 @@ export default defineConfig({
             link: '/en/' 
           },
           { 
-            text: 'Питомцы', 
+            text: 'Pets', 
             items: [
-              { text: 'Кошки', link: '/en/pets/cats' },
-              { text: 'Собаки', link: '/en/pets/dogs' }
+              { text: 'Cats', link: '/en/pets/cats' },
+              { text: 'Dogs', link: '/en/pets/dogs' }
             ]
           },
           { 
-            text: 'Добрология', 
+            text: 'Dobrology', 
             items: [
-              { text: 'Волонтёры', link: '/en/humans/volunteers' },
-              { text: 'Присоединиться', link: '/en/dobrology/join' },
-              { text: 'Поддержать', link: '/en/dobrology/support' }
+              { text: 'Volunteers', link: '/en/humans/volunteers' },
+              { text: 'Join us', link: '/en/dobrology/join' },
+              { text: 'Support', link: '/en/dobrology/support' }
             ]
           },
           { 
-            text: 'Советы', 
+            text: 'Tips', 
             items: [
-              { text: 'Взять питомца', link: '/en/recommendations/go' },
-              { text: 'Здоровье', link: '/en/recommendations/health' },
-              { text: 'Неприятности', link: '/en/recommendations/trouble' },
-              { text: 'Права и защита', link: '/en/recommendations/welfare' }
+              { text: 'Take a pet', link: '/en/recommendations/go' },
+              { text: 'Health', link: '/en/recommendations/health' },
+              { text: 'Troubles', link: '/en/recommendations/trouble' },
+              { text: 'Rights & Protection', link: '/en/recommendations/welfare' }
             ]
           },
           { 
-            text: 'Любимцы', 
+            text: 'Favorites', 
             link: '/en/chance/favorites' 
           }
         ],
         sidebar: [
           {
-            text: 'Питомцы',
+            text: 'Pets',
             items: [
-              { text: 'Кошки', link: '/en/pets/cats' },
-              { text: 'Собаки', link: '/en/pets/dogs' }
+              { text: 'Cats', link: '/en/pets/cats' },
+              { text: 'Dogs', link: '/en/pets/dogs' }
             ]
           },
           {
-            text: 'Добрология',
+            text: 'Dobrology',
             items: [
-              { text: 'Волонтёры', link: '/en/humans/volunteers' },
-              { text: 'Присоединиться', link: '/en/dobrology/join' },
-              { text: 'Поддержать', link: '/en/dobrology/support' }
+              { text: 'Volunteers', link: '/en/humans/volunteers' },
+              { text: 'Join us', link: '/en/dobrology/join' },
+              { text: 'Support', link: '/en/dobrology/support' }
             ]
           },
           {
             text: 'Советы',
             items: [
-              { text: 'Взять питомца', link: '/en/recommendations/go' },
-              { text: 'Здоровье', link: '/en/recommendations/health' },
-              { text: 'Неприятности', link: '/en/recommendations/trouble' },
-              { text: 'Права и защита', link: '/en/recommendations/welfare' }
+              { text: 'Take a pet', link: '/en/recommendations/go' },
+              { text: 'Health', link: '/en/recommendations/health' },
+              { text: 'Troubles', link: '/en/recommendations/trouble' },
+              { text: 'Welfare', link: '/en/recommendations/welfare' }
             ]
           },
           { 
-            text: 'Любимцы', 
+            text: 'Favorites', 
             link: '/en/chance/favorites' 
           }
         ],
