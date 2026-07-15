@@ -49,7 +49,9 @@ export const translations = {
       'Посмотреть ещё': 'Посмотреть ещё',
       'Все питомцы': 'Все питомцы',
       'Нет результатов': 'Нет результатов',
-      'Включить все фильтры': 'Включить все фильтры'
+      'Включить все фильтры': 'Включить все фильтры',
+      'Нет назначенных опекунов': 'Нет назначенных опекунов',
+      'Нет выбранных любимцев': 'Нет выбранных любимцев'
     }
   },
   en: {
@@ -102,7 +104,9 @@ export const translations = {
       'Посмотреть ещё': 'View more',
       'Все питомцы': 'All pets',
       'Нет результатов': 'No results found',
-      'Включить все фильтры': 'Enable all filters'
+      'Включить все фильтры': 'Enable all filters',
+      'Нет назначенных опекунов': 'No assigned guardians',
+      'Нет выбранных любимцев': 'No favorites selected'
     }
   },
   ru: {
@@ -155,7 +159,9 @@ export const translations = {
       'Посмотреть ещё': 'Mehr anzeigen',
       'Все питомцы': 'Alle Tiere',
       'Нет результатов': 'Keine Ergebnisse gefunden',
-      'Включить все фильтры': 'Alle Filter aktivieren'
+      'Включить все фильтры': 'Alle Filter aktivieren',
+      'Нет назначенных опекунов': 'Keine zugewiesenen Betreuer',
+      'Нет выбранных любимцев': 'Keine Favoriten ausgewählt'
     }
   }
 }
