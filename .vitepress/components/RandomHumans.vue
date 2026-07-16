@@ -161,7 +161,7 @@ export default {
 
     const linkUrl = computed(() => {
       const langPath = lang.value || 'ru'
-      return `/${langPath}/${props.humanType}`
+      return `${baseUrl}${langPath}/humans/${props.humanType}`
     })
 
     // ============================================================
