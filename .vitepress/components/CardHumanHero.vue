@@ -87,14 +87,14 @@ export default {
 
     const human = computed(() => {
       const data = fm.value || {}
-      const currentLang = lang.value
+      const uuid = data.uuid || path.replace(`/${lang.value}/humans/${props.humanType}/`, '').replace('.md', '')
       
       return {
-        uuid: data.uuid || '',
+        uuid,
         nameDisplay: data.title || '',
         descriptionDisplay: data.description || '',
-        directionDisplay: getDirection(currentLang, data.direction),
-        experienceDisplay: getExperience(currentLang, data.experience),
+        directionDisplay: getDirection(lang.value, data.direction),
+        experienceDisplay: getExperience(lang.value, data.experience),
         image: processImage(data.image, props.humanType, data.uuid || ''),
       }
     })

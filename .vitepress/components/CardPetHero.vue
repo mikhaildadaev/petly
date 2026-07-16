@@ -124,9 +124,10 @@ export default {
 
     const pet = computed(() => {
       const data = fm.value || {}
+      const uuid = data.uuid || path.replace(`/${lang.value}/pets/${props.petType}/`, '').replace('.md', '')
       
       return {
-        uuid: data.uuid || '',
+        uuid,
         nameDisplay: data.title || '',
         descriptionDisplay: data.description || '',
         gender: getTranslate('ru', 'gender', data.gender),
