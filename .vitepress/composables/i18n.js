@@ -174,29 +174,10 @@ export const getTranslate = (lang, category, key) => {
 }
 export const getTranslateAge = (lang, ageStr) => {
   if (!ageStr) return ''
-  const match = ageStr.match(/(\d+)\s*(год|лет|года|месяц|месяца|месяцев)/)
+  const match = ageStr.match(/(\d+)\s*(лет|года|год|месяцев|месяца|месяц)/)
   if (!match) return ageStr
   const num = parseInt(match[1])
   const unit = match[2]
-  if (lang === 'ru') {
-    const lastDigit = num % 10
-    const lastTwoDigits = num % 100
-    let unitKey = unit
-    if (unit.includes('год')) {
-      if (lastTwoDigits >= 11 && lastTwoDigits <= 19) unitKey = 'лет'
-      else if (lastDigit === 1) unitKey = 'год'
-      else if (lastDigit >= 2 && lastDigit <= 4) unitKey = 'года'
-      else unitKey = 'лет'
-    }
-    if (unit.includes('месяц')) {
-      if (lastTwoDigits >= 11 && lastTwoDigits <= 19) unitKey = 'месяцев'
-      else if (lastDigit === 1) unitKey = 'месяц'
-      else if (lastDigit >= 2 && lastDigit <= 4) unitKey = 'месяца'
-      else unitKey = 'месяцев'
-    }
-    const translatedUnit = getTranslate(lang, 'ageUnits', unitKey)
-    return `${num} ${translatedUnit}`
-  }
   const translatedUnit = getTranslate(lang, 'ageUnits', unit)
   return `${num} ${translatedUnit}`
 }
