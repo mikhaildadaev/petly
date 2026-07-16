@@ -162,7 +162,7 @@ export default {
 
     const linkUrl = computed(() => {
       const langPath = lang.value || 'ru'
-      return `${baseUrl}${langPath}/pets/${props.humanType}`
+      return `${baseUrl}${langPath}/pets/${props.petType}`
     })
 
     // ============================================================
