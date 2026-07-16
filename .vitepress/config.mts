@@ -70,6 +70,17 @@ export default defineConfig({
           { 
             text: 'Favoriten', 
             link: '/de/chance/favorites' 
+          },
+          {
+            text: 'Über das Projekt',
+            items: [
+              { text: 'Mission', link: '/de/about/mission' },
+              { text: 'Geschichte', link: '/de/about/history' },
+              { text: 'Team', link: '/de/about/team' },
+              { text: 'Dankeschön', link: '/de/about/thanks' },
+              { text: 'Technologien', link: '/de/about/tech' },
+              { text: 'Kontakte', link: '/de/about/contacts' }
+            ]
           }
         ],
         sidebar: [
@@ -197,6 +208,17 @@ export default defineConfig({
           { 
             text: 'Favorites', 
             link: '/en/chance/favorites' 
+          },
+          {
+            text: 'About Project',
+            items: [
+              { text: 'Mission', link: '/en/about/mission' },
+              { text: 'History', link: '/en/about/history' },
+              { text: 'Team', link: '/en/about/team' },
+              { text: 'Acknowledgments', link: '/en/about/thanks' },
+              { text: 'Technologies', link: '/en/about/tech' },
+              { text: 'Contacts', link: '/en/about/contacts' }
+            ]
           }
         ],
         sidebar: [
@@ -324,6 +346,17 @@ export default defineConfig({
           { 
             text: 'Любимцы', 
             link: '/ru/chance/favorites' 
+          },
+          {
+            text: 'О проекте',
+            items: [
+              { text: 'Миссия', link: '/ru/about/mission' },
+              { text: 'История', link: '/ru/about/history' },
+              { text: 'Команда', link: '/ru/about/team' },
+              { text: 'Благодарности', link: '/ru/about/thanks' },
+              { text: 'Технологии', link: '/ru/about/tech' },
+              { text: 'Контакты', link: '/ru/about/contacts' }
+            ]
           }
         ],
         sidebar: [
