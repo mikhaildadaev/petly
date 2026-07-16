@@ -22,9 +22,8 @@
 // ============================================================
 //  ИМПОРТЫ
 // ============================================================
-import { computed, ref, onMounted, watch, nextTick } from 'vue'
+import { computed, ref, onMounted, watch, nextTick, inject } from 'vue'
 import { useData } from 'vitepress'
-import { useLang } from '../composables/useLang'
 import { translations, getTranslate, getTranslateAge } from '../composables/i18n'
 
 // ============================================================
@@ -97,7 +96,7 @@ export default {
     //  ДАННЫЕ
     // ============================================================
     const { frontmatter } = useData()
-    const { lang } = useLang()
+    const lang = inject('lang', 'ru')
     const translate = (category, key) => getTranslate(lang.value, category, key)
     const translateAge = (ageStr) => getTranslateAge(lang.value, ageStr)
     

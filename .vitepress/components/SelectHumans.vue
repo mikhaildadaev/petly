@@ -52,8 +52,7 @@
 // ============================================================
 //  ИМПОРТЫ
 // ============================================================
-import { computed, ref, onMounted, onUnmounted, nextTick } from 'vue'
-import { useLang } from '../composables/useLang'
+import { computed, ref, onMounted, onUnmounted, nextTick, inject } from 'vue'
 import { translations, getTranslate, getTranslateDirection } from '../composables/i18n'
 
 // ============================================================
@@ -135,7 +134,7 @@ export default {
     // ============================================================
     //  ЯЗЫК
     // ============================================================
-    const { lang } = useLang()
+    const lang = inject('lang', 'ru')
     const translate = (category, key) => getTranslate(lang.value, category, key)
     const translateDirection = (directionStr) => getTranslateDirection(lang.value, directionStr)
 
