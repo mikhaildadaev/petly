@@ -1,13 +1,13 @@
 <template>
   <div class="aspect-card hero-card">
     <div class="hero-meta">
-      <span v-if="direction" class="tag direction-tag">{{ translateDirection(direction) }}</span>
-      <span v-if="experience" class="tag experience-tag">{{ translate('experience', experience) }}</span>
+      <span v-if="human.directionDisplay" class="tag direction-tag">{{ human.directionDisplay }}</span>
+      <span v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</span>
     </div>
-    <img :src="image" :alt="name" class="hero-image" loading="lazy" />
-    <div :class="['hero-overlay', getRandomHumanClass(uuid)]">
-      <div class="name">{{ name }}</div>
-      <p>{{ description }}</p>
+    <img :src="human.image" class="hero-image" loading="lazy" />
+    <div :class="['hero-overlay', getRandomHumanClass(human.uuid)]">
+      <div class="name">{{ human.nameDisplay }}</div>
+      <p>{{ human.descriptionDisplay }}</p>
     </div>
   </div>
 </template>
@@ -18,7 +18,7 @@
 // ============================================================
 import { computed, inject } from 'vue'
 import { useData } from 'vitepress'
-import { getTranslate, getTranslateDirection } from '../composables/i18n'
+import { getTranslate, getDirection, getExperience } from '../composables/i18n'
 
 // ============================================================
 //  2. КОНСТАНТЫ
@@ -46,39 +46,6 @@ const processImage = (imagePath, type, uuid) => {
   return imagePath
 }
 
-/**
- * Преобразование опыта в уровень
- */
-const getExperienceLevel = (experienceRaw) => {
-  if (!experienceRaw) return 'Нет опыта'
-  
-  const exp = experienceRaw.toLowerCase()
-
-  // Проверяем ключевые слова
-  if (exp.includes('эксперт')) return 'Эксперт'
-  if (exp.includes('опытный')) return 'Опытный'
-  if (exp.includes('начинающий')) return 'Начинающий'
-
-  // Проверяем годы
-  const yearMatch = exp.match(/(\d+)\s*(год|лет|года)/)
-  if (yearMatch) {
-    const years = parseInt(yearMatch[1])
-    if (years <= 1) return 'Начинающий'
-    if (years <= 3) return 'Опытный'
-    return 'Эксперт'
-  }
-
-  // Проверяем месяцы
-  const monthMatch = exp.match(/(\d+)\s*(месяц|мес)/)
-  if (monthMatch) {
-    const months = parseInt(monthMatch[1])
-    if (months < 12) return 'Начинающий'
-    return 'Опытный'
-  }
-
-  return experienceRaw || 'Нет опыта'
-}
-
 // ============================================================
 //  4. КОМПОНЕНТ
 // ============================================================
@@ -99,7 +66,6 @@ export default {
     // ============================================================
     const lang = inject('lang', 'ru')
     const translate = (category, key) => getTranslate(lang.value, category, key)
-    const translateDirection = (directionStr) => getTranslateDirection(lang.value, directionStr)
 
     // ============================================================
     //  4.2. ДАННЫЕ (FRONTMATTER)
@@ -119,17 +85,18 @@ export default {
       return data
     })
 
-    const uuid = computed(() => fm.value?.uuid || '')
-    const name = computed(() => fm.value?.title || 'Безымянный друг')
-    const description = computed(() => fm.value?.description || '')
-    const direction = computed(() => fm.value?.direction || '')
-    const experience = computed(() => getExperienceLevel(fm.value?.experience))
-    
-    /**
-     * Обработка изображения
-     */
-    const image = computed(() => {
-      return processImage(fm.value?.image, props.humanType, uuid.value)
+    const human = computed(() => {
+      const data = fm.value || {}
+      const currentLang = lang.value
+      
+      return {
+        uuid: data.uuid || '',
+        nameDisplay: data.title || '',
+        descriptionDisplay: data.description || '',
+        directionDisplay: getDirection(currentLang, data.direction),
+        experienceDisplay: getExperience(currentLang, data.experience),
+        image: processImage(data.image, props.humanType, data.uuid || ''),
+      }
     })
 
     // ============================================================
@@ -156,18 +123,12 @@ export default {
     //  4.5. ВОЗВРАТ
     // ============================================================
     return {
-      // Данные человека
-      uuid,
-      name,
-      description,
-      direction,
-      experience,
-      image,
-
+      // Данные
+      human,
+      
       // Язык
       lang,
       translate,
-      translateDirection,
       
       // Методы
       getRandomHumanClass,

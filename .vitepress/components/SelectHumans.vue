@@ -3,13 +3,13 @@
     <div v-if="!isMobile" class="grid-cards">
       <a v-for="human in selectHumans" :key="human.uuid" :href="`${baseUrl}${lang}/humans/${humanType}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
         <div class="grid-meta">
-          <span v-if="human.direction" class="tag direction-tag">{{ translateDirection(human.direction) }}</span>
-          <span v-if="human.experience" class="tag experience-tag">{{ translate('experience', human.experience) }}</span>
+          <span v-if="human.directionDisplay" class="tag direction-tag">{{ human.directionDisplay }}</span>
+          <span v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</span>
         </div>
-        <img :src="human.image" :alt="human.name" loading="lazy" />
+        <img :src="human.image" loading="lazy" />
         <div :class="['grid-card-body', getRandomVolunteerClass(human.uuid)]">
-          <div class="name">{{ human.name }}</div>
-          <p>{{ human.description }}</p>
+          <div class="name">{{ human.nameDisplay }}</div>
+          <p>{{ human.descriptionDisplay }}</p>
         </div>
       </a>
     </div>
@@ -24,13 +24,13 @@
           <div v-for="(human, index) in selectHumans" :key="human.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
             <a :href="`${baseUrl}${lang}/humans/${humanType}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
               <div class="grid-meta">
-                <span v-if="human.direction" class="tag direction-tag">{{ translateDirection(human.direction) }}</span>
-                <span v-if="human.experience" class="tag experience-tag">{{ translate('experience', human.experience) }}</span>
+                <span v-if="human.directionDisplay" class="tag direction-tag">{{ human.directionDisplay }}</span>
+                <span v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</span>
               </div>
-              <img :src="human.image" :alt="human.name" loading="lazy" />
+              <img :src="human.image" loading="lazy" />
               <div :class="['grid-card-body', getRandomVolunteerClass(human.uuid)]">
-                <div class="name">{{ human.name }}</div>
-                <p>{{ human.description }}</p>
+                <div class="name">{{ human.nameDisplay }}</div>
+                <p>{{ human.descriptionDisplay }}</p>
               </div>
             </a>
           </div>
@@ -53,7 +53,7 @@
 //  1. ИМПОРТЫ
 // ============================================================
 import { computed, ref, onMounted, onUnmounted, nextTick, inject } from 'vue'
-import { getTranslate, getTranslateDirection } from '../composables/i18n'
+import { getTranslate, getDirection, getExperience } from '../composables/i18n'
 
 // ============================================================
 //  2. КОНСТАНТЫ
@@ -83,34 +83,6 @@ const processImage = (imagePath, type, uuid) => {
   return imagePath
 }
 
-/**
- * Определение категории опыта
- */
-const getExperienceCategory = (expValue) => {
-  if (!expValue) return 'Нет опыта'
-  if (expValue.includes('лет') || expValue.includes('год')) {
-    const match = expValue.match(/(\d+)/)
-    if (match) {
-      const num = parseInt(match[1])
-      if (num <= 1) return 'Начинающий'
-      if (num <= 3) return 'Опытный'
-      return 'Эксперт'
-    }
-  }
-  if (expValue.includes('месяц')) {
-    const match = expValue.match(/(\d+)/)
-    if (match) {
-      const num = parseInt(match[1])
-      return num < 12 ? 'Начинающий' : 'Опытный'
-    }
-  }
-  const lower = expValue.toLowerCase()
-  if (lower.includes('начин')) return 'Начинающий'
-  if (lower.includes('опыт')) return 'Опытный'
-  if (lower.includes('эксперт')) return 'Эксперт'
-  return expValue || 'Нет опыта'
-}
-
 // ============================================================
 //  4. КОМПОНЕНТ
 // ============================================================
@@ -135,7 +107,6 @@ export default {
     // ============================================================
     const lang = inject('lang', 'ru')
     const translate = (category, key) => getTranslate(lang.value, category, key)
-    const translateDirection = (directionStr) => getTranslateDirection(lang.value, directionStr)
 
     // ============================================================
     //  4.2. СОСТОЯНИЕ
@@ -330,10 +301,10 @@ export default {
 
             return {
               uuid: uuid,
-              name: fm.title || '',
-              description: fm.description || '',
-              experience: getExperienceCategory(fm.experience),
-              direction: fm.direction || '',
+              nameDisplay: fm.title || '',
+              descriptionDisplay: fm.description || '',
+              experienceDisplay: getExperience(lang.value, fm.experience),
+              directionDisplay: getDirection(lang.value, fm.direction),
               image: processImage(fm.image, props.humanType, uuid),
             }
           })
@@ -367,7 +338,6 @@ export default {
       // Язык
       lang,
       translate,
-      translateDirection,
       
       // Состояние
       isLoading,

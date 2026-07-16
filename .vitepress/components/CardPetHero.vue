@@ -1,19 +1,19 @@
 <template>
   <div class="aspect-card hero-card">
     <div class="hero-meta">
-      <span v-if="gender" class="tag gender-tag" :data-gender="gender">{{ translate('gender', gender) }}</span>
-      <span v-if="age" class="tag age-tag">{{ translateAge(age) }}</span>
-      <span v-if="size" class="tag size-tag">{{ translate('size', size) }}</span>
+      <span v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</span>
+      <span v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</span>
+      <span v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</span>
     </div>
-    <img :src="image" :alt="name" class="hero-image" loading="lazy" />
-    <div :class="['hero-overlay', getRandomPetClass(uuid)]">
-      <div class="name">{{ name }}</div>
-      <button v-if="uuid" class="favorite-btn" :class="{ 'is-favorite': isFavorite }" @click.stop="toggleFavorite" :title="translate('ui', 'Добавить в избранное')">
+    <img :src="pet.image" class="hero-image" loading="lazy" />
+    <div :class="['hero-overlay', getRandomPetClass(pet.uuid)]">
+      <div class="name">{{ pet.nameDisplay }}</div>
+      <button v-if="pet.uuid" class="favorite-btn" :class="{ 'is-favorite': isFavorite }" @click.stop="toggleFavorite" :title="translate('ui', 'Добавить в избранное')">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
         </svg>
       </button>
-      <p>{{ description }}</p>
+      <p>{{ pet.descriptionDisplay }}</p>
     </div>
   </div>
 </template>
@@ -24,7 +24,7 @@
 // ============================================================
 import { computed, ref, onMounted, watch, nextTick, inject } from 'vue'
 import { useData } from 'vitepress'
-import { getTranslate, getTranslateAge } from '../composables/i18n'
+import { getTranslate, getAge, getAgePetCategory } from '../composables/i18n'
 
 // ============================================================
 //  2. КОНСТАНТЫ
@@ -55,7 +55,6 @@ const processImage = (imagePath, type, uuid) => {
 
 /**
  * Загрузка избранных из localStorage
- * @returns {Array} - массив UUID избранных питомцев
  */
 const loadFavorites = () => {
   try {
@@ -69,7 +68,6 @@ const loadFavorites = () => {
 
 /**
  * Сохранение избранных в localStorage
- * @param {Array} favorites - массив UUID
  */
 const saveFavorites = (favorites) => {
   try {
@@ -99,7 +97,6 @@ export default {
     // ============================================================
     const lang = inject('lang', 'ru')
     const translate = (category, key) => getTranslate(lang.value, category, key)
-    const translateAge = (ageStr) => getTranslateAge(lang.value, ageStr)
 
     // ============================================================
     //  4.2. ДАННЫЕ (FRONTMATTER)
@@ -125,19 +122,19 @@ export default {
       return data
     })
 
-    const uuid = computed(() => fm.value?.uuid || '')
-    const name = computed(() => fm.value?.title || 'Безымянный друг')
-    const description = computed(() => fm.value?.description || '')
-    const gender = computed(() => fm.value?.gender || '')
-    const age = computed(() => fm.value?.age || '')
-    const size = computed(() => fm.value?.size || '')
-    const tags = computed(() => fm.value?.tags || [])
-    
-    /**
-     * Обработка изображения
-     */
-    const image = computed(() => {
-      return processImage(fm.value?.image, props.petType, uuid.value)
+    const pet = computed(() => {
+      const data = fm.value || {}
+      
+      return {
+        uuid: data.uuid || '',
+        nameDisplay: data.title || '',
+        descriptionDisplay: data.description || '',
+        gender: getTranslate('ru', 'gender', data.gender),
+        genderDisplay: getTranslate(lang.value, 'gender', data.gender),
+        ageDisplay: getAge(lang.value, data.age),
+        sizeDisplay: getTranslate(lang.value, 'size', data.size),
+        image: processImage(data.image, props.petType, data.uuid || ''),
+      }
     })
 
     // ============================================================
@@ -146,13 +143,12 @@ export default {
 
     /**
      * Проверка, добавлен ли питомец в избранное
-     * @returns {boolean}
      */
     const checkIsFavorite = () => {
-      if (!uuid.value) return false
+      if (!pet.value.uuid) return false
       try {
         const favorites = loadFavorites()
-        return favorites.includes(uuid.value)
+        return favorites.includes(pet.value.uuid)
       } catch (error) {
         console.error('Ошибка проверки избранного:', error)
         return false
@@ -164,20 +160,20 @@ export default {
      */
     const toggleFavorite = (e) => {
       if (e) e.stopPropagation()
-      if (!uuid.value) {
+      if (!pet.value.uuid) {
         console.warn('UUID отсутствует, невозможно добавить в избранное')
         return
       }
       
       try {
         const favorites = loadFavorites()
-        const index = favorites.indexOf(uuid.value)
+        const index = favorites.indexOf(pet.value.uuid)
         
         if (index > -1) {
           favorites.splice(index, 1)
           isFavorite.value = false
         } else {
-          favorites.push(uuid.value)
+          favorites.push(pet.value.uuid)
           isFavorite.value = true
         }
         
@@ -220,7 +216,7 @@ export default {
     //  4.7. WATCHERS
     // ============================================================
 
-    watch(uuid, (newUuid) => {
+    watch(() => pet.value.uuid, (newUuid) => {
       if (newUuid) {
         setTimeout(() => {
           isFavorite.value = checkIsFavorite()
@@ -238,15 +234,8 @@ export default {
     //  4.8. ВОЗВРАТ
     // ============================================================
     return {
-      // Данные питомца
-      uuid,
-      name,
-      description,
-      gender,
-      age,
-      size,
-      tags,
-      image,
+      // Данные
+      pet,
       
       // Состояние избранного
       isFavorite,
@@ -255,7 +244,6 @@ export default {
       // Язык
       lang,
       translate,
-      translateAge,
 
       // Методы
       getRandomPetClass,

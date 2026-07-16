@@ -32,14 +32,14 @@
   <div v-if="!isMobile" class="grid-cards">
     <a v-for="pet in paginatedPets" :key="pet.uuid" :href="`${baseUrl}${lang}/pets/${petType}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
       <div class="grid-meta">
-        <span v-if="pet.gender" class="tag gender-tag" :data-gender="pet.gender">{{ translate('gender', pet.gender) }}</span>
-        <span v-if="pet.age" class="tag age-tag">{{ translateAge(pet.age) }}</span>
-        <span v-if="pet.size" class="tag size-tag">{{ translate('size', pet.size) }}</span>
+        <span v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</span>
+        <span v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</span>
+        <span v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</span>
       </div>
-      <img :src="pet.image" :alt="pet.name" loading="lazy" />
+      <img :src="pet.image" loading="lazy" />
       <div :class="['grid-card-body', getRandomPetClass(pet.uuid)]">
-        <div class="name">{{ pet.name }}</div>
-        <p>{{ pet.description }}</p>
+        <div class="name">{{ pet.nameDisplay }}</div>
+        <p>{{ pet.descriptionDisplay }}</p>
       </div>
     </a>
     <div v-if="hasMoreItems" class="load-more" @click="loadMore">
@@ -69,14 +69,14 @@
         <div v-for="(pet, index) in paginatedPets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }" >
           <a :href="`${baseUrl}${lang}/pets/${petType}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
             <div class="grid-meta">
-              <span v-if="pet.gender" class="tag gender-tag" :data-gender="pet.gender">{{ translate('gender', pet.gender) }}</span>
-              <span v-if="pet.age" class="tag age-tag">{{ translateAge(pet.age) }}</span>
-              <span v-if="pet.size" class="tag size-tag">{{ translate('size', pet.size) }}</span>
+              <span v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</span>
+              <span v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</span>
+              <span v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</span>
             </div>
-            <img :src="pet.image" :alt="pet.name" loading="lazy" />
+            <img :src="pet.image" loading="lazy" />
             <div :class="['grid-card-body', getRandomPetClass(pet.uuid)]">
-              <div class="name">{{ pet.name }}</div>
-              <p>{{ pet.description }}</p>
+              <div class="name">{{ pet.nameDisplay }}</div>
+              <p>{{ pet.descriptionDisplay }}</p>
             </div>
           </a>
         </div>
@@ -115,7 +115,7 @@
 //  1. ИМПОРТЫ
 // ============================================================
 import { computed, ref, onMounted, watch, nextTick, onUnmounted, reactive, inject } from 'vue'
-import { getTranslate, getTranslateAge } from '../composables/i18n'
+import { getTranslate, getAge, getAgePetCategory } from '../composables/i18n'
 
 // ============================================================
 //  2. КОНСТАНТЫ
@@ -145,19 +145,6 @@ const processImage = (imagePath, type, uuid) => {
   return imagePath
 }
 
-/**
- * Определение возрастной категории
- */
-const getAgeCategory = (ageStr) => {
-  if (!ageStr) return ''
-  const match = ageStr.match(/(\d+)/)
-  if (!match) return ''
-  const num = parseInt(match[1])
-  if (ageStr.includes('месяц') || num < 1) return 'Щенок'
-  if (num <= 3) return 'Молодая'
-  return 'Взрослая'
-}
-
 // ============================================================
 //  4. КОМПОНЕНТ
 // ============================================================
@@ -178,7 +165,6 @@ export default {
     // ============================================================
     const lang = inject('lang', 'ru')
     const translate = (category, key) => getTranslate(lang.value, category, key)
-    const translateAge = (ageStr) => getTranslateAge(lang.value, ageStr)
 
     // ============================================================
     //  4.2. ОПЦИИ ФИЛЬТРОВ (ВЫЧИСЛЯЕМЫЕ)
@@ -196,10 +182,10 @@ export default {
       }))
     })
 
-    const AGE_KEYS = ['Щенок', 'Молодая', 'Взрослая']
+    const AGE_KEYS = ['Детеныш', 'Молодая', 'Взрослая']
     const ageOptions = computed(() => {
       const ageIcons = {
-        'Щенок': `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10c0-1.5.8-3 2-3s2 1.5 2 3-.8 2.5-2 2.5S6 11.5 6 10z"/><path d="M14 10c0-1.5.8-3 2-3s2 1.5 2 3-.8 2.5-2 2.5-2-1-2-2.5z"/><path d="M4 14.5c0-1.5 1.5-2.5 3.5-2.5h9c2 0 3.5 1 3.5 2.5v1.5H4z"/><path d="M7.5 17v2"/><path d="M16.5 17v2"/></svg>`,
+        'Детеныш': `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10c0-1.5.8-3 2-3s2 1.5 2 3-.8 2.5-2 2.5S6 11.5 6 10z"/><path d="M14 10c0-1.5.8-3 2-3s2 1.5 2 3-.8 2.5-2 2.5-2-1-2-2.5z"/><path d="M4 14.5c0-1.5 1.5-2.5 3.5-2.5h9c2 0 3.5 1 3.5 2.5v1.5H4z"/><path d="M7.5 17v2"/><path d="M16.5 17v2"/></svg>`,
         'Молодая': `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10c0-2 1-4 3-4s3 2 3 4-1 3-3 3-3-1-3-3z"/><path d="M17 10c0-2-1-4-3-4s-3 2-3 4 1 3 3 3 3-1 3-3z"/><path d="M5 16c0-3 2-4 5-4h4c3 0 5 1 5 4v2H5z"/><path d="M9 18v2"/><path d="M15 18v2"/></svg>`,
         'Взрослая': `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10c0-3 2-5 4-5s4 2 4 5-2 4-4 4-4-1-4-4z"/><path d="M18 10c0-3-2-5-4-5s-4 2-4 5 2 4 4 4 4-1 4-4z"/><path d="M4 16c0-4 3-5 6-5h4c3 0 6 1 6 5v2H4z"/><path d="M8 18v2"/><path d="M16 18v2"/></svg>`
       }
@@ -238,7 +224,7 @@ export default {
     // Фильтры
     const filters = reactive({
       gender: { 'Девочка': true, 'Мальчик': true },
-      age: { 'Щенок': true, 'Молодая': true, 'Взрослая': true },
+      age: { 'Детеныш': true, 'Молодая': true, 'Взрослая': true },
       size: { 'Маленькая': true, 'Средняя': true, 'Крупная': true }
     })
 
@@ -260,7 +246,7 @@ export default {
     const areAllActive = computed(() => {
       return (
         filters.gender['Девочка'] && filters.gender['Мальчик'] &&
-        filters.age['Щенок'] && filters.age['Молодая'] && filters.age['Взрослая'] &&
+        filters.age['Детеныш'] && filters.age['Молодая'] && filters.age['Взрослая'] &&
         filters.size['Маленькая'] && filters.size['Средняя'] && filters.size['Крупная']
       )
     })
@@ -268,7 +254,7 @@ export default {
     const filteredPets = computed(() => {
       return allPets.value.filter(pet => {
         if (!filters.gender[pet.gender]) return false
-        if (!filters.age[getAgeCategory(pet.age)]) return false
+        if (!filters.age[pet.age]) return false
         if (!filters.size[pet.size]) return false
         return true
       })
@@ -322,15 +308,11 @@ export default {
     // --- Пагинация ---
     const loadMore = async () => {
       if (isLoadingMore.value || !hasMoreItems.value) return
-
       isLoadingMore.value = true
       savedIndex.value = currentIndex.value
-
       await new Promise(resolve => setTimeout(resolve, 500))
-
       visibleCount.value += perPage
       isLoadingMore.value = false
-
       if (isMobile.value) {
         nextTick(() => {
           if (carouselRef.value && paginatedPets.value.length) {
@@ -350,11 +332,9 @@ export default {
       currentIndex.value = 0
       savedIndex.value = 0
       visibleCount.value = perPage
-
       if (carouselRef.value) {
         const container = carouselRef.value
         container.scrollLeft = 0
-
         nextTick(() => {
           container.scrollLeft = 0
           const slides = container.querySelectorAll('.carousel-slide')
@@ -377,17 +357,14 @@ export default {
       const container = carouselRef.value
       const slides = container.querySelectorAll('.carousel-slide')
       if (!slides.length || index < 0 || index >= slides.length) return
-
       const slide = slides[index]
       const containerWidth = container.offsetWidth
       const slideWidth = slide.offsetWidth
       const scrollPosition = slide.offsetLeft - (containerWidth - slideWidth) / 2
-
       container.scrollTo({
         left: Math.max(0, scrollPosition),
         behavior: 'smooth'
       })
-
       currentIndex.value = index
     }
 
@@ -515,12 +492,14 @@ export default {
 
             return {
               uuid,
-              name: fm.title || '',
-              description: fm.description || '',
-              age: fm.age || '',
-              gender: fm.gender || '',
-              size: fm.size || '',
-              tags: fm.tags || [],
+              nameDisplay: fm.title || '',
+              descriptionDisplay: fm.description || '',
+              gender: getTranslate('ru', 'gender', fm.gender),
+              genderDisplay: getTranslate(lang.value, 'gender', fm.gender),
+              age: getAgePetCategory(fm.age),
+              ageDisplay: getAge(lang.value, fm.age),
+              size: getTranslate('ru', 'size', fm.size),
+              sizeDisplay: getTranslate(lang.value, 'size', fm.size),
               image: processImage(fm.image, props.petType, uuid),
             }
           })
@@ -612,7 +591,6 @@ export default {
       // Язык
       lang,
       translate,
-      translateAge,
 
       // Состояние
       isLoading,

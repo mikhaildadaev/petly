@@ -3,14 +3,14 @@
     <div v-if="!isMobile" class="grid-cards">
       <a v-for="pet in selectPets" :key="pet.uuid" :href="`${baseUrl}${lang}/pets/${petType}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
         <div class="grid-meta">
-          <span v-if="pet.gender" class="tag gender-tag" :data-gender="pet.gender">{{ translate('gender', pet.gender) }}</span>
-          <span v-if="pet.age" class="tag age-tag">{{ translateAge(pet.age) }}</span>
-          <span v-if="pet.size" class="tag size-tag">{{ translate('size', pet.size) }}</span>
+          <span v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</span>
+          <span v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</span>
+          <span v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</span>
         </div>
-        <img :src="pet.image" :alt="pet.name" loading="lazy" />
+        <img :src="pet.image" loading="lazy" />
         <div :class="['grid-card-body', getRandomPetClass(pet.uuid)]">
-          <div class="name">{{ pet.name }}</div>
-          <p>{{ pet.description }}</p>
+          <div class="name">{{ pet.nameDisplay }}</div>
+          <p>{{ pet.descriptionDisplay }}</p>
         </div>
       </a>
     </div>
@@ -25,14 +25,14 @@
           <div v-for="(pet, index) in selectPets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
             <a :href="`${baseUrl}${lang}/pets/${petType}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
               <div class="grid-meta">
-                <span v-if="pet.gender" class="tag gender-tag" :data-gender="pet.gender">{{ translate('gender', pet.gender) }}</span>
-                <span v-if="pet.age" class="tag age-tag">{{ translateAge(pet.age) }}</span>
-                <span v-if="pet.size" class="tag size-tag">{{ translate('size', pet.size) }}</span>
+                <span v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</span>
+                <span v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</span>
+                <span v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</span>
               </div>
-              <img :src="pet.image" :alt="pet.name" loading="lazy" />
+              <img :src="pet.image" loading="lazy" />
               <div :class="['grid-card-body', getRandomPetClass(pet.uuid)]">
-                <div class="name">{{ pet.name }}</div>
-                <p>{{ pet.description }}</p>
+                <div class="name">{{ pet.nameDisplay }}</div>
+                <p>{{ pet.descriptionDisplay }}</p>
               </div>
             </a>
           </div>
@@ -55,7 +55,7 @@
 //  1. ИМПОРТЫ
 // ============================================================
 import { computed, ref, onMounted, onUnmounted, nextTick, inject } from 'vue'
-import { getTranslate, getTranslateAge } from '../composables/i18n'
+import { getTranslate, getAge, getAgePetCategory } from '../composables/i18n'
 
 // ============================================================
 //  2. КОНСТАНТЫ
@@ -85,19 +85,6 @@ const processImage = (imagePath, type, uuid) => {
   return imagePath
 }
 
-/**
- * Определение возрастной категории
- */
-const getAgeCategory = (ageStr) => {
-  if (!ageStr) return ''
-  const match = ageStr.match(/(\d+)/)
-  if (!match) return ''
-  const num = parseInt(match[1])
-  if (ageStr.includes('месяц') || num < 1) return 'Щенок'
-  if (num <= 3) return 'Молодая'
-  return 'Взрослая'
-}
-
 // ============================================================
 //  4. КОМПОНЕНТ
 // ============================================================
@@ -122,7 +109,6 @@ export default {
     // ============================================================
     const lang = inject('lang', 'ru')
     const translate = (category, key) => getTranslate(lang.value, category, key)
-    const translateAge = (ageStr) => getTranslateAge(lang.value, ageStr)
 
     // ============================================================
     //  4.2. СОСТОЯНИЕ
@@ -317,11 +303,14 @@ export default {
 
             return {
               uuid: uuid,
-              name: fm.title || '',
-              description: fm.description || '',
-              age: fm.age || '',
-              gender: fm.gender || '',
-              size: fm.size || '',
+              nameDisplay: fm.title || '',
+              descriptionDisplay: fm.description || '',
+              gender: getTranslate('ru', 'gender', fm.gender),
+              genderDisplay: getTranslate(lang.value, 'gender', fm.gender),
+              age: getAgePetCategory(fm.age),
+              ageDisplay: getAge(lang.value, fm.age),
+              size: getTranslate('ru', 'size', fm.size),
+              sizeDisplay: getTranslate(lang.value, 'size', fm.size),
               image: processImage(fm.image, props.petType, uuid),
             }
           })
@@ -355,7 +344,6 @@ export default {
       // Язык
       lang,
       translate,
-      translateAge,
 
       // Состояние
       isLoading,
