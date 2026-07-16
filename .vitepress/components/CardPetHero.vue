@@ -20,21 +20,21 @@
 
 <script>
 // ============================================================
-//  ИМПОРТЫ
+//  1. ИМПОРТЫ
 // ============================================================
 import { computed, ref, onMounted, watch, nextTick, inject } from 'vue'
 import { useData } from 'vitepress'
-import { translations, getTranslate, getTranslateAge } from '../composables/i18n'
+import { getTranslate, getTranslateAge } from '../composables/i18n'
 
 // ============================================================
-//  КОНСТАНТЫ
+//  2. КОНСТАНТЫ
 // ============================================================
 const baseUrl = import.meta.env.BASE_URL
 const STORAGE_KEY = 'pets_favorites'
 const randomClassCache = new Map()
 
 // ============================================================
-//  УТИЛИТЫ
+//  3. УТИЛИТЫ
 // ============================================================
 
 /**
@@ -55,6 +55,7 @@ const processImage = (imagePath, type, uuid) => {
 
 /**
  * Загрузка избранных из localStorage
+ * @returns {Array} - массив UUID избранных питомцев
  */
 const loadFavorites = () => {
   try {
@@ -68,6 +69,7 @@ const loadFavorites = () => {
 
 /**
  * Сохранение избранных в localStorage
+ * @param {Array} favorites - массив UUID
  */
 const saveFavorites = (favorites) => {
   try {
@@ -78,7 +80,7 @@ const saveFavorites = (favorites) => {
 }
 
 // ============================================================
-//  КОМПОНЕНТ
+//  4. КОМПОНЕНТ
 // ============================================================
 export default {
   name: 'CardPetHero',
@@ -93,21 +95,25 @@ export default {
 
   setup(props) {
     // ============================================================
-    //  ДАННЫЕ
+    //  4.1. ЯЗЫК И ПЕРЕВОДЫ
     // ============================================================
-    const { frontmatter } = useData()
     const lang = inject('lang', 'ru')
     const translate = (category, key) => getTranslate(lang.value, category, key)
     const translateAge = (ageStr) => getTranslateAge(lang.value, ageStr)
+
+    // ============================================================
+    //  4.2. ДАННЫЕ (FRONTMATTER)
+    // ============================================================
+    const { frontmatter } = useData()
     
     // ============================================================
-    //  СОСТОЯНИЕ
+    //  4.3. СОСТОЯНИЕ
     // ============================================================
     const isFavorite = ref(false)
     const isInitialized = ref(false)
 
     // ============================================================
-    //  ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
+    //  4.4. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
     // ============================================================
 
     /**
@@ -128,14 +134,14 @@ export default {
     const tags = computed(() => fm.value?.tags || [])
     
     /**
-     * Обработка изображения (консистентно с ListPets)
+     * Обработка изображения
      */
     const image = computed(() => {
       return processImage(fm.value?.image, props.petType, uuid.value)
     })
 
     // ============================================================
-    //  МЕТОДЫ
+    //  4.5. МЕТОДЫ
     // ============================================================
 
     /**
@@ -144,7 +150,6 @@ export default {
      */
     const checkIsFavorite = () => {
       if (!uuid.value) return false
-      
       try {
         const favorites = loadFavorites()
         return favorites.includes(uuid.value)
@@ -201,7 +206,7 @@ export default {
     }
 
     // ============================================================
-    //  ЖИЗНЕННЫЙ ЦИКЛ
+    //  4.6. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(() => {
@@ -212,7 +217,7 @@ export default {
     })
 
     // ============================================================
-    //  WATCHERS
+    //  4.7. WATCHERS
     // ============================================================
 
     watch(uuid, (newUuid) => {
@@ -230,7 +235,7 @@ export default {
     }, { deep: true })
 
     // ============================================================
-    //  ВОЗВРАТ
+    //  4.8. ВОЗВРАТ
     // ============================================================
     return {
       // Данные питомца
@@ -259,6 +264,6 @@ export default {
       // Константы
       baseUrl
     }
-  }
+  },
 }
 </script>

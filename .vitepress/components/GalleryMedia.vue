@@ -39,12 +39,12 @@
 
 <script>
 // ============================================================
-//  ИМПОРТЫ
+//  1. ИМПОРТЫ
 // ============================================================
 import { ref, computed, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
 
 // ============================================================
-//  КОМПОНЕНТ
+//  2. КОМПОНЕНТ
 // ============================================================
 export default {
   name: 'GalleryMedia',
@@ -53,16 +53,18 @@ export default {
     photos: {
       type: Array,
       default: () => [],
+      description: 'Массив URL изображений'
     },
     videos: {
       type: Array,
       default: () => [],
+      description: 'Массив URL видео'
     }
   },
 
   setup(props) {
     // ============================================================
-    //  СОСТОЯНИЕ
+    //  2.1. СОСТОЯНИЕ
     // ============================================================
     const fullsliderOpen = ref(false)
     const currentIndex = ref(0)
@@ -74,9 +76,12 @@ export default {
     const isSwiping = ref(false)
 
     // ============================================================
-    //  ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
+    //  2.2. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
     // ============================================================
 
+    /**
+     * Объединенный список медиа (фото + видео в порядке чередования)
+     */
     const mediaItems = computed(() => {
       const items = []
       const maxLength = Math.max(props.photos.length, props.videos.length)
@@ -93,16 +98,25 @@ export default {
       return items
     })
 
+    /**
+     * Текущий медиа-элемент
+     */
     const currentMedia = computed(() => {
       return mediaItems.value[currentIndex.value] || { type: 'image', src: '' }
     })
 
+    /**
+     * Проверка, есть ли медиа
+     */
     const hasMedia = computed(() => mediaItems.value.length > 0)
 
     // ============================================================
-    //  МЕТОДЫ
+    //  2.3. МЕТОДЫ
     // ============================================================
 
+    /**
+     * Открыть лайтбокс
+     */
     const openFullslider = (index) => {
       if (!hasMedia.value) return
       currentIndex.value = index
@@ -110,6 +124,9 @@ export default {
       document.body.style.overflow = 'hidden'
     }
 
+    /**
+     * Закрыть лайтбокс
+     */
     const closeFullslider = () => {
       fullsliderOpen.value = false
       document.body.style.overflow = ''
@@ -118,29 +135,47 @@ export default {
       }
     }
 
+    /**
+     * Следующее медиа
+     */
     const nextImage = () => {
       currentIndex.value = (currentIndex.value + 1) % mediaItems.value.length
     }
 
+    /**
+     * Предыдущее медиа
+     */
     const prevImage = () => {
       currentIndex.value = (currentIndex.value - 1 + mediaItems.value.length) % mediaItems.value.length
     }
 
+    /**
+     * Перейти к конкретному медиа
+     */
     const goToImage = (index) => {
       currentIndex.value = index
     }
 
+    /**
+     * Воспроизвести видео (превью)
+     */
     const playVideo = (e) => {
       const video = e.target
       video.play().catch(() => {})
     }
 
+    /**
+     * Остановить видео (превью)
+     */
     const pauseVideo = (e) => {
       const video = e.target
       video.pause()
       video.currentTime = 0
     }
 
+    /**
+     * Остановка видео при смене слайда
+     */
     const stopCurrentVideo = () => {
       if (fullsliderVideoRef.value) {
         fullsliderVideoRef.value.pause()
@@ -148,6 +183,9 @@ export default {
       }
     }
 
+    /**
+     * Воспроизведение видео при смене слайда
+     */
     const playCurrentVideo = () => {
       if (fullsliderVideoRef.value && currentMedia.value.type === 'video') {
         setTimeout(() => {
@@ -166,7 +204,6 @@ export default {
 
     const handleTouchMove = (e) => {
       if (!isSwiping.value) return
-
       const touch = e.touches[0]
       const deltaX = touch.clientX - touchStartX.value
       const deltaY = touch.clientY - touchStartY.value
@@ -215,16 +252,19 @@ export default {
     }
 
     // ============================================================
-    //  WATCHERS
+    //  2.4. WATCHERS
     // ============================================================
 
+    /**
+     * Перезапускаем видео при смене слайда
+     */
     watch(currentIndex, () => {
       stopCurrentVideo()
       playCurrentVideo()
     })
 
     // ============================================================
-    //  ЖИЗНЕННЫЙ ЦИКЛ
+    //  2.5. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(() => {
@@ -237,22 +277,31 @@ export default {
     })
 
     // ============================================================
-    //  ВОЗВРАТ
+    //  2.6. ВОЗВРАТ
     // ============================================================
     return {
+      // Состояние
       fullsliderOpen,
       currentIndex,
       fullsliderVideoRef,
+
+      // Вычисляемые
       mediaItems,
       currentMedia,
       hasMedia,
+
+      // Методы управления
       openFullslider,
       closeFullslider,
       nextImage,
       prevImage,
       goToImage,
+
+      // Видео
       playVideo,
       pauseVideo,
+
+      // События
       handleKeydown,
       handleTouchStart,
       handleTouchMove,

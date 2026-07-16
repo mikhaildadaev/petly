@@ -48,20 +48,20 @@
 
 <script>
 // ============================================================
-//  ИМПОРТЫ
+//  1. ИМПОРТЫ
 // ============================================================
 import { ref, computed, onMounted, onUnmounted, inject } from 'vue'
-import { translations, getTranslate, getTranslateDirection} from '../composables/i18n'
+import { getTranslate, getTranslateDirection } from '../composables/i18n'
 
 // ============================================================
-//  КОНСТАНТЫ
+//  2. КОНСТАНТЫ
 // ============================================================
 const baseUrl = import.meta.env.BASE_URL
 const randomClassCache = new Map()
 let previousColor = 0
 
 // ============================================================
-//  УТИЛИТЫ
+//  3. УТИЛИТЫ
 // ============================================================
 
 /**
@@ -112,10 +112,10 @@ const getRandomClass = (uuid) => {
 }
 
 // ============================================================
-//  КОМПОНЕНТ
+//  4. КОМПОНЕНТ
 // ============================================================
 export default {
-  name: 'randomHumans',
+  name: 'RandomHumans',
 
   props: {
     humanType: {
@@ -130,25 +130,17 @@ export default {
 
   setup(props) {
     // ============================================================
-    //  ЯЗЫК
+    //  4.1. ЯЗЫК И ПЕРЕВОДЫ
     // ============================================================
     const lang = inject('lang', 'ru')
     const translate = (category, key) => getTranslate(lang.value, category, key)
     const translateDirection = (directionStr) => getTranslateDirection(lang.value, directionStr)
 
     // ============================================================
-    //  СОСТОЯНИЕ
+    //  4.2. СОСТОЯНИЕ
     // ============================================================
     const randomHumans = ref([])
     const isLoading = ref(true)
-
-    // ============================================================
-    //  ССЫЛКА ДЛЯ "ПОСМОТРЕТЬ ЕЩЁ"
-    // ============================================================
-    const linkUrl = computed(() => {
-      const langPath = lang.value || 'ru'
-      return `/${langPath}/${props.humanType}`
-    })
 
     // Карусель
     const carouselRef = ref(null)
@@ -160,24 +152,28 @@ export default {
     const isSwiping = ref(false)
 
     // ============================================================
-    //  ВЫЧИСЛЯЕМЫЕ
+    //  4.3. ВЫЧИСЛЯЕМЫЕ
     // ============================================================
 
     const carouselTotalSlides = computed(() => {
       return randomHumans.value.length + 1
     })
 
+    const linkUrl = computed(() => {
+      const langPath = lang.value || 'ru'
+      return `/${langPath}/${props.humanType}`
+    })
+
     // ============================================================
-    //  ПЕРЕХОД (ССЫЛКА)
+    //  4.4. МЕТОДЫ
     // ============================================================
+
+    // --- Переход на страницу всех волонтёров ---
     const goToLink = () => {
       window.location.href = linkUrl.value
     }
 
-    // ============================================================
-    //  МЕТОДЫ (КАРУСЕЛЬ)
-    // ============================================================
-
+    // --- Карусель ---
     const scrollToSlide = (index) => {
       if (!carouselRef.value) return
       const container = carouselRef.value
@@ -213,10 +209,7 @@ export default {
       scrollToSlide(index)
     }
 
-    // ============================================================
-    //  МЕТОДЫ (СВАЙП)
-    // ============================================================
-
+    // --- Свайп ---
     const handleTouchStart = (e) => {
       const touch = e.touches[0]
       touchStartX.value = touch.clientX
@@ -252,7 +245,7 @@ export default {
     }
 
     // ============================================================
-    //  RESIZE
+    //  4.5. RESIZE
     // ============================================================
     let resizeTimeout = null
 
@@ -261,13 +254,13 @@ export default {
         clearTimeout(resizeTimeout)
       }
       resizeTimeout = setTimeout(() => {
-        checkMobile()
+        // Здесь можно добавить логику для мобильной версии, если нужно
         resizeTimeout = null
       }, 100)
     }
 
     // ============================================================
-    //  ЖИЗНЕННЫЙ ЦИКЛ
+    //  4.6. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(async () => {
@@ -306,7 +299,7 @@ export default {
           })
         )
 
-        // Перемешиваем и берем нужное количество
+        // Перемешиваем и берём нужное количество
         const shuffled = shuffleArray(loaded)
         randomHumans.value = shuffled.slice(0, props.count)
 
@@ -330,7 +323,7 @@ export default {
     })
 
     // ============================================================
-    //  ВОЗВРАТ
+    //  4.7. ВОЗВРАТ
     // ============================================================
     return {
       // Данные
@@ -363,6 +356,7 @@ export default {
       // Прочее
       baseUrl,
       linkUrl,
+      goToLink,
       getRandomClass,
     }
   },

@@ -112,13 +112,13 @@
 
 <script>
 // ============================================================
-//  ИМПОРТЫ
+//  1. ИМПОРТЫ
 // ============================================================
 import { computed, ref, onMounted, watch, nextTick, onUnmounted, reactive, inject } from 'vue'
-import { translations, getTranslate, getTranslateAge } from '../composables/i18n'
+import { getTranslate, getTranslateAge } from '../composables/i18n'
 
 // ============================================================
-//  КОНСТАНТЫ
+//  2. КОНСТАНТЫ
 // ============================================================
 const MOBILE_BREAKPOINT = 735
 const baseUrl = import.meta.env.BASE_URL
@@ -126,7 +126,7 @@ const perPage = 8
 const randomClassCache = new Map()
 
 // ============================================================
-//  УТИЛИТЫ
+//  3. УТИЛИТЫ
 // ============================================================
 
 /**
@@ -145,6 +145,9 @@ const processImage = (imagePath, type, uuid) => {
   return imagePath
 }
 
+/**
+ * Определение возрастной категории
+ */
 const getAgeCategory = (ageStr) => {
   if (!ageStr) return ''
   const match = ageStr.match(/(\d+)/)
@@ -156,7 +159,7 @@ const getAgeCategory = (ageStr) => {
 }
 
 // ============================================================
-//  КОМПОНЕНТ
+//  4. КОМПОНЕНТ
 // ============================================================
 export default {
   name: 'ListPets',
@@ -171,36 +174,14 @@ export default {
 
   setup(props) {
     // ============================================================
-    //  ЯЗЫК
+    //  4.1. ЯЗЫК И ПЕРЕВОДЫ
     // ============================================================
     const lang = inject('lang', 'ru')
     const translate = (category, key) => getTranslate(lang.value, category, key)
     const translateAge = (ageStr) => getTranslateAge(lang.value, ageStr)
-    
-    // ============================================================
-    //  СОСТОЯНИЕ
-    // ============================================================
-    const allPets = ref([])
-    const visibleCount = ref(perPage)
-    const isLoading = ref(true)
-    const isMobile = ref(false)
-    const isLoadingMore = ref(false)
-    const isClient = ref(false)
-    const savedIndex = ref(0)
-
-    // Карусель
-    const carouselRef = ref(null)
-    const currentIndex = ref(0)
-
-    // Свайп
-    const touchStartX = ref(0)
-    const touchStartY = ref(0)
-    const touchEndX = ref(0)
-    const touchEndY = ref(0)
-    const isSwiping = ref(false)
 
     // ============================================================
-    //  ФИЛЬТРЫ (ЧЕКБОКСЫ)
+    //  4.2. ОПЦИИ ФИЛЬТРОВ (ВЫЧИСЛЯЕМЫЕ)
     // ============================================================
     const GENDER_KEYS = ['Девочка', 'Мальчик']
     const genderOptions = computed(() => {
@@ -214,6 +195,7 @@ export default {
         icon: genderIcons[key] || ''
       }))
     })
+
     const AGE_KEYS = ['Щенок', 'Молодая', 'Взрослая']
     const ageOptions = computed(() => {
       const ageIcons = {
@@ -227,6 +209,7 @@ export default {
         icon: ageIcons[key] || ''
       }))
     })
+
     const SIZE_KEYS = ['Маленькая', 'Средняя', 'Крупная']
     const sizeOptions = computed(() => {
       const sizeIcons = {
@@ -241,37 +224,46 @@ export default {
       }))
     })
 
-    // Состояние фильтров (все активны по умолчанию)
+    // ============================================================
+    //  4.3. СОСТОЯНИЕ
+    // ============================================================
+    const allPets = ref([])
+    const visibleCount = ref(perPage)
+    const isLoading = ref(true)
+    const isMobile = ref(false)
+    const isLoadingMore = ref(false)
+    const isClient = ref(false)
+    const savedIndex = ref(0)
+
+    // Фильтры
     const filters = reactive({
-      gender: {
-        'Девочка': true,
-        'Мальчик': true
-      },
-      age: {
-        'Щенок': true,
-        'Молодая': true,
-        'Взрослая': true
-      },
-      size: {
-        'Маленькая': true,
-        'Средняя': true,
-        'Крупная': true
-      }
+      gender: { 'Девочка': true, 'Мальчик': true },
+      age: { 'Щенок': true, 'Молодая': true, 'Взрослая': true },
+      size: { 'Маленькая': true, 'Средняя': true, 'Крупная': true }
     })
 
+    // Карусель
+    const carouselRef = ref(null)
+    const currentIndex = ref(0)
+
+    // Свайп
+    const touchStartX = ref(0)
+    const touchStartY = ref(0)
+    const touchEndX = ref(0)
+    const touchEndY = ref(0)
+    const isSwiping = ref(false)
+
     // ============================================================
-    //  ВЫЧИСЛЯЕМЫЕ (ФИЛЬТРЫ)
+    //  4.4. ВЫЧИСЛЯЕМЫЕ
     // ============================================================
 
     const areAllActive = computed(() => {
       return (
-        filters.gender['Девочка'] && filters.gender['Мальчик'] && filters.age['Щенок'] && filters.age['Молодая'] && filters.age['Взрослая'] && filters.size['Маленькая'] && filters.size['Средняя'] && filters.size['Крупная']
+        filters.gender['Девочка'] && filters.gender['Мальчик'] &&
+        filters.age['Щенок'] && filters.age['Молодая'] && filters.age['Взрослая'] &&
+        filters.size['Маленькая'] && filters.size['Средняя'] && filters.size['Крупная']
       )
     })
-
-    // ============================================================
-    //  ВЫЧИСЛЯЕМЫЕ (ПИТОМЦЫ)
-    // ============================================================
 
     const filteredPets = computed(() => {
       return allPets.value.filter(pet => {
@@ -299,12 +291,12 @@ export default {
     })
 
     // ============================================================
-    //  МЕТОДЫ (ФИЛЬТРЫ)
+    //  4.5. МЕТОДЫ
     // ============================================================
 
+    // --- Фильтры ---
     const toggleFilter = (group, value) => {
       filters[group][value] = !filters[group][value]
-      // Сбрасываем пагинацию при изменении фильтров
       visibleCount.value = perPage
       currentIndex.value = 0
     }
@@ -317,10 +309,7 @@ export default {
       currentIndex.value = 0
     }
 
-    // ============================================================
-    //  МЕТОДЫ (ОСТАЛЬНЫЕ)
-    // ============================================================
-
+    // --- Мобильная версия ---
     const checkMobile = () => {
       if (typeof window !== 'undefined') {
         const newIsMobile = window.innerWidth < MOBILE_BREAKPOINT
@@ -330,6 +319,7 @@ export default {
       }
     }
 
+    // --- Пагинация ---
     const loadMore = async () => {
       if (isLoadingMore.value || !hasMoreItems.value) return
 
@@ -355,6 +345,7 @@ export default {
       }
     }
 
+    // --- Карусель ---
     const resetToFirstSlide = () => {
       currentIndex.value = 0
       savedIndex.value = 0
@@ -416,6 +407,7 @@ export default {
       scrollToSlide(index)
     }
 
+    // --- Свайп ---
     const handleTouchStart = (e) => {
       const touch = e.touches[0]
       touchStartX.value = touch.clientX
@@ -458,7 +450,6 @@ export default {
     let previousColor = 0
     const getRandomPetClass = (uuid) => {
       if (!uuid) return 'rand-01'
-      
       if (randomClassCache.has(uuid)) {
         return randomClassCache.get(uuid)
       }
@@ -474,7 +465,7 @@ export default {
     }
 
     // ============================================================
-    //  RESIZE
+    //  4.6. RESIZE
     // ============================================================
     let resizeTimeout = null
 
@@ -489,7 +480,7 @@ export default {
     }
 
     // ============================================================
-    //  ЖИЗНЕННЫЙ ЦИКЛ
+    //  4.7. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(async () => {
@@ -542,6 +533,7 @@ export default {
       }
     })
 
+    // --- Watchers ---
     watch(
       [() => filters.gender, () => filters.age, () => filters.size],
       () => {
@@ -592,16 +584,18 @@ export default {
     })
 
     // ============================================================
-    //  ВОЗВРАТ
+    //  4.8. ВОЗВРАТ
     // ============================================================
     return {
       // Опции фильтров
       genderOptions,
       ageOptions,
       sizeOptions,
+
       // Данные
       paginatedPets,
       filteredPets,
+
       // Фильтры
       filters,
       areAllActive,

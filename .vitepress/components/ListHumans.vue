@@ -104,13 +104,13 @@
 
 <script>
 // ============================================================
-//  ИМПОРТЫ
+//  1. ИМПОРТЫ
 // ============================================================
 import { computed, ref, onMounted, watch, nextTick, onUnmounted, reactive, inject } from 'vue'
-import { translations, getTranslate, getTranslateDirection } from '../composables/i18n'
+import { getTranslate, getTranslateDirection } from '../composables/i18n'
 
 // ============================================================
-//  КОНСТАНТЫ
+//  2. КОНСТАНТЫ
 // ============================================================
 const MOBILE_BREAKPOINT = 735
 const baseUrl = import.meta.env.BASE_URL
@@ -118,7 +118,7 @@ const perPage = 8
 const randomClassCache = new Map()
 
 // ============================================================
-//  УТИЛИТЫ
+//  3. УТИЛИТЫ
 // ============================================================
 
 /**
@@ -137,6 +137,9 @@ const processImage = (imagePath, type, uuid) => {
   return imagePath
 }
 
+/**
+ * Определение категории опыта
+ */
 const getExperienceCategory = (expValue) => {
   if (!expValue) return 'Нет опыта'
   if (expValue.includes('лет') || expValue.includes('год')) {
@@ -159,7 +162,6 @@ const getExperienceCategory = (expValue) => {
   if (lower.includes('начин')) return 'Начинающий'
   if (lower.includes('опыт')) return 'Опытный'
   if (lower.includes('эксперт')) return 'Эксперт'
-
   return expValue || 'Нет опыта'
 }
 
@@ -168,18 +170,16 @@ const getExperienceCategory = (expValue) => {
  */
 const processDirection = (directionValue) => {
   if (!directionValue) return ''
-  
   if (directionValue.includes('/') || directionValue.includes(',')) {
     const parts = directionValue.replace(/,/g, '/').split('/')
     const uniqueDirections = [...new Set(parts.map(d => d.trim()))]
     return uniqueDirections.join(' / ')
   }
-  
   return directionValue
 }
 
 // ============================================================
-//  КОМПОНЕНТ
+//  4. КОМПОНЕНТ
 // ============================================================
 export default {
   name: 'ListHumans',
@@ -194,40 +194,16 @@ export default {
 
   setup(props) {
     // ============================================================
-    //  ЯЗЫК
+    //  4.1. ЯЗЫК И ПЕРЕВОДЫ
     // ============================================================
     const lang = inject('lang', 'ru')
     const translate = (category, key) => getTranslate(lang.value, category, key)
     const translateDirection = (directionStr) => getTranslateDirection(lang.value, directionStr)
 
     // ============================================================
-    //  СОСТОЯНИЕ
-    // ============================================================
-    const allHumans = ref([])
-    const visibleCount = ref(perPage)
-    const isLoading = ref(true)
-    const isMobile = ref(false)
-    const isLoadingMore = ref(false)
-    const isClient = ref(false)
-    const savedIndex = ref(0)
-
-    // Карусель
-    const carouselRef = ref(null)
-    const currentIndex = ref(0)
-
-    // Свайп
-    const touchStartX = ref(0)
-    const touchStartY = ref(0)
-    const touchEndX = ref(0)
-    const touchEndY = ref(0)
-    const isSwiping = ref(false)
-
-    // ============================================================
-    //  ФИЛЬТРЫ (ЧЕКБОКСЫ)
+    //  4.2. ОПЦИИ ФИЛЬТРОВ (ВЫЧИСЛЯЕМЫЕ)
     // ============================================================
     const EXPERIENCE_KEYS = ['Начинающий', 'Опытный', 'Эксперт']
-    const DIRECTION_KEYS = ['Выгул', 'Социализация', 'Лечение', 'Передержка', 'Креатив', 'Фандрайзинг']
-
     const experienceOptions = computed(() => {
       const experienceIcons = {
         'Начинающий': `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="8" cy="9" r="1.5" fill="currentColor"/><circle cx="16" cy="9" r="1.5" fill="currentColor"/><path d="M8 14c1.5 2 3 2 4 2s2.5 0 4-2"/></svg>`,
@@ -240,6 +216,8 @@ export default {
         icon: experienceIcons[key] || ''
       }))
     })
+
+    const DIRECTION_KEYS = ['Выгул', 'Социализация', 'Лечение', 'Передержка', 'Креатив', 'Фандрайзинг']
     const directionOptions = computed(() => {
       const directionIcons = {
         'Выгул': `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`,
@@ -256,7 +234,18 @@ export default {
       }))
     })
 
-    // Состояние фильтров (все активны по умолчанию)
+    // ============================================================
+    //  4.3. СОСТОЯНИЕ
+    // ============================================================
+    const allHumans = ref([])
+    const visibleCount = ref(perPage)
+    const isLoading = ref(true)
+    const isMobile = ref(false)
+    const isLoadingMore = ref(false)
+    const isClient = ref(false)
+    const savedIndex = ref(0)
+
+    // Фильтры
     const filters = reactive({
       experience: {
         'Начинающий': true,
@@ -273,20 +262,28 @@ export default {
       }
     })
 
+    // Карусель
+    const carouselRef = ref(null)
+    const currentIndex = ref(0)
+
+    // Свайп
+    const touchStartX = ref(0)
+    const touchStartY = ref(0)
+    const touchEndX = ref(0)
+    const touchEndY = ref(0)
+    const isSwiping = ref(false)
+
     // ============================================================
-    //  ВЫЧИСЛЯЕМЫЕ (ФИЛЬТРЫ)
+    //  4.4. ВЫЧИСЛЯЕМЫЕ
     // ============================================================
 
     const areAllActive = computed(() => {
-  return (
-    filters.experience['Начинающий'] && filters.experience['Опытный'] && filters.experience['Эксперт'] && filters.direction['Выгул'] && filters.direction['Социализация'] && filters.direction['Лечение'] && filters.direction['Передержка'] && filters.direction['Креатив'] && filters.direction['Фандрайзинг']
-  )
-})
-
-    // ============================================================
-    //  ВЫЧИСЛЯЕМЫЕ (ЛЮДИ)
-    // ============================================================
-
+      return (
+        filters.experience['Начинающий'] && filters.experience['Опытный'] && filters.experience['Эксперт'] &&
+        filters.direction['Выгул'] && filters.direction['Социализация'] && filters.direction['Лечение'] &&
+        filters.direction['Передержка'] && filters.direction['Креатив'] && filters.direction['Фандрайзинг']
+      )
+    })
 
     const filteredHumans = computed(() => {
       return allHumans.value.filter(human => {
@@ -316,12 +313,12 @@ export default {
     })
 
     // ============================================================
-    //  МЕТОДЫ (ФИЛЬТРЫ)
+    //  4.5. МЕТОДЫ
     // ============================================================
 
+    // --- Фильтры ---
     const toggleFilter = (group, value) => {
       filters[group][value] = !filters[group][value]
-      // Сбрасываем пагинацию при изменении фильтров
       visibleCount.value = perPage
       currentIndex.value = 0
     }
@@ -332,11 +329,8 @@ export default {
       visibleCount.value = perPage
       currentIndex.value = 0
     }
-    
-    // ============================================================
-    //  МЕТОДЫ (ОСТАЛЬНЫЕ)
-    // ============================================================
 
+    // --- Мобильная версия ---
     const checkMobile = () => {
       if (typeof window !== 'undefined') {
         const newIsMobile = window.innerWidth < MOBILE_BREAKPOINT
@@ -346,17 +340,14 @@ export default {
       }
     }
 
+    // --- Пагинация ---
     const loadMore = async () => {
       if (isLoadingMore.value || !hasMoreItems.value) return
-
       isLoadingMore.value = true
       savedIndex.value = currentIndex.value
-
       await new Promise(resolve => setTimeout(resolve, 500))
-
       visibleCount.value += perPage
       isLoadingMore.value = false
-
       if (isMobile.value) {
         nextTick(() => {
           if (carouselRef.value && paginatedHumans.value.length) {
@@ -371,15 +362,14 @@ export default {
       }
     }
 
+    // --- Карусель ---
     const resetToFirstSlide = () => {
       currentIndex.value = 0
       savedIndex.value = 0
       visibleCount.value = perPage
-
       if (carouselRef.value) {
         const container = carouselRef.value
         container.scrollLeft = 0
-
         nextTick(() => {
           container.scrollLeft = 0
           const slides = container.querySelectorAll('.carousel-slide')
@@ -402,17 +392,14 @@ export default {
       const container = carouselRef.value
       const slides = container.querySelectorAll('.carousel-slide')
       if (!slides.length || index < 0 || index >= slides.length) return
-
       const slide = slides[index]
       const containerWidth = container.offsetWidth
       const slideWidth = slide.offsetWidth
       const scrollPosition = slide.offsetLeft - (containerWidth - slideWidth) / 2
-
       container.scrollTo({
         left: Math.max(0, scrollPosition),
         behavior: 'smooth'
       })
-
       currentIndex.value = index
     }
 
@@ -432,6 +419,7 @@ export default {
       scrollToSlide(index)
     }
 
+    // --- Свайп ---
     const handleTouchStart = (e) => {
       const touch = e.touches[0]
       touchStartX.value = touch.clientX
@@ -474,7 +462,6 @@ export default {
     let previousColor = 0
     const getRandomHumanClass = (uuid) => {
       if (!uuid) return 'rand-01'
-      
       if (randomClassCache.has(uuid)) {
         return randomClassCache.get(uuid)
       }
@@ -490,7 +477,7 @@ export default {
     }
 
     // ============================================================
-    //  RESIZE
+    //  4.6. RESIZE
     // ============================================================
     let resizeTimeout = null
 
@@ -505,7 +492,7 @@ export default {
     }
 
     // ============================================================
-    //  ЖИЗНЕННЫЙ ЦИКЛ
+    //  4.7. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(async () => {
@@ -559,6 +546,7 @@ export default {
       }
     })
 
+    // --- Watchers ---
     watch(
       [() => filters.experience, () => filters.direction],
       () => {
@@ -609,23 +597,23 @@ export default {
     })
 
     // ============================================================
-    //  ВОЗВРАТ
+    //  4.8. ВОЗВРАТ
     // ============================================================
     return {
       // Опции фильтров
       experienceOptions,
       directionOptions,
-      
+
       // Данные
       paginatedHumans,
       filteredHumans,
-      
+
       // Фильтры
       filters,
       areAllActive,
       toggleFilter,
       resetFilters,
-      
+
       // Пагинация
       visibleCount,
       remaining,
@@ -642,7 +630,7 @@ export default {
       isLoading,
       isMobile,
       baseUrl,
-      
+
       // Карусель
       carouselRef,
       currentIndex,
@@ -652,7 +640,7 @@ export default {
       prevSlide,
       goToSlide,
       resetToFirstSlide,
-      
+
       // Свайп
       handleTouchStart,
       handleTouchMove,
@@ -661,7 +649,7 @@ export default {
       touchStartY,
       touchEndX,
       touchEndY,
-      
+
       // Прочее
       humanType: props.humanType,
       getRandomHumanClass,

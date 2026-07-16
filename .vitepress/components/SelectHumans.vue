@@ -50,13 +50,13 @@
 
 <script>
 // ============================================================
-//  ИМПОРТЫ
+//  1. ИМПОРТЫ
 // ============================================================
 import { computed, ref, onMounted, onUnmounted, nextTick, inject } from 'vue'
-import { translations, getTranslate, getTranslateDirection } from '../composables/i18n'
+import { getTranslate, getTranslateDirection } from '../composables/i18n'
 
 // ============================================================
-//  КОНСТАНТЫ
+//  2. КОНСТАНТЫ
 // ============================================================
 const MOBILE_BREAKPOINT = 735
 const baseUrl = import.meta.env.BASE_URL
@@ -64,7 +64,7 @@ const perPage = 0
 const randomClassCache = new Map()
 
 // ============================================================
-//  УТИЛИТЫ
+//  3. УТИЛИТЫ
 // ============================================================
 
 /**
@@ -108,12 +108,11 @@ const getExperienceCategory = (expValue) => {
   if (lower.includes('начин')) return 'Начинающий'
   if (lower.includes('опыт')) return 'Опытный'
   if (lower.includes('эксперт')) return 'Эксперт'
-
   return expValue || 'Нет опыта'
 }
 
 // ============================================================
-//  КОМПОНЕНТ
+//  4. КОМПОНЕНТ
 // ============================================================
 export default {
   name: 'SelectHumans',
@@ -132,14 +131,14 @@ export default {
 
   setup(props) {
     // ============================================================
-    //  ЯЗЫК
+    //  4.1. ЯЗЫК И ПЕРЕВОДЫ
     // ============================================================
     const lang = inject('lang', 'ru')
     const translate = (category, key) => getTranslate(lang.value, category, key)
     const translateDirection = (directionStr) => getTranslateDirection(lang.value, directionStr)
 
     // ============================================================
-    //  СОСТОЯНИЕ
+    //  4.2. СОСТОЯНИЕ
     // ============================================================
     const allHumans = ref([])
     const isLoading = ref(true)
@@ -157,7 +156,7 @@ export default {
     const isSwiping = ref(false)
 
     // ============================================================
-    //  ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+    //  4.3. ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
     // ============================================================
 
     const checkMobile = () => {
@@ -170,7 +169,7 @@ export default {
     }
 
     // ============================================================
-    //  ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
+    //  4.4. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
     // ============================================================
 
     const selectHumans = computed(() => {
@@ -184,14 +183,13 @@ export default {
     })
 
     // ============================================================
-    //  МЕТОДЫ
+    //  4.5. МЕТОДЫ
     // ============================================================
 
     // --- Рандомные цвета ---
     let previousColor = 0
     const getRandomVolunteerClass = (uuid) => {
       if (!uuid) return 'rand-01'
-      
       if (randomClassCache.has(uuid)) {
         return randomClassCache.get(uuid)
       }
@@ -253,36 +251,29 @@ export default {
 
     const handleTouchMove = (e) => {
       if (!isSwiping.value) return
-
       const touch = e.touches[0]
       const deltaX = touch.clientX - touchStartX.value
       const deltaY = touch.clientY - touchStartY.value
-
       if (Math.abs(deltaY) > Math.abs(deltaX)) {
         isSwiping.value = false
         return
       }
-
       e.preventDefault()
     }
 
     const handleTouchEnd = (e) => {
       if (!isSwiping.value) return
       isSwiping.value = false
-
       const touch = e.changedTouches[0]
       touchEndX.value = touch.clientX
       touchEndY.value = touch.clientY
-
       const diffX = touchStartX.value - touchEndX.value
       const minSwipeDistance = 50
-
       if (diffX > minSwipeDistance) {
         nextSlide()
       } else if (diffX < -minSwipeDistance) {
         prevSlide()
       }
-
       touchStartX.value = 0
       touchStartY.value = 0
       touchEndX.value = 0
@@ -290,7 +281,7 @@ export default {
     }
 
     // ============================================================
-    //  RESIZE
+    //  4.6. RESIZE
     // ============================================================
     let resizeTimeout = null
 
@@ -298,7 +289,6 @@ export default {
       if (resizeTimeout) {
         clearTimeout(resizeTimeout)
       }
-
       resizeTimeout = setTimeout(() => {
         checkMobile()
         resizeTimeout = null
@@ -306,7 +296,7 @@ export default {
     }
 
     // ============================================================
-    //  ЖИЗНЕННЫЙ ЦИКЛ
+    //  4.7. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(async () => {
@@ -368,7 +358,7 @@ export default {
     })
 
     // ============================================================
-    //  ВОЗВРАТ
+    //  4.8. ВОЗВРАТ
     // ============================================================
     return {
       // Данные
