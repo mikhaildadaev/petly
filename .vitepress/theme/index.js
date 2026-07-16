@@ -1,4 +1,7 @@
 import DefaultTheme from 'vitepress/theme'
+import { provide } from 'vue'
+import { useLang } from '../composables/useLang'
+
 import CardHumanHero from '../components/CardHumanHero.vue'
 import CardPetHero from '../components/CardPetHero.vue'
 import GalleryMedia from '../components/GalleryMedia.vue'
@@ -23,5 +26,11 @@ export default {
     app.component('SelectHumans', SelectHumans)
     app.component('SelectPets', SelectPets)
     app.component('StyleImagePage', StyleImagePage)
+  },
+
+  setup() {
+    const { lang } = useLang()
+    provide('lang', lang)
+    return { lang }
   }
 }
