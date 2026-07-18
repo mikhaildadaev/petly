@@ -4,10 +4,9 @@ const MOBILE_BREAKPOINT = 735
 
 export function useScroll(options = {}) {
   const {
-    items = ref([]),           // список элементов
-    perPage = 8,               // элементов на страницу
-    containerRef = ref(null),  // ссылка на контейнер карусели
-    hasMoreItems = ref(false), // флаг наличия дополнительного элемента
+    items = ref([]),
+    containerRef = ref(null),
+    hasMoreItems = ref(false),
   } = options
 
   // ============================================================
@@ -21,17 +20,15 @@ export function useScroll(options = {}) {
   const touchStartY = ref(0)
   const touchEndX = ref(0)
   const touchEndY = ref(0)
-  
+
   let resizeTimeout = null
-  let scrollTimeout = null  // ← добавить для Safari
+  let scrollTimeout = null
+  let isAnimating = false
 
   // ============================================================
   //  МЕТОДЫ
   // ============================================================
 
-  /**
-   * Проверка мобильного устройства
-   */
   const checkMobile = () => {
     if (typeof window !== 'undefined') {
       const newIsMobile = window.innerWidth < MOBILE_BREAKPOINT
@@ -42,121 +39,87 @@ export function useScroll(options = {}) {
   }
 
   /**
+   * Обновление классов .center
+   */
+  const updateCenterClass = (index) => {
+    if (!containerRef.value) return
+    const slides = containerRef.value.querySelectorAll('.carousel-slide')
+    slides.forEach((s, i) => {
+      s.classList.toggle('center', i === index)
+    })
+  }
+
+  /**
    * Прокрутка к слайду
    */
   const scrollToSlide = (index) => {
-    if (!containerRef.value) return
+    if (!containerRef.value || isAnimating) return
     const container = containerRef.value
     const slides = container.querySelectorAll('.carousel-slide')
     if (!slides.length || index < 0 || index >= slides.length) return
 
+    isAnimating = true
+
+    // Обновляем классы
+    updateCenterClass(index)
+    currentIndex.value = index
+
+    // Рассчитываем позицию
     const slide = slides[index]
     const containerWidth = container.offsetWidth
     const slideWidth = slide.offsetWidth
-    const scrollPosition = slide.offsetLeft - (containerWidth - slideWidth) / 2
+    const paddingLeft = parseInt(getComputedStyle(container).paddingLeft) || 0
+    const slideLeft = slide.offsetLeft - paddingLeft
+    const scrollPosition = slideLeft - (containerWidth - slideWidth) / 2
 
+    // Прокручиваем
     container.scrollTo({
       left: Math.max(0, scrollPosition),
       behavior: 'smooth'
     })
 
-    currentIndex.value = index
+    // Снимаем флаг после анимации
+    setTimeout(() => {
+      isAnimating = false
+    }, 400)
   }
 
   const nextSlide = () => {
     const maxIndex = items.value.length + (hasMoreItems.value ? 1 : 0)
-    if (currentIndex.value < maxIndex - 1) {
+    if (currentIndex.value < maxIndex - 1 && !isAnimating) {
       scrollToSlide(currentIndex.value + 1)
     }
   }
 
   const prevSlide = () => {
-    if (currentIndex.value > 0) {
+    if (currentIndex.value > 0 && !isAnimating) {
       scrollToSlide(currentIndex.value - 1)
     }
   }
 
   const goToSlide = (index) => {
-    scrollToSlide(index)
+    if (!isAnimating) {
+      scrollToSlide(index)
+    }
   }
 
-  /**
-   * Сброс на первый слайд
-   */
   const resetToFirstSlide = () => {
     currentIndex.value = 0
     savedIndex.value = 0
-    
-    if (containerRef.value) {
-      const container = containerRef.value
-      container.scrollLeft = 0
-      
-      nextTick(() => {
-        container.scrollLeft = 0
-        const slides = container.querySelectorAll('.carousel-slide')
+    nextTick(() => {
+      if (containerRef.value) {
+        const slides = containerRef.value.querySelectorAll('.carousel-slide')
         if (slides && slides.length > 0) {
-          const firstSlide = slides[0]
-          const containerWidth = container.offsetWidth
-          const slideWidth = firstSlide.offsetWidth
-          const scrollPosition = firstSlide.offsetLeft - (containerWidth - slideWidth) / 2
-          container.scrollTo({
-            left: Math.max(0, scrollPosition),
-            behavior: 'smooth'
-          })
+          scrollToSlide(0)
         }
-      })
-    }
-  }
-
-  /**
-   * Найти ближайший слайд (для Safari)
-   */
-  const findClosestSlide = () => {
-    if (!containerRef.value) return
-    
-    const container = containerRef.value
-    const slides = container.querySelectorAll('.carousel-slide')
-    if (!slides.length) return
-
-    const containerWidth = container.offsetWidth
-    const scrollLeft = container.scrollLeft
-    
-    let closestIndex = 0
-    let closestDistance = Infinity
-    
-    slides.forEach((slide, index) => {
-      const slideLeft = slide.offsetLeft
-      const centerOffset = (containerWidth - slide.offsetWidth) / 2
-      const distance = Math.abs(slideLeft - scrollLeft - centerOffset)
-      
-      if (distance < closestDistance) {
-        closestDistance = distance
-        closestIndex = index
       }
     })
-    
-    return closestIndex
   }
 
-  /**
-   * Принудительный снап после скролла (для Safari)
-   */
-  const snapAfterScroll = () => {
-    if (!containerRef.value) return
-    
-    const container = containerRef.value
-    // Проверяем, что скролл остановился
-    if (container.scrollLeft === container.scrollLeft) { // простая проверка
-      const closestIndex = findClosestSlide()
-      if (closestIndex !== undefined && closestIndex !== currentIndex.value) {
-        scrollToSlide(closestIndex)
-      }
-    }
-  }
+  // ============================================================
+  //  ОБРАБОТЧИКИ СОБЫТИЙ
+  // ============================================================
 
-  /**
-   * Обработчики свайпа
-   */
   const handleTouchStart = (e) => {
     const touch = e.touches[0]
     touchStartX.value = touch.clientX
@@ -169,6 +132,7 @@ export function useScroll(options = {}) {
     const touch = e.touches[0]
     const deltaX = touch.clientX - touchStartX.value
     const deltaY = touch.clientY - touchStartY.value
+
     if (Math.abs(deltaY) > Math.abs(deltaX)) {
       isSwiping.value = false
       return
@@ -179,81 +143,76 @@ export function useScroll(options = {}) {
   const handleTouchEnd = (e) => {
     if (!isSwiping.value) return
     isSwiping.value = false
+
     const touch = e.changedTouches[0]
     touchEndX.value = touch.clientX
     touchEndY.value = touch.clientY
+
     const diffX = touchStartX.value - touchEndX.value
     const minSwipeDistance = 30
 
-    if (diffX > minSwipeDistance) {
+    if (diffX > minSwipeDistance && !isAnimating) {
       nextSlide()
-    } else if (diffX < -minSwipeDistance) {
+    } else if (diffX < -minSwipeDistance && !isAnimating) {
       prevSlide()
     } else {
+      // Возвращаемся к текущему слайду
       scrollToSlide(currentIndex.value)
     }
-    
+
     touchStartX.value = 0
     touchStartY.value = 0
     touchEndX.value = 0
     touchEndY.value = 0
   }
 
-  /**
-   * Обработчик скролла (для Safari)
-   */
   const handleScroll = () => {
-    if (!containerRef.value) return
-    
-    // Очищаем предыдущий таймаут
+    if (isAnimating) return
+
     if (scrollTimeout) {
       clearTimeout(scrollTimeout)
     }
-    
-    // Ждём остановки скролла
+
     scrollTimeout = setTimeout(() => {
-      snapAfterScroll()
+      // Проверяем, что слайд с .center есть
+      if (containerRef.value) {
+        const slides = containerRef.value.querySelectorAll('.carousel-slide')
+        let hasCenter = false
+        slides.forEach((s) => {
+          if (s.classList.contains('center')) hasCenter = true
+        })
+        if (!hasCenter) {
+          updateCenterClass(currentIndex.value)
+        }
+      }
       scrollTimeout = null
-    }, 150)
+    }, 100)
   }
 
-  /**
-   * Обработчик изменения размера
-   */
   const handleResize = () => {
     if (resizeTimeout) {
       clearTimeout(resizeTimeout)
     }
     resizeTimeout = setTimeout(() => {
       checkMobile()
+      if (containerRef.value && items.value.length > 0) {
+        const slides = containerRef.value.querySelectorAll('.carousel-slide')
+        if (slides.length > 0) {
+          const index = Math.min(currentIndex.value, slides.length - 1)
+          // Обновляем позицию без анимации
+          const container = containerRef.value
+          const slide = slides[index]
+          const containerWidth = container.offsetWidth
+          const slideWidth = slide.offsetWidth
+          const paddingLeft = parseInt(getComputedStyle(container).paddingLeft) || 0
+          const slideLeft = slide.offsetLeft - paddingLeft
+          const scrollPosition = slideLeft - (containerWidth - slideWidth) / 2
+          container.scrollLeft = Math.max(0, scrollPosition)
+          updateCenterClass(index)
+        }
+      }
       resizeTimeout = null
-    }, 100)
-  }
-
-  /**
-   * Добавление/удаление слушателей
-   */
-  const addScrollListener = () => {
-    if (containerRef.value) {
-      containerRef.value.addEventListener('scroll', handleScroll)
-      // Для Safari с поддержкой scrollend
-      if ('onscrollend' in window) {
-        containerRef.value.addEventListener('scrollend', snapAfterScroll)
-      }
-    }
-  }
-
-  const removeScrollListener = () => {
-    if (containerRef.value) {
-      containerRef.value.removeEventListener('scroll', handleScroll)
-      if ('onscrollend' in window) {
-        containerRef.value.removeEventListener('scrollend', snapAfterScroll)
-      }
-    }
-    if (scrollTimeout) {
-      clearTimeout(scrollTimeout)
-      scrollTimeout = null
-    }
+    }, 200)
   }
 
   // ============================================================
@@ -262,12 +221,15 @@ export function useScroll(options = {}) {
 
   onMounted(() => {
     checkMobile()
+
     if (typeof window !== 'undefined') {
       window.addEventListener('resize', handleResize)
     }
-    // Добавляем слушатели после монтирования
+
     nextTick(() => {
-      addScrollListener()
+      if (containerRef.value) {
+        containerRef.value.addEventListener('scroll', handleScroll, { passive: true })
+      }
     })
   })
 
@@ -276,16 +238,24 @@ export function useScroll(options = {}) {
       window.removeEventListener('resize', handleResize)
       if (resizeTimeout) {
         clearTimeout(resizeTimeout)
+        resizeTimeout = null
       }
     }
-    removeScrollListener()
+
+    if (containerRef.value) {
+      containerRef.value.removeEventListener('scroll', handleScroll)
+    }
+
+    if (scrollTimeout) {
+      clearTimeout(scrollTimeout)
+      scrollTimeout = null
+    }
   })
 
   // ============================================================
   //  ВОЗВРАТ
   // ============================================================
   return {
-    // Состояние
     isMobile,
     currentIndex,
     savedIndex,
@@ -294,20 +264,18 @@ export function useScroll(options = {}) {
     touchEndX,
     touchEndY,
     isSwiping,
-    
-    // Методы
-    checkMobile,
+
     scrollToSlide,
     nextSlide,
     prevSlide,
     goToSlide,
     resetToFirstSlide,
+    updateCenterClass,
+
     handleTouchStart,
     handleTouchMove,
     handleTouchEnd,
     handleResize,
-    // ← добавить для отладки
-    addScrollListener,
-    removeScrollListener,
+    checkMobile,
   }
 }
