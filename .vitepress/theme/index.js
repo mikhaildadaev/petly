@@ -1,6 +1,6 @@
 import DefaultTheme from 'vitepress/theme'
 import { provide } from 'vue'
-import { useLang } from '../composables/useLang'
+import { useLang } from '../utils/useLang'
 
 import CardHumanHero from '../components/CardHumanHero.vue'
 import CardOrganizationHero from '../components/CardOrganizationHero.vue'
