@@ -39,9 +39,9 @@
         <!-- Фотографии -->
         <img v-if="currentMedia.type === 'image'" :src="currentMedia.src" />
         <!-- Видеозаписи -->
-        <video v-else-if="currentMedia.type === 'video'" :src="currentMedia.src" controls autoplay playsinline class="fullScreen-video" ref="fullScreenVideoRef"/>
+        <video v-else-if="currentMedia.type === 'video'" :src="currentMedia.src" controls autoplay muted playsinline class="fullScreen-video" ref="fullScreenVideoRef"/>
         <!-- Аудиозаписи -->
-        <audio v-else-if="currentMedia.type === 'audio'" :src="currentMedia.src" controls autoplay class="fullScreen-audio" ref="fullScreenAudioRef"/>
+        <audio v-else-if="currentMedia.type === 'audio'" :src="currentMedia.src" controls class="fullScreen-audio" ref="fullScreenAudioRef"/>
       </div>
       <div class="fullScreen-footer" @click.stop>
         <div class="fullScreen-dots">
