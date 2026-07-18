@@ -60,7 +60,7 @@ export function useFavorites(uuid = null) {
       return false
     }
   }
-  const getFavoriteUUIDs = () => {
+  const useFavoriteUUIDs = () => {
     return loadFavorites()
   }
   const clearFavorites = () => {
@@ -95,7 +95,7 @@ export function useFavorites(uuid = null) {
     saveFavorites,
     checkIsFavorite,
     toggleFavorite,
-    getFavoriteUUIDs,
+    useFavoriteUUIDs,
     clearFavorites,
   }
 }

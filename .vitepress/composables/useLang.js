@@ -5,7 +5,6 @@ const lang = ref('ru')
 
 export function useLang() {
   let storageListener = null
-
   const updateLang = () => {
     try {
       const stored = localStorage.getItem(LANG_KEY)
@@ -14,10 +13,8 @@ export function useLang() {
       lang.value = 'ru'
     }
   }
-
   onMounted(() => {
     updateLang()
-    
     storageListener = (e) => {
       if (e.key === LANG_KEY) {
         lang.value = e.newValue || 'ru'
@@ -25,12 +22,10 @@ export function useLang() {
     }
     window.addEventListener('storage', storageListener)
   })
-
   onUnmounted(() => {
     if (storageListener) {
       window.removeEventListener('storage', storageListener)
     }
   })
-
   return { lang, updateLang }
 }

@@ -5,13 +5,6 @@ const randomClassCache = new Map()
 
 export function useRandomColor() {
   const previousColor = ref(0)
-
-  /**
-   * Получение случайного класса для карточки
-   * @param {string} uuid - UUID сущности
-   * @param {number} maxColors - количество цветов (по умолчанию 30)
-   * @returns {string} - случайный класс rand-XX
-   */
   const useRandomClass = (uuid, maxColors = 30) => {
     if (!uuid) return 'rand-01'
     
