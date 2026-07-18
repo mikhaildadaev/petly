@@ -2,7 +2,7 @@ import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 
 const MOBILE_BREAKPOINT = 735
 
-export function useScroll(options = {}) {
+export function useScrollCarusel(options = {}) {
   const {
     items = ref([]),
     containerRef = ref(null),
@@ -83,26 +83,22 @@ export function useScroll(options = {}) {
       isAnimating = false
     }, 400)
   }
-
   const nextSlide = () => {
     const maxIndex = items.value.length + (hasMoreItems.value ? 1 : 0)
     if (currentIndex.value < maxIndex - 1 && !isAnimating) {
       scrollToSlide(currentIndex.value + 1)
     }
   }
-
   const prevSlide = () => {
     if (currentIndex.value > 0 && !isAnimating) {
       scrollToSlide(currentIndex.value - 1)
     }
   }
-
   const goToSlide = (index) => {
     if (!isAnimating) {
       scrollToSlide(index)
     }
   }
-
   const resetToFirstSlide = () => {
     currentIndex.value = 0
     savedIndex.value = 0
@@ -126,37 +122,30 @@ export function useScroll(options = {}) {
     touchStartY.value = touch.clientY
     isSwiping.value = true
   }
-
   const handleTouchMove = (e) => {
     if (!isSwiping.value) return
     const touch = e.touches[0]
     const deltaX = touch.clientX - touchStartX.value
     const deltaY = touch.clientY - touchStartY.value
-
     if (Math.abs(deltaY) > Math.abs(deltaX)) {
       isSwiping.value = false
       return
     }
     e.preventDefault()
   }
-
   const handleTouchEnd = (e) => {
     if (!isSwiping.value) return
     isSwiping.value = false
-
     const touch = e.changedTouches[0]
     touchEndX.value = touch.clientX
     touchEndY.value = touch.clientY
-
     const diffX = touchStartX.value - touchEndX.value
     const minSwipeDistance = 30
-
     if (diffX > minSwipeDistance && !isAnimating) {
       nextSlide()
     } else if (diffX < -minSwipeDistance && !isAnimating) {
       prevSlide()
     } else {
-      // Возвращаемся к текущему слайду
       scrollToSlide(currentIndex.value)
     }
 
@@ -165,16 +154,13 @@ export function useScroll(options = {}) {
     touchEndX.value = 0
     touchEndY.value = 0
   }
-
   const handleScroll = () => {
     if (isAnimating) return
 
     if (scrollTimeout) {
       clearTimeout(scrollTimeout)
     }
-
     scrollTimeout = setTimeout(() => {
-      // Проверяем, что слайд с .center есть
       if (containerRef.value) {
         const slides = containerRef.value.querySelectorAll('.carousel-slide')
         let hasCenter = false
@@ -188,7 +174,6 @@ export function useScroll(options = {}) {
       scrollTimeout = null
     }, 100)
   }
-
   const handleResize = () => {
     if (resizeTimeout) {
       clearTimeout(resizeTimeout)
@@ -221,11 +206,9 @@ export function useScroll(options = {}) {
 
   onMounted(() => {
     checkMobile()
-
     if (typeof window !== 'undefined') {
       window.addEventListener('resize', handleResize)
     }
-
     nextTick(() => {
       if (containerRef.value) {
         containerRef.value.addEventListener('scroll', handleScroll, { passive: true })
@@ -241,11 +224,9 @@ export function useScroll(options = {}) {
         resizeTimeout = null
       }
     }
-
     if (containerRef.value) {
       containerRef.value.removeEventListener('scroll', handleScroll)
     }
-
     if (scrollTimeout) {
       clearTimeout(scrollTimeout)
       scrollTimeout = null
