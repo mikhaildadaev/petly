@@ -466,7 +466,12 @@ h1,h2,h3 {
   flex: 1;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
   touch-action: pan-y pinch-zoom;
+  
 }
 .carousel-track::-webkit-scrollbar {
   display: none;
@@ -477,6 +482,7 @@ h1,h2,h3 {
   transition: all 0.5s ease;
   min-height: 420px;
   min-width: 340px;
+  scroll-snap-stop: always;
 }
 .carousel-slide.center {
   z-index: 2;
