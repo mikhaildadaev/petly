@@ -476,7 +476,7 @@ h1,h2,h3 {
   scroll-snap-align: center;
   transition: all 0.5s ease;
   min-height: 420px;
-  min-width: 280px;
+  min-width: 340px;
 }
 .carousel-slide.center {
   z-index: 2;
@@ -1042,14 +1042,16 @@ h1,h2,h3 {
     gap: 8px;
   }
 }
-@media (min-width: 736px) and (max-width: 939px) {
-  .carousel-slide {
-    flex: 0 0 calc(50% - 14px)!important;
-  }
-}
 @media (min-width: 940px) and (max-width: 1023px) {
   .carousel-slide {
-    flex: 0 0 calc(33.333% - 14px)!important;
+    flex: 0 0 calc(33.333% - 48px)!important;
+    min-width: 320px;
+  }
+}
+@media (min-width: 736px) and (max-width: 939px) {
+  .carousel-slide {
+    flex: 0 0 calc(50% - 48px)!important;
+    min-width: 300px;
   }
 }
 
@@ -1063,6 +1065,7 @@ h1,h2,h3 {
   }
   .carousel-slide {
     flex: 0 0 calc(100% - 48px);
+    min-width: 280px;
   }
   .grid-card-body p {
     font-size: 0.9rem;
