@@ -5,6 +5,6 @@ description: A list of shelters where pets live while waiting for their new home
 
 # Shelters
 
-<ListOrganizations :organizationType="'shelters'"/>
+<ListOrganizations :type="'shelters'"/>
 
 <StyleImagePage src="/assets/webp/handsCatAndDog.webp" width="284" float="center"/>

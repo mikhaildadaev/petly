@@ -5,6 +5,6 @@ description: Menschen, die mit Taten helfen.
 
 # Freiwillige
 
-<ListHumans :humanType="'volunteers'"/>
+<ListHumans :type="'volunteers'"/>
 
 <StyleImagePage src="/assets/webp/handsCatAndDog.webp" width="284" float="center"/>

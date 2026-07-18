@@ -28,12 +28,12 @@ features:
 
 ## Cats
 
-<RandomPets petType="cats" :count="8"/>
+<RandomPets type="cats" :count="8"/>
 
 ## Dogs
 
-<RandomPets petType="dogs" :count="8"/>
+<RandomPets type="dogs" :count="8"/>
 
 ## Volunteers
 
-<RandomHumans humanType="volunteers" :count="8"/>
+<RandomHumans type="volunteers" :count="8"/>

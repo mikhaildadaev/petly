@@ -5,6 +5,6 @@ description: Eine Liste von Tierheimen, in denen Haustiere leben, die auf ihr ne
 
 # Tierheime
 
-<ListOrganizations :organizationType="'shelters'"/>
+<ListOrganizations :type="'shelters'"/>
 
 <StyleImagePage src="/assets/webp/handsCatAndDog.webp" width="284" float="center"/>

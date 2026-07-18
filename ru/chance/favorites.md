@@ -13,11 +13,11 @@ description: Питомцы, что покорили ваше сердце.
 
 ## Кошки
 
-<SelectPets :petUUIDs="favoriteUUIDs" :petType="'cats'"/>
+<SelectPets :uuids="favoriteUUIDs" :type="'cats'"/>
 
 ## Собаки
 
-<SelectPets :petUUIDs="favoriteUUIDs" :petType="'dogs'"/>
+<SelectPets :uuids="favoriteUUIDs" :type="'dogs'"/>
 
 <StyleImagePage src="/assets/webp/dogWithCat.webp" width="284" float="center"/>
 

@@ -13,11 +13,11 @@ Komm zurück zu ihnen. Blättere durch die Karten. Vielleicht entscheidest du ge
 
 ## Katzen
 
-<SelectPets :petUUIDs="favoriteUUIDs" :petType="'cats'"/>
+<SelectPets :type="'cats'" :uuids="favoriteUUIDs"/>
 
 ## Hunde
 
-<SelectPets :petUUIDs="favoriteUUIDs" :petType="'dogs'"/>
+<SelectPets :type="'dogs'" :uuids="favoriteUUIDs"/>
 
 <StyleImagePage src="/assets/webp/dogWithCat.webp" width="284" float="center"/>
 

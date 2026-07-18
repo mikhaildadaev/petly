@@ -13,11 +13,11 @@ Come back to them. Browse through the cards. Maybe today you'll decide: **«This
 
 ## Cats
 
-<SelectPets :petUUIDs="favoriteUUIDs" :petType="'cats'"/>
+<SelectPets :petUUIDs="favoriteUUIDs" :type="'cats'"/>
 
 ## Dogs
 
-<SelectPets :petUUIDs="favoriteUUIDs" :petType="'dogs'"/>
+<SelectPets :petUUIDs="favoriteUUIDs" :type="'dogs'"/>
 
 <StyleImagePage src="/assets/webp/dogWithCat.webp" width="284" float="center"/>
 
