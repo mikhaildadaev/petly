@@ -8,7 +8,7 @@
           <span v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</span>
         </div>
         <img :src="pet.image" loading="lazy" />
-        <div :class="['grid-card-body', getRandomClass(pet.uuid)]">
+        <div :class="['grid-card-body', useRandomClass(pet.uuid)]">
           <div class="name">{{ pet.nameDisplay }}</div>
           <p>{{ pet.descriptionDisplay }}</p>
         </div>
@@ -55,9 +55,9 @@
 //  1. ИМПОРТЫ
 // ============================================================
 import { computed, ref, onMounted, onUnmounted, nextTick, inject, watch } from 'vue'
-import { getTranslate, getAge, getAgePetCategory } from '../composables/i18n'
 import { useRandomColor } from '../composables/useRandomColor'
 import { useScroll } from '../composables/useScroll'
+import { useTranslate, useAge, useAgePetCategory } from '../composables/useTranslate'
 
 // ============================================================
 //  2. КОНСТАНТЫ
@@ -107,7 +107,7 @@ export default {
     //  4.1. ЯЗЫК И ПЕРЕВОДЫ
     // ============================================================
     const lang = inject('lang', 'ru')
-    const translate = (category, key) => getTranslate(lang.value, category, key)
+    const translate = (category, key) => useTranslate(lang.value, category, key)
 
     // ============================================================
     //  4.2. СОСТОЯНИЕ
@@ -135,7 +135,7 @@ export default {
     // ============================================================
 
     // --- Рандомные цвета ---
-    const { getRandomClass } = useRandomColor()
+    const { useRandomClass } = useRandomColor()
 
     // --- Скролл и карусель ---
     const carouselRef = ref(null)
@@ -205,10 +205,10 @@ export default {
               uuid: uuid,
               nameDisplay: fm.title || '',
               descriptionDisplay: fm.description || '',
-              gender: getTranslate('ru', 'gender', fm.gender),
-              genderDisplay: getTranslate(lang.value, 'gender', fm.gender),
-              ageDisplay: getAge(lang.value, fm.age),
-              sizeDisplay: getTranslate(lang.value, 'size', fm.size),
+              gender: useTranslate('ru', 'gender', fm.gender),
+              genderDisplay: useTranslate(lang.value, 'gender', fm.gender),
+              ageDisplay: useAge(lang.value, fm.age),
+              sizeDisplay: useTranslate(lang.value, 'size', fm.size),
               image: processImage(fm.image, props.petType, uuid),
             }
           })
@@ -286,7 +286,7 @@ export default {
       
       // Прочее
       petType: props.petType,
-      getRandomClass,
+      useRandomClass,
       baseUrl,
     }
   },

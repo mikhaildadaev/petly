@@ -5,7 +5,7 @@
       <span v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</span>
     </div>
     <img :src="human.image" class="hero-image" loading="lazy" />
-    <div :class="['hero-overlay', getRandomHumanClass(human.uuid)]">
+    <div :class="['hero-overlay', useRandomClass(human.uuid)]">
       <div class="name">{{ human.nameDisplay }}</div>
       <p>{{ human.descriptionDisplay }}</p>
     </div>
@@ -16,15 +16,16 @@
 // ============================================================
 //  1. ИМПОРТЫ
 // ============================================================
-import { computed, inject } from 'vue'
+import { computed, ref, onMounted, watch, nextTick, inject } from 'vue'
 import { useData } from 'vitepress'
-import { getTranslate, getDirection, getExperience } from '../composables/i18n'
+import { useFavorites } from '../composables/useFavorites'
+import { useRandomColor } from '../composables/useRandomColor'
+import { useTranslate, useDirection, useExperience } from '../composables/useTranslate'
 
 // ============================================================
 //  2. КОНСТАНТЫ
 // ============================================================
 const baseUrl = import.meta.env.BASE_URL
-const randomClassCache = new Map()
 
 // ============================================================
 //  3. УТИЛИТЫ
@@ -57,6 +58,7 @@ export default {
       type: String,
       required: false,
       default: 'volunteers',
+      description: 'Тип человека (volunteers, staff, и т.д.)'
     }
   },
 
@@ -65,7 +67,7 @@ export default {
     //  4.1. ЯЗЫК И ПЕРЕВОДЫ
     // ============================================================
     const lang = inject('lang', 'ru')
-    const translate = (category, key) => getTranslate(lang.value, category, key)
+    const translate = (category, key) => useTranslate(lang.value, category, key)
 
     // ============================================================
     //  4.2. ДАННЫЕ (FRONTMATTER)
@@ -73,7 +75,13 @@ export default {
     const { frontmatter } = useData()
     
     // ============================================================
-    //  4.3. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
+    //  4.3. COMPOSABLES
+    // ============================================================
+    const { useRandomClass } = useRandomColor()
+    const { isFavorite, toggleFavorite, checkIsFavorite } = useFavorites()
+
+    // ============================================================
+    //  4.4. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
     // ============================================================
 
     /**
@@ -85,53 +93,67 @@ export default {
       return data
     })
 
+    /**
+     * Данные человека с переводами
+     */
     const human = computed(() => {
       const data = fm.value || {}
-      const uuid = data.uuid || path.replace(`/${lang.value}/humans/${props.humanType}/`, '').replace('.md', '')
+      const uuid = data.uuid || ''
       
       return {
         uuid,
         nameDisplay: data.title || '',
         descriptionDisplay: data.description || '',
-        directionDisplay: getDirection(lang.value, data.direction),
-        experienceDisplay: getExperience(lang.value, data.experience),
-        image: processImage(data.image, props.humanType, data.uuid || ''),
+        directionDisplay: data.direction ? useDirection(lang.value, data.direction) : '',
+        experienceDisplay: data.experience ? useExperience(lang.value, data.experience) : '',
+        image: processImage(data.image, props.humanType, uuid),
       }
     })
 
     // ============================================================
-    //  4.4. РАНДОМНЫЕ ЦВЕТА
+    //  4.5. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
-    let previousColor = 0
-    const getRandomHumanClass = (uuid) => {
-      if (!uuid) return 'rand-01'
-      if (randomClassCache.has(uuid)) {
-        return randomClassCache.get(uuid)
-      }
-      let num
-      do {
-        num = Math.floor(Math.random() * 30) + 1
-      } while (num === previousColor)
-      previousColor = num
-      const formattedNum = num.toString().padStart(2, '0')
-      const className = `rand-${formattedNum}`
-      randomClassCache.set(uuid, className)
-      return className
-    }
+
+    onMounted(() => {
+      nextTick(() => {
+        if (human.value.uuid) {
+          isFavorite.value = checkIsFavorite(human.value.uuid)
+        }
+      })
+    })
 
     // ============================================================
-    //  4.5. ВОЗВРАТ
+    //  4.6. WATCHERS
+    // ============================================================
+
+    watch(() => human.value.uuid, (newUuid) => {
+      if (newUuid) {
+        setTimeout(() => {
+          isFavorite.value = checkIsFavorite(newUuid)
+        }, 50)
+      }
+    }, { immediate: true })
+
+    watch(fm, (newFm) => {
+      if (newFm?.uuid) {
+        isFavorite.value = checkIsFavorite(newFm.uuid)
+      }
+    }, { deep: true })
+
+    // ============================================================
+    //  4.7. ВОЗВРАТ
     // ============================================================
     return {
       // Данные
       human,
       
-      // Язык
-      lang,
-      translate,
+      // Состояние
+      isFavorite,
       
       // Методы
-      getRandomHumanClass,
+      useRandomClass,
+      toggleFavorite,
+      translate,
       
       // Константы
       baseUrl,

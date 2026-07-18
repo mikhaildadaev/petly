@@ -30,7 +30,7 @@
         <span v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</span>
       </div>
       <img :src="human.image" loading="lazy" />
-      <div :class="['grid-card-body', getRandomClass(human.uuid)]">
+      <div :class="['grid-card-body', useRandomClass(human.uuid)]">
         <div class="name">{{ human.nameDisplay }}</div>
         <p>{{ human.descriptionDisplay }}</p>
       </div>
@@ -66,7 +66,7 @@
               <span v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</span>
             </div>
             <img :src="human.image" loading="lazy" />
-            <div :class="['grid-card-body', getRandomClass(human.uuid)]">
+            <div :class="['grid-card-body', useRandomClass(human.uuid)]">
               <div class="name">{{ human.nameDisplay }}</div>
               <p>{{ human.descriptionDisplay }}</p>
             </div>
@@ -110,7 +110,7 @@ import { computed, ref, onMounted, watch, nextTick, onUnmounted, reactive, injec
 import { usePagination } from '../composables/usePagination'
 import { useRandomColor } from '../composables/useRandomColor'
 import { useScroll } from '../composables/useScroll'
-import { getTranslate, getDirection, getExperience } from '../composables/i18n'
+import { useTranslate, useDirection, useExperience } from '../composables/useTranslate'
 
 // ============================================================
 //  2. КОНСТАНТЫ
@@ -136,7 +136,7 @@ export default {
     //  4.1. ЯЗЫК И ПЕРЕВОДЫ
     // ============================================================
     const lang = inject('lang', 'ru')
-    const translate = (category, key) => getTranslate(lang.value, category, key)
+    const translate = (category, key) => useTranslate(lang.value, category, key)
 
     // ============================================================
     //  4.2. ОПЦИИ ФИЛЬТРОВ
@@ -268,7 +268,7 @@ export default {
     //  4.7. РАНДОМНЫЕ ЦВЕТА
     // ============================================================
 
-    const { getRandomClass } = useRandomColor()
+    const { useRandomClass } = useRandomColor()
 
     // ============================================================
     //  4.8. МЕТОДЫ (ФИЛЬТРЫ)
@@ -350,10 +350,10 @@ export default {
               uuid,
               nameDisplay: fm.title || '',
               descriptionDisplay: fm.description || '',
-              experience: getExperience('ru', fm.experience),
-              experienceDisplay: getExperience(lang.value, fm.experience),
-              direction: getDirection('ru', fm.direction),
-              directionDisplay: getDirection(lang.value, fm.direction),
+              experience: useExperience('ru', fm.experience),
+              experienceDisplay: useExperience(lang.value, fm.experience),
+              direction: useDirection('ru', fm.direction),
+              directionDisplay: useDirection(lang.value, fm.direction),
               image: processImage(fm.image, props.humanType, uuid),
             }
           })
@@ -480,7 +480,7 @@ export default {
 
       // Прочее
       humanType: props.humanType,
-      getRandomClass,
+      useRandomClass,
     }
   },
 }

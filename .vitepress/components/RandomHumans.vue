@@ -14,7 +14,7 @@
               <span v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</span>
             </div>
             <img :src="human.image" loading="lazy" />
-            <div :class="['grid-card-body', getRandomClass(human.uuid)]">
+            <div :class="['grid-card-body', useRandomClass(human.uuid)]">
               <div class="name">{{ human.nameDisplay }}</div>
               <p>{{ human.descriptionDisplay }}</p>
             </div>
@@ -51,9 +51,9 @@
 //  1. ИМПОРТЫ
 // ============================================================
 import { ref, computed, onMounted, watch, onUnmounted, inject } from 'vue'
-import { getTranslate, getDirection, getExperience } from '../composables/i18n'
 import { useRandomColor } from '../composables/useRandomColor'
 import { useScroll } from '../composables/useScroll'
+import { useTranslate, useDirection, useExperience } from '../composables/useTranslate'
 
 // ============================================================
 //  2. КОНСТАНТЫ
@@ -114,7 +114,7 @@ export default {
     //  4.1. ЯЗЫК И ПЕРЕВОДЫ
     // ============================================================
     const lang = inject('lang', 'ru')
-    const translate = (category, key) => getTranslate(lang.value, category, key)
+    const translate = (category, key) => useTranslate(lang.value, category, key)
 
     // ============================================================
     //  4.2. СОСТОЯНИЕ
@@ -136,7 +136,7 @@ export default {
     // ============================================================
 
     // --- Рандомные цвета ---
-    const { getRandomClass } = useRandomColor()
+    const { useRandomClass } = useRandomColor()
 
     // --- Дополнительный слайд "Перейти в раздел" ---
     const hasMoreItems = ref(true)
@@ -216,8 +216,8 @@ export default {
               uuid,
               nameDisplay: fm.title || '',
               descriptionDisplay: fm.description || '',
-              directionDisplay: getDirection(lang.value, fm.direction),
-              experienceDisplay: getExperience(lang.value, fm.experience),
+              directionDisplay: useDirection(lang.value, fm.direction),
+              experienceDisplay: useExperience(lang.value, fm.experience),
               image: processImage(fm.image, props.humanType, uuid),
               humanType: props.humanType,
             }
@@ -265,8 +265,8 @@ export default {
               uuid,
               nameDisplay: fm.title || '',
               descriptionDisplay: fm.description || '',
-              directionDisplay: getDirection(lang.value, fm.direction),
-              experienceDisplay: getExperience(lang.value, fm.experience),
+              directionDisplay: useDirection(lang.value, fm.direction),
+              experienceDisplay: useExperience(lang.value, fm.experience),
               image: processImage(fm.image, props.humanType, uuid),
               humanType: props.humanType,
             }
@@ -323,7 +323,7 @@ export default {
       baseUrl,
       linkUrl,
       goToLink,
-      getRandomClass,
+      useRandomClass,
     }
   },
 }
