@@ -23,6 +23,7 @@ export function useScroll(options = {}) {
   const touchEndY = ref(0)
   
   let resizeTimeout = null
+  let scrollTimeout = null  // ← добавить для Safari
 
   // ============================================================
   //  МЕТОДЫ
@@ -108,6 +109,52 @@ export function useScroll(options = {}) {
   }
 
   /**
+   * Найти ближайший слайд (для Safari)
+   */
+  const findClosestSlide = () => {
+    if (!containerRef.value) return
+    
+    const container = containerRef.value
+    const slides = container.querySelectorAll('.carousel-slide')
+    if (!slides.length) return
+
+    const containerWidth = container.offsetWidth
+    const scrollLeft = container.scrollLeft
+    
+    let closestIndex = 0
+    let closestDistance = Infinity
+    
+    slides.forEach((slide, index) => {
+      const slideLeft = slide.offsetLeft
+      const centerOffset = (containerWidth - slide.offsetWidth) / 2
+      const distance = Math.abs(slideLeft - scrollLeft - centerOffset)
+      
+      if (distance < closestDistance) {
+        closestDistance = distance
+        closestIndex = index
+      }
+    })
+    
+    return closestIndex
+  }
+
+  /**
+   * Принудительный снап после скролла (для Safari)
+   */
+  const snapAfterScroll = () => {
+    if (!containerRef.value) return
+    
+    const container = containerRef.value
+    // Проверяем, что скролл остановился
+    if (container.scrollLeft === container.scrollLeft) { // простая проверка
+      const closestIndex = findClosestSlide()
+      if (closestIndex !== undefined && closestIndex !== currentIndex.value) {
+        scrollToSlide(closestIndex)
+      }
+    }
+  }
+
+  /**
    * Обработчики свайпа
    */
   const handleTouchStart = (e) => {
@@ -136,16 +183,38 @@ export function useScroll(options = {}) {
     touchEndX.value = touch.clientX
     touchEndY.value = touch.clientY
     const diffX = touchStartX.value - touchEndX.value
-    const minSwipeDistance = 50
+    const minSwipeDistance = 30
+
     if (diffX > minSwipeDistance) {
       nextSlide()
     } else if (diffX < -minSwipeDistance) {
       prevSlide()
+    } else {
+      scrollToSlide(currentIndex.value)
     }
+    
     touchStartX.value = 0
     touchStartY.value = 0
     touchEndX.value = 0
     touchEndY.value = 0
+  }
+
+  /**
+   * Обработчик скролла (для Safari)
+   */
+  const handleScroll = () => {
+    if (!containerRef.value) return
+    
+    // Очищаем предыдущий таймаут
+    if (scrollTimeout) {
+      clearTimeout(scrollTimeout)
+    }
+    
+    // Ждём остановки скролла
+    scrollTimeout = setTimeout(() => {
+      snapAfterScroll()
+      scrollTimeout = null
+    }, 150)
   }
 
   /**
@@ -161,6 +230,32 @@ export function useScroll(options = {}) {
     }, 100)
   }
 
+  /**
+   * Добавление/удаление слушателей
+   */
+  const addScrollListener = () => {
+    if (containerRef.value) {
+      containerRef.value.addEventListener('scroll', handleScroll)
+      // Для Safari с поддержкой scrollend
+      if ('onscrollend' in window) {
+        containerRef.value.addEventListener('scrollend', snapAfterScroll)
+      }
+    }
+  }
+
+  const removeScrollListener = () => {
+    if (containerRef.value) {
+      containerRef.value.removeEventListener('scroll', handleScroll)
+      if ('onscrollend' in window) {
+        containerRef.value.removeEventListener('scrollend', snapAfterScroll)
+      }
+    }
+    if (scrollTimeout) {
+      clearTimeout(scrollTimeout)
+      scrollTimeout = null
+    }
+  }
+
   // ============================================================
   //  ЖИЗНЕННЫЙ ЦИКЛ
   // ============================================================
@@ -170,6 +265,10 @@ export function useScroll(options = {}) {
     if (typeof window !== 'undefined') {
       window.addEventListener('resize', handleResize)
     }
+    // Добавляем слушатели после монтирования
+    nextTick(() => {
+      addScrollListener()
+    })
   })
 
   onUnmounted(() => {
@@ -179,6 +278,7 @@ export function useScroll(options = {}) {
         clearTimeout(resizeTimeout)
       }
     }
+    removeScrollListener()
   })
 
   // ============================================================
@@ -206,5 +306,8 @@ export function useScroll(options = {}) {
     handleTouchMove,
     handleTouchEnd,
     handleResize,
+    // ← добавить для отладки
+    addScrollListener,
+    removeScrollListener,
   }
 }
