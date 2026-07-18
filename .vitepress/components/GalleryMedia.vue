@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="gallery-media">
-      <div v-for="(item, index) in mediaItems" :key="index" class="gallery-item" :style="{ '--delay': index * 0.05 + 's' }" @click="openFullslider(index)">
+      <div v-for="(item, index) in mediaItems" :key="index" class="gallery-item" :style="{ '--delay': index * 0.05 + 's' }" @click="openFullScreen(index)">
         <!-- Фотографии (превью) -->
         <img v-if="item.type === 'image'" :src="item.src" loading="lazy" />
         <!-- Видеозаписи (превью) -->
@@ -19,32 +19,32 @@
         </div>
       </div>
     </div>
-    <div v-if="fullsliderOpen" class="fullslider" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-      <button class="fullslider-close" @click.stop="closeFullslider" aria-label="Закрыть">
+    <div v-if="fullScreenOpen" class="fullScreen" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
+      <button class="fullScreen-close" @click.stop="closefullScreen" aria-label="Закрыть">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M18 6L6 18M6 6l12 12" />
         </svg>
       </button>
-      <button v-if="mediaItems.length > 1" class="fullslider-prev" @click.stop="prevMedia" aria-label="Предыдущее">
+      <button v-if="mediaItems.length > 1" class="fullScreen-prev" @click.stop="prevMedia" aria-label="Предыдущее">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M15 18l-6-6 6-6" />
         </svg>
       </button>
-      <button v-if="mediaItems.length > 1" class="fullslider-next" @click.stop="nextMedia" aria-label="Следующее">
+      <button v-if="mediaItems.length > 1" class="fullScreen-next" @click.stop="nextMedia" aria-label="Следующее">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M9 18l6-6-6-6" />
         </svg>
       </button>
-      <div class="fullslider-content" @click.stop>
+      <div class="fullScreen-content" @click.stop>
         <!-- Фотографии -->
         <img v-if="currentMedia.type === 'image'" :src="currentMedia.src" />
         <!-- Видеозаписи -->
-        <video v-else-if="currentMedia.type === 'video'" :src="currentMedia.src" controls autoplay playsinline class="fullslider-video" ref="fullsliderVideoRef"/>
+        <video v-else-if="currentMedia.type === 'video'" :src="currentMedia.src" controls autoplay playsinline class="fullScreen-video" ref="fullScreenVideoRef"/>
         <!-- Аудиозаписи -->
-        <audio v-else-if="currentMedia.type === 'audio'" :src="currentMedia.src" controls autoplay class="fullslider-audio"/>
+        <audio v-else-if="currentMedia.type === 'audio'" :src="currentMedia.src" controls autoplay class="fullScreen-audio"/>
       </div>
-      <div class="fullslider-footer" @click.stop>
-        <div class="fullslider-dots">
+      <div class="fullScreen-footer" @click.stop>
+        <div class="fullScreen-dots">
           <span v-for="(_, index) in mediaItems" :key="index" class="dot" :class="{ active: index === currentIndex }" @click.stop="goToMedia(index)" />
         </div>
       </div>
@@ -56,8 +56,8 @@
 // ============================================================
 //  1. ИМПОРТЫ
 // ============================================================
-import { ref, computed, onMounted, onBeforeUnmount, watch, toRef } from 'vue'
-import { useScrollCarusel } from '../utils/useScrollCarusel'
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
+import { useScrollGallery } from '../utils/useScrollGallery'
 
 // ============================================================
 //  2. КОМПОНЕНТ
@@ -69,17 +69,14 @@ export default {
     audios: {
       type: Array,
       default: () => [],
-      description: 'Массив URL аудиозаписей'
     },
     photos: {
       type: Array,
       default: () => [],
-      description: 'Массив URL изображений'
     },
     videos: {
       type: Array,
       default: () => [],
-      description: 'Массив URL видеозаписей'
     }
   },
 
@@ -87,36 +84,56 @@ export default {
     // ============================================================
     //  2.1. СОСТОЯНИЕ
     // ============================================================
-    const fullsliderOpen = ref(false)
-    const currentIndex = ref(0)
-    const fullsliderVideoRef = ref(null)
+    const fullScreenOpen = ref(false)
+    const fullScreenVideoRef = ref(null)
 
     // ============================================================
-    //  2.2. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
+    //  2.2. МЕДИА
     // ============================================================
+    const mediaItems = ref([])
 
-    const mediaItems = computed(() => {
+    const updateMediaItems = () => {
       const items = []
       const audios = props.audios || []
       const photos = props.photos || []
       const videos = props.videos || []
       const maxLength = Math.max(audios.length, photos.length, videos.length)
+      
       for (let i = 0; i < maxLength; i++) {
-        if (i < audios.length) {
-          items.push({ type: 'audio', src: audios[i] })
-        }
-        if (i < photos.length) {
-          items.push({ type: 'image', src: photos[i] })
-        }
-        if (i < videos.length) {
-          items.push({ type: 'video', src: videos[i] })
-        }
+        if (i < audios.length) items.push({ type: 'audio', src: audios[i] })
+        if (i < photos.length) items.push({ type: 'image', src: photos[i] })
+        if (i < videos.length) items.push({ type: 'video', src: videos[i] })
       }
-      return items
+      
+      mediaItems.value = items
+    }
+
+    // ============================================================
+    //  2.3. КОМПОЗАБЛ ДЛЯ ГАЛЕРЕИ
+    // ============================================================
+
+    const {
+      currentIndex,
+      goTo,
+      next,
+      prev,
+      handleTouchStart,
+      handleTouchMove,
+      handleTouchEnd,
+      handleKeydown,
+    } = useScrollGallery({
+      items: mediaItems,
+      initialIndex: 0,
     })
+
+    // ============================================================
+    //  2.4. ВЫЧИСЛЯЕМЫЕ
+    // ============================================================
+
     const currentMedia = computed(() => {
       return mediaItems.value[currentIndex.value] || { type: 'image', src: '' }
     })
+
     const hasMedia = computed(() => {
       const audios = props.audios || []
       const photos = props.photos || []
@@ -125,85 +142,56 @@ export default {
     })
 
     // ============================================================
-    //  2.3. КОМПОЗАБЛЫ
+    //  2.5. МЕТОДЫ
     // ============================================================
 
-    const carouselRef = ref(null)
-
-    const {
-      handleTouchStart,
-      handleTouchMove,
-      handleTouchEnd,
-    } = useScrollCarusel({
-      containerRef: carouselRef,
-      items: toRef(mediaItems),  // ← превращаем computed в ref
-    })
-
-    // ============================================================
-    //  2.4. МЕТОДЫ
-    // ============================================================
-
-    const openFullslider = (index) => {
+    const openFullScreen = (index) => {
       if (!hasMedia.value) return
-      currentIndex.value = index
-      fullsliderOpen.value = true
+      goTo(index)
+      fullScreenOpen.value = true
       document.body.style.overflow = 'hidden'
     }
-    const closeFullslider = () => {
-      fullsliderOpen.value = false
+
+    const closeFullScreen = () => {
+      fullScreenOpen.value = false
       document.body.style.overflow = ''
-      if (fullsliderVideoRef.value) {
-        fullsliderVideoRef.value.pause()
+      if (fullScreenVideoRef.value) {
+        fullScreenVideoRef.value.pause()
       }
     }
-    const nextMedia = () => {
-      currentIndex.value = (currentIndex.value + 1) % mediaItems.value.length
-    }
-    const prevMedia = () => {
-      currentIndex.value = (currentIndex.value - 1 + mediaItems.value.length) % mediaItems.value.length
-    }
-    const goToMedia = (index) => {
-      currentIndex.value = index
-    }
+
+    const nextMedia = () => next()
+    const prevMedia = () => prev()
+    const goToMedia = (index) => goTo(index)
+
     const playVideo = (e) => {
       const video = e.target
       video.play().catch(() => {})
     }
+
     const pauseVideo = (e) => {
       const video = e.target
       video.pause()
       video.currentTime = 0
     }
+
     const stopCurrentVideo = () => {
-      if (fullsliderVideoRef.value) {
-        fullsliderVideoRef.value.pause()
-        fullsliderVideoRef.value.currentTime = 0
+      if (fullScreenVideoRef.value) {
+        fullScreenVideoRef.value.pause()
+        fullScreenVideoRef.value.currentTime = 0
       }
     }
+
     const playCurrentVideo = () => {
-      if (fullsliderVideoRef.value && currentMedia.value.type === 'video') {
+      if (fullScreenVideoRef.value && currentMedia.value.type === 'video') {
         setTimeout(() => {
-          fullsliderVideoRef.value?.play().catch(() => {})
+          fullScreenVideoRef.value?.play().catch(() => {})
         }, 100)
-      }
-    }
-    const handleKeydown = (e) => {
-      if (!fullsliderOpen.value) return
-      switch (e.key) {
-        case 'Escape':
-          closeFullslider()
-          break
-        case 'ArrowRight':
-          nextMedia()
-          break
-        case 'ArrowLeft':
-          prevMedia()
-          break
       }
     }
 
     // ============================================================
-    //  2.5. WATCHERS
+    //  2.6. WATCHERS
     // ============================================================
 
     watch(currentIndex, () => {
@@ -212,11 +200,17 @@ export default {
     })
 
     // ============================================================
-    //  2.6. ЖИЗНЕННЫЙ ЦИКЛ
+    //  2.7. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(() => {
+      updateMediaItems()
       window.addEventListener('keydown', handleKeydown)
+    })
+
+    watch(() => [props.audios, props.photos, props.videos], updateMediaItems, { 
+      deep: true,
+      immediate: true 
     })
 
     onBeforeUnmount(() => {
@@ -225,31 +219,22 @@ export default {
     })
 
     // ============================================================
-    //  2.7. ВОЗВРАТ
+    //  2.8. ВОЗВРАТ
     // ============================================================
     return {
-      // Состояние
-      fullsliderOpen,
+      fullScreenOpen,
       currentIndex,
-      fullsliderVideoRef,
-
-      // Вычисляемые
+      fullScreenVideoRef,
       mediaItems,
       currentMedia,
       hasMedia,
-
-      // Методы управления
-      openFullslider,
-      closeFullslider,
+      openFullScreen,
+      closeFullScreen,
       nextMedia,
       prevMedia,
       goToMedia,
-
-      // Видео
       playVideo,
       pauseVideo,
-
-      // События
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
