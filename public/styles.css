@@ -158,12 +158,14 @@ h1,h2,h3 {
 /* ============================================
    ЦВЕТОВАЯ ДИФФЕРЕНЦИАЦИЯ ТЭГОВ
    ============================================ */
-.experience-tag {
+.experience-tag,
+.format-tag  {
   background: #9422e6;
   color: var(--vp-c-bg);
   font-weight: 700;
 }
-.age-tag {
+.age-tag,
+.extra-tag  {
   background: #e67e22;
   color: var(--vp-c-bg);
   font-weight: 700;
@@ -176,14 +178,9 @@ h1,h2,h3 {
 .gender-tag[data-gender="Мальчик"] {
   background: #2980b9;
 }
-.size-tag,
-.direction-tag {
+.direction-tag,
+.size-tag {
   background: #27ae60;
-  color: var(--vp-c-bg);
-  font-weight: 700;
-}
-.extra-tag {
-  background: #e67e22;
   color: var(--vp-c-bg);
   font-weight: 700;
 }
