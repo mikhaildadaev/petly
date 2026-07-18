@@ -98,12 +98,12 @@ export default {
       const audios = props.audios || []
       const photos = props.photos || []
       const videos = props.videos || []
-      const maxLength = Math.max(audios.length, photos.length, videos.length)
+      const maxLength = Math.max( audios.length, photos.length, videos.length)
       
       for (let i = 0; i < maxLength; i++) {
-        if (i < audios.length) items.push({ type: 'audio', src: audios[i] })
         if (i < photos.length) items.push({ type: 'image', src: photos[i] })
         if (i < videos.length) items.push({ type: 'video', src: videos[i] })
+        if (i < audios.length) items.push({ type: 'audio', src: audios[i] })
       }
       
       mediaItems.value = items
@@ -156,6 +156,9 @@ export default {
     const closeFullScreen = () => {
       fullScreenOpen.value = false
       document.body.style.overflow = ''
+      if (fullScreenAudioRef.value) {
+        fullScreenAudioRef.value.pause()
+      }
       if (fullScreenVideoRef.value) {
         fullScreenVideoRef.value.pause()
       }
@@ -204,6 +207,11 @@ export default {
     watch(currentIndex, () => {
       stopCurrentVideo()
       playCurrentVideo()
+      setTimeout(() => {
+        if (currentMedia.value.type === 'audio') {
+          playAudio()
+        }
+      }, 300)
     })
 
     // ============================================================
