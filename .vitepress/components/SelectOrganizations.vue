@@ -52,7 +52,7 @@
 // ============================================================
 import { computed, ref, onMounted, onUnmounted, nextTick, inject, watch } from 'vue'
 import { useRandomColor } from '../utils/useRandomColor'
-import { useScroll } from '../utils/useScroll'
+import { useScrollCarusel } from '../utils/useScrollCarusel'
 import { useTranslate } from '../utils/useTranslate'
 import { useUrlMedia } from '../utils/useUrlMedia'
 
@@ -131,7 +131,7 @@ export default {
       touchStartY,
       touchEndX,
       touchEndY,
-    } = useScroll({
+    } = useScrollCarusel({
       containerRef: carouselRef,
       items: selectOrganizations,
     })

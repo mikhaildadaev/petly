@@ -56,8 +56,8 @@
 // ============================================================
 //  1. ИМПОРТЫ
 // ============================================================
-import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
-import { useScroll } from '../utils/useScroll'
+import { ref, computed, onMounted, onBeforeUnmount, watch, toRef } from 'vue'
+import { useScrollCarusel } from '../utils/useScrollCarusel'
 
 // ============================================================
 //  2. КОМПОНЕНТ
@@ -92,22 +92,7 @@ export default {
     const fullsliderVideoRef = ref(null)
 
     // ============================================================
-    //  2.2. КОМПОЗАБЛЫ
-    // ============================================================
-
-    const carouselRef = ref(null)
-
-    const {
-      handleTouchStart,
-      handleTouchMove,
-      handleTouchEnd,
-    } = useScroll({
-      containerRef: carouselRef,
-      items: computed(() => mediaItems.value),
-    })
-
-    // ============================================================
-    //  2.3. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
+    //  2.2. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
     // ============================================================
 
     const mediaItems = computed(() => {
@@ -137,6 +122,21 @@ export default {
       const photos = props.photos || []
       const videos = props.videos || []
       return audios.length > 0 || photos.length > 0 || videos.length > 0
+    })
+
+    // ============================================================
+    //  2.3. КОМПОЗАБЛЫ
+    // ============================================================
+
+    const carouselRef = ref(null)
+
+    const {
+      handleTouchStart,
+      handleTouchMove,
+      handleTouchEnd,
+    } = useScrollCarusel({
+      containerRef: carouselRef,
+      items: toRef(mediaItems),  // ← превращаем computed в ref
     })
 
     // ============================================================

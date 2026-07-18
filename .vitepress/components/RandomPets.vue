@@ -54,7 +54,7 @@
 import { ref, computed, onMounted, onUnmounted, inject, watch } from 'vue'
 import { useRandomArray } from '../utils/useRandomArray'
 import { useRandomColor } from '../utils/useRandomColor'
-import { useScroll } from '../utils/useScroll'
+import { useScrollCarusel } from '../utils/useScrollCarusel'
 import { useTranslate, useAge, useAgePetCategory } from '../utils/useTranslate'
 import { useUrlMedia } from '../utils/useUrlMedia'
 
@@ -114,7 +114,7 @@ export default {
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
-    } = useScroll({
+    } = useScrollCarusel({
       containerRef: carouselRef,
       items: randomPets,
       hasMoreItems: hasMoreItems,

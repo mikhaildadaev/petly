@@ -54,7 +54,7 @@
 // ============================================================
 import { computed, ref, onMounted, onUnmounted, nextTick, inject, watch } from 'vue'
 import { useRandomColor } from '../utils/useRandomColor'
-import { useScroll } from '../utils/useScroll'
+import { useScrollCarusel } from '../utils/useScrollCarusel'
 import { useTranslate, useDirection, useExperience } from '../utils/useTranslate'
 import { useUrlMedia } from '../utils/useUrlMedia'
 
@@ -133,7 +133,7 @@ export default {
       touchStartY,
       touchEndX,
       touchEndY,
-    } = useScroll({
+    } = useScrollCarusel({
       containerRef: carouselRef,
       items: selectHumans,
     })
@@ -148,7 +148,7 @@ export default {
         clearTimeout(resizeTimeout)
       }
       resizeTimeout = setTimeout(() => {
-        // checkMobile уже есть в useScroll
+        // checkMobile уже есть в useScrollCarusel
         resizeTimeout = null
       }, 100)
     }

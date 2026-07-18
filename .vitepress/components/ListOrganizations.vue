@@ -101,7 +101,7 @@
 import { computed, ref, onMounted, watch, nextTick, onUnmounted, reactive, inject } from 'vue'
 import { usePagination } from '../utils/usePagination'
 import { useRandomColor } from '../utils/useRandomColor'
-import { useScroll } from '../utils/useScroll'
+import { useScrollCarusel } from '../utils/useScrollCarusel'
 import { useTranslate } from '../utils/useTranslate'
 import { useUrlMedia } from '../utils/useUrlMedia'
 
@@ -216,7 +216,7 @@ export default {
       touchStartY,
       touchEndX,
       touchEndY,
-    } = useScroll({
+    } = useScrollCarusel({
       containerRef: carouselRef,
       items: paginatedOrganizations,
       hasMoreItems: hasMoreItems,
