@@ -3,8 +3,7 @@
     <div v-if="!isMobile" class="grid-cards">
       <a v-for="organization in selectOrganizations" :key="organization.uuid" :href="`${baseUrl}${lang}/organizations/${organizationType}/${organization.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
         <div class="grid-meta">
-          <span v-if="organization.directionDisplay" class="tag direction-tag">{{ organization.directionDisplay }}</span>
-          <span v-if="organization.experienceDisplay" class="tag experience-tag">{{ organization.experienceDisplay }}</span>
+          <span v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</span>
         </div>
         <img :src="organization.image" loading="lazy" />
         <div :class="['grid-card-body', useRandomClass(organization.uuid)]">
@@ -24,8 +23,7 @@
           <div v-for="(organization, index) in selectOrganizations" :key="organization.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
             <a :href="`${baseUrl}${lang}/organizations/${organizationType}/${organization.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
               <div class="grid-meta">
-                <span v-if="organization.directionDisplay" class="tag direction-tag">{{ organization.directionDisplay }}</span>
-                <span v-if="organization.experienceDisplay" class="tag experience-tag">{{ organization.experienceDisplay }}</span>
+                <span v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</span>
               </div>
               <img :src="organization.image" loading="lazy" />
               <div :class="['grid-card-body', useRandomClass(organization.uuid)]">
@@ -44,7 +42,7 @@
     </div>
   </div>
   <div v-else-if="selectOrganizations && selectOrganizations.length === 0" class="no-results">
-    <p>{{ translate('ui', 'Нет назначенных волонтеров') }}</p>
+    <p>{{ translate('ui', 'Нет назначенных организаций') }}</p>
   </div>
 </template>
 
@@ -55,7 +53,7 @@
 import { computed, ref, onMounted, onUnmounted, nextTick, inject, watch } from 'vue'
 import { useRandomColor } from '../composables/useRandomColor'
 import { useScroll } from '../composables/useScroll'
-import { useTranslate, useDirection, useExperience } from '../composables/useTranslate'
+import { useTranslate } from '../composables/useTranslate'
 
 // ============================================================
 //  2. КОНСТАНТЫ
@@ -86,7 +84,7 @@ const processImage = (imagePath, type, uuid) => {
 //  4. КОМПОНЕНТ
 // ============================================================
 export default {
-  name: 'selectOrganizations',
+  name: 'SelectOrganizations',
 
   props: {
     organizationUUIDs: {
@@ -96,7 +94,7 @@ export default {
     organizationType: {
       type: String,
       required: true,
-      default: 'volunteers'
+      default: 'shelters'
     }
   },
 
@@ -110,7 +108,7 @@ export default {
     // ============================================================
     //  4.2. СОСТОЯНИЕ
     // ============================================================
-    const allorganizations = ref([])
+    const allOrganizations = ref([])
     const isLoading = ref(true)
     const isClient = ref(false)
 
@@ -120,10 +118,10 @@ export default {
 
     const selectOrganizations = computed(() => {
       if (isLoading.value) return []
-      if (!allorganizations.value || allorganizations.value.length === 0) return []
+      if (!allOrganizations.value || allOrganizations.value.length === 0) return []
       if (!props.organizationUUIDs || props.organizationUUIDs.length === 0) return []
 
-      return allorganizations.value.filter(v =>
+      return allOrganizations.value.filter(v =>
         v.uuid && props.organizationUUIDs.includes(v.uuid)
       )
     })
@@ -167,7 +165,6 @@ export default {
         clearTimeout(resizeTimeout)
       }
       resizeTimeout = setTimeout(() => {
-        // checkMobile уже есть в useScroll
         resizeTimeout = null
       }, 100)
     }
@@ -204,14 +201,13 @@ export default {
               uuid: uuid,
               nameDisplay: fm.title || '',
               descriptionDisplay: fm.description || '',
-              experienceDisplay: useExperience(lang.value, fm.experience),
-              directionDisplay: useDirection(lang.value, fm.direction),
+              formatDisplay: fm.format ? translate('format', fm.format) : '',
               image: processImage(fm.image, props.organizationType, uuid),
             }
           })
         )
 
-        allorganizations.value = loaded
+        allOrganizations.value = loaded
       } catch (error) {
         console.error('Ошибка загрузки данных:', error)
       }
