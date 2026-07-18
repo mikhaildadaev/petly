@@ -1,10 +1,10 @@
 ---
-title: Приюты
-description: Список приютов, где живут питомцы в ожидании своего нового дома.
+title: Tierheime
+description: Eine Liste von Tierheimen, in denen Haustiere leben, die auf ihr neues Zuhause warten.
 ---
 
-# Приюты
+# Tierheime
 
-<ListОrganizations :organizationType="'shelters'"/>
+<ListOrganizations :organizationType="'shelters'"/>
 
 <StyleImagePage src="/assets/webp/handsCatAndDog.webp" width="284" float="center"/>

@@ -1,10 +1,10 @@
 ---
-title: Приюты
-description: Список приютов, где живут питомцы в ожидании своего нового дома.
+title: Shelters
+description: A list of shelters where pets live while waiting for their new homes.
 ---
 
-# Приюты
+# Shelters
 
-<ListОrganizations :organizationType="'shelters'"/>
+<ListOrganizations :organizationType="'shelters'"/>
 
 <StyleImagePage src="/assets/webp/handsCatAndDog.webp" width="284" float="center"/>
