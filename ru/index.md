@@ -40,4 +40,4 @@ features:
 
 ## Приюты
 
-<RandomHumans type="shelters" :count="8"/>
+<RandomOrganizations type="shelters" :count="8"/>

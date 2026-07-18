@@ -36,4 +36,4 @@ features:
 
 ## Freiwillige
 
-<RandomHumans type="volunteers" :count="8"/>
+<RandomOrganizations type="volunteers" :count="8"/>
