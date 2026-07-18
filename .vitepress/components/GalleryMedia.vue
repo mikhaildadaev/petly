@@ -20,7 +20,7 @@
       </div>
     </div>
     <div v-if="fullScreenOpen" class="fullScreen" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-      <button class="fullScreen-close" @click.stop="closefullScreen" aria-label="Закрыть">
+      <button class="fullScreen-close" @click.stop="closeFullScreen" aria-label="Закрыть">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M18 6L6 18M6 6l12 12" />
         </svg>
