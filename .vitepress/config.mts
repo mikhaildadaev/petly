@@ -55,7 +55,8 @@ export default defineConfig({
             items: [
               { text: 'Freiwillige', link: '/de/humans/volunteers' },
               { text: 'Mitmachen', link: '/de/dobrology/join' },
-              { text: 'Unterstützen', link: '/de/dobrology/support' }
+              { text: 'Unterstützen', link: '/de/dobrology/support' },
+              { text: 'Tierheime', link: '/ru/organizations/shelters' }
             ]
           },
           { 
@@ -96,7 +97,8 @@ export default defineConfig({
             items: [
               { text: 'Freiwillige', link: '/de/humans/volunteers' },
               { text: 'Mitmachen', link: '/de/dobrology/join' },
-              { text: 'Unterstützen', link: '/de/dobrology/support' }
+              { text: 'Unterstützen', link: '/de/dobrology/support' },
+              { text: 'Tierheime', link: '/ru/organizations/shelters' }
             ]
           },
           {
@@ -193,7 +195,8 @@ export default defineConfig({
             items: [
               { text: 'Volunteers', link: '/en/humans/volunteers' },
               { text: 'Join us', link: '/en/dobrology/join' },
-              { text: 'Support', link: '/en/dobrology/support' }
+              { text: 'Support', link: '/en/dobrology/support' },
+              { text: 'Shelters', link: '/ru/organizations/shelters' }
             ]
           },
           { 
@@ -234,7 +237,8 @@ export default defineConfig({
             items: [
               { text: 'Volunteers', link: '/en/humans/volunteers' },
               { text: 'Join us', link: '/en/dobrology/join' },
-              { text: 'Support', link: '/en/dobrology/support' }
+              { text: 'Support', link: '/en/dobrology/support' },
+              { text: 'Shelters', link: '/ru/organizations/shelters' }
             ]
           },
           {
@@ -331,7 +335,8 @@ export default defineConfig({
             items: [
               { text: 'Волонтёры', link: '/ru/humans/volunteers' },
               { text: 'Присоединиться', link: '/ru/dobrology/join' },
-              { text: 'Поддержать', link: '/ru/dobrology/support' }
+              { text: 'Поддержать', link: '/ru/dobrology/support' },
+              { text: 'Приюты', link: '/ru/organizations/shelters' }
             ]
           },
           { 
@@ -372,7 +377,8 @@ export default defineConfig({
             items: [
               { text: 'Волонтёры', link: '/ru/humans/volunteers' },
               { text: 'Присоединиться', link: '/ru/dobrology/join' },
-              { text: 'Поддержать', link: '/ru/dobrology/support' }
+              { text: 'Поддержать', link: '/ru/dobrology/support' },
+              { text: 'Приюты', link: '/ru/organizations/shelters' }
             ]
           },
           {
