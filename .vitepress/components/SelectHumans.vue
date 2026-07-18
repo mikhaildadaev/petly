@@ -28,7 +28,7 @@
                 <span v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</span>
               </div>
               <img :src="human.image" loading="lazy" />
-              <div :class="['grid-card-body', getRandomClass(human.uuid)]">
+              <div :class="['grid-card-body', useRandomColor(human.uuid)]">
                 <div class="name">{{ human.nameDisplay }}</div>
                 <p>{{ human.descriptionDisplay }}</p>
               </div>

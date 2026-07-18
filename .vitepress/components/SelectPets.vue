@@ -8,7 +8,7 @@
           <span v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</span>
         </div>
         <img :src="pet.image" loading="lazy" />
-        <div :class="['grid-card-body', useRandomClass(pet.uuid)]">
+        <div :class="['grid-card-body', useRandomColor(pet.uuid)]">
           <div class="name">{{ pet.nameDisplay }}</div>
           <p>{{ pet.descriptionDisplay }}</p>
         </div>
@@ -30,7 +30,7 @@
                 <span v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</span>
               </div>
               <img :src="pet.image" loading="lazy" />
-              <div :class="['grid-card-body', getRandomClass(pet.uuid)]">
+              <div :class="['grid-card-body', useRandomColor(pet.uuid)]">
                 <div class="name">{{ pet.nameDisplay }}</div>
                 <p>{{ pet.descriptionDisplay }}</p>
               </div>
