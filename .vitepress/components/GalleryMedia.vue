@@ -41,7 +41,7 @@
         <!-- Видеозаписи -->
         <video v-else-if="currentMedia.type === 'video'" :src="currentMedia.src" controls autoplay playsinline class="fullScreen-video" ref="fullScreenVideoRef"/>
         <!-- Аудиозаписи -->
-        <audio v-else-if="currentMedia.type === 'audio'" :src="currentMedia.src" controls autoplay class="fullScreen-audio"/>
+        <audio v-else-if="currentMedia.type === 'audio'" :src="currentMedia.src" controls autoplay class="fullScreen-audio" ref="fullScreenAudioRef"/>
       </div>
       <div class="fullScreen-footer" @click.stop>
         <div class="fullScreen-dots">
@@ -85,6 +85,7 @@ export default {
     //  2.1. СОСТОЯНИЕ
     // ============================================================
     const fullScreenOpen = ref(false)
+    const fullScreenAudioRef = ref(null)
     const fullScreenVideoRef = ref(null)
 
     // ============================================================
@@ -164,6 +165,12 @@ export default {
     const prevMedia = () => prev()
     const goToMedia = (index) => goTo(index)
 
+    const playAudio = () => {
+      if (fullScreenAudioRef.value) {
+        fullScreenAudioRef.value.play().catch(() => {})
+      }
+    }
+
     const playVideo = (e) => {
       const video = e.target
       video.play().catch(() => {})
@@ -224,6 +231,7 @@ export default {
     return {
       fullScreenOpen,
       currentIndex,
+      fullScreenAudioRef,
       fullScreenVideoRef,
       mediaItems,
       currentMedia,
@@ -233,6 +241,7 @@ export default {
       nextMedia,
       prevMedia,
       goToMedia,
+      playAudio,
       playVideo,
       pauseVideo,
       handleTouchStart,
