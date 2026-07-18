@@ -8,7 +8,7 @@
         </div>
       </div>
     </div>
-    <div v-if="fullsliderOpen" class="fullslider" @touchstart="handleTouchStart" @touchmove.prevent="handleTouchMove" @touchend="handleTouchEnd">
+    <div v-if="fullsliderOpen" class="fullslider" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
       <button class="fullslider-close" @click.stop="closeFullslider" aria-label="Закрыть">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M18 6L6 18M6 6l12 12" />
