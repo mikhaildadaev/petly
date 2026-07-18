@@ -21,6 +21,7 @@ import { useData } from 'vitepress'
 import { useFavorites } from '../composables/useFavorites'
 import { useRandomColor } from '../composables/useRandomColor'
 import { useTranslate, useDirection, useExperience } from '../composables/useTranslate'
+import { useUrlMedia } from '../composables/useUrlMedia'
 
 // ============================================================
 //  2. КОНСТАНТЫ
@@ -28,60 +29,39 @@ import { useTranslate, useDirection, useExperience } from '../composables/useTra
 const baseUrl = import.meta.env.BASE_URL
 
 // ============================================================
-//  3. УТИЛИТЫ
-// ============================================================
-
-/**
- * Обработка пути к изображению
- */
-const processImage = (imagePath, type, uuid) => {
-  if (!imagePath) {
-    return uuid ? `${baseUrl}images/${type}/${uuid}.webp` : `${baseUrl}placeholder-${type}.svg`
-  }
-  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
-    return imagePath
-  }
-  if (imagePath.startsWith('/')) {
-    return `${baseUrl}${imagePath.slice(1)}`
-  }
-  return imagePath
-}
-
-// ============================================================
-//  4. КОМПОНЕНТ
+//  3. КОМПОНЕНТ
 // ============================================================
 export default {
   name: 'CardHumanHero',
 
   props: {
-    humanType: {
+    type: {
       type: String,
       required: false,
-      default: 'volunteers',
-      description: 'Тип человека (volunteers, staff, и т.д.)'
+      default: 'volunteers'
     }
   },
 
   setup(props) {
     // ============================================================
-    //  4.1. ЯЗЫК И ПЕРЕВОДЫ
+    //  3.1. ЯЗЫК И ПЕРЕВОДЫ
     // ============================================================
     const lang = inject('lang', 'ru')
     const translate = (category, key) => useTranslate(lang.value, category, key)
 
     // ============================================================
-    //  4.2. ДАННЫЕ (FRONTMATTER)
+    //  3.2. ДАННЫЕ (FRONTMATTER)
     // ============================================================
     const { frontmatter } = useData()
     
     // ============================================================
-    //  4.3. COMPOSABLES
+    //  3.3. COMPOSABLES
     // ============================================================
     const { useRandomClass } = useRandomColor()
     const { isFavorite, toggleFavorite, checkIsFavorite } = useFavorites()
 
     // ============================================================
-    //  4.4. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
+    //  3.3. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
     // ============================================================
 
     /**
@@ -106,12 +86,13 @@ export default {
         descriptionDisplay: data.description || '',
         directionDisplay: data.direction ? useDirection(lang.value, data.direction) : '',
         experienceDisplay: data.experience ? useExperience(lang.value, data.experience) : '',
-        image: processImage(data.image, props.humanType, uuid),
+        image: useUrlMedia(fm.image, props.type, uuid, 'image'),
+        type: props.type,
       }
     })
 
     // ============================================================
-    //  4.5. ЖИЗНЕННЫЙ ЦИКЛ
+    //  3.5. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(() => {
@@ -123,7 +104,7 @@ export default {
     })
 
     // ============================================================
-    //  4.6. WATCHERS
+    //  3.6. WATCHERS
     // ============================================================
 
     watch(() => human.value.uuid, (newUuid) => {
@@ -141,7 +122,7 @@ export default {
     }, { deep: true })
 
     // ============================================================
-    //  4.7. ВОЗВРАТ
+    //  3.7. ВОЗВРАТ
     // ============================================================
     return {
       // Данные

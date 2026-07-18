@@ -24,7 +24,7 @@
       </button>
     </div>
   <div v-if="!isMobile" class="grid-cards">
-    <a v-for="human in paginatedHumans" :key="human.uuid" :href="`${baseUrl}${lang}/humans/${humanType}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+    <a v-for="human in paginatedHumans" :key="human.uuid" :href="`${baseUrl}${lang}/humans/${human.type}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
       <div class="grid-meta">
         <span v-if="human.directionDisplay" class="tag direction-tag">{{ human.directionDisplay }}</span>
         <span v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</span>
@@ -60,7 +60,7 @@
       </button>      
       <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
         <div v-for="(human, index) in paginatedHumans" :key="human.uuid" class="carousel-slide" :class="{ center: index === currentIndex }" >
-          <a :href="`${baseUrl}${lang}/humans/${humanType}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+          <a :href="`${baseUrl}${lang}/humans/${human.type}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
             <div class="grid-meta">
               <span v-if="human.directionDisplay" class="tag direction-tag">{{ human.directionDisplay }}</span>
               <span v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</span>
@@ -111,6 +111,7 @@ import { usePagination } from '../composables/usePagination'
 import { useRandomColor } from '../composables/useRandomColor'
 import { useScroll } from '../composables/useScroll'
 import { useTranslate, useDirection, useExperience } from '../composables/useTranslate'
+import { useUrlMedia } from '../composables/useUrlMedia'
 
 // ============================================================
 //  2. КОНСТАНТЫ
@@ -124,7 +125,7 @@ export default {
   name: 'ListHumans',
 
   props: {
-    humanType: {
+    type: {
       type: String,
       required: true,
       default: 'volunteers'
@@ -133,13 +134,13 @@ export default {
 
   setup(props) {
     // ============================================================
-    //  4.1. ЯЗЫК И ПЕРЕВОДЫ
+    //  3.1. ЯЗЫК И ПЕРЕВОДЫ
     // ============================================================
     const lang = inject('lang', 'ru')
     const translate = (category, key) => useTranslate(lang.value, category, key)
 
     // ============================================================
-    //  4.2. ОПЦИИ ФИЛЬТРОВ
+    //  3.2. ОПЦИИ ФИЛЬТРОВ
     // ============================================================
     const EXPERIENCE_KEYS = ['Начинающий', 'Опытный', 'Эксперт']
     const experienceOptions = computed(() => {
@@ -162,7 +163,7 @@ export default {
         'Социализация': `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>`,
         'Лечение': `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9-4-18-3 9H2"/></svg>`,
         'Передержка': `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1"/></svg>`,
-        'Креатив': `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>`,
+        'Креатив': `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M3.93 3.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M3.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>`,
         'Фандрайзинг': `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v12"/><path d="M8 8l4 4 4-4"/></svg>`
       }
       return DIRECTION_KEYS.map(key => ({
@@ -173,7 +174,7 @@ export default {
     })
 
     // ============================================================
-    //  4.3. СОСТОЯНИЕ
+    //  3.3. СОСТОЯНИЕ
     // ============================================================
     const allHumans = ref([])
     const isLoading = ref(true)
@@ -196,7 +197,7 @@ export default {
     })
 
     // ============================================================
-    //  4.4. ВЫЧИСЛЯЕМЫЕ
+    //  3.3. ВЫЧИСЛЯЕМЫЕ
     // ============================================================
 
     const filteredHumans = computed(() => {
@@ -219,7 +220,7 @@ export default {
     })
 
     // ============================================================
-    //  4.5. ПАГИНАЦИЯ
+    //  3.5. ПАГИНАЦИЯ
     // ============================================================
 
     const {
@@ -239,7 +240,7 @@ export default {
     })
 
     // ============================================================
-    //  4.6. СКРОЛЛ И КАРУСЕЛЬ
+    //  3.6. СКРОЛЛ И КАРУСЕЛЬ
     // ============================================================
 
     const carouselRef = ref(null)
@@ -265,13 +266,13 @@ export default {
     })
 
     // ============================================================
-    //  4.7. РАНДОМНЫЕ ЦВЕТА
+    //  3.7. РАНДОМНЫЕ ЦВЕТА
     // ============================================================
 
     const { useRandomClass } = useRandomColor()
 
     // ============================================================
-    //  4.8. МЕТОДЫ (ФИЛЬТРЫ)
+    //  3.8. МЕТОДЫ (ФИЛЬТРЫ)
     // ============================================================
 
     const toggleFilter = (group, value) => {
@@ -288,24 +289,7 @@ export default {
     }
 
     // ============================================================
-    //  4.9. ОБРАБОТЧИК ИЗОБРАЖЕНИЙ
-    // ============================================================
-
-    const processImage = (imagePath, type, uuid) => {
-      if (!imagePath) {
-        return uuid ? `${baseUrl}images/${type}/${uuid}.webp` : `${baseUrl}placeholder-${type}.svg`
-      }
-      if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
-        return imagePath
-      }
-      if (imagePath.startsWith('/')) {
-        return `${baseUrl}${imagePath.slice(1)}`
-      }
-      return imagePath
-    }
-
-    // ============================================================
-    //  4.10. RESIZE
+    //  3.9. RESIZE
     // ============================================================
     let resizeTimeout = null
 
@@ -319,7 +303,7 @@ export default {
     }
 
     // ============================================================
-    //  4.11. ЖИЗНЕННЫЙ ЦИКЛ
+    //  3.10. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     // --- Загрузка данных ---
@@ -337,14 +321,14 @@ export default {
             modules = import.meta.glob('/ru/humans/*/*.md')
         }
         const filteredModules = Object.entries(modules).filter(([path]) => {
-          return path.includes(`/${lang.value}/humans/${props.humanType}/`) && !path.endsWith(`${props.humanType}_index.md`)
+          return path.includes(`/${lang.value}/humans/${props.type}/`) && !path.endsWith(`${props.type}_index.md`)
         })
 
         const loaded = await Promise.all(
           filteredModules.map(async ([path, loader]) => {
             const mod = await loader()
             const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || path.replace(`/${lang.value}/humans/${props.humanType}/`, '').replace('.md', '')
+            const uuid = fm.uuid || path.replace(`/${lang.value}/humans/${props.type}/`, '').replace('.md', '')
 
             return {
               uuid,
@@ -354,7 +338,8 @@ export default {
               experienceDisplay: useExperience(lang.value, fm.experience),
               direction: useDirection('ru', fm.direction),
               directionDisplay: useDirection(lang.value, fm.direction),
-              image: processImage(fm.image, props.humanType, uuid),
+              image: useUrlMedia(fm.image, props.type, uuid, 'image'),
+              type: props.type,
             }
           })
         )
@@ -426,7 +411,7 @@ export default {
     })
 
     // ============================================================
-    //  4.12. ВОЗВРАТ
+    //  3.12. ВОЗВРАТ
     // ============================================================
     return {
       // Опции фильтров
@@ -479,7 +464,6 @@ export default {
       touchEndY,
 
       // Прочее
-      humanType: props.humanType,
       useRandomClass,
     }
   },

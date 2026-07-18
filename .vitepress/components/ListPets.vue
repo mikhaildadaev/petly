@@ -30,7 +30,7 @@
     </button>
   </div>
   <div v-if="!isMobile" class="grid-cards">
-    <a v-for="pet in paginatedPets" :key="pet.uuid" :href="`${baseUrl}${lang}/pets/${petType}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+    <a v-for="pet in paginatedPets" :key="pet.uuid" :href="`${baseUrl}${lang}/pets/${type}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
       <div class="grid-meta">
         <span v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</span>
         <span v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</span>
@@ -67,7 +67,7 @@
       </button>      
       <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
         <div v-for="(pet, index) in paginatedPets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }" >
-          <a :href="`${baseUrl}${lang}/pets/${petType}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+          <a :href="`${baseUrl}${lang}/pets/${type}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
             <div class="grid-meta">
               <span v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</span>
               <span v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</span>
@@ -119,6 +119,7 @@ import { usePagination } from '../composables/usePagination'
 import { useRandomColor } from '../composables/useRandomColor'
 import { useScroll } from '../composables/useScroll'
 import { useTranslate, useAge, useAgePetCategory } from '../composables/useTranslate'
+import { useUrlMedia } from '../composables/useUrlMedia'
 
 // ============================================================
 //  2. КОНСТАНТЫ
@@ -126,33 +127,13 @@ import { useTranslate, useAge, useAgePetCategory } from '../composables/useTrans
 const baseUrl = import.meta.env.BASE_URL
 
 // ============================================================
-//  3. УТИЛИТЫ
-// ============================================================
-
-/**
- * Обработка пути к изображению
- */
-const processImage = (imagePath, type, uuid) => {
-  if (!imagePath) {
-    return uuid ? `${baseUrl}images/${type}/${uuid}.webp` : `${baseUrl}placeholder-${type}.svg`
-  }
-  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
-    return imagePath
-  }
-  if (imagePath.startsWith('/')) {
-    return `${baseUrl}${imagePath.slice(1)}`
-  }
-  return imagePath
-}
-
-// ============================================================
-//  4. КОМПОНЕНТ
+//  3. КОМПОНЕНТ
 // ============================================================
 export default {
   name: 'ListPets',
 
   props: {
-    petType: {
+    type: {
       type: String,
       required: true,
       default: 'dogs'
@@ -161,13 +142,13 @@ export default {
 
   setup(props) {
     // ============================================================
-    //  4.1. ЯЗЫК И ПЕРЕВОДЫ
+    //  3.1. ЯЗЫК И ПЕРЕВОДЫ
     // ============================================================
     const lang = inject('lang', 'ru')
     const translate = (category, key) => useTranslate(lang.value, category, key)
 
     // ============================================================
-    //  4.2. ОПЦИИ ФИЛЬТРОВ
+    //  3.2. ОПЦИИ ФИЛЬТРОВ
     // ============================================================
     const GENDER_KEYS = ['Девочка', 'Мальчик']
     const genderOptions = computed(() => {
@@ -185,7 +166,7 @@ export default {
     const AGE_KEYS = ['Детеныш', 'Молодая', 'Взрослая']
     const ageOptions = computed(() => {
       const ageIcons = {
-        'Детеныш': `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10c0-1.5.8-3 2-3s2 1.5 2 3-.8 2.5-2 2.5S6 11.5 6 10z"/><path d="M14 10c0-1.5.8-3 2-3s2 1.5 2 3-.8 2.5-2 2.5-2-1-2-2.5z"/><path d="M4 14.5c0-1.5 1.5-2.5 3.5-2.5h9c2 0 3.5 1 3.5 2.5v1.5H4z"/><path d="M7.5 17v2"/><path d="M16.5 17v2"/></svg>`,
+        'Детеныш': `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10c0-1.5.8-3 2-3s2 1.5 2 3-.8 2.5-2 2.5S6 11.5 6 10z"/><path d="M14 10c0-1.5.8-3 2-3s2 1.5 2 3-.8 2.5-2 2.5-2-1-2-2.5z"/><path d="M4 13.5c0-1.5 1.5-2.5 3.5-2.5h9c2 0 3.5 1 3.5 2.5v1.5H4z"/><path d="M7.5 17v2"/><path d="M16.5 17v2"/></svg>`,
         'Молодая': `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10c0-2 1-4 3-4s3 2 3 4-1 3-3 3-3-1-3-3z"/><path d="M17 10c0-2-1-4-3-4s-3 2-3 4 1 3 3 3 3-1 3-3z"/><path d="M5 16c0-3 2-4 5-4h4c3 0 5 1 5 4v2H5z"/><path d="M9 18v2"/><path d="M15 18v2"/></svg>`,
         'Взрослая': `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10c0-3 2-5 4-5s4 2 4 5-2 4-4 4-4-1-4-4z"/><path d="M18 10c0-3-2-5-4-5s-4 2-4 5 2 4 4 4 4-1 4-4z"/><path d="M4 16c0-4 3-5 6-5h4c3 0 6 1 6 5v2H4z"/><path d="M8 18v2"/><path d="M16 18v2"/></svg>`
       }
@@ -211,7 +192,7 @@ export default {
     })
 
     // ============================================================
-    //  4.3. СОСТОЯНИЕ
+    //  3.3. СОСТОЯНИЕ
     // ============================================================
     const allPets = ref([])
     const isLoading = ref(true)
@@ -224,7 +205,7 @@ export default {
     })
 
     // ============================================================
-    //  4.4. ВЫЧИСЛЯЕМЫЕ
+    //  3.3. ВЫЧИСЛЯЕМЫЕ
     // ============================================================
 
     const filteredPets = computed(() => {
@@ -245,7 +226,7 @@ export default {
     })
 
     // ============================================================
-    //  4.5. ПАГИНАЦИЯ
+    //  3.5. ПАГИНАЦИЯ
     // ============================================================
 
     const {
@@ -265,7 +246,7 @@ export default {
     })
 
     // ============================================================
-    //  4.6. СКРОЛЛ И КАРУСЕЛЬ
+    //  3.6. СКРОЛЛ И КАРУСЕЛЬ
     // ============================================================
 
     const carouselRef = ref(null)
@@ -291,13 +272,13 @@ export default {
     })
 
     // ============================================================
-    //  4.7. РАНДОМНЫЕ ЦВЕТА
+    //  3.7. РАНДОМНЫЕ ЦВЕТА
     // ============================================================
 
     const { useRandomClass } = useRandomColor()
 
     // ============================================================
-    //  4.8. МЕТОДЫ
+    //  3.8. МЕТОДЫ
     // ============================================================
 
     const toggleFilter = (group, value) => {
@@ -315,7 +296,7 @@ export default {
     }
 
     // ============================================================
-    //  4.9. RESIZE
+    //  3.9. RESIZE
     // ============================================================
     let resizeTimeout = null
 
@@ -329,7 +310,7 @@ export default {
     }
 
     // ============================================================
-    //  4.10. ЖИЗНЕННЫЙ ЦИКЛ
+    //  3.10. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(async () => {
@@ -352,14 +333,14 @@ export default {
             modules = import.meta.glob('/ru/pets/*/*.md')
         }
         const filteredModules = Object.entries(modules).filter(([path]) => {
-          return path.includes(`/${lang.value}/pets/${props.petType}/`) && !path.endsWith(`${props.petType}_index.md`)
+          return path.includes(`/${lang.value}/pets/${props.type}/`) && !path.endsWith(`${props.type}_index.md`)
         })
 
         const loaded = await Promise.all(
           filteredModules.map(async ([path, loader]) => {
             const mod = await loader()
             const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || path.replace(`/${lang.value}/pets/${props.petType}/`, '').replace('.md', '')
+            const uuid = fm.uuid || path.replace(`/${lang.value}/pets/${props.type}/`, '').replace('.md', '')
 
             return {
               uuid,
@@ -371,7 +352,8 @@ export default {
               ageDisplay: useAge(lang.value, fm.age),
               size: useTranslate('ru', 'size', fm.size),
               sizeDisplay: useTranslate(lang.value, 'size', fm.size),
-              image: processImage(fm.image, props.petType, uuid),
+              image: useUrlMedia(fm.image, props.type, uuid, 'image'),
+              type: props.type,
             }
           })
         )
@@ -423,7 +405,7 @@ export default {
     })
 
     // ============================================================
-    //  4.11. ВОЗВРАТ
+    //  3.11. ВОЗВРАТ
     // ============================================================
     return {
       // Опции фильтров
@@ -477,7 +459,6 @@ export default {
       touchEndY,
 
       // Прочее
-      petType: props.petType,
       useRandomClass,
     }
   }

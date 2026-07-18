@@ -1,7 +1,7 @@
 <template>
   <div v-if="selectPets && selectPets.length > 0" class="grid-list">
     <div v-if="!isMobile" class="grid-cards">
-      <a v-for="pet in selectPets" :key="pet.uuid" :href="`${baseUrl}${lang}/pets/${petType}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+      <a v-for="pet in selectPets" :key="pet.uuid" :href="`${baseUrl}${lang}/pets/${type}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
         <div class="grid-meta">
           <span v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</span>
           <span v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</span>
@@ -23,7 +23,7 @@
         </button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(pet, index) in selectPets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="`${baseUrl}${lang}/pets/${petType}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+            <a :href="`${baseUrl}${lang}/pets/${type}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
               <div class="grid-meta">
                 <span v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</span>
                 <span v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</span>
@@ -58,6 +58,7 @@ import { computed, ref, onMounted, onUnmounted, nextTick, inject, watch } from '
 import { useRandomColor } from '../composables/useRandomColor'
 import { useScroll } from '../composables/useScroll'
 import { useTranslate, useAge, useAgePetCategory } from '../composables/useTranslate'
+import { useUrlMedia } from '../composables/useUrlMedia'
 
 // ============================================================
 //  2. КОНСТАНТЫ
@@ -65,37 +66,17 @@ import { useTranslate, useAge, useAgePetCategory } from '../composables/useTrans
 const baseUrl = import.meta.env.BASE_URL
 
 // ============================================================
-//  3. УТИЛИТЫ
-// ============================================================
-
-/**
- * Обработка пути к изображению
- */
-const processImage = (imagePath, type, uuid) => {
-  if (!imagePath) {
-    return uuid ? `${baseUrl}images/${type}/${uuid}.webp` : `${baseUrl}placeholder-${type}.svg`
-  }
-  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
-    return imagePath
-  }
-  if (imagePath.startsWith('/')) {
-    return `${baseUrl}${imagePath.slice(1)}`
-  }
-  return imagePath
-}
-
-// ============================================================
-//  4. КОМПОНЕНТ
+//  3. КОМПОНЕНТ
 // ============================================================
 export default {
   name: 'SelectPets',
 
   props: {
-    petUUIDs: {
+    uuids: {
       type: Array,
       default: () => [],
     },
-    petType: {
+    type: {
       type: String,
       required: true,
       default: 'pets'
@@ -104,34 +85,34 @@ export default {
 
   setup(props) {
     // ============================================================
-    //  4.1. ЯЗЫК И ПЕРЕВОДЫ
+    //  3.1. ЯЗЫК И ПЕРЕВОДЫ
     // ============================================================
     const lang = inject('lang', 'ru')
     const translate = (category, key) => useTranslate(lang.value, category, key)
 
     // ============================================================
-    //  4.2. СОСТОЯНИЕ
+    //  3.2. СОСТОЯНИЕ
     // ============================================================
     const allPets = ref([])
     const isLoading = ref(true)
     const isClient = ref(false)
 
     // ============================================================
-    //  4.3. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
+    //  3.3. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
     // ============================================================
 
     const selectPets = computed(() => {
       if (isLoading.value) return []
       if (!allPets.value || allPets.value.length === 0) return []
-      if (!props.petUUIDs || props.petUUIDs.length === 0) return []
+      if (!props.uuids || props.uuids.length === 0) return []
 
       return allPets.value.filter(v =>
-        v.uuid && props.petUUIDs.includes(v.uuid)
+        v.uuid && props.uuids.includes(v.uuid)
       )
     })
 
     // ============================================================
-    //  4.4. ПОДКЛЮЧЕНИЕ КОМПОЗАБЛОВ
+    //  3.3. ПОДКЛЮЧЕНИЕ КОМПОЗАБЛОВ
     // ============================================================
 
     // --- Рандомные цвета ---
@@ -160,7 +141,7 @@ export default {
     })
 
     // ============================================================
-    //  4.5. RESIZE
+    //  3.5. RESIZE
     // ============================================================
     let resizeTimeout = null
 
@@ -174,7 +155,7 @@ export default {
     }
 
     // ============================================================
-    //  4.6. ЖИЗНЕННЫЙ ЦИКЛ
+    //  3.6. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     // --- Загрузка данных ---
@@ -192,14 +173,14 @@ export default {
             modules = import.meta.glob('/ru/pets/*/*.md')
         }
         const filteredModules = Object.entries(modules).filter(([path]) => {
-          return path.includes(`/${lang.value}/pets/${props.petType}/`) && !path.endsWith(`${props.petType}_index.md`)
+          return path.includes(`/${lang.value}/pets/${props.type}/`) && !path.endsWith(`${props.type}_index.md`)
         })
 
         const loaded = await Promise.all(
           filteredModules.map(async ([path, loader]) => {
             const mod = await loader()
             const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || path.replace(`/${lang.value}/pets/${props.petType}/`, '').replace('.md', '')
+            const uuid = fm.uuid || path.replace(`/${lang.value}/pets/${props.type}/`, '').replace('.md', '')
 
             return {
               uuid: uuid,
@@ -209,7 +190,8 @@ export default {
               genderDisplay: useTranslate(lang.value, 'gender', fm.gender),
               ageDisplay: useAge(lang.value, fm.age),
               sizeDisplay: useTranslate(lang.value, 'size', fm.size),
-              image: processImage(fm.image, props.petType, uuid),
+              image: useUrlMedia(fm.image, props.type, uuid, 'image'),
+              type: props.type,
             }
           })
         )
@@ -252,7 +234,7 @@ export default {
     })
 
     // ============================================================
-    //  4.7. ВОЗВРАТ
+    //  3.7. ВОЗВРАТ
     // ============================================================
     return {
       // Данные
@@ -285,7 +267,7 @@ export default {
       touchEndY,
       
       // Прочее
-      petType: props.petType,
+      type: props.type,
       useRandomClass,
       baseUrl,
     }

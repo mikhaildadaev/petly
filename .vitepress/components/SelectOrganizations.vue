@@ -1,7 +1,7 @@
 <template>
   <div v-if="selectOrganizations && selectOrganizations.length > 0" class="grid-list">
     <div v-if="!isMobile" class="grid-cards">
-      <a v-for="organization in selectOrganizations" :key="organization.uuid" :href="`${baseUrl}${lang}/organizations/${organizationType}/${organization.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+      <a v-for="organization in selectOrganizations" :key="organization.uuid" :href="`${baseUrl}${lang}/organizations/${type}/${organization.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
         <div class="grid-meta">
           <span v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</span>
         </div>
@@ -21,7 +21,7 @@
         </button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(organization, index) in selectOrganizations" :key="organization.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="`${baseUrl}${lang}/organizations/${organizationType}/${organization.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+            <a :href="`${baseUrl}${lang}/organizations/${type}/${organization.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
               <div class="grid-meta">
                 <span v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</span>
               </div>
@@ -54,6 +54,7 @@ import { computed, ref, onMounted, onUnmounted, nextTick, inject, watch } from '
 import { useRandomColor } from '../composables/useRandomColor'
 import { useScroll } from '../composables/useScroll'
 import { useTranslate } from '../composables/useTranslate'
+import { useUrlMedia } from '../composables/useUrlMedia'
 
 // ============================================================
 //  2. КОНСТАНТЫ
@@ -61,37 +62,17 @@ import { useTranslate } from '../composables/useTranslate'
 const baseUrl = import.meta.env.BASE_URL
 
 // ============================================================
-//  3. УТИЛИТЫ
-// ============================================================
-
-/**
- * Обработка пути к изображению
- */
-const processImage = (imagePath, type, uuid) => {
-  if (!imagePath) {
-    return uuid ? `${baseUrl}images/${type}/${uuid}.webp` : `${baseUrl}placeholder-${type}.svg`
-  }
-  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
-    return imagePath
-  }
-  if (imagePath.startsWith('/')) {
-    return `${baseUrl}${imagePath.slice(1)}`
-  }
-  return imagePath
-}
-
-// ============================================================
-//  4. КОМПОНЕНТ
+//  3. КОМПОНЕНТ
 // ============================================================
 export default {
   name: 'SelectOrganizations',
 
   props: {
-    organizationUUIDs: {
+    uuids: {
       type: Array,
       default: () => [],
     },
-    organizationType: {
+    type: {
       type: String,
       required: true,
       default: 'shelters'
@@ -100,34 +81,34 @@ export default {
 
   setup(props) {
     // ============================================================
-    //  4.1. ЯЗЫК И ПЕРЕВОДЫ
+    //  3.1. ЯЗЫК И ПЕРЕВОДЫ
     // ============================================================
     const lang = inject('lang', 'ru')
     const translate = (category, key) => useTranslate(lang.value, category, key)
 
     // ============================================================
-    //  4.2. СОСТОЯНИЕ
+    //  3.2. СОСТОЯНИЕ
     // ============================================================
     const allOrganizations = ref([])
     const isLoading = ref(true)
     const isClient = ref(false)
 
     // ============================================================
-    //  4.3. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
+    //  3.3. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
     // ============================================================
 
     const selectOrganizations = computed(() => {
       if (isLoading.value) return []
       if (!allOrganizations.value || allOrganizations.value.length === 0) return []
-      if (!props.organizationUUIDs || props.organizationUUIDs.length === 0) return []
+      if (!props.uuids || props.uuids.length === 0) return []
 
       return allOrganizations.value.filter(v =>
-        v.uuid && props.organizationUUIDs.includes(v.uuid)
+        v.uuid && props.uuids.includes(v.uuid)
       )
     })
 
     // ============================================================
-    //  4.4. ПОДКЛЮЧЕНИЕ КОМПОЗАБЛОВ
+    //  3.3. ПОДКЛЮЧЕНИЕ КОМПОЗАБЛОВ
     // ============================================================
 
     // --- Рандомные цвета ---
@@ -156,7 +137,7 @@ export default {
     })
 
     // ============================================================
-    //  4.5. RESIZE
+    //  3.5. RESIZE
     // ============================================================
     let resizeTimeout = null
 
@@ -170,7 +151,7 @@ export default {
     }
 
     // ============================================================
-    //  4.6. ЖИЗНЕННЫЙ ЦИКЛ
+    //  3.6. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     // --- Загрузка данных ---
@@ -188,21 +169,22 @@ export default {
             modules = import.meta.glob('/ru/organizations/*/*.md')
         }
         const filteredModules = Object.entries(modules).filter(([path]) => {
-          return path.includes(`/${lang.value}/organizations/${props.organizationType}/`) && !path.endsWith(`${props.organizationType}_index.md`)
+          return path.includes(`/${lang.value}/organizations/${props.type}/`) && !path.endsWith(`${props.type}_index.md`)
         })
 
         const loaded = await Promise.all(
           filteredModules.map(async ([path, loader]) => {
             const mod = await loader()
             const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || path.replace(`/${lang.value}/organizations/${props.organizationType}/`, '').replace('.md', '')
+            const uuid = fm.uuid || path.replace(`/${lang.value}/organizations/${props.type}/`, '').replace('.md', '')
 
             return {
               uuid: uuid,
               nameDisplay: fm.title || '',
               descriptionDisplay: fm.description || '',
               formatDisplay: fm.format ? translate('format', fm.format) : '',
-              image: processImage(fm.image, props.organizationType, uuid),
+              image: useUrlMedia(fm.image, props.type, uuid, 'image'),
+              type: props.type,
             }
           })
         )
@@ -245,7 +227,7 @@ export default {
     })
 
     // ============================================================
-    //  4.7. ВОЗВРАТ
+    //  3.7. ВОЗВРАТ
     // ============================================================
     return {
       // Данные
@@ -278,7 +260,7 @@ export default {
       touchEndY,
       
       // Прочее
-      organizationType: props.organizationType,
+      type: props.type,
       useRandomClass,
       baseUrl,
     }

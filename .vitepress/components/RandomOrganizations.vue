@@ -8,10 +8,9 @@
       </button>
       <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
         <div v-for="(organization, index) in randomOrganizations" :key="organization.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-          <a :href="`${baseUrl}${lang}/organizations/${organization.organizationType}/${organization.uuid}`" class="aspect-list grid-card">
+          <a :href="`${baseUrl}${lang}/organizations/${organization.type}/${organization.uuid}`" class="aspect-list grid-card">
             <div class="grid-meta">
-              <span v-if="organization.directionDisplay" class="tag direction-tag">{{ organization.directionDisplay }}</span>
-              <span v-if="organization.experienceDisplay" class="tag experience-tag">{{ organization.experienceDisplay }}</span>
+              <span v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</span>
             </div>
             <img :src="organization.image" loading="lazy" />
             <div :class="['grid-card-body', useRandomClass(organization.uuid)]">
@@ -53,32 +52,13 @@
 import { ref, computed, onMounted, watch, onUnmounted, inject } from 'vue'
 import { useRandomColor } from '../composables/useRandomColor'
 import { useScroll } from '../composables/useScroll'
-import { useTranslate, useDirection, useExperience } from '../composables/useTranslate'
+import { useTranslate } from '../composables/useTranslate'
+import { useUrlMedia } from '../composables/useUrlMedia'
 
 // ============================================================
 //  2. КОНСТАНТЫ
 // ============================================================
 const baseUrl = import.meta.env.BASE_URL
-
-// ============================================================
-//  3. УТИЛИТЫ
-// ============================================================
-
-/**
- * Обработка пути к изображению
- */
-const processImage = (imagePath, type, uuid) => {
-  if (!imagePath) {
-    return uuid ? `${baseUrl}images/${type}/${uuid}.webp` : `${baseUrl}placeholder-${type}.svg`
-  }
-  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
-    return imagePath
-  }
-  if (imagePath.startsWith('/')) {
-    return `${baseUrl}${imagePath.slice(1)}`
-  }
-  return imagePath
-}
 
 /**
  * Перемешивание массива (алгоритм Фишера-Йетса)
@@ -93,13 +73,13 @@ const shuffleArray = (array) => {
 }
 
 // ============================================================
-//  4. КОМПОНЕНТ
+//  3. КОМПОНЕНТ
 // ============================================================
 export default {
-  name: 'randomOrganizations',
+  name: 'RandomOrganizations',
 
   props: {
-    organizationType: {
+    type: {
       type: String,
       default: 'all',
     },
@@ -111,35 +91,35 @@ export default {
 
   setup(props) {
     // ============================================================
-    //  4.1. ЯЗЫК И ПЕРЕВОДЫ
+    //  3.1. ЯЗЫК И ПЕРЕВОДЫ
     // ============================================================
     const lang = inject('lang', 'ru')
     const translate = (category, key) => useTranslate(lang.value, category, key)
 
     // ============================================================
-    //  4.2. СОСТОЯНИЕ
+    //  3.2. СОСТОЯНИЕ
     // ============================================================
     const randomOrganizations = ref([])
     const isLoading = ref(true)
 
     // ============================================================
-    //  4.3. ВЫЧИСЛЯЕМЫЕ
+    //  3.3. ВЫЧИСЛЯЕМЫЕ
     // ============================================================
 
     const linkUrl = computed(() => {
       const langPath = lang.value || 'ru'
-      return `${baseUrl}${langPath}/organizations/${props.organizationType}`
+      return `${baseUrl}${langPath}/organizations/${props.type}`
     })
 
     // ============================================================
-    //  4.4. ПОДКЛЮЧЕНИЕ КОМПОЗАБЛОВ
+    //  3.3. ПОДКЛЮЧЕНИЕ КОМПОЗАБЛОВ
     // ============================================================
 
     // --- Рандомные цвета ---
     const { useRandomClass } = useRandomColor()
 
     // --- Дополнительный слайд "Перейти в раздел" ---
-    const hasMoreItems = ref(true)
+    const hasMoreItems = computed(() => randomOrganizations.value.length > 0)
 
     // --- Скролл и карусель ---
     const carouselRef = ref(null)
@@ -159,20 +139,20 @@ export default {
     })
 
     const carouselTotalSlides = computed(() => {
-      return randomOrganizations.value.length + 1
+      return randomOrganizations.value.length + (hasMoreItems.value ? 1 : 0)
     })
 
     // ============================================================
-    //  4.5. МЕТОДЫ
+    //  3.5. МЕТОДЫ
     // ============================================================
 
-    // --- Переход на страницу всех волонтёров ---
+    // --- Переход на страницу всех организаций ---
     const goToLink = () => {
       window.location.href = linkUrl.value
     }
 
     // ============================================================
-    //  4.6. RESIZE
+    //  3.6. RESIZE
     // ============================================================
     let resizeTimeout = null
 
@@ -186,7 +166,7 @@ export default {
     }
 
     // ============================================================
-    //  4.7. ЖИЗНЕННЫЙ ЦИКЛ
+    //  3.7. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(async () => {
@@ -203,23 +183,22 @@ export default {
             modules = import.meta.glob('/ru/organizations/*/*.md')
         }
         const filteredModules = Object.entries(modules).filter(([path]) => {
-          return path.includes(`/${lang.value}/organizations/${props.organizationType}/`) && !path.endsWith(`${props.organizationType}_index.md`)
+          return path.includes(`/${lang.value}/organizations/${props.type}/`) && !path.endsWith(`${props.type}_index.md`)
         })
 
         const loaded = await Promise.all(
           filteredModules.map(async ([path, loader]) => {
             const mod = await loader()
             const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || path.replace(`/${lang.value}/organizations/${props.organizationType}/`, '').replace('.md', '')
+            const uuid = fm.uuid || path.replace(`/${lang.value}/organizations/${props.type}/`, '').replace('.md', '')
 
             return {
               uuid,
               nameDisplay: fm.title || '',
               descriptionDisplay: fm.description || '',
-              directionDisplay: useDirection(lang.value, fm.direction),
-              experienceDisplay: useExperience(lang.value, fm.experience),
-              image: processImage(fm.image, props.organizationType, uuid),
-              organizationType: props.organizationType,
+              formatDisplay: fm.format ? translate('format', fm.format) : '',
+              image: useUrlMedia(fm.image, props.type, uuid, 'image'),
+              type: props.type,
             }
           })
         )
@@ -252,23 +231,22 @@ export default {
             modules = import.meta.glob('/ru/organizations/*/*.md')
         }
         const filteredModules = Object.entries(modules).filter(([path]) => {
-          return path.includes(`/${lang.value}/organizations/${props.organizationType}/`) && !path.endsWith(`${props.organizationType}_index.md`)
+          return path.includes(`/${lang.value}/organizations/${props.type}/`) && !path.endsWith(`${props.type}_index.md`)
         })
 
         const loaded = await Promise.all(
           filteredModules.map(async ([path, loader]) => {
             const mod = await loader()
             const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || path.replace(`/${lang.value}/organizations/${props.organizationType}/`, '').replace('.md', '')
+            const uuid = fm.uuid || path.replace(`/${lang.value}/organizations/${props.type}/`, '').replace('.md', '')
 
             return {
               uuid,
               nameDisplay: fm.title || '',
               descriptionDisplay: fm.description || '',
-              directionDisplay: useDirection(lang.value, fm.direction),
-              experienceDisplay: useExperience(lang.value, fm.experience),
-              image: processImage(fm.image, props.organizationType, uuid),
-              organizationType: props.organizationType,
+              formatDisplay: fm.format ? translate('format', fm.format) : '',
+              image: useUrlMedia(fm.image, props.type, uuid, 'image'),
+              type: props.type,
             }
           })
         )
@@ -292,7 +270,7 @@ export default {
     })
 
     // ============================================================
-    //  4.8. ВОЗВРАТ
+    //  3.8. ВОЗВРАТ
     // ============================================================
     return {
       // Данные

@@ -18,7 +18,7 @@
     </button>
   </div>
   <div v-if="!isMobile" class="grid-cards">
-    <a v-for="organization in paginatedOrganizations" :key="organization.uuid" :href="`${baseUrl}${lang}/organizations/${organizationType}/${organization.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+    <a v-for="organization in paginatedOrganizations" :key="organization.uuid" :href="`${baseUrl}${lang}/organizations/${organization.type}/${organization.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
       <div class="grid-meta">
         <span v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</span>
       </div>
@@ -53,7 +53,7 @@
       </button>      
       <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
         <div v-for="(organization, index) in paginatedOrganizations" :key="organization.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-          <a :href="`${baseUrl}${lang}/organizations/${organizationType}/${organization.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
+          <a :href="`${baseUrl}${lang}/organizations/${organization.type}/${organization.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
             <div class="grid-meta">
               <span v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</span>
             </div>
@@ -103,6 +103,7 @@ import { usePagination } from '../composables/usePagination'
 import { useRandomColor } from '../composables/useRandomColor'
 import { useScroll } from '../composables/useScroll'
 import { useTranslate } from '../composables/useTranslate'
+import { useUrlMedia } from '../composables/useUrlMedia'
 
 // ============================================================
 //  2. КОНСТАНТЫ
@@ -116,7 +117,7 @@ export default {
   name: 'ListOrganizations',
 
   props: {
-    organizationType: {
+    type: {
       type: String,
       required: true,
       default: 'shelters'
@@ -125,13 +126,13 @@ export default {
 
   setup(props) {
     // ============================================================
-    //  4.1. ЯЗЫК И ПЕРЕВОДЫ
+    //  3.1. ЯЗЫК И ПЕРЕВОДЫ
     // ============================================================
     const lang = inject('lang', 'ru')
     const translate = (category, key) => useTranslate(lang.value, category, key)
 
     // ============================================================
-    //  4.2. ОПЦИИ ФИЛЬТРОВ
+    //  3.2. ОПЦИИ ФИЛЬТРОВ
     // ============================================================
     const FORMAT_KEYS = ['Частный', 'Государственный']
     const formatOptions = computed(() => {
@@ -147,7 +148,7 @@ export default {
     })
 
     // ============================================================
-    //  4.3. СОСТОЯНИЕ
+    //  3.3. СОСТОЯНИЕ
     // ============================================================
     const allOrganizations = ref([])
     const isLoading = ref(true)
@@ -161,7 +162,7 @@ export default {
     })
 
     // ============================================================
-    //  4.4. ВЫЧИСЛЯЕМЫЕ
+    //  3.3. ВЫЧИСЛЯЕМЫЕ
     // ============================================================
 
     const filteredOrganizations = computed(() => {
@@ -176,7 +177,7 @@ export default {
     })
 
     // ============================================================
-    //  4.5. ПАГИНАЦИЯ
+    //  3.5. ПАГИНАЦИЯ
     // ============================================================
 
     const {
@@ -196,7 +197,7 @@ export default {
     })
 
     // ============================================================
-    //  4.6. СКРОЛЛ И КАРУСЕЛЬ
+    //  3.6. СКРОЛЛ И КАРУСЕЛЬ
     // ============================================================
 
     const carouselRef = ref(null)
@@ -222,13 +223,13 @@ export default {
     })
 
     // ============================================================
-    //  4.7. РАНДОМНЫЕ ЦВЕТА
+    //  3.7. РАНДОМНЫЕ ЦВЕТА
     // ============================================================
 
     const { useRandomClass } = useRandomColor()
 
     // ============================================================
-    //  4.8. МЕТОДЫ (ФИЛЬТРЫ)
+    //  3.8. МЕТОДЫ (ФИЛЬТРЫ)
     // ============================================================
 
     const toggleFilter = (group, value) => {
@@ -244,24 +245,7 @@ export default {
     }
 
     // ============================================================
-    //  4.9. ОБРАБОТЧИК ИЗОБРАЖЕНИЙ
-    // ============================================================
-
-    const processImage = (imagePath, type, uuid) => {
-      if (!imagePath) {
-        return uuid ? `${baseUrl}images/${type}/${uuid}.webp` : `${baseUrl}placeholder-${type}.svg`
-      }
-      if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
-        return imagePath
-      }
-      if (imagePath.startsWith('/')) {
-        return `${baseUrl}${imagePath.slice(1)}`
-      }
-      return imagePath
-    }
-
-    // ============================================================
-    //  4.10. RESIZE
+    //  3.9. RESIZE
     // ============================================================
     let resizeTimeout = null
 
@@ -275,7 +259,7 @@ export default {
     }
 
     // ============================================================
-    //  4.11. ЖИЗНЕННЫЙ ЦИКЛ
+    //  3.10. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     // --- Загрузка данных ---
@@ -293,14 +277,14 @@ export default {
             modules = import.meta.glob('/ru/organizations/*/*.md')
         }
         const filteredModules = Object.entries(modules).filter(([path]) => {
-          return path.includes(`/${lang.value}/organizations/${props.organizationType}/`) && !path.endsWith(`${props.organizationType}_index.md`)
+          return path.includes(`/${lang.value}/organizations/${props.type}/`) && !path.endsWith(`${props.type}_index.md`)
         })
 
         const loaded = await Promise.all(
           filteredModules.map(async ([path, loader]) => {
             const mod = await loader()
             const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || path.replace(`/${lang.value}/organizations/${props.organizationType}/`, '').replace('.md', '')
+            const uuid = fm.uuid || path.replace(`/${lang.value}/organizations/${props.type}/`, '').replace('.md', '')
 
             return {
               uuid,
@@ -308,7 +292,8 @@ export default {
               descriptionDisplay: fm.description || '',
               format: fm.format || '',
               formatDisplay: fm.format ? translate('format', fm.format) : '',
-              image: processImage(fm.image, props.organizationType, uuid),
+              image: useUrlMedia(fm.image, props.type, uuid, 'image'),
+              type: props.type,
             }
           })
         )
@@ -380,7 +365,7 @@ export default {
     })
 
     // ============================================================
-    //  4.12. ВОЗВРАТ
+    //  3.12. ВОЗВРАТ
     // ============================================================
     return {
       // Опции фильтров
@@ -432,7 +417,6 @@ export default {
       touchEndY,
 
       // Прочее
-      organizationType: props.organizationType,
       useRandomClass,
     }
   },

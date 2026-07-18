@@ -10,7 +10,7 @@
       <div class="name">{{ pet.nameDisplay }}</div>
       <button v-if="pet.uuid" class="favorite-btn" :class="{ 'is-favorite': isFavorite }" @click.stop="toggleFavorite(pet.uuid)" :title="translate('ui', 'Добавить в избранное')">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          <path d="M20.84 3.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
         </svg>
       </button>
       <p>{{ pet.descriptionDisplay }}</p>
@@ -27,6 +27,7 @@ import { useData } from 'vitepress'
 import { useFavorites } from '../composables/useFavorites'
 import { useRandomColor } from '../composables/useRandomColor'
 import { useTranslate, useAge, useAgePetCategory } from '../composables/useTranslate'
+import { useUrlMedia } from '../composables/useUrlMedia'
 
 // ============================================================
 //  2. КОНСТАНТЫ
@@ -34,59 +35,39 @@ import { useTranslate, useAge, useAgePetCategory } from '../composables/useTrans
 const baseUrl = import.meta.env.BASE_URL
 
 // ============================================================
-//  3. УТИЛИТЫ
-// ============================================================
-
-/**
- * Обработка пути к изображению
- */
-const processImage = (imagePath, type, uuid) => {
-  if (!imagePath) {
-    return uuid ? `${baseUrl}images/${type}/${uuid}.webp` : `${baseUrl}placeholder-${type}.svg`
-  }
-  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
-    return imagePath
-  }
-  if (imagePath.startsWith('/')) {
-    return `${baseUrl}${imagePath.slice(1)}`
-  }
-  return imagePath
-}
-
-// ============================================================
-//  4. КОМПОНЕНТ
+//  3. КОМПОНЕНТ
 // ============================================================
 export default {
   name: 'CardPetHero',
 
   props: {
-    petType: {
+    type: {
       type: String,
       required: false,
-      default: 'dogs',
+      default: 'dogs'
     }
   },
 
   setup(props) {
     // ============================================================
-    //  4.1. ЯЗЫК И ПЕРЕВОДЫ
+    //  3.1. ЯЗЫК И ПЕРЕВОДЫ
     // ============================================================
     const lang = inject('lang', 'ru')
     const translate = (category, key) => useTranslate(lang.value, category, key)
 
     // ============================================================
-    //  4.2. ДАННЫЕ (FRONTMATTER)
+    //  3.2. ДАННЫЕ (FRONTMATTER)
     // ============================================================
     const { frontmatter } = useData()
     
     // ============================================================
-    //  4.3. COMPOSABLES
+    //  3.3. COMPOSABLES
     // ============================================================
     const { useRandomClass } = useRandomColor()
     const { isFavorite, toggleFavorite, checkIsFavorite } = useFavorites()
 
     // ============================================================
-    //  4.4. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
+    //  3.3. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
     // ============================================================
 
     /**
@@ -115,12 +96,13 @@ export default {
         ageDisplay: data.age ? useAge(lang.value, data.age) : '',
         size: data.size || '',
         sizeDisplay: data.size ? useTranslate(lang.value, 'size', data.size) : '',
-        image: processImage(data.image, props.petType, uuid),
+        image: useUrlMedia(fm.image, props.type, uuid, 'image'),
+        type: props.type,
       }
     })
 
     // ============================================================
-    //  4.5. ЖИЗНЕННЫЙ ЦИКЛ
+    //  3.5. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(() => {
@@ -132,7 +114,7 @@ export default {
     })
 
     // ============================================================
-    //  4.6. WATCHERS
+    //  3.6. WATCHERS
     // ============================================================
 
     watch(() => pet.value.uuid, (newUuid) => {
@@ -150,7 +132,7 @@ export default {
     }, { deep: true })
 
     // ============================================================
-    //  4.7. ВОЗВРАТ
+    //  3.7. ВОЗВРАТ
     // ============================================================
     return {
       // Данные
