@@ -37,7 +37,7 @@
         <span v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</span>
       </div>
       <img :src="pet.image" loading="lazy" />
-      <div :class="['grid-card-body', getRandomPetClass(pet.uuid)]">
+      <div :class="['grid-card-body', getRandomClass(pet.uuid)]">
         <div class="name">{{ pet.nameDisplay }}</div>
         <p>{{ pet.descriptionDisplay }}</p>
       </div>
@@ -74,7 +74,7 @@
               <span v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</span>
             </div>
             <img :src="pet.image" loading="lazy" />
-            <div :class="['grid-card-body', getRandomPetClass(pet.uuid)]">
+            <div :class="['grid-card-body', getRandomClass(pet.uuid)]">
               <div class="name">{{ pet.nameDisplay }}</div>
               <p>{{ pet.descriptionDisplay }}</p>
             </div>
@@ -115,15 +115,15 @@
 //  1. ИМПОРТЫ
 // ============================================================
 import { computed, ref, onMounted, watch, nextTick, onUnmounted, reactive, inject } from 'vue'
+import { usePagination } from '../composables/usePagination'
+import { useRandomColor } from '../composables/useRandomColor'
+import { useScroll } from '../composables/useScroll'
 import { getTranslate, getAge, getAgePetCategory } from '../composables/i18n'
 
 // ============================================================
 //  2. КОНСТАНТЫ
 // ============================================================
-const MOBILE_BREAKPOINT = 735
 const baseUrl = import.meta.env.BASE_URL
-const perPage = 8
-const randomClassCache = new Map()
 
 // ============================================================
 //  3. УТИЛИТЫ
@@ -167,7 +167,7 @@ export default {
     const translate = (category, key) => getTranslate(lang.value, category, key)
 
     // ============================================================
-    //  4.2. ОПЦИИ ФИЛЬТРОВ (ВЫЧИСЛЯЕМЫЕ)
+    //  4.2. ОПЦИИ ФИЛЬТРОВ
     // ============================================================
     const GENDER_KEYS = ['Девочка', 'Мальчик']
     const genderOptions = computed(() => {
@@ -214,42 +214,18 @@ export default {
     //  4.3. СОСТОЯНИЕ
     // ============================================================
     const allPets = ref([])
-    const visibleCount = ref(perPage)
     const isLoading = ref(true)
-    const isMobile = ref(false)
-    const isLoadingMore = ref(false)
     const isClient = ref(false)
-    const savedIndex = ref(0)
 
-    // Фильтры
     const filters = reactive({
       gender: { 'Девочка': true, 'Мальчик': true },
       age: { 'Детеныш': true, 'Молодая': true, 'Взрослая': true },
       size: { 'Маленькая': true, 'Средняя': true, 'Крупная': true }
     })
 
-    // Карусель
-    const carouselRef = ref(null)
-    const currentIndex = ref(0)
-
-    // Свайп
-    const touchStartX = ref(0)
-    const touchStartY = ref(0)
-    const touchEndX = ref(0)
-    const touchEndY = ref(0)
-    const isSwiping = ref(false)
-
     // ============================================================
     //  4.4. ВЫЧИСЛЯЕМЫЕ
     // ============================================================
-
-    const areAllActive = computed(() => {
-      return (
-        filters.gender['Девочка'] && filters.gender['Мальчик'] &&
-        filters.age['Детеныш'] && filters.age['Молодая'] && filters.age['Взрослая'] &&
-        filters.size['Маленькая'] && filters.size['Средняя'] && filters.size['Крупная']
-      )
-    })
 
     const filteredPets = computed(() => {
       return allPets.value.filter(pet => {
@@ -260,16 +236,28 @@ export default {
       })
     })
 
-    const paginatedPets = computed(() => {
-      return filteredPets.value.slice(0, visibleCount.value)
+    const areAllActive = computed(() => {
+      return (
+        filters.gender['Девочка'] && filters.gender['Мальчик'] &&
+        filters.age['Детеныш'] && filters.age['Молодая'] && filters.age['Взрослая'] &&
+        filters.size['Маленькая'] && filters.size['Средняя'] && filters.size['Крупная']
+      )
     })
 
-    const remaining = computed(() => {
-      return filteredPets.value.length - visibleCount.value
-    })
+    // ============================================================
+    //  4.5. ПАГИНАЦИЯ
+    // ============================================================
 
-    const hasMoreItems = computed(() => {
-      return filteredPets.value.length > visibleCount.value
+    const {
+      paginatedItems: paginatedPets,
+      remaining,
+      hasMoreItems,
+      loadMore,
+      isLoadingMore,
+      resetPagination,
+      visibleCount,
+    } = usePagination(filteredPets, {
+      perPage: 8,
     })
 
     const carouselTotalSlides = computed(() => {
@@ -277,172 +265,57 @@ export default {
     })
 
     // ============================================================
-    //  4.5. МЕТОДЫ
+    //  4.6. СКРОЛЛ И КАРУСЕЛЬ
     // ============================================================
 
-    // --- Фильтры ---
+    const carouselRef = ref(null)
+    const {
+      isMobile,
+      currentIndex,
+      scrollToSlide,
+      nextSlide,
+      prevSlide,
+      goToSlide,
+      resetToFirstSlide,
+      handleTouchStart,
+      handleTouchMove,
+      handleTouchEnd,
+      touchStartX,
+      touchStartY,
+      touchEndX,
+      touchEndY,
+    } = useScroll({
+      containerRef: carouselRef,
+      items: paginatedPets,
+      hasMoreItems: hasMoreItems,
+    })
+
+    // ============================================================
+    //  4.7. РАНДОМНЫЕ ЦВЕТА
+    // ============================================================
+
+    const { getRandomClass } = useRandomColor()
+
+    // ============================================================
+    //  4.8. МЕТОДЫ
+    // ============================================================
+
     const toggleFilter = (group, value) => {
       filters[group][value] = !filters[group][value]
-      visibleCount.value = perPage
-      currentIndex.value = 0
+      resetPagination()
+      resetToFirstSlide()
     }
 
     const resetFilters = () => {
       Object.keys(filters.gender).forEach(k => filters.gender[k] = true)
       Object.keys(filters.age).forEach(k => filters.age[k] = true)
       Object.keys(filters.size).forEach(k => filters.size[k] = true)
-      visibleCount.value = perPage
-      currentIndex.value = 0
-    }
-
-    // --- Мобильная версия ---
-    const checkMobile = () => {
-      if (typeof window !== 'undefined') {
-        const newIsMobile = window.innerWidth < MOBILE_BREAKPOINT
-        if (isMobile.value !== newIsMobile) {
-          isMobile.value = newIsMobile
-        }
-      }
-    }
-
-    // --- Пагинация ---
-    const loadMore = async () => {
-      if (isLoadingMore.value || !hasMoreItems.value) return
-      isLoadingMore.value = true
-      savedIndex.value = currentIndex.value
-      await new Promise(resolve => setTimeout(resolve, 500))
-      visibleCount.value += perPage
-      isLoadingMore.value = false
-      if (isMobile.value) {
-        nextTick(() => {
-          if (carouselRef.value && paginatedPets.value.length) {
-            let targetIndex = savedIndex.value
-            const maxIndex = carouselTotalSlides.value - 1
-            if (targetIndex > maxIndex) targetIndex = maxIndex
-            if (targetIndex < 0) targetIndex = 0
-            scrollToSlide(targetIndex)
-            savedIndex.value = 0
-          }
-        })
-      }
-    }
-
-    // --- Карусель ---
-    const resetToFirstSlide = () => {
-      currentIndex.value = 0
-      savedIndex.value = 0
-      visibleCount.value = perPage
-      if (carouselRef.value) {
-        const container = carouselRef.value
-        container.scrollLeft = 0
-        nextTick(() => {
-          container.scrollLeft = 0
-          const slides = container.querySelectorAll('.carousel-slide')
-          if (slides && slides.length > 0) {
-            const firstSlide = slides[0]
-            const containerWidth = container.offsetWidth
-            const slideWidth = firstSlide.offsetWidth
-            const scrollPosition = firstSlide.offsetLeft - (containerWidth - slideWidth) / 2
-            container.scrollTo({
-              left: Math.max(0, scrollPosition),
-              behavior: 'smooth'
-            })
-          }
-        })
-      }
-    }
-
-    const scrollToSlide = (index) => {
-      if (!carouselRef.value) return
-      const container = carouselRef.value
-      const slides = container.querySelectorAll('.carousel-slide')
-      if (!slides.length || index < 0 || index >= slides.length) return
-      const slide = slides[index]
-      const containerWidth = container.offsetWidth
-      const slideWidth = slide.offsetWidth
-      const scrollPosition = slide.offsetLeft - (containerWidth - slideWidth) / 2
-      container.scrollTo({
-        left: Math.max(0, scrollPosition),
-        behavior: 'smooth'
-      })
-      currentIndex.value = index
-    }
-
-    const nextSlide = () => {
-      if (currentIndex.value < carouselTotalSlides.value - 1) {
-        scrollToSlide(currentIndex.value + 1)
-      }
-    }
-
-    const prevSlide = () => {
-      if (currentIndex.value > 0) {
-        scrollToSlide(currentIndex.value - 1)
-      }
-    }
-
-    const goToSlide = (index) => {
-      scrollToSlide(index)
-    }
-
-    // --- Свайп ---
-    const handleTouchStart = (e) => {
-      const touch = e.touches[0]
-      touchStartX.value = touch.clientX
-      touchStartY.value = touch.clientY
-      isSwiping.value = true
-    }
-
-    const handleTouchMove = (e) => {
-      if (!isSwiping.value) return
-      const touch = e.touches[0]
-      const deltaX = touch.clientX - touchStartX.value
-      const deltaY = touch.clientY - touchStartY.value
-      if (Math.abs(deltaY) > Math.abs(deltaX)) {
-        isSwiping.value = false
-        return
-      }
-      e.preventDefault()
-    }
-
-    const handleTouchEnd = (e) => {
-      if (!isSwiping.value) return
-      isSwiping.value = false
-      const touch = e.changedTouches[0]
-      touchEndX.value = touch.clientX
-      touchEndY.value = touch.clientY
-      const diffX = touchStartX.value - touchEndX.value
-      const minSwipeDistance = 50
-      if (diffX > minSwipeDistance) {
-        nextSlide()
-      } else if (diffX < -minSwipeDistance) {
-        prevSlide()
-      }
-      touchStartX.value = 0
-      touchStartY.value = 0
-      touchEndX.value = 0
-      touchEndY.value = 0
-    }
-
-    // --- Рандомные цвета ---
-    let previousColor = 0
-    const getRandomPetClass = (uuid) => {
-      if (!uuid) return 'rand-01'
-      if (randomClassCache.has(uuid)) {
-        return randomClassCache.get(uuid)
-      }
-      let num
-      do {
-        num = Math.floor(Math.random() * 30) + 1
-      } while (num === previousColor)
-      previousColor = num
-      const formattedNum = num.toString().padStart(2, '0')
-      const className = `rand-${formattedNum}`
-      randomClassCache.set(uuid, className)
-      return className
+      resetPagination()
+      resetToFirstSlide()
     }
 
     // ============================================================
-    //  4.6. RESIZE
+    //  4.9. RESIZE
     // ============================================================
     let resizeTimeout = null
 
@@ -451,18 +324,16 @@ export default {
         clearTimeout(resizeTimeout)
       }
       resizeTimeout = setTimeout(() => {
-        checkMobile()
         resizeTimeout = null
       }, 100)
     }
 
     // ============================================================
-    //  4.7. ЖИЗНЕННЫЙ ЦИКЛ
+    //  4.10. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(async () => {
       isClient.value = true
-      checkMobile()
 
       if (typeof window !== 'undefined') {
         window.addEventListener('resize', handleResize)
@@ -505,6 +376,7 @@ export default {
           })
         )
         allPets.value = loaded.reverse()
+        resetPagination()
       } catch (error) {
         console.error('Ошибка загрузки данных:', error)
       } finally {
@@ -516,23 +388,15 @@ export default {
     watch(
       [() => filters.gender, () => filters.age, () => filters.size],
       () => {
-        currentIndex.value = 0
-        savedIndex.value = 0
-        visibleCount.value = perPage
-        nextTick(() => {
-          resetToFirstSlide()
-        })
+        resetPagination()
+        resetToFirstSlide()
       },
       { deep: true }
     )
 
     watch(isMobile, (newVal) => {
       if (isClient.value && newVal && paginatedPets.value.length) {
-        nextTick(() => {
-          if (carouselRef.value) {
-            resetToFirstSlide()
-          }
-        })
+        resetToFirstSlide()
       }
     })
 
@@ -540,14 +404,10 @@ export default {
       () => paginatedPets.value,
       (newVal) => {
         if (isClient.value && isMobile.value && newVal.length) {
-          nextTick(() => {
-            if (carouselRef.value) {
-              const maxIndex = carouselTotalSlides.value - 1
-              if (currentIndex.value > maxIndex) {
-                resetToFirstSlide()
-              }
-            }
-          })
+          const maxIndex = carouselTotalSlides.value - 1
+          if (currentIndex.value > maxIndex) {
+            resetToFirstSlide()
+          }
         }
       },
       { deep: true }
@@ -563,7 +423,7 @@ export default {
     })
 
     // ============================================================
-    //  4.8. ВОЗВРАТ
+    //  4.11. ВОЗВРАТ
     // ============================================================
     return {
       // Опции фильтров
@@ -618,7 +478,7 @@ export default {
 
       // Прочее
       petType: props.petType,
-      getRandomPetClass,
+      getRandomClass,
     }
   }
 }

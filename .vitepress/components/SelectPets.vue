@@ -8,7 +8,7 @@
           <span v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</span>
         </div>
         <img :src="pet.image" loading="lazy" />
-        <div :class="['grid-card-body', getRandomPetClass(pet.uuid)]">
+        <div :class="['grid-card-body', getRandomClass(pet.uuid)]">
           <div class="name">{{ pet.nameDisplay }}</div>
           <p>{{ pet.descriptionDisplay }}</p>
         </div>
@@ -30,7 +30,7 @@
                 <span v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</span>
               </div>
               <img :src="pet.image" loading="lazy" />
-              <div :class="['grid-card-body', getRandomPetClass(pet.uuid)]">
+              <div :class="['grid-card-body', getRandomClass(pet.uuid)]">
                 <div class="name">{{ pet.nameDisplay }}</div>
                 <p>{{ pet.descriptionDisplay }}</p>
               </div>
@@ -54,16 +54,15 @@
 // ============================================================
 //  1. ИМПОРТЫ
 // ============================================================
-import { computed, ref, onMounted, onUnmounted, nextTick, inject } from 'vue'
+import { computed, ref, onMounted, onUnmounted, nextTick, inject, watch } from 'vue'
 import { getTranslate, getAge, getAgePetCategory } from '../composables/i18n'
+import { useRandomColor } from '../composables/useRandomColor'
+import { useScroll } from '../composables/useScroll'
 
 // ============================================================
 //  2. КОНСТАНТЫ
 // ============================================================
-const MOBILE_BREAKPOINT = 735
 const baseUrl = import.meta.env.BASE_URL
-const perPage = 0
-const randomClassCache = new Map()
 
 // ============================================================
 //  3. УТИЛИТЫ
@@ -113,148 +112,55 @@ export default {
     // ============================================================
     //  4.2. СОСТОЯНИЕ
     // ============================================================
-    const allpets = ref([])
+    const allPets = ref([])
     const isLoading = ref(true)
-    const isMobile = ref(false)
-
-    // Карусель
-    const carouselRef = ref(null)
-    const currentIndex = ref(0)
-
-    // Свайп
-    const touchStartX = ref(0)
-    const touchStartY = ref(0)
-    const touchEndX = ref(0)
-    const touchEndY = ref(0)
-    const isSwiping = ref(false)
+    const isClient = ref(false)
 
     // ============================================================
-    //  4.3. ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
-    // ============================================================
-
-    const checkMobile = () => {
-      if (typeof window !== 'undefined') {
-        const newIsMobile = window.innerWidth < MOBILE_BREAKPOINT
-        if (isMobile.value !== newIsMobile) {
-          isMobile.value = newIsMobile
-        }
-      }
-    }
-
-    // ============================================================
-    //  4.4. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
+    //  4.3. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
     // ============================================================
 
     const selectPets = computed(() => {
       if (isLoading.value) return []
-      if (!allpets.value || allpets.value.length === 0) return []
+      if (!allPets.value || allPets.value.length === 0) return []
       if (!props.petUUIDs || props.petUUIDs.length === 0) return []
 
-      return allpets.value.filter(v =>
+      return allPets.value.filter(v =>
         v.uuid && props.petUUIDs.includes(v.uuid)
       )
     })
 
     // ============================================================
-    //  4.5. МЕТОДЫ
+    //  4.4. ПОДКЛЮЧЕНИЕ КОМПОЗАБЛОВ
     // ============================================================
 
     // --- Рандомные цвета ---
-    let previousColor = 0
-    const getRandomPetClass = (uuid) => {
-      if (!uuid) return 'rand-01'
-      if (randomClassCache.has(uuid)) {
-        return randomClassCache.get(uuid)
-      }
-      let num
-      do {
-        num = Math.floor(Math.random() * 30) + 1
-      } while (num === previousColor)
-      previousColor = num
-      const formattedNum = num.toString().padStart(2, '0')
-      const className = `rand-${formattedNum}`
-      randomClassCache.set(uuid, className)
-      return className
-    }
+    const { getRandomClass } = useRandomColor()
 
-    // --- Карусель ---
-    const scrollToSlide = (index) => {
-      if (!carouselRef.value || !selectPets.value || selectPets.value.length === 0) return
-      const container = carouselRef.value
-      const slides = container.querySelectorAll('.carousel-slide')
-      if (!slides.length || index < 0 || index >= slides.length) return
-
-      const slide = slides[index]
-      const containerWidth = container.offsetWidth
-      const slideWidth = slide.offsetWidth
-      const scrollPosition = slide.offsetLeft - (containerWidth - slideWidth) / 2
-
-      container.scrollTo({
-        left: Math.max(0, scrollPosition),
-        behavior: 'smooth'
-      })
-
-      currentIndex.value = index
-    }
-
-    const nextSlide = () => {
-      if (!selectPets.value || selectPets.value.length === 0) return
-      if (currentIndex.value < selectPets.value.length - 1) {
-        scrollToSlide(currentIndex.value + 1)
-      }
-    }
-
-    const prevSlide = () => {
-      if (currentIndex.value > 0) {
-        scrollToSlide(currentIndex.value - 1)
-      }
-    }
-
-    const goToSlide = (index) => {
-      scrollToSlide(index)
-    }
-
-    // --- Обработчики свайпа ---
-    const handleTouchStart = (e) => {
-      const touch = e.touches[0]
-      touchStartX.value = touch.clientX
-      touchStartY.value = touch.clientY
-      isSwiping.value = true
-    }
-
-    const handleTouchMove = (e) => {
-      if (!isSwiping.value) return
-      const touch = e.touches[0]
-      const deltaX = touch.clientX - touchStartX.value
-      const deltaY = touch.clientY - touchStartY.value
-      if (Math.abs(deltaY) > Math.abs(deltaX)) {
-        isSwiping.value = false
-        return
-      }
-      e.preventDefault()
-    }
-
-    const handleTouchEnd = (e) => {
-      if (!isSwiping.value) return
-      isSwiping.value = false
-      const touch = e.changedTouches[0]
-      touchEndX.value = touch.clientX
-      touchEndY.value = touch.clientY
-      const diffX = touchStartX.value - touchEndX.value
-      const minSwipeDistance = 50
-      if (diffX > minSwipeDistance) {
-        nextSlide()
-      } else if (diffX < -minSwipeDistance) {
-        prevSlide()
-      }
-      touchStartX.value = 0
-      touchStartY.value = 0
-      touchEndX.value = 0
-      touchEndY.value = 0
-    }
+    // --- Скролл и карусель ---
+    const carouselRef = ref(null)
+    const {
+      isMobile,
+      currentIndex,
+      scrollToSlide,
+      nextSlide,
+      prevSlide,
+      goToSlide,
+      resetToFirstSlide,
+      handleTouchStart,
+      handleTouchMove,
+      handleTouchEnd,
+      touchStartX,
+      touchStartY,
+      touchEndX,
+      touchEndY,
+    } = useScroll({
+      containerRef: carouselRef,
+      items: selectPets,
+    })
 
     // ============================================================
-    //  4.6. RESIZE
+    //  4.5. RESIZE
     // ============================================================
     let resizeTimeout = null
 
@@ -263,22 +169,16 @@ export default {
         clearTimeout(resizeTimeout)
       }
       resizeTimeout = setTimeout(() => {
-        checkMobile()
         resizeTimeout = null
       }, 100)
     }
 
     // ============================================================
-    //  4.7. ЖИЗНЕННЫЙ ЦИКЛ
+    //  4.6. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
-    onMounted(async () => {
-      checkMobile()
-
-      if (typeof window !== 'undefined') {
-        window.addEventListener('resize', handleResize)
-      }
-
+    // --- Загрузка данных ---
+    const loadData = async () => {
       try {
         let modules
         switch (lang.value) {
@@ -307,21 +207,38 @@ export default {
               descriptionDisplay: fm.description || '',
               gender: getTranslate('ru', 'gender', fm.gender),
               genderDisplay: getTranslate(lang.value, 'gender', fm.gender),
-              age: getAgePetCategory(fm.age),
               ageDisplay: getAge(lang.value, fm.age),
-              size: getTranslate('ru', 'size', fm.size),
               sizeDisplay: getTranslate(lang.value, 'size', fm.size),
               image: processImage(fm.image, props.petType, uuid),
             }
           })
         )
 
-        allpets.value = loaded
+        allPets.value = loaded
       } catch (error) {
         console.error('Ошибка загрузки данных:', error)
-      } finally {
-        isLoading.value = false
       }
+    }
+
+    // --- Монтирование ---
+    onMounted(async () => {
+      isClient.value = true
+
+      if (typeof window !== 'undefined') {
+        window.addEventListener('resize', handleResize)
+      }
+
+      isLoading.value = true
+      await loadData()
+      isLoading.value = false
+    })
+
+    // --- Следим за изменением языка ---
+    watch(lang, async () => {
+      isLoading.value = true
+      await loadData()
+      resetToFirstSlide()
+      isLoading.value = false
     })
 
     // --- Unmount ---
@@ -335,7 +252,7 @@ export default {
     })
 
     // ============================================================
-    //  4.8. ВОЗВРАТ
+    //  4.7. ВОЗВРАТ
     // ============================================================
     return {
       // Данные
@@ -356,6 +273,7 @@ export default {
       nextSlide,
       prevSlide,
       goToSlide,
+      resetToFirstSlide,
       
       // Свайп
       handleTouchStart,
@@ -368,7 +286,7 @@ export default {
       
       // Прочее
       petType: props.petType,
-      getRandomPetClass,
+      getRandomClass,
       baseUrl,
     }
   },
