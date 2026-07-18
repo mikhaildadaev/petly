@@ -6,7 +6,7 @@
           <path d="M15 18l-6-6 6-6" />
         </svg>
       </button>
-      <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
+      <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove.prevent="handleTouchMove" @touchend="handleTouchEnd">
         <div v-for="(pet, index) in randomPets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
           <a :href="`${baseUrl}${lang}/pets/${pet.type}/${pet.uuid}`" class="aspect-list grid-card">
             <div class="grid-meta">
