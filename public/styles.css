@@ -907,7 +907,7 @@ h1,h2,h3 {
 /* ============================================================
    ПОЛНОЭКРАННЫЙ СЛАЙДЕР
    ============================================================ */
-.fullslider {
+.fullScreen {
   position: fixed;
   top: 0;
   left: 0;
@@ -921,15 +921,15 @@ h1,h2,h3 {
   justify-content: center;
   animation: fadeIn 0.3s ease;
 }
-.fullslider-content {
+.fullScreen-content {
   max-width: 90vw;
   max-height: 85vh;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.fullslider-content img,
-.fullslider-video {
+.fullScreen-content img,
+.fullScreen-video {
   max-width: 90vw;
   max-height: 85vh;
   object-fit: contain;
@@ -937,12 +937,12 @@ h1,h2,h3 {
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
   animation: zoomIn 0.3s ease;
 }
-.fullslider-video {
+.fullScreen-video {
   width: 90vw;
   max-height: 85vh;
   background: #000;
 }
-.fullslider-close {
+.fullScreen-close {
   position: absolute;
   top: 24px;
   right: calc(50% - 24px);
@@ -957,12 +957,12 @@ h1,h2,h3 {
   transition: all 0.3s ease;
   z-index: 10;
 }
-.fullslider-close:hover {
+.fullScreen-close:hover {
   background: rgba(255, 255, 255, 0.2);
   transform: rotate(90deg);
 }
-.fullslider-prev,
-.fullslider-next {
+.fullScreen-prev,
+.fullScreen-next {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -974,18 +974,18 @@ h1,h2,h3 {
   transition: all 0.3s ease;
   z-index: 10;
 }
-.fullslider-prev:hover,
-.fullslider-next:hover {
+.fullScreen-prev:hover,
+.fullScreen-next:hover {
   background: rgba(255, 255, 255, 0.15);
   border-color: rgba(255, 255, 255, 0.3);
 }
-.fullslider-prev {
+.fullScreen-prev {
   left: 0;
 }
-.fullslider-next {
+.fullScreen-next {
   right: 0;
 }
-.fullslider-footer {
+.fullScreen-footer {
   position: absolute;
   bottom: 30px;
   left: 50%;
@@ -995,7 +995,7 @@ h1,h2,h3 {
   align-items: center;
   gap: 12px;
 }
-.fullslider-counter {
+.fullScreen-counter {
   color: rgba(255, 255, 255, 0.7);
   font-size: 14px;
   font-weight: 500;
@@ -1004,11 +1004,11 @@ h1,h2,h3 {
   align-items: center;
   gap: 12px;
 }
-.fullslider-dots {
+.fullScreen-dots {
   display: flex;
   gap: 8px;
 }
-.fullslider-dots .dot {
+.fullScreen-dots .dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -1016,11 +1016,11 @@ h1,h2,h3 {
   cursor: pointer;
   transition: all 0.3s ease;
 }
-.fullslider-dots .dot:hover {
+.fullScreen-dots .dot:hover {
   background: rgba(255, 255, 255, 0.4);
   transform: scale(1.2);
 }
-.fullslider-dots .dot.active {
+.fullScreen-dots .dot.active {
   width: 32px;
   height: 8px;
   border-radius: 4px;
@@ -1106,8 +1106,8 @@ h1,h2,h3 {
   .gallery-item {
     border-radius: 8px;
   }
-  .fullslider-prev,
-  .fullslider-next {
+  .fullScreen-prev,
+  .fullScreen-next {
     color: transparent!important;
     background-color: transparent!important;
   }
