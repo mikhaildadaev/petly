@@ -1,8 +1,7 @@
 <template>
   <div class="aspect-card hero-card">
     <div class="hero-meta">
-      <span v-if="organization.directionDisplay" class="tag direction-tag">{{ organization.directionDisplay }}</span>
-      <span v-if="organization.experienceDisplay" class="tag experience-tag">{{ organization.experienceDisplay }}</span>
+      <span v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</span>
     </div>
     <img :src="organization.image" class="hero-image" loading="lazy" />
     <div :class="['hero-overlay', useRandomClass(organization.uuid)]">
@@ -104,8 +103,7 @@ export default {
         uuid,
         nameDisplay: data.title || '',
         descriptionDisplay: data.description || '',
-        directionDisplay: data.direction ? useDirection(lang.value, data.direction) : '',
-        experienceDisplay: data.experience ? useExperience(lang.value, data.experience) : '',
+        formatDisplay: data.format ? useTranslate(lang.value, 'format', data.format) : '',
         image: processImage(data.image, props.organizationType, uuid),
       }
     })
