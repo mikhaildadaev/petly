@@ -17,10 +17,10 @@
 // ============================================================
 import { computed, ref, onMounted, watch, nextTick, inject } from 'vue'
 import { useData } from 'vitepress'
-import { useFavorites } from '../composables/useFavorites'
-import { useRandomColor } from '../composables/useRandomColor'
-import { useTranslate, useDirection, useExperience } from '../composables/useTranslate'
-import { useUrlMedia } from '../composables/useUrlMedia'
+import { useFavorites } from '../utils/useFavorites'
+import { useRandomColor } from '../utils/useRandomColor'
+import { useTranslate, useDirection, useExperience } from '../utils/useTranslate'
+import { useUrlMedia } from '../utils/useUrlMedia'
 
 // ============================================================
 //  2. КОНСТАНТЫ

@@ -51,27 +51,16 @@
 //  1. ИМПОРТЫ
 // ============================================================
 import { ref, computed, onMounted, watch, onUnmounted, inject } from 'vue'
-import { useRandomColor } from '../composables/useRandomColor'
-import { useScroll } from '../composables/useScroll'
-import { useTranslate, useDirection, useExperience } from '../composables/useTranslate'
-import { useUrlMedia } from '../composables/useUrlMedia'
+import { useRandomArray } from '../utils/useRandomArray'
+import { useRandomColor } from '../utils/useRandomColor'
+import { useScroll } from '../utils/useScroll'
+import { useTranslate, useDirection, useExperience } from '../utils/useTranslate'
+import { useUrlMedia } from '../utils/useUrlMedia'
 
 // ============================================================
 //  2. КОНСТАНТЫ
 // ============================================================
 const baseUrl = import.meta.env.BASE_URL
-
-/**
- * Перемешивание массива (алгоритм Фишера-Йетса)
- */
-const shuffleArray = (array) => {
-  const shuffled = [...array]
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
-  }
-  return shuffled
-}
 
 // ============================================================
 //  3. КОМПОНЕНТ
@@ -206,7 +195,7 @@ export default {
         )
 
         // Перемешиваем и берём нужное количество
-        const shuffled = shuffleArray(loaded)
+        const shuffled = useRandomArray(loaded)
         randomHumans.value = shuffled.slice(0, props.count)
 
         // Сбрасываем индекс после загрузки
@@ -254,7 +243,7 @@ export default {
           })
         )
 
-        const shuffled = shuffleArray(loaded)
+        const shuffled = useRandomArray(loaded)
         randomHumans.value = shuffled.slice(0, props.count)
         currentIndex.value = 0
       } catch (error) {

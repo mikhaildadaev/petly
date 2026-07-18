@@ -53,10 +53,10 @@
 //  1. ИМПОРТЫ
 // ============================================================
 import { computed, ref, onMounted, onUnmounted, nextTick, inject, watch } from 'vue'
-import { useRandomColor } from '../composables/useRandomColor'
-import { useScroll } from '../composables/useScroll'
-import { useTranslate, useDirection, useExperience } from '../composables/useTranslate'
-import { useUrlMedia } from '../composables/useUrlMedia'
+import { useRandomColor } from '../utils/useRandomColor'
+import { useScroll } from '../utils/useScroll'
+import { useTranslate, useDirection, useExperience } from '../utils/useTranslate'
+import { useUrlMedia } from '../utils/useUrlMedia'
 
 // ============================================================
 //  2. КОНСТАНТЫ
