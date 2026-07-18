@@ -12,7 +12,7 @@ export function useRandomColor() {
    * @param {number} maxColors - количество цветов (по умолчанию 30)
    * @returns {string} - случайный класс rand-XX
    */
-  const getRandomClass = (uuid, maxColors = 30) => {
+  const useRandomClass = (uuid, maxColors = 30) => {
     if (!uuid) return 'rand-01'
     
     if (randomClassCache.has(uuid)) {
@@ -45,7 +45,7 @@ export function useRandomColor() {
   }
 
   return {
-    getRandomClass,
+    useRandomClass,
     clearColorCache,
   }
 }

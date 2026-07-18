@@ -169,11 +169,11 @@ export const translations = {
   }
 }
 
-export const getTranslate = (lang, category, key) => {
+export const useTranslate = (lang, category, key) => {
   return translations[lang]?.[category]?.[key] || key
 }
-export const getAge = (lang, startDate) => {
-  if (!startDate) return getTranslate(lang, 'ui', 'Нет данных')
+export const useAge = (lang, startDate) => {
+  if (!startDate) return useTranslate(lang, 'ui', 'Нет данных')
   const start = new Date(startDate)
   const now = new Date()
   let years = now.getFullYear() - start.getFullYear()
@@ -183,39 +183,39 @@ export const getAge = (lang, startDate) => {
     months += 12
   }
   if (years < 1 && months === 0) {
-    return getTranslate(lang, 'ui', 'Меньше месяца')
+    return useTranslate(lang, 'ui', 'Меньше месяца')
   }
-  const getUnit = (num, unit) => {
+  const useUnit = (num, unit) => {
     const lastDigit = num % 10
     const lastTwoDigits = num % 100
     if (unit === 'год') {
-      if (lastTwoDigits >= 11 && lastTwoDigits <= 19) return getTranslate(lang, 'ageUnits', 'лет')
-      if (lastDigit === 1) return getTranslate(lang, 'ageUnits', 'год')
-      if (lastDigit >= 2 && lastDigit <= 4) return getTranslate(lang, 'ageUnits', 'года')
-      return getTranslate(lang, 'ageUnits', 'лет')
+      if (lastTwoDigits >= 11 && lastTwoDigits <= 19) return useTranslate(lang, 'ageUnits', 'лет')
+      if (lastDigit === 1) return useTranslate(lang, 'ageUnits', 'год')
+      if (lastDigit >= 2 && lastDigit <= 4) return useTranslate(lang, 'ageUnits', 'года')
+      return useTranslate(lang, 'ageUnits', 'лет')
     }
     if (unit === 'месяц') {
-      if (lastTwoDigits >= 11 && lastTwoDigits <= 19) return getTranslate(lang, 'ageUnits', 'месяцев')
-      if (lastDigit === 1) return getTranslate(lang, 'ageUnits', 'месяц')
-      if (lastDigit >= 2 && lastDigit <= 4) return getTranslate(lang, 'ageUnits', 'месяца')
-      return getTranslate(lang, 'ageUnits', 'месяцев')
+      if (lastTwoDigits >= 11 && lastTwoDigits <= 19) return useTranslate(lang, 'ageUnits', 'месяцев')
+      if (lastDigit === 1) return useTranslate(lang, 'ageUnits', 'месяц')
+      if (lastDigit >= 2 && lastDigit <= 4) return useTranslate(lang, 'ageUnits', 'месяца')
+      return useTranslate(lang, 'ageUnits', 'месяцев')
     }
-    return getTranslate(lang, 'ageUnits', unit)
+    return useTranslate(lang, 'ageUnits', unit)
   }
   if (years < 1) {
-    const monthUnit = getUnit(months, 'месяц')
+    const monthUnit = useUnit(months, 'месяц')
     return `${months} ${monthUnit}`
   }
-  const yearUnit = getUnit(years, 'год')
+  const yearUnit = useUnit(years, 'год')
   let result = `${years} ${yearUnit}`
   
   if (months > 0) {
-    const monthUnit = getUnit(months, 'месяц')
+    const monthUnit = useUnit(months, 'месяц')
     result += ` ${months} ${monthUnit}`
   }
   return result
 }
-export const getAgePetCategory = (birthday) => {
+export const useAgePetCategory = (birthday) => {
   if (!birthday) return ''
   const birthDate = new Date(birthday)
   const now = new Date()
@@ -228,16 +228,16 @@ export const getAgePetCategory = (birthday) => {
   if (months <= 36) return 'Молодая'
   return 'Взрослая'
 }
-export const getDirection = (lang, directionStr) => {
+export const useDirection = (lang, directionStr) => {
   if (!directionStr) return ''
   const parts = directionStr.split(/[/,]\s*/).map(s => s.trim())
   const translatedParts = parts.map(part => {
-    return getTranslate(lang, 'direction', part)
+    return useTranslate(lang, 'direction', part)
   })
   return translatedParts.join(' / ')
 }
-export const getExperience = (lang, startDate) => {
-  if (!startDate) return getTranslate(lang, 'ui', 'Нет данных')
+export const useExperience = (lang, startDate) => {
+  if (!startDate) return useTranslate(lang, 'ui', 'Нет данных')
   const start = new Date(startDate)
   const now = new Date()
   let years = now.getFullYear() - start.getFullYear()
@@ -254,5 +254,5 @@ export const getExperience = (lang, startDate) => {
   } else {
     categoryKey = 'Эксперт'
   }
-  return getTranslate(lang, 'experience', categoryKey)
+  return useTranslate(lang, 'experience', categoryKey)
 }

@@ -43,7 +43,6 @@ export function usePagination(items, options = {}) {
     }
   }
   const resetPagination = () => {
-    console.log('🔄 resetPagination вызван')
     visibleCount.value = perPage
     isLoadingMore.value = false
   }
