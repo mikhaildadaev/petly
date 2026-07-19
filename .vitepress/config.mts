@@ -18,6 +18,11 @@ export default defineConfig({
       link: '/de/',
       title: 'PETLY',
       themeConfig: {
+        notFound: {
+          title: 'Hoppla! Seite nicht gefunden 🐾',
+          quote: 'Sieht so aus, als wäre diese Seite spazieren gegangen. Aber wir helfen dir, den Weg nach Hause zu finden!',
+          linkText: 'Zurück zur Startseite',
+        },
         search: {
           provider: 'local',
           options: {
@@ -143,7 +148,7 @@ export default defineConfig({
         },
         footer: {
           message: 'Jedes Tier verdient ein Zuhause',
-          copyright: '© 2026 Михаил Дадаев'
+          copyright: '© 2026 Michail Dadajew • Apache License 2.0'
         }
       }
     },
@@ -154,6 +159,11 @@ export default defineConfig({
       link: '/en/',
       title: 'PETLY',
       themeConfig: {
+        notFound: {
+          title: 'Oops! Page not found 🐾',
+          quote: 'Looks like this page went for a walk. But we\'ll help you find your way home!',
+          linkText: 'Return to home',
+        },
         search: {
           provider: 'local',
           options: {
@@ -279,7 +289,7 @@ export default defineConfig({
         },
         footer: {
           message: 'Every pet deserves a home',
-          copyright: '© 2026 Mikhail Dadaev'
+          copyright: '© 2026 Mikhail Dadaev • Apache License 2.0'
         }
       }
     },
@@ -290,6 +300,11 @@ export default defineConfig({
       link: '/ru/',
       title: 'PETLY',
       themeConfig: {
+        notFound: {
+          title: 'Ой! Страница не найдена 🐾',
+          quote: 'Похоже, эта страница ушла гулять. Но мы поможем найти дорогу домой!',
+          linkText: 'Вернуться на главную',
+        },
         search: {
           provider: 'local',
           options: {
@@ -415,7 +430,7 @@ export default defineConfig({
         },
         footer: {
           message: 'Каждый питомец заслуживает дом',
-          copyright: '© 2026 Михаил Дадаев'
+          copyright: '© 2026 Михаил Дадаев • Apache License 2.0'
         }
       }
     }
