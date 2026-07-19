@@ -820,18 +820,19 @@ h1,h2,h3 {
 .block-type-social {
   position: relative;
   display: block;
-  margin-top: -3em;
 }
 .block-type-social .background {
   position: absolute;
   left: 0;
-  top: 4em;
+  top: 6em;
   right: 0;
   bottom: 0;
-  padding: 1em 2em;
   background-color: var(--vp-c-bg-alt);
   border-radius: var(--radius);
   z-index: -1;
+}
+.block-type-social .background .block-title {
+  margin-top: -2em;
 }
 .block-type-social .block-grid {
   display: grid;
@@ -841,7 +842,7 @@ h1,h2,h3 {
 .block-type-social .block-item-links {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  margin-top: 6em;
   padding: 2em;
   justify-content: flex-end;
   gap: 16px;
