@@ -75,4 +75,4 @@ This project is distributed under the **Apache License 2.0**.
 
 © 2026 Mikhail Dadaev
 
-Details: [LICENSE](./LICENSE)
+Details: [LICENSE](./LICENSE.md)
