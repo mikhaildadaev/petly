@@ -49,14 +49,11 @@ blocks:
     description: Делитесь ссылкой на сервис в социальных сетях! Один репост — и кто-то найдет дом, а кто-то — верного друга.
     image: /assets/webp/dogWithPhone.webp
     list: 
-      - description: VKontakte
-        image: /assets/webp/vkontakte.webp
-
-      - description: Instagram
-        image: /assets/webp/instagram.webp
+      - link: «ВКонтакте»
+        url: https://vk.com/share.php?url=https://mikhaildadaev.github.io/petly
       
-      - description: Telegram
-        image: /assets/webp/telegram.webp
+      - link: «Телеграм»
+        url: https://t.me/share/url?url=https://mikhaildadaev.github.io/petly
 
     type: "social"
 
