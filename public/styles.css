@@ -866,6 +866,92 @@ h1,h2,h3 {
 .block-type-social .block-item-link:hover {
   color: var(--vp-c-text-1);
 }
+.block-type-steps {
+  max-width: 700px;
+  margin: 0 auto;
+}
+.block-type-steps .step-item {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  padding: 20px 24px;
+  background: var(--vp-c-bg-soft);
+  border-radius: 12px;
+  border: 1px solid var(--vp-c-border);
+  transition: all 0.3s ease;
+  margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.block-type-steps .step-item:last-child {
+  margin-bottom: 0;
+}
+.block-type-steps .block-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--vp-c-brand);
+  background: rgba(230, 126, 34, 0.08);
+  border-radius: 12px;
+  line-height: 1;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.block-type-steps .block-number::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30%;
+  background: linear-gradient(to top, var(--vp-c-bg-soft), transparent);
+  pointer-events: none;
+}
+.block-type-steps .step-item:nth-child(odd) .block-number::after {
+  top: 0;
+  bottom: auto;
+  height: 35%;
+  background: linear-gradient(to bottom, var(--vp-c-bg-soft), transparent);
+}
+.block-type-steps .step-item:hover .block-number {
+  transform: scale(1.1);
+  background: rgba(230, 126, 34, 0.15);
+}
+.block-type-steps .block-content {
+  flex: 1;
+  min-width: 0;
+  padding-top: 4px;
+}
+.block-type-steps .block-content h3 {
+  margin: 0 0 4px;
+  font-size: 1.1em;
+  font-weight: 600;
+  color: var(--vp-c-text);
+}
+.block-type-steps .block-content p {
+  margin: 0 0 8px;
+  font-size: 0.95em;
+  color: var(--vp-c-text-light);
+  line-height: 1.5;
+}
+.block-type-steps .step-link {
+  display: inline-block;
+  color: var(--vp-c-brand);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9em;
+  transition: all 0.2s ease;
+}
+.block-type-steps .step-link:hover {
+  text-decoration: underline;
+  color: var(--vp-c-brand-dark);
+}
 
 /* ============================================================
    ВСПЛЫВАЮЩАЯ ПОДСКАЗКА
