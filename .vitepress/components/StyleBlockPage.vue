@@ -38,6 +38,19 @@
           </div>
         </div>
       </div>
+      <div v-else-if="block.type === 'steps'" :class="`block-type-${type}`">
+        <div class="block-title">{{ block.name }}</div>
+        <div v-for="(item, itemIndex) in block.list" :key="itemIndex" class="step-item">
+          <div class="block-number">{{ itemIndex + 1 }}</div>
+          <div class="block-content">
+            <h3>{{ item.point }}</h3>
+            <p>{{ item.info }}</p>
+            <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="step-link">
+              Перейти к анкете →
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
