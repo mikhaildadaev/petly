@@ -1,5 +1,5 @@
 <template>
-  <div v-for="(block, blockIndex) in blocks" :key="blockIndex" class="block-section" :class="`block-type-${type}`">
+  <div v-for="(block, blockIndex) in filteredBlocks" :key="blockIndex" class="block-section" :class="`block-type-${type}`">
     <h2 class="block-title">{{ block.name }}</h2>
     <div class="block-grid">
       <div v-for="(item, itemIndex) in block.list" :key="itemIndex" class="block-item">
@@ -8,17 +8,15 @@
         </div>
         <div class="block-item-content">
           <p>{{ item.description }}</p>
-          <div v-if="item.info" class="info">
-            <span class="info-trigger" @mouseenter="showTooltip(itemIndex)" @mouseleave="hideTooltip" @click="toggleTooltip(itemIndex)" aria-label="Подробнее">
-               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 16v-4" />
-                <path d="M12 8h.01" />
-              </svg>
-            </span>
-            <div v-show="activeTooltip === itemIndex" class="tooltip" @mouseenter="showTooltip(itemIndex)" @mouseleave="hideTooltip">{{ item.info }}</div>
-          </div>
-      </div>
+          <span v-if="item.info" class="info-trigger" @mouseenter="showTooltip(itemIndex)" @mouseleave="hideTooltip" @click="toggleTooltip(itemIndex)" aria-label="Подробнее">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 16v-4" />
+              <path d="M12 8h.01" />
+            </svg>
+          </span>
+          <div v-show="activeTooltip === itemIndex" class="tooltip" @mouseenter="showTooltip(itemIndex)" @mouseleave="hideTooltip">{{ item.info }}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -32,17 +30,21 @@ import { useUrlMedia } from '../utils/useUrlMedia'
 const props = defineProps({
   type: {
     type: String,
-    default: '01'
+    default: 'kvadrat'
   }
 })
 
 const { frontmatter } = useData()
+
 const activeTooltip = ref(null)
 let tooltipTimeout = null
-const blocks = computed(() => {
+
+const filteredBlocks = computed(() => {
   const rawBlocks = frontmatter.value?.blocks || []
   
-  return rawBlocks.map(block => ({
+  const matchedBlocks = rawBlocks.filter(block => block.type === props.type)
+  
+  return matchedBlocks.map(block => ({
     ...block,
     list: block.list?.map(item => ({
       ...item,
@@ -50,6 +52,7 @@ const blocks = computed(() => {
     })) || []
   }))
 })
+
 const showTooltip = (index) => {
   clearTimeout(tooltipTimeout)
   activeTooltip.value = index
