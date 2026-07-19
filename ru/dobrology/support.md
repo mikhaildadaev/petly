@@ -7,12 +7,16 @@ blocks:
     list: 
       - description: Приучить к поводку и ошейнику.
         image: /assets/webp/collar.webp
+        info: Помогите питомцу освоиться на прогулке — это сделает его увереннее и спокойнее.
     
       - description: Потренировать базовые команды
         image: /assets/webp/whistle.webp
+        info: Сидеть, лежать, ко мне — простые команды помогут питомцу быстрее найти новый дом.
     
       - description: Поиграть и научить контакту с человеком
         image: /assets/webp/medicines.webp
+        info: Игры и общение помогают питомцу привыкнуть к людям и стать более социальным.
+    type: "kvadrat"
   
   - name: ... Вещами
     list: 
@@ -35,11 +39,12 @@ blocks:
       - description: Лекарства
         image: /assets/webp/medicines.webp
         info: Должен быть в закрытой заводской упаковке и действующим сроком годности.
+    type: "kvadrat"
 
 ---
 
 # Поддержать
 
-<StyleBlockPage type="01"/>
+<StyleBlockPage type="kvadrat"/>
 
 <StyleImagePage src="/assets/webp/womanWithRug.webp" width="320" float="center"/>
