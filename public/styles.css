@@ -753,12 +753,12 @@ h1,h2,h3 {
   color: var(--vp-c-text);
   margin-bottom: 20px;
 }
-.block-type-01 .block-grid {
+.block-type-kvadrat .block-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
 }
-.block-type-01 .block-item {
+.block-type-kvadrat .block-item {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -770,37 +770,34 @@ h1,h2,h3 {
   transition: all 0.3s ease;
   position: relative;
 }
-.block-type-01 .block-item-image {
-  width: 64px;
-  height: 64px;
+.block-type-kvadrat .block-item-image {
+  width: 80px;
+  height: 80px;
   flex-shrink: 0;
   border-radius: 10px;
   overflow: hidden;
   background: var(--vp-c-bg);
 }
-.block-type-01 .block-item-image img {
+.block-type-kvadrat .block-item-image img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
-.block-type-01 .block-item-content {
+.block-type-kvadrat .block-item-content {
   text-align: center;
   width: 100%;
 }
-.block-type-01 .block-item-content p {
+.block-type-kvadrat .block-item-content p {
   margin: 0 0 6px;
   font-size: 0.95em;
   line-height: 1.4em;
   color: var(--vp-c-text);
 }
-.block-type-01 .block-item-content .info {
+.block-type-kvadrat .block-item-content .info-trigger {
   position: absolute;
-  display: inline-block;
+  display: inline-flex;
   top: 8px;
   right: 8px;
-}
-.block-type-01 .block-item-content .info-trigger {
-  display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
@@ -809,11 +806,11 @@ h1,h2,h3 {
   padding: 4px;
   border-radius: 50%;
 }
-.block-type-01 .block-item-content .info-trigger:hover {
+.block-type-kvadrat .block-item-content .info-trigger:hover {
   color: var(--vp-c-brand);
   background: rgba(230, 126, 34, 0.1);
 }
-.block-type-01 .block-item-content .info-trigger svg {
+.block-type-kvadrat .block-item-content .info-trigger svg {
   display: block;
 }
 
@@ -822,13 +819,13 @@ h1,h2,h3 {
    ============================================================ */
 .tooltip {
   position: absolute;
-  top: -4px;
-  right: 32px;
+  top: 4px;
+  right: 40px;
   background: var(--vp-c-bg);
   color: var(--vp-c-text);
-  padding: 16px;
+  padding: 8px 16px;
   border-radius: 8px;
-  font-size: 0.85em;
+  font-size: 0.75em;
   line-height: 1.5;
   min-width: 200px;
   max-width: 280px;
@@ -836,6 +833,7 @@ h1,h2,h3 {
   border: 1px solid var(--vp-c-border);
   z-index: 100;
   text-align: left;
+  font-weight: 500;
   animation: tooltipFade 0.2s ease;
   pointer-events: auto;
 }
