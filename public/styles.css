@@ -821,6 +821,7 @@ h1,h2,h3 {
   position: absolute;
   top: 4px;
   right: 40px;
+  margin-left: 4px;
   background: var(--vp-c-bg);
   color: var(--vp-c-text);
   padding: 8px 16px;
