@@ -29,6 +29,7 @@
         <div class="block-grid">
           <div class="block-item">
             <div class="block-item-links">
+              <div class="block-item-description">{{ block.description }}</div>
               <div v-for="(item, itemIndex) in block.list" :key="itemIndex" class="block-item-links-elem">
                 <img :src="item.image" loading="lazy" />
               </div>
