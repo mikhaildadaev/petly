@@ -7,7 +7,7 @@ blocks:
       - point: Лакомства
         image: /assets/webp/yummy.webp
         info: Должен быть в закрытой заводской упаковке и с действующим сроком годности.
-    
+        
       - point: Лежанки и миски
         image: /assets/webp/catch.webp
         info: Подойдут и уже использованные в хорошем состоянии.
