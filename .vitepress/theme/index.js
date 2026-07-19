@@ -15,6 +15,7 @@ import RandomPets from '../components/RandomPets.vue'
 import SelectHumans from '../components/SelectHumans.vue'
 import SelectOrganizations from '../components/SelectOrganizations.vue'
 import SelectPets from '../components/SelectPets.vue'
+import StyleBlockPage from '../components/StyleBlockPage.vue'
 import StyleImagePage from '../components/StyleImagePage.vue'
 
 export default {
@@ -33,6 +34,7 @@ export default {
     app.component('SelectHumans', SelectHumans)
     app.component('SelectOrganizations', SelectOrganizations)
     app.component('SelectPets', SelectPets)
+    app.component('StyleBlockPage', StyleBlockPage)
     app.component('StyleImagePage', StyleImagePage)
   },
 
