@@ -28,11 +28,9 @@
         </div>
         <div class="block-grid">
           <div class="block-item">
-            <div class="block-item-links">
-              <div class="block-item-description">{{ block.description }}</div>
-              <div v-for="(item, itemIndex) in block.list" :key="itemIndex" class="block-item-links-elem">
-                <img :src="item.image" loading="lazy" />
-              </div>
+            <div class="block-item-content">
+              <p>{{ block.description }}</p>
+              <a v-for="(item, itemIndex) in block.list" :href="item.url" :key="itemIndex" class="block-item-link">{{ item.link }}</a>
             </div>
           </div>
           <div class="block-item">
