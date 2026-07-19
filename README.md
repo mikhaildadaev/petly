@@ -29,7 +29,7 @@ PETLY — this is a platform for animal volunteers, created by volunteers for vo
 | **Vue**       | 3.5     |
 | **VitePress** | 1.6     |
 | **Vite**      | 5.4     |
-| **Node.js**.  | 18+     |
+| **Node.js**   | 18+     |
 
 ## 🛠️ Installation and Running
 
@@ -52,9 +52,9 @@ npm run docs:preview
 
 The project is fully translated into three languages:
 
-- 🇷🇺 Russian
 - 🇬🇧 English
 - 🇩🇪 German
+- 🇷🇺 Russian
 
 ---
 
