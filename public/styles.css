@@ -980,6 +980,7 @@ p.description {
   width: 3px;
   background: rgb(230 34 34 / 39%);
   pointer-events: none;
+  z-index: -1;
 }
 .block-type-intro .background .title {
   margin: 0!important;
