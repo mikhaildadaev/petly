@@ -59,6 +59,18 @@
           </div>
         </div>
       </div>
+      <div v-else-if="block.type === 'rects'" :class="`block-type-${type}`">
+        <h1 class="title">{{ block.title }}</h1>
+        <div class="container">
+          <div v-for="(item, itemIndex) in block.list" :key="itemIndex" class="item">
+            <div class="content">
+              <h6 class="name">{{ item.name }}</h6>
+              <p class="description withColor">{{ item.description }}</p>
+              <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="link">Перейти по ссылке</a>
+            </div>
+          </div>
+        </div>
+      </div>
       <div v-else-if="block.type === 'steps'" :class="`block-type-${type}`">
         <h1 class="title">{{ block.title }}</h1>
         <div class="container">
