@@ -1134,10 +1134,9 @@ p.description {
   position: absolute;
   top: 4px;
   right: 40px;
-  margin-left: 4px;
   background: var(--vp-c-bg);
   color: var(--vp-c-text);
-  padding: 8px 16px;
+  padding: 16px 24px;
   border-radius: calc(var(--radius) - 2px) calc(var(--radius) / 2) calc(var(--radius) / 2) calc(var(--radius) - 2px);
   line-height: 1.5;
   min-width: 200px;
