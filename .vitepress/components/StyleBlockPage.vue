@@ -9,8 +9,8 @@
               <img :src="item.image" loading="lazy"/>
             </div>
             <div class="chip-content">
-              <h4>{{ item.point }}</h4>
-              <p>{{ item.info }}</p>
+              <h6 class="name">{{ item.name }}</h6>
+              <p class="description">{{ item.description }}</p>
             </div>
             <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="chip-link"></a>
           </div>
@@ -24,7 +24,7 @@
               <img :src="item.image" loading="lazy" />
             </div>
             <div class="block-item-content">
-              <p>{{ item.point }}</p>
+              <h6 class="name">{{ item.name }}</h6>
               <div v-if="item.info" class="info-trigger" @click.stop="toggleTooltip(`${blockIndex}-${itemIndex}`)" aria-label="Подробнее">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="10" />
@@ -41,7 +41,7 @@
         <div class="background">
           <h1 class="title">{{ block.title }}</h1>
         </div>
-        <p>{{ block.description }}</p>
+        <p class="description">{{ block.description }}</p>
       </div>
       <div v-else-if="block.type === 'social'" :class="`block-type-${type}`">
         <div class="background">
@@ -50,7 +50,7 @@
         <div class="block-grid">
           <div class="block-item">
             <div class="block-item-content">
-              <p>{{ block.description }}</p>
+              <p class="description">{{ block.description }}</p>
               <a v-for="(item, itemIndex) in block.list" :href="item.url" :key="itemIndex" class="block-item-link">{{ item.link }}</a>
             </div>
           </div>
@@ -64,8 +64,8 @@
         <div v-for="(item, itemIndex) in block.list" :key="itemIndex" class="step-item">
           <div class="block-number">{{ itemIndex + 1 }}</div>
           <div class="block-content">
-            <h3>{{ item.point }}</h3>
-            <p>{{ item.info }}</p>
+            <h6 class="name">{{ item.name }}</h6>
+            <p class="description">{{ item.description }}</p>
             <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="step-link">Перейти по ссылке</a>
           </div>
         </div>
