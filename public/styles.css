@@ -743,7 +743,6 @@ h1,h2,h3 {
 /* ============================================================
    БЛОКИ СЕКЦИЙ
    ============================================================ */
-
 .block-section {
   margin-bottom: 40px;
 }
@@ -860,7 +859,7 @@ h1,h2,h3 {
   text-align: center;
   color: var(--vp-c-brand);
   line-height: 1;
-  background: linear-gradient(90deg, var(--vp-c-brand-1) 0%, var(--vp-c-text) 30%, var(--vp-c-brand-1) 60%, var(--vp-c-text) 80%, var(--vp-c-brand-1) 100%);
+  background: linear-gradient(135deg, var(--vp-c-brand-1) 0%, var(--vp-c-text) 30%, var(--vp-c-brand-1) 60%, var(--vp-c-text) 80%, var(--vp-c-brand-1) 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
