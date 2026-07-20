@@ -970,6 +970,7 @@ p.description {
   background-size: 16px 16px;
   background-position: -1px -1px;
   opacity: 0.4;
+  z-index: -2;
 }
 .block-type-intro .background::after {
   content: '';
