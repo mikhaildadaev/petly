@@ -65,4 +65,4 @@ blocks:
 
 <StyleBlockPage type="social"/>
 
-<StyleImagePage src="/assets/webp/womanWithRug.webp" width="320" float="center"/>
+<StyleImagePage src="/assets/webp/dogWithGirl.webp" width="320" float="center"/>
