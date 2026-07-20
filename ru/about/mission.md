@@ -45,4 +45,4 @@ blocks:
 
 <StyleBlockPage type="cubes"/>
 
-<StyleImagePage src="/assets/webp/womanWithRug.webp" width="320" float="center"/>
+<StyleImagePage src="/assets/webp/dogWithBoy.webp" width="320" float="center"/>
