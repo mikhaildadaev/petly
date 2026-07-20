@@ -1,7 +1,7 @@
 <template>
   <div class="aspect-card hero-card">
     <div class="hero-meta">
-      <span v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</span>
+      <label v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</label>
     </div>
     <img :src="organization.image" class="hero-image" loading="lazy" />
     <div :class="['hero-overlay', useRandomClass(organization.uuid)]">

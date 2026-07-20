@@ -10,13 +10,13 @@
         <div v-for="(pet, index) in randomPets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
           <a :href="`${baseUrl}${lang}/pets/${pet.type}/${pet.uuid}`" class="aspect-list grid-card">
             <div class="grid-meta">
-              <span v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</span>
-              <span v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</span>
-              <span v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</span>
+              <label v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</label>
+              <label v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</label>
+              <label v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</label>
             </div>
             <img :src="pet.image" loading="lazy" />
             <div :class="['grid-card-body', useRandomClass(pet.uuid)]">
-              <div class="name">{{ pet.nameDisplay }}</div>
+              <h1 class="title">{{ pet.nameDisplay }}</h1>
               <p>{{ pet.descriptionDisplay }}</p>
             </div>
           </a>
@@ -30,7 +30,7 @@
                   <path d="M5 12h14" />
                 </svg>
               </div>
-              <span class="load-more-text">{{ translate('ui', 'Перейти в раздел') }}</span>
+              <div class="load-more-text">{{ translate('ui', 'Перейти в раздел') }}</div>
             </div>
           </div>
         </div>

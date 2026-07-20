@@ -4,7 +4,7 @@
       <div class="filter-chips">
         <button v-for="option in formatOptions" :key="option.value" class="chip" :class="{ active: filters.format[option.value] }" @click="toggleFilter('format', option.value)" :title="option.label" v-html="option.icon"/>
       </div>
-      <span class="filter-label">{{ translate('filter', 'Формат') }}</span>
+      <label class="filter-label">{{ translate('filter', 'Формат') }}</label>
     </div>
     <button v-if="!areAllActive" class="btn-reset-compact" @click="resetFilters" :title="translate('ui', 'Включить все фильтры')">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -20,11 +20,11 @@
   <div v-if="!isMobile" class="grid-cards">
     <a v-for="organization in paginatedOrganizations" :key="organization.uuid" :href="`${baseUrl}${lang}/organizations/${organization.type}/${organization.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
       <div class="grid-meta">
-        <span v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</span>
+        <label v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</label>
       </div>
       <img :src="organization.image" loading="lazy" />
       <div :class="['grid-card-body', useRandomClass(organization.uuid)]">
-        <div class="name">{{ organization.nameDisplay }}</div>
+        <h1 class="title">{{ organization.nameDisplay }}</h1>
         <p>{{ organization.descriptionDisplay }}</p>
       </div>
     </a>
@@ -36,8 +36,8 @@
             <path d="M5 12h14" />
           </svg>
         </div>
-        <span class="load-more-text">{{ translate('ui', 'Загрузить ещё') }}</span>
-        <span class="load-more-count">{{ remaining }} {{ translate('ui', 'осталось') }}</span>
+        <div class="load-more-text">{{ translate('ui', 'Загрузить ещё') }}</div>
+        <div class="load-more-count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
         <div class="load-more-progress">
           <div class="progress-bar" :style="{ width: `${(visibleCount / filteredOrganizations.length) * 100}%` }"></div>
         </div>
@@ -55,11 +55,11 @@
         <div v-for="(organization, index) in paginatedOrganizations" :key="organization.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
           <a :href="`${baseUrl}${lang}/organizations/${organization.type}/${organization.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
             <div class="grid-meta">
-              <span v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</span>
+              <label v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</label>
             </div>
             <img :src="organization.image" loading="lazy" />
             <div :class="['grid-card-body', useRandomClass(organization.uuid)]">
-              <div class="name">{{ organization.nameDisplay }}</div>
+              <h1 class="title">{{ organization.nameDisplay }}</h1>
               <p>{{ organization.descriptionDisplay }}</p>
             </div>
           </a>
@@ -73,8 +73,8 @@
                   <path d="M5 12h14" />
                 </svg>
               </div>
-              <span class="load-more-text">{{ translate('ui', 'Загрузить ещё') }}</span>
-              <span class="load-more-count">{{ remaining }} {{ translate('ui', 'осталось') }}</span>
+              <div class="load-more-text">{{ translate('ui', 'Загрузить ещё') }}</div>
+              <div class="load-more-count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
               <div class="load-more-progress">
                 <div class="progress-bar" :style="{ width: `${(visibleCount / filteredOrganizations.length) * 100}%` }"></div>
               </div>

@@ -3,13 +3,13 @@
     <div v-if="!isMobile" class="grid-cards">
       <a v-for="pet in selectPets" :key="pet.uuid" :href="`${baseUrl}${lang}/pets/${type}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
         <div class="grid-meta">
-          <span v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</span>
-          <span v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</span>
-          <span v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</span>
+          <label v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</label>
+          <label v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</label>
+          <label v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</label>
         </div>
         <img :src="pet.image" loading="lazy" />
         <div :class="['grid-card-body', useRandomClass(pet.uuid)]">
-          <div class="name">{{ pet.nameDisplay }}</div>
+          <h1 class="title">{{ pet.nameDisplay }}</h1>
           <p>{{ pet.descriptionDisplay }}</p>
         </div>
       </a>
@@ -25,13 +25,13 @@
           <div v-for="(pet, index) in selectPets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
             <a :href="`${baseUrl}${lang}/pets/${type}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
               <div class="grid-meta">
-                <span v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</span>
-                <span v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</span>
-                <span v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</span>
+                <label v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</label>
+                <label v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</label>
+                <label v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</label>
               </div>
               <img :src="pet.image" loading="lazy" />
               <div :class="['grid-card-body', useRandomClass(pet.uuid)]">
-                <div class="name">{{ pet.nameDisplay }}</div>
+                <h1 class="title">{{ pet.nameDisplay }}</h1>
                 <p>{{ pet.descriptionDisplay }}</p>
               </div>
             </a>

@@ -3,11 +3,11 @@
     <div v-if="!isMobile" class="grid-cards">
       <a v-for="organization in selectOrganizations" :key="organization.uuid" :href="`${baseUrl}${lang}/organizations/${type}/${organization.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
         <div class="grid-meta">
-          <span v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</span>
+          <label v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</label>
         </div>
         <img :src="organization.image" loading="lazy" />
         <div :class="['grid-card-body', useRandomClass(organization.uuid)]">
-          <div class="name">{{ organization.nameDisplay }}</div>
+          <h1 class="title">{{ organization.nameDisplay }}</h1>
           <p>{{ organization.descriptionDisplay }}</p>
         </div>
       </a>
@@ -23,11 +23,11 @@
           <div v-for="(organization, index) in selectOrganizations" :key="organization.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
             <a :href="`${baseUrl}${lang}/organizations/${type}/${organization.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
               <div class="grid-meta">
-                <span v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</span>
+                <label v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</label>
               </div>
               <img :src="organization.image" loading="lazy" />
               <div :class="['grid-card-body', useRandomClass(organization.uuid)]">
-                <div class="name">{{ organization.nameDisplay }}</div>
+                <h1 class="title">{{ organization.nameDisplay }}</h1>
                 <p>{{ organization.descriptionDisplay }}</p>
               </div>
             </a>

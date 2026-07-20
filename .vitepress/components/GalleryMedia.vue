@@ -35,7 +35,7 @@
           <path d="M9 18l6-6-6-6" />
         </svg>
       </button>
-      <div class="fullScreen-content" @click.stop>
+      <div class="fullScreen-content">
         <!-- Фотографии -->
         <img v-if="currentMedia.type === 'image'" :src="currentMedia.src" />
         <!-- Видеозаписи -->
@@ -43,10 +43,8 @@
         <!-- Аудиозаписи -->
         <audio v-else-if="currentMedia.type === 'audio'" :src="currentMedia.src" controls class="fullScreen-audio" ref="fullScreenAudioRef"/>
       </div>
-      <div class="fullScreen-footer" @click.stop>
-        <div class="fullScreen-dots">
-          <span v-for="(_, index) in mediaItems" :key="index" class="dot" :class="{ active: index === currentIndex }" @click.stop="goToMedia(index)" />
-        </div>
+      <div class="fullScreen-dots">
+        <span v-for="(_, index) in mediaItems" :key="index" class="dot" :class="{ active: index === currentIndex }" @click.stop="goToMedia(index)" />
       </div>
     </div>
   </div>

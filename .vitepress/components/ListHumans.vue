@@ -4,13 +4,13 @@
         <div class="filter-chips">
           <button v-for="option in experienceOptions" :key="option.value" class="chip" :class="{ active: filters.experience[option.value] }" @click="toggleFilter('experience', option.value)" :title="option.label" v-html="option.icon"/>
         </div>
-        <span class="filter-label">{{ translate('filter', 'Опыт') }}</span>
+        <label class="filter-label">{{ translate('filter', 'Опыт') }}</label>
       </div>
       <div class="filter-group">
         <div class="filter-chips">
           <button v-for="option in directionOptions" :key="option.value" class="chip" :class="{ active: filters.direction[option.value] }" @click="toggleFilter('direction', option.value)" :title="option.label" v-html="option.icon"/>
         </div>
-        <span class="filter-label">{{ translate('filter', 'Направление') }}</span>
+        <label class="filter-label">{{ translate('filter', 'Направление') }}</label>
       </div>
       <button v-if="!areAllActive" class="btn-reset-compact" @click="resetFilters" :title="translate('ui', 'Включить все фильтры')">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -26,12 +26,12 @@
   <div v-if="!isMobile" class="grid-cards">
     <a v-for="human in paginatedHumans" :key="human.uuid" :href="`${baseUrl}${lang}/humans/${human.type}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
       <div class="grid-meta">
-        <span v-if="human.directionDisplay" class="tag direction-tag">{{ human.directionDisplay }}</span>
-        <span v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</span>
+        <label v-if="human.directionDisplay" class="tag direction-tag">{{ human.directionDisplay }}</label>
+        <label v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</label>
       </div>
       <img :src="human.image" loading="lazy" />
       <div :class="['grid-card-body', useRandomClass(human.uuid)]">
-        <div class="name">{{ human.nameDisplay }}</div>
+        <h1 class="title">{{ human.nameDisplay }}</h1>
         <p>{{ human.descriptionDisplay }}</p>
       </div>
     </a>
@@ -43,8 +43,8 @@
             <path d="M5 12h14" />
           </svg>
         </div>
-        <span class="load-more-text">{{ translate('ui', 'Загрузить ещё') }}</span>
-        <span class="load-more-count">{{ remaining }} {{ translate('ui', 'осталось') }}</span>
+        <div class="load-more-text">{{ translate('ui', 'Загрузить ещё') }}</div>
+        <div class="load-more-count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
         <div class="load-more-progress">
           <div class="progress-bar" :style="{ width: `${(visibleCount / filteredHumans.length) * 100}%` }"></div>
         </div>
@@ -62,12 +62,12 @@
         <div v-for="(human, index) in paginatedHumans" :key="human.uuid" class="carousel-slide" :class="{ center: index === currentIndex }" >
           <a :href="`${baseUrl}${lang}/humans/${human.type}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
             <div class="grid-meta">
-              <span v-if="human.directionDisplay" class="tag direction-tag">{{ human.directionDisplay }}</span>
-              <span v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</span>
+              <label v-if="human.directionDisplay" class="tag direction-tag">{{ human.directionDisplay }}</label>
+              <label v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</label>
             </div>
             <img :src="human.image" loading="lazy" />
             <div :class="['grid-card-body', useRandomClass(human.uuid)]">
-              <div class="name">{{ human.nameDisplay }}</div>
+              <h1 class="title">{{ human.nameDisplay }}</h1>
               <p>{{ human.descriptionDisplay }}</p>
             </div>
           </a>
@@ -81,8 +81,8 @@
                   <path d="M5 12h14" />
                 </svg>
               </div>
-              <span class="load-more-text">{{ translate('ui', 'Загрузить ещё') }}</span>
-              <span class="load-more-count">{{ remaining }} {{ translate('ui', 'осталось') }}</span>
+              <div class="load-more-text">{{ translate('ui', 'Загрузить ещё') }}</div>
+              <div class="load-more-count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
               <div class="load-more-progress">
                 <div class="progress-bar" :style="{ width: `${(visibleCount / filteredHumans.length) * 100}%` }"></div>
               </div>

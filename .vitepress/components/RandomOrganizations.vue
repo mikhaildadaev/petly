@@ -10,11 +10,11 @@
         <div v-for="(organization, index) in randomOrganizations" :key="organization.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
           <a :href="`${baseUrl}${lang}/organizations/${organization.type}/${organization.uuid}`" class="aspect-list grid-card">
             <div class="grid-meta">
-              <span v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</span>
+              <label v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</label>
             </div>
             <img :src="organization.image" loading="lazy" />
             <div :class="['grid-card-body', useRandomClass(organization.uuid)]">
-              <div class="name">{{ organization.nameDisplay }}</div>
+              <h1 class="title">{{ organization.nameDisplay }}</h1>
               <p>{{ organization.descriptionDisplay }}</p>
             </div>
           </a>
@@ -28,7 +28,7 @@
                   <path d="M5 12h14" />
                 </svg>
               </div>
-              <span class="load-more-text">{{ translate('ui', 'Перейти в раздел') }}</span>
+              <div class="load-more-text">{{ translate('ui', 'Перейти в раздел') }}</div>
             </div>
           </div>
         </div>

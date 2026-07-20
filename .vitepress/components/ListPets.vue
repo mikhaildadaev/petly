@@ -4,19 +4,19 @@
       <div class="filter-chips">
         <button v-for="option in genderOptions" :key="option.value" class="chip" :class="{ active: filters.gender[option.value] }" @click="toggleFilter('gender', option.value)" :title="option.label" v-html="option.icon"/>
       </div>
-      <span class="filter-label">{{ translate('filter', 'Пол') }}</span>
+      <label class="filter-label">{{ translate('filter', 'Пол') }}</label>
     </div>
     <div class="filter-group">
       <div class="filter-chips">
         <button v-for="option in ageOptions" :key="option.value" class="chip" :class="{ active: filters.age[option.value] }" @click="toggleFilter('age', option.value)" :title="option.label" v-html="option.icon"/>
       </div>
-      <span class="filter-label">{{ translate('filter', 'Возраст') }}</span>
+      <label class="filter-label">{{ translate('filter', 'Возраст') }}</label>
     </div>
     <div class="filter-group">
       <div class="filter-chips">
         <button v-for="option in sizeOptions" :key="option.value" class="chip" :class="{ active: filters.size[option.value] }" @click="toggleFilter('size', option.value)" :title="option.label" v-html="option.icon"/>
       </div>
-      <span class="filter-label">{{ translate('filter', 'Размер') }}</span>
+      <label class="filter-label">{{ translate('filter', 'Размер') }}</label>
     </div>
     <button v-if="!areAllActive" class="btn-reset-compact" @click="resetFilters" :title="translate('ui', 'Включить все фильтры')">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -32,13 +32,13 @@
   <div v-if="!isMobile" class="grid-cards">
     <a v-for="pet in paginatedPets" :key="pet.uuid" :href="`${baseUrl}${lang}/pets/${type}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
       <div class="grid-meta">
-        <span v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</span>
-        <span v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</span>
-        <span v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</span>
+        <label v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</label>
+        <label v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</label>
+        <label v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</label>
       </div>
       <img :src="pet.image" loading="lazy" />
       <div :class="['grid-card-body', useRandomClass(pet.uuid)]">
-        <div class="name">{{ pet.nameDisplay }}</div>
+        <h1 class="title">{{ pet.nameDisplay }}</h1>
         <p>{{ pet.descriptionDisplay }}</p>
       </div>
     </a>
@@ -50,8 +50,8 @@
             <path d="M5 12h14" />
           </svg>
         </div>
-        <span class="load-more-text">{{ translate('ui', 'Загрузить ещё') }}</span>
-        <span class="load-more-count">{{ remaining }} {{ translate('ui', 'осталось') }}</span>
+        <div class="load-more-text">{{ translate('ui', 'Загрузить ещё') }}</div>
+        <div class="load-more-count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
         <div class="load-more-progress">
           <div class="progress-bar" :style="{ width: `${(visibleCount / filteredPets.length) * 100}%` }"></div>
         </div>
@@ -69,13 +69,13 @@
         <div v-for="(pet, index) in paginatedPets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }" >
           <a :href="`${baseUrl}${lang}/pets/${type}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
             <div class="grid-meta">
-              <span v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</span>
-              <span v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</span>
-              <span v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</span>
+              <label v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</label>
+              <label v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</label>
+              <label v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</label>
             </div>
             <img :src="pet.image" loading="lazy" />
             <div :class="['grid-card-body', useRandomClass(pet.uuid)]">
-              <div class="name">{{ pet.nameDisplay }}</div>
+              <h1 class="title">{{ pet.nameDisplay }}</h1>
               <p>{{ pet.descriptionDisplay }}</p>
             </div>
           </a>
@@ -89,8 +89,8 @@
                   <path d="M5 12h14" />
                 </svg>
               </div>
-              <span class="load-more-text">{{ translate('ui', 'Загрузить ещё') }}</span>
-              <span class="load-more-count">{{ remaining }} {{ translate('ui', 'осталось') }}</span>
+              <div class="load-more-text">{{ translate('ui', 'Загрузить ещё') }}</div>
+              <div class="load-more-count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
               <div class="load-more-progress">
                 <div class="progress-bar" :style="{ width: `${(visibleCount / filteredPets.length) * 100}%` }"></div>
               </div>

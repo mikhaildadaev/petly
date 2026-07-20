@@ -1,8 +1,8 @@
 <template>
   <div class="aspect-card hero-card">
     <div class="hero-meta">
-      <span v-if="human.directionDisplay" class="tag direction-tag">{{ human.directionDisplay }}</span>
-      <span v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</span>
+      <label v-if="human.directionDisplay" class="tag direction-tag">{{ human.directionDisplay }}</label>
+      <label v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</label>
     </div>
     <img :src="human.image" class="hero-image" loading="lazy" />
     <div :class="['hero-overlay', useRandomClass(human.uuid)]">

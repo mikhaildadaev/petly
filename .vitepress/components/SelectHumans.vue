@@ -3,12 +3,12 @@
     <div v-if="!isMobile" class="grid-cards">
       <a v-for="human in selectHumans" :key="human.uuid" :href="`${baseUrl}${lang}/humans/${human.type}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
         <div class="grid-meta">
-          <span v-if="human.directionDisplay" class="tag direction-tag">{{ human.directionDisplay }}</span>
-          <span v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</span>
+          <label v-if="human.directionDisplay" class="tag direction-tag">{{ human.directionDisplay }}</label>
+          <label v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</label>
         </div>
         <img :src="human.image" loading="lazy" />
         <div :class="['grid-card-body', useRandomClass(human.uuid)]">
-          <div class="name">{{ human.nameDisplay }}</div>
+          <h1 class="title">{{ human.nameDisplay }}</h1>
           <p>{{ human.descriptionDisplay }}</p>
         </div>
       </a>
@@ -24,12 +24,12 @@
           <div v-for="(human, index) in selectHumans" :key="human.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
             <a :href="`${baseUrl}${lang}/humans/${human.type}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
               <div class="grid-meta">
-                <span v-if="human.directionDisplay" class="tag direction-tag">{{ human.directionDisplay }}</span>
-                <span v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</span>
+                <label v-if="human.directionDisplay" class="tag direction-tag">{{ human.directionDisplay }}</label>
+                <label v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</label>
               </div>
               <img :src="human.image" loading="lazy" />
               <div :class="['grid-card-body', useRandomClass(human.uuid)]">
-                <div class="name">{{ human.nameDisplay }}</div>
+                <h1 class="title">{{ human.nameDisplay }}</h1>
                 <p>{{ human.descriptionDisplay }}</p>
               </div>
             </a>

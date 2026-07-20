@@ -1,9 +1,9 @@
 <template>
   <div class="aspect-card hero-card">
     <div class="hero-meta">
-      <span v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</span>
-      <span v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</span>
-      <span v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</span>
+      <label v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</label>
+      <label v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</label>
+      <label v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</label>
     </div>
     <img :src="pet.image" class="hero-image" loading="lazy" />
     <div :class="['hero-overlay', useRandomClass(pet.uuid)]">
