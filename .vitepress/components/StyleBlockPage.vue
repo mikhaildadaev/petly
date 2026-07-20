@@ -3,29 +3,29 @@
     <div v-for="(block, blockIndex) in filteredBlocks" :key="blockIndex" class="block-section">
       <div v-if="block.type === 'chips'" :class="`block-type-${type}`">
         <h1 class="title">{{ block.title }}</h1>
-        <div class="chips-grid">
-          <div v-for="(item, itemIndex) in block.list" :key="itemIndex" class="chip-item">
+        <div class="container">
+          <div v-for="(item, itemIndex) in block.list" :key="itemIndex" class="item">
             <div class="chip-icon">
               <img :src="item.image" loading="lazy"/>
             </div>
-            <div class="chip-content">
+            <div class="content">
               <h6 class="name">{{ item.name }}</h6>
               <p class="description">{{ item.description }}</p>
             </div>
-            <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="chip-link"></a>
+            <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="link"></a>
           </div>
         </div>
       </div>
       <div v-else-if="block.type === 'cubes'" :class="`block-type-${type}`">
         <h1 class="title">{{ block.title }}</h1>
-        <div class="block-grid">
-          <div v-for="(item, itemIndex) in block.list" :key="itemIndex" class="block-item">
+        <div class="container">
+          <div v-for="(item, itemIndex) in block.list" :key="itemIndex" class="item">
             <div class="block-item-image">
               <img :src="item.image" loading="lazy" />
             </div>
-            <div class="block-item-content">
+            <div class="content">
               <h6 class="name">{{ item.name }}</h6>
-              <div v-if="item.info" class="info-trigger" @click.stop="toggleTooltip(`${blockIndex}-${itemIndex}`)" aria-label="Подробнее">
+              <div v-if="item.info" class="info" @click.stop="toggleTooltip(`${blockIndex}-${itemIndex}`)" aria-label="Подробнее">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="10" />
                   <path d="M12 16v-4" />
@@ -41,32 +41,34 @@
         <div class="background">
           <h1 class="title">{{ block.title }}</h1>
         </div>
-        <p class="description">{{ block.description }}</p>
+        <p>{{ block.description }}</p>
       </div>
       <div v-else-if="block.type === 'social'" :class="`block-type-${type}`">
         <div class="background">
           <h1 class="title">{{ block.title }}</h1>
         </div>
         <div class="block-grid">
-          <div class="block-item">
-            <div class="block-item-content">
+          <div class="item">
+            <div class="content">
               <p class="description">{{ block.description }}</p>
-              <a v-for="(item, itemIndex) in block.list" :href="item.url" :key="itemIndex" class="block-item-link">{{ item.link }}</a>
+              <a v-for="(item, itemIndex) in block.list" :href="item.url" :key="itemIndex" class="link">{{ item.link }}</a>
             </div>
           </div>
-          <div class="block-item">
+          <div class="item">
             <img :src="block.image" loading="lazy" />
           </div>
         </div>
       </div>
       <div v-else-if="block.type === 'steps'" :class="`block-type-${type}`">
         <h1 class="title">{{ block.title }}</h1>
-        <div v-for="(item, itemIndex) in block.list" :key="itemIndex" class="step-item">
-          <div class="block-number">{{ itemIndex + 1 }}</div>
-          <div class="block-content">
-            <h6 class="name">{{ item.name }}</h6>
-            <p class="description">{{ item.description }}</p>
-            <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="step-link">Перейти по ссылке</a>
+        <div class="container">
+          <div v-for="(item, itemIndex) in block.list" :key="itemIndex" class="item">
+            <div class="number">{{ itemIndex + 1 }}</div>
+            <div class="content">
+              <h6 class="name">{{ item.name }}</h6>
+              <p class="description">{{ item.description }}</p>
+              <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="link">Перейти по ссылке</a>
+            </div>
           </div>
         </div>
       </div>
@@ -111,7 +113,7 @@ const closeAllTooltips = () => {
 }
 const handleGlobalClick = (event) => {
   const target = event.target
-  if (!target.closest('.info-trigger') && !target.closest('.tooltip')) {
+  if (!target.closest('.info') && !target.closest('.tooltip')) {
     activeTooltip.value = null
   }
 }
