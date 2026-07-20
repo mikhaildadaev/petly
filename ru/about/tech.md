@@ -6,7 +6,7 @@ blocks:
     description: Для данного проекта используются современные технологии, чтобы помогать животным находить дом, а волонтёрам — объединяться.
     type: intro
 
-  - name: ... Инфраструктура
+  - title: ... Инфраструктура
     type: chips
     list:
       - point: GitHub
@@ -24,7 +24,7 @@ blocks:
         info: Облачное хранилище для изображений с оптимизацией.
         link: https://cloudinary.com/
 
-  - name: ... Фронтенд
+  - title: ... Фронтенд
     type: cubes
     list:
       - point: Vue 3
@@ -57,7 +57,7 @@ blocks:
         info: Шрифты Caveat и Days One для уютной атмосферы.
         link: https://fonts.google.com/
 
-  - name: ... Лицензия
+  - title: ... Лицензия
     type: steps
     list:
       - point: Apache License 2.0
