@@ -830,6 +830,10 @@ p.withColor {
 .block-section {
   margin-bottom: 40px;
 }
+.block-type-chips {
+  position: relative;
+  display: block;
+}
 .block-type-chips .container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -883,9 +887,9 @@ p.withColor {
   color: var(--vp-c-brand);
   transform: scale(1.05);
 }
-
 .block-type-cubes {
   position: relative;
+  display: block;
 }
 .block-type-cubes .container {
   display: grid;
@@ -997,6 +1001,36 @@ p.withColor {
   background-clip: text;
   animation: shimmer 24s linear infinite;
 }
+.block-type-rects {
+  position: relative;
+  display: block;
+}
+.block-type-rects .container {
+  display: grid;
+  gap: 16px;
+}
+.block-type-rects .container .item {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  padding: 20px 24px;
+  background: var(--vp-c-bg-soft);
+  border-radius: var(--radius);
+  border: 1px solid var(--vp-c-border);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.block-type-rects .link {
+  display: inline-block;
+  color: var(--vp-c-text);
+  text-decoration: none;
+  font-weight: 500;
+  text-decoration: underline!important;
+}
+.block-type-rects .link:hover {
+  color: var(--vp-c-brand);
+}
 .block-type-social {
   position: relative;
   display: block;
@@ -1049,8 +1083,8 @@ p.withColor {
   color: var(--vp-c-brand);
 }
 .block-type-steps {
-  max-width: 700px;
-  margin: 0 auto;
+  position: relative;
+  display: block;
 }
 .block-type-steps .container {
   display: grid;
@@ -1067,9 +1101,6 @@ p.withColor {
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-}
-.block-type-steps .container .item:last-child {
-  margin-bottom: 0;
 }
 .block-type-steps .number {
   display: flex;
@@ -1095,7 +1126,7 @@ p.withColor {
   background: linear-gradient(to top, var(--vp-c-bg-soft), transparent);
   pointer-events: none;
 }
-.block-type-steps .item:nth-child(odd) .number::after {
+.block-type-steps .item:nth-child(even) .number::after {
   top: 0;
   bottom: auto;
   height: 35%;
