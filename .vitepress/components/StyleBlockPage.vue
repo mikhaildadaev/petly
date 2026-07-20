@@ -10,7 +10,7 @@
             </div>
             <div class="content">
               <h6 class="name">{{ item.name }}</h6>
-              <p class="description">{{ item.description }}</p>
+              <p class="description withColor">{{ item.description }}</p>
             </div>
             <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="link"></a>
           </div>
@@ -41,7 +41,7 @@
         <div class="background">
           <h1 class="title">{{ block.title }}</h1>
         </div>
-        <p>{{ block.description }}</p>
+        <p class="description">{{ block.description }}</p>
       </div>
       <div v-else-if="block.type === 'social'" :class="`block-type-${type}`">
         <div class="background">
@@ -50,7 +50,7 @@
         <div class="block-grid">
           <div class="item">
             <div class="content">
-              <p class="description">{{ block.description }}</p>
+              <p class="description withColor">{{ block.description }}</p>
               <a v-for="(item, itemIndex) in block.list" :href="item.url" :key="itemIndex" class="link">{{ item.link }}</a>
             </div>
           </div>
@@ -66,7 +66,7 @@
             <div class="number">{{ itemIndex + 1 }}</div>
             <div class="content">
               <h6 class="name">{{ item.name }}</h6>
-              <p class="description">{{ item.description }}</p>
+              <p class="description withColor">{{ item.description }}</p>
               <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="link">Перейти по ссылке</a>
             </div>
           </div>

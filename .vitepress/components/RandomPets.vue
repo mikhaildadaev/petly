@@ -17,7 +17,7 @@
             <img :src="pet.image" loading="lazy" />
             <div :class="['grid-card-body', useRandomClass(pet.uuid)]">
               <h1 class="title">{{ pet.nameDisplay }}</h1>
-              <p>{{ pet.descriptionDisplay }}</p>
+              <p class="description">{{ pet.descriptionDisplay }}</p>
             </div>
           </a>
         </div>

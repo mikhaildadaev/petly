@@ -32,7 +32,7 @@
       <img :src="human.image" loading="lazy" />
       <div :class="['grid-card-body', useRandomClass(human.uuid)]">
         <h1 class="title">{{ human.nameDisplay }}</h1>
-        <p>{{ human.descriptionDisplay }}</p>
+        <p class="description">{{ human.descriptionDisplay }}</p>
       </div>
     </a>
     <div v-if="hasMoreItems" class="load-more" @click="loadMore">
@@ -68,7 +68,7 @@
             <img :src="human.image" loading="lazy" />
             <div :class="['grid-card-body', useRandomClass(human.uuid)]">
               <h1 class="title">{{ human.nameDisplay }}</h1>
-              <p>{{ human.descriptionDisplay }}</p>
+              <p class="description">{{ human.descriptionDisplay }}</p>
             </div>
           </a>
         </div>

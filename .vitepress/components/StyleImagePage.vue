@@ -1,6 +1,6 @@
 <template>
   <div class="page-image" :class="float">
-    <img :src="processedSrc" :width="width" :height="height" loading="lazy" @error="handleImageError" />
+    <img :src="imageUrl" :width="width" :height="height" loading="lazy" @error="handleImageError" />
   </div>
 </template>
 
@@ -9,14 +9,10 @@
 //  1. ИМПОРТЫ
 // ============================================================
 import { computed } from 'vue'
+import { useUrlMedia } from '../utils/useUrlMedia'
 
 // ============================================================
-//  2. КОНСТАНТЫ
-// ============================================================
-const baseUrl = import.meta.env.BASE_URL
-
-// ============================================================
-//  3. КОМПОНЕНТ
+//  2. КОМПОНЕНТ
 // ============================================================
 export default {
   name: 'StyleImagePage',
@@ -25,10 +21,6 @@ export default {
     src: {
       type: String,
       required: true,
-    },
-    alt: {
-      type: String,
-      default: 'Изображение',
     },
     float: {
       type: String,
@@ -46,31 +38,35 @@ export default {
 
   setup(props) {
     // ============================================================
-    //  3.1. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
+    //  2.1. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
     // ============================================================
 
-    const processedSrc = computed(() => {
-      const src = props.src
-      if (src.startsWith('/')) {
-        return `${baseUrl}${src.slice(1)}`
+    const imageUrl = computed(() => {
+      // Если src начинается с http:// или https:// — это полный URL
+      if (props.src.startsWith('http://') || props.src.startsWith('https://')) {
+        return props.src
       }
-      return src
+      
+      // Используем useUrlMedia для обработки пути
+      // Передаём src, тип 'image' и пустой uuid
+      return useUrlMedia(props.src, 'images', '', 'image')
     })
 
     // ============================================================
-    //  3.2. МЕТОДЫ
+    //  2.2. МЕТОДЫ
     // ============================================================
 
     const handleImageError = (e) => {
       console.warn(`⚠️ Ошибка загрузки изображения: ${props.src}`)
       e.target.style.display = 'none'
+      //e.target.src = '/placeholder-image.svg'
     }
 
     // ============================================================
-    //  3.3. ВОЗВРАТ
+    //  2.3. ВОЗВРАТ
     // ============================================================
     return {
-      processedSrc,
+      imageUrl,
       handleImageError,
     }
   }
