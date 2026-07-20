@@ -6,7 +6,7 @@
     </div>
     <img :src="human.image" class="hero-image" loading="lazy" />
     <div :class="['hero-overlay', useRandomClass(human.uuid)]">
-      <div class="name">{{ human.nameDisplay }}</div>
+      <h1 class="title">{{ human.nameDisplay }}</h1>
       <p>{{ human.descriptionDisplay }}</p>
     </div>
   </div>

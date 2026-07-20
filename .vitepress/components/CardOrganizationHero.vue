@@ -5,7 +5,7 @@
     </div>
     <img :src="organization.image" class="hero-image" loading="lazy" />
     <div :class="['hero-overlay', useRandomClass(organization.uuid)]">
-      <div class="name">{{ organization.nameDisplay }}</div>
+      <h1 class="title">{{ organization.nameDisplay }}</h1>
       <p>{{ organization.descriptionDisplay }}</p>
     </div>
   </div>

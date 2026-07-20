@@ -7,7 +7,7 @@
     </div>
     <img :src="pet.image" class="hero-image" loading="lazy" />
     <div :class="['hero-overlay', useRandomClass(pet.uuid)]">
-      <div class="name">{{ pet.nameDisplay }}</div>
+      <h1 class="title">{{ pet.nameDisplay }}</h1>
       <button v-if="pet.uuid" class="favorite-btn" :class="{ 'is-favorite': isFavorite }" @click.stop="toggleFavorite(pet.uuid)" :title="translate('ui', 'Добавить в избранное')">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20.84 3.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
