@@ -11,17 +11,12 @@ blocks:
     list:
       - name: GitHub
         image: /assets/webp/tech-github.webp
-        description: Хранение кода и CI/CD через GitHub Actions.
+        description: Хранение кода, CI/CD через GitHub Actions и бесплатный хостинг на GitHub Pages.
         link: https://github.com/
-      
-      - name: GitHub Pages
-        image: /assets/webp/tech-pages.webp
-        description: Бесплатный хостинг для статических сайтов.
-        link: https://pages.github.com/
       
       - name: Cloudinary
         image: /assets/webp/tech-cloudinary.webp
-        description: Облачное хранилище для изображений с оптимизацией.
+        description: Облачное хранилище для аудио/видео записей и изображений с доставкой контента.
         link: https://cloudinary.com/
 
   - title: ... Фронтенд
