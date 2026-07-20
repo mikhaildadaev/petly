@@ -22,6 +22,12 @@
           </div>
         </div>
       </div>
+      <div v-else-if="block.type === 'intro'" :class="`block-type-${type}`">
+        <div class="block-title">
+          <div class="block-title-text">{{ block.name }}</div>
+        </div>
+        <p>{{ block.description }}</p>
+      </div>
       <div v-else-if="block.type === 'social'" :class="`block-type-${type}`">
         <div class="background">
           <div class="block-title">{{ block.name }}</div>
