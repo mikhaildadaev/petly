@@ -82,38 +82,74 @@ h1,h2,h3 {
   text-decoration: none!important;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)!important;
 }
+h1.name {
+  margin-bottom: 0.45em!important;
+  font-family: var(--vp-font-family-one)!important;
+  font-size: 1.25!important;
+  font-weight: 700!important;
+}
 h1.title {
-  margin-bottom: 0.75em!important;
+  margin-bottom: 0.45em!important;
   font-family: var(--vp-font-family-written)!important;
   font-size: 2em!important;
   font-weight: 700!important;
 }
+h2.name {
+  margin-bottom: 0.40em!important;
+  font-family: var(--vp-font-family-one)!important;
+  font-size: 1.20em!important;
+  font-weight: 700!important;
+}
 h2.title {
-  margin-bottom: 0.65em!important;
+  margin-bottom: 0.40em!important;
   font-family: var(--vp-font-family-written)!important;
   font-size: 1.85em!important;
   font-weight: 700!important;
 }
+h3.name {
+  margin-bottom: 0.35em!important;
+  font-family: var(--vp-font-family-one)!important;
+  font-size: 1.15em!important;
+  font-weight: 600!important;
+}
 h3.title {
-  margin-bottom: 0.55em!important;
+  margin-bottom: 0.35em!important;
   font-family: var(--vp-font-family-written)!important;
   font-size: 1.60em!important;
   font-weight: 600!important;
 }
+h4.name {
+  margin-bottom: 0.30em!important;
+  font-family: var(--vp-font-family-one)!important;
+  font-size: 1.10em!important;
+  font-weight: 600!important;
+}
 h4.title {
-  margin-bottom: 0.45em!important;
+  margin-bottom: 0.30em!important;
   font-family: var(--vp-font-family-written)!important;
   font-size: 1.45em!important;
   font-weight: 600!important;
 }
+h5.name {
+  margin-bottom: 0.25em!important;
+  font-family: var(--vp-font-family-one)!important;
+  font-size: 1.05em!important;
+  font-weight: 500!important;
+}
 h5.title {
-  margin-bottom: 0.35em!important;
+  margin-bottom: 0.25em!important;
   font-family: var(--vp-font-family-written)!important;
   font-size: 1.30em!important;
   font-weight: 500!important;
 }
+h6.name {
+  margin-bottom: 0.20em!important;
+  font-family: var(--vp-font-family-one)!important;
+  font-size: 1.0em!important;
+  font-weight: 500!important;
+}
 h6.title {
-  margin-bottom: 0.25em!important;
+  margin-bottom: 0.20em!important;
   font-family: var(--vp-font-family-written)!important;
   font-size: 1.15em!important;
   font-weight: 500!important;
@@ -127,9 +163,14 @@ label {
 }
 
 /* ============================================
-   СТРОКА
+   АБЗАЦ
    ============================================ */
 p {
+    line-height: 1.5!important;
+}
+p.description {
+    margin: 0px1.5!important;
+    color: var(--vp-c-text-light)1.5!important;
     line-height: 1.5!important;
 }
 
@@ -1095,58 +1136,6 @@ p {
 }
 .block-type-steps .step-link:hover {
   color: var(--vp-c-brand);
-}
-
-/* ============================================================
-   БЛОК ЦИТАТЫ
-   ============================================================ */
-.block-quote {
-  position: relative;
-  max-width: 700px;
-  margin: 48px auto 0;
-  padding: 32px 40px;
-  text-align: center;
-  background: var(--vp-c-bg-soft);
-  border-radius: 16px;
-  border: 1px solid var(--vp-c-border);
-  transition: all 0.3s ease;
-  overflow: hidden;
-}
-.block-quote::before {
-  content: '"';
-  position: absolute;
-  top: 8px;
-  left: 16px;
-  font-size: 64px;
-  color: var(--vp-c-brand);
-  opacity: 0.15;
-  font-family: Georgia, serif;
-  line-height: 1;
-}
-.block-quote::after {
-  content: '"';
-  position: absolute;
-  bottom: -8px;
-  right: 16px;
-  font-size: 64px;
-  color: var(--vp-c-brand);
-  opacity: 0.15;
-  font-family: Georgia, serif;
-  line-height: 1;
-}
-.block-quote blockquote {
-  font-family: var(--font-handwritten, 'Caveat', cursive);
-  font-size: 1.8em;
-  color: var(--vp-c-text);
-  margin: 0;
-  line-height: 1.5;
-  position: relative;
-  z-index: 1;
-}
-.block-quote:hover {
-  border-color: var(--vp-c-brand);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
 }
 
 /* ============================================================
