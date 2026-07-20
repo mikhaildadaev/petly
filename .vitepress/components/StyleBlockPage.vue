@@ -1,7 +1,22 @@
 <template>
   <div class="style-block-page" @click="closeAllTooltips">
     <div v-for="(block, blockIndex) in filteredBlocks" :key="blockIndex" class="block-section">
-      <div v-if="block.type === 'cubes'" :class="`block-type-${type}`">
+      <div v-if="block.type === 'chips'" :class="`block-type-${type}`">
+        <div class="block-title">{{ block.name }}</div>
+        <div class="chips-grid">
+          <div v-for="(item, itemIndex) in block.list" :key="itemIndex" class="chip-item">
+            <div class="chip-icon">
+              <img :src="item.image" loading="lazy"/>
+            </div>
+            <div class="chip-content">
+              <h4>{{ item.point }}</h4>
+              <p>{{ item.info }}</p>
+            </div>
+            <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="chip-link"></a>
+          </div>
+        </div>
+      </div>
+      <div v-else-if="block.type === 'cubes'" :class="`block-type-${type}`">
         <div class="block-title">{{ block.name }}</div>
         <div class="block-grid">
           <div v-for="(item, itemIndex) in block.list" :key="itemIndex" class="block-item">
@@ -51,9 +66,7 @@
           <div class="block-content">
             <h3>{{ item.point }}</h3>
             <p>{{ item.info }}</p>
-            <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="step-link">
-              Перейти к анкете →
-            </a>
+            <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="step-link">Перейти по ссылке</a>
           </div>
         </div>
       </div>
