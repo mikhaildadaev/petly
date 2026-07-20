@@ -179,8 +179,9 @@ p {
 }
 p.description {
     margin: 0!important;
-    color: var(--vp-c-text-light)1.5!important;
-    line-height: 1.5!important;
+}
+p.withColor {
+    color: var(--vp-c-text-light)!important;
 }
 
 /* ============================================
