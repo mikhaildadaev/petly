@@ -984,10 +984,11 @@ h1,h2,h3 {
   color: var(--vp-c-text);
 }
 .block-type-steps .block-content p {
-  margin: 0 0 8px;
   font-size: 1.1em;
   color: var(--vp-c-text-light);
   line-height: 1.5;
+  align-content: center;
+  text-align: center;
 }
 .block-type-steps .step-link {
   display: inline-block;
