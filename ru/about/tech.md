@@ -53,7 +53,7 @@ blocks:
         link: https://fonts.google.com/
 
   - title: ... Лицензия
-    type: steps
+    type: rects
     list:
       - name: Apache License 2.0
         description: Проект распространяется под лицензией Apache License 2.0. Код открыт и вы можете использовать его в своих проектах.
@@ -68,6 +68,6 @@ blocks:
 
 <StyleBlockPage type="cubes"/>
 
-<StyleBlockPage type="steps"/>
+<StyleBlockPage type="rects"/>
 
 <StyleImagePage src="/assets/webp/catBoyWithHut.webp" width="320" float="center"/>
