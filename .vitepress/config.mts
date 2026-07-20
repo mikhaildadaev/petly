@@ -65,6 +65,10 @@ export default defineConfig({
             ]
           },
           { 
+            text: 'Favoriten', 
+            link: '/de/chance/favorites' 
+          },
+          { 
             text: 'Tipps', 
             items: [
               { text: 'Tier aufnehmen', link: '/de/recommendations/go' },
@@ -72,10 +76,6 @@ export default defineConfig({
               { text: 'Probleme', link: '/de/recommendations/trouble' },
               { text: 'Rechte & Schutz', link: '/de/recommendations/welfare' }
             ]
-          },
-          { 
-            text: 'Favoriten', 
-            link: '/de/chance/favorites' 
           },
           {
             text: 'Über das Projekt',
@@ -104,6 +104,10 @@ export default defineConfig({
               { text: 'Tierheime', link: '/ru/organizations/shelters' }
             ]
           },
+          { 
+            text: 'Favoriten', 
+            link: '/de/chance/favorites' 
+          },
           {
             text: 'Tipps',
             items: [
@@ -112,10 +116,6 @@ export default defineConfig({
               { text: 'Probleme', link: '/de/recommendations/trouble' },
               { text: 'Rechte & Schutz', link: '/de/recommendations/welfare' }
             ]
-          },
-          { 
-            text: 'Favoriten', 
-            link: '/de/chance/favorites' 
           },
           {
             text: 'Über das Projekt',
@@ -206,6 +206,10 @@ export default defineConfig({
             ]
           },
           { 
+            text: 'Favorites', 
+            link: '/en/chance/favorites' 
+          },
+          { 
             text: 'Tips', 
             items: [
               { text: 'Take a pet', link: '/en/recommendations/go' },
@@ -213,10 +217,6 @@ export default defineConfig({
               { text: 'Troubles', link: '/en/recommendations/trouble' },
               { text: 'Rights & Protection', link: '/en/recommendations/welfare' }
             ]
-          },
-          { 
-            text: 'Favorites', 
-            link: '/en/chance/favorites' 
           },
           {
             text: 'About Project',
@@ -245,6 +245,10 @@ export default defineConfig({
               { text: 'Shelters', link: '/ru/organizations/shelters' }
             ]
           },
+          { 
+            text: 'Favorites', 
+            link: '/en/chance/favorites' 
+          },
           {
             text: 'Tips',
             items: [
@@ -253,10 +257,6 @@ export default defineConfig({
               { text: 'Troubles', link: '/en/recommendations/trouble' },
               { text: 'Welfare', link: '/en/recommendations/welfare' }
             ]
-          },
-          { 
-            text: 'Favorites', 
-            link: '/en/chance/favorites' 
           },
           {
             text: 'About Project',
@@ -347,6 +347,10 @@ export default defineConfig({
             ]
           },
           { 
+            text: 'Любимцы', 
+            link: '/ru/chance/favorites' 
+          },
+          { 
             text: 'Советы', 
             items: [
               { text: 'Взять питомца', link: '/ru/recommendations/go' },
@@ -354,10 +358,6 @@ export default defineConfig({
               { text: 'Неприятности', link: '/ru/recommendations/trouble' },
               { text: 'Права и защита', link: '/ru/recommendations/welfare' }
             ]
-          },
-          { 
-            text: 'Любимцы', 
-            link: '/ru/chance/favorites' 
           },
           {
             text: 'О проекте',
@@ -386,6 +386,10 @@ export default defineConfig({
               { text: 'Приюты', link: '/ru/organizations/shelters' }
             ]
           },
+          { 
+            text: 'Любимцы', 
+            link: '/ru/chance/favorites' 
+          },
           {
             text: 'Советы',
             items: [
@@ -394,10 +398,6 @@ export default defineConfig({
               { text: 'Неприятности', link: '/ru/recommendations/trouble' },
               { text: 'Права и защита', link: '/ru/recommendations/welfare' }
             ]
-          },
-          { 
-            text: 'Любимцы', 
-            link: '/ru/chance/favorites' 
           },
           {
             text: 'О проекте',
