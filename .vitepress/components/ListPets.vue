@@ -352,7 +352,7 @@ export default {
               ageDisplay: useAge(lang.value, fm.age),
               size: useTranslate('ru', 'size', fm.size),
               sizeDisplay: useTranslate(lang.value, 'size', fm.size),
-              image: useUrlMedia(fm.image, props.type, uuid, 'image'),
+              image: useUrlMedia(fm.image, 'image'),
               type: props.type,
             }
           })

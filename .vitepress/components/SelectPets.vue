@@ -190,7 +190,7 @@ export default {
               genderDisplay: useTranslate(lang.value, 'gender', fm.gender),
               ageDisplay: useAge(lang.value, fm.age),
               sizeDisplay: useTranslate(lang.value, 'size', fm.size),
-              image: useUrlMedia(fm.image, props.type, uuid, 'image'),
+              image: useUrlMedia(fm.image, 'image'),
               type: props.type,
             }
           })

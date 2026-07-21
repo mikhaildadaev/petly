@@ -188,7 +188,7 @@ export default {
               descriptionDisplay: fm.description || '',
               directionDisplay: useDirection(lang.value, fm.direction),
               experienceDisplay: useExperience(lang.value, fm.experience),
-              image: useUrlMedia(fm.image, props.type, uuid, 'image'),
+              image: useUrlMedia(fm.image, 'image'),
               type: props.type,
             }
           })
@@ -237,7 +237,7 @@ export default {
               descriptionDisplay: fm.description || '',
               directionDisplay: useDirection(lang.value, fm.direction),
               experienceDisplay: useExperience(lang.value, fm.experience),
-              image: useUrlMedia(fm.image, props.type, uuid, 'image'),
+              image: useUrlMedia(fm.image, 'image'),
               type: props.type,
             }
           })

@@ -186,7 +186,7 @@ export default {
               nameDisplay: fm.title || '',
               descriptionDisplay: fm.description || '',
               formatDisplay: fm.format ? translate('format', fm.format) : '',
-              image: useUrlMedia(fm.image, props.type, uuid, 'image'),
+              image: useUrlMedia(fm.image, 'image'),
               type: props.type,
             }
           })
@@ -234,7 +234,7 @@ export default {
               nameDisplay: fm.title || '',
               descriptionDisplay: fm.description || '',
               formatDisplay: fm.format ? translate('format', fm.format) : '',
-              image: useUrlMedia(fm.image, props.type, uuid, 'image'),
+              image: useUrlMedia(fm.image, 'image'),
               type: props.type,
             }
           })

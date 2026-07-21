@@ -84,7 +84,7 @@ export default {
         nameDisplay: data.title || '',
         descriptionDisplay: data.description || '',
         formatDisplay: data.format ? useTranslate(lang.value, 'format', data.format) : '',
-        image: useUrlMedia(data.image, props.type, uuid, 'image'),
+        image: useUrlMedia(data.image, 'image'),
         type: props.type,
       }
     })

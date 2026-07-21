@@ -192,7 +192,7 @@ export default {
               age: useAgePetCategory(fm.age),
               ageDisplay: useAge(lang.value, fm.age),
               sizeDisplay: useTranslate(lang.value, 'size', fm.size),
-              image: useUrlMedia(fm.image, props.type, uuid, 'image'),
+              image: useUrlMedia(fm.image, 'image'),
               type: props.type,
             }
           })
@@ -242,7 +242,7 @@ export default {
               age: useAgePetCategory(fm.age),
               ageDisplay: useAge(lang.value, fm.age),
               sizeDisplay: useTranslate(lang.value, 'size', fm.size),
-              image: useUrlMedia(fm.image, props.type, uuid, 'image'),
+              image: useUrlMedia(fm.image, 'image'),
               type: props.type,
             }
           })

@@ -86,7 +86,7 @@ export default {
         descriptionDisplay: data.description || '',
         directionDisplay: data.direction ? useDirection(lang.value, data.direction) : '',
         experienceDisplay: data.experience ? useExperience(lang.value, data.experience) : '',
-        image: useUrlMedia(data.image, props.type, uuid, 'image'),
+        image: useUrlMedia(data.image, 'image'),
         type: props.type,
       }
     })

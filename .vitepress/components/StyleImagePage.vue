@@ -5,15 +5,11 @@
 </template>
 
 <script>
-// ============================================================
-//  1. ИМПОРТЫ
-// ============================================================
 import { computed } from 'vue'
 import { useUrlMedia } from '../utils/useUrlMedia'
 
-// ============================================================
-//  2. КОМПОНЕНТ
-// ============================================================
+const baseUrl = import.meta.env.BASE_URL
+
 export default {
   name: 'StyleImagePage',
 
@@ -37,34 +33,17 @@ export default {
   },
 
   setup(props) {
-    // ============================================================
-    //  2.1. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
-    // ============================================================
-
     const imageUrl = computed(() => {
-      // Если src начинается с http:// или https:// — это полный URL
-      if (props.src.startsWith('http://') || props.src.startsWith('https://')) {
-        return props.src
+      const src = props.src
+      if (src.startsWith('http://') || src.startsWith('https://')) {
+        return src
       }
-      
-      // Используем useUrlMedia для обработки пути
-      // Передаём src, тип 'image' и пустой uuid
-      return useUrlMedia(props.src, 'images', '', 'image')
+      return useUrlMedia(src, 'image')
     })
-
-    // ============================================================
-    //  2.2. МЕТОДЫ
-    // ============================================================
-
     const handleImageError = (e) => {
       console.warn(`⚠️ Ошибка загрузки изображения: ${props.src}`)
       e.target.style.display = 'none'
-      //e.target.src = '/placeholder-image.svg'
     }
-
-    // ============================================================
-    //  2.3. ВОЗВРАТ
-    // ============================================================
     return {
       imageUrl,
       handleImageError,

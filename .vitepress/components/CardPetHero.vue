@@ -96,7 +96,7 @@ export default {
         ageDisplay: data.age ? useAge(lang.value, data.age) : '',
         size: data.size || '',
         sizeDisplay: data.size ? useTranslate(lang.value, 'size', data.size) : '',
-        image: useUrlMedia(data.image, props.type, uuid, 'image'),
+        image: useUrlMedia(data.image, 'image'),
         type: props.type,
       }
     })

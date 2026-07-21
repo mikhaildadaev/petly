@@ -106,10 +106,10 @@ const filteredBlocks = computed(() => {
   const matchedBlocks = rawBlocks.filter(block => block.type === props.type)
   return matchedBlocks.map(block => ({
     ...block,
-    image: block.image ? useUrlMedia(block.image, 'support', '', 'image') : '',
+    image: block.image ? useUrlMedia(block.image, 'images', '', 'image') : '',
     list: block.list?.map(item => ({
       ...item,
-      image: item.image ? useUrlMedia(item.image, 'support', '', 'image') : ''
+      image: item.image ? useUrlMedia(item.image, 'images', '', 'image') : ''
     })) || []
   }))
 })
