@@ -22,33 +22,28 @@ blocks:
   - title: ... Фронтенд
     type: cubes
     list:
-      - name: Vue 3
-        image: /assets/webp/tech-vue.webp
-        info: Современный JavaScript-фреймворк. Быстрый, реактивный и удобный.
+      - name: Vue 3 & VitePress
+        image: /assets/webp/vue.svg
+        info: Фреймворк для интерфейсов и движок для статических сайтов — экосистема от команды Vue.
         link: https://vuejs.org/
       
-      - name: VitePress
-        image: /assets/webp/tech-vitepress.webp
-        info: Движок для статических сайтов на Markdown.
-        link: https://vitepress.dev/
-      
-      - name: JavaScript
-        image: /assets/webp/tech-js.webp
-        info: Современный JavaScript с модулями и стрелочными функциями.
-        link: 
+      - name: JavaScript & TypeScript
+        image: /assets/webp/ts.svg
+        info: Современный JavaScript с поддержкой TypeScript для типобезопасности.
+        link: https://www.typescriptlang.org/
 
       - name: CSS
-        image: /assets/webp/tech-css.webp
+        image: /assets/webp/css3.svg
         info: Гибкая система стилей с адаптацией под светлую и тёмную тему.
-        link: 
+        link: https://developer.mozilla.org/ru/docs/Web/CSS
 
       - name: SVG
-        image: /assets/webp/tech-svg.webp
+        image: /assets/webp/svg.svg
         info: Собственные иконки, которые не теряют качество при масштабировании.
-        link: 
+        link: https://developer.mozilla.org/ru/docs/Web/SVG
     
       - name: Google Fonts
-        image: /assets/webp/tech-fonts.webp
+        image: /assets/webp/googlefonts.svg
         info: Шрифты Caveat и Days One для уютной атмосферы.
         link: https://fonts.google.com/
 
