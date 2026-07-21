@@ -71,6 +71,7 @@ a {
    КНОПКИ
    ============================================ */
 button {
+  font-weight: 600!important;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)!important;
 }
 
@@ -169,6 +170,7 @@ div.number {
    ============================================ */
 label {
   font-size: 0.65em;
+  font-weight: 600!important;
 }
 
 /* ============================================
@@ -307,11 +309,11 @@ p.withColor {
   border: 1px solid var(--vp-c-border);
   border-radius: 30px;
   background: transparent;
-  color: var(--vp-c-text-light, #6b5b5b);
   cursor: pointer;
   white-space: nowrap;
   font-family: inherit;
   margin-left: auto;
+  font-size: 0.65em;
 }
 .filters-compact .btn-reset-compact:hover {
   border-color: #ef5350;
@@ -332,10 +334,7 @@ p.withColor {
   background: var(--vp-c-bg-soft);
 }
 .filter-label {
-  font-weight: 600;
-  color: var(--vp-c-text-2);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
   margin-left: 4px;
   margin-right: 12px;
 }
@@ -378,7 +377,6 @@ p.withColor {
   background: var(--vp-c-brand);
   color: #fff !important;
   border-radius: 8px;
-  font-weight: 600;
   text-decoration: none;
   border: none;
   cursor: pointer;
@@ -407,8 +405,6 @@ p.withColor {
   border: 1px solid #e67e22;
   background: transparent;
   color: #e67e22;
-  font-family: inherit;
-  font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
 }
@@ -441,7 +437,6 @@ p.withColor {
   color: white !important;
   border: none;
   border-radius: 8px;
-  font-weight: 600;
   cursor: pointer;
   transition: background 0.2s, transform 0.2s;
 }
@@ -459,7 +454,6 @@ p.withColor {
   border: 2px solid #e67e22;
   color: #e67e22;
   border-radius: 8px;
-  font-weight: 600;
   cursor: pointer;
   transition: background 0.2s, color 0.2s, transform 0.2s;
 }
@@ -688,15 +682,6 @@ p.withColor {
 .dark .grid-card-body {
   background-color: #3a3530;
 }
-.grid-card-body h3 {
-  margin: 0 0 0.5rem;
-  font-weight: 700;
-}
-.grid-card-body p {
-  line-height: 1.6;
-  margin-top: 0;
-  margin-bottom: 1.2rem;
-}
 
 /* ============================================
    СОСТОЯНИЯ
@@ -923,12 +908,6 @@ p.withColor {
   text-align: center;
   width: 100%;
 }
-.block-type-cubes .content p {
-  margin: 0 0 6px;
-  line-height: 1.4em;
-  color: var(--vp-c-text);
-  font-weight: 700;
-}
 .block-type-cubes .content .info {
   position: absolute;
   display: inline-flex;
@@ -1024,7 +1003,6 @@ p.withColor {
 .block-type-rects .link {
   display: inline-block;
   color: var(--vp-c-text);
-  text-decoration: none;
   font-weight: 500;
   text-decoration: underline!important;
 }
@@ -1063,10 +1041,6 @@ p.withColor {
 }
 .block-type-social .content p {
   flex: 1;
-  margin: 0;
-  line-height: 1.4em;
-  color: var(--vp-c-text);
-  font-weight: 700;
   align-content: center;
   text-align: center;
 }
@@ -1141,16 +1115,6 @@ p.withColor {
   min-width: 0;
   padding-top: 4px;
 }
-.block-type-steps .content h3 {
-  margin: 0 0 8px;
-  font-weight: 600;
-  color: var(--vp-c-text);
-}
-.block-type-steps .content p {
-  margin: 0;
-  color: var(--vp-c-text-light);
-  line-height: 1.5;
-}
 .block-type-steps .link {
   display: inline-block;
   color: var(--vp-c-text);
@@ -1180,6 +1144,7 @@ p.withColor {
   border: 1px solid var(--vp-c-border);
   z-index: 1;
   text-align: left;
+  font-size: 0.95em;
   font-weight: 500;
   animation: tooltipFade 0.2s ease;
   pointer-events: auto;
