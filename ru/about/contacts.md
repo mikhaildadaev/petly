@@ -9,3 +9,5 @@ blocks:
 # Контакты
 
 <StyleBlockPage type="intro"/>
+
+<StyleImagePage src="/assets/webp/catWithSkein.webp" width="320" float="center"/>
