@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="80px" height="80px" viewBox="0 0 80 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>github 2</title>
+    <title>vue</title>
     <g id="Logo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Vue" fill-rule="nonzero">
             <path d="M80,64 L80,16 C80,7.163444 72.836556,-3.55271368e-15 64,0 L16,0 C7.163444,1.77635684e-15 0,7.163444 0,16 L0,64 C1.77635684e-15,72.836556 7.163444,80 16,80 L64,80 C72.836556,80 80,72.836556 80,64 Z" id="Oval" fill="#FFFFFF"></path>
