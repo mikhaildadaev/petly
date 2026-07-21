@@ -18,7 +18,7 @@
       </div>
       <label class="filter-label">{{ translate('filter', 'Размер') }}</label>
     </div>
-    <button v-if="!areAllActive" class="btn-reset-compact" @click="resetFilters" :title="translate('ui', 'Включить все фильтры')">
+    <button v-if="!areAllActive" class="reset" @click="resetFilters" :title="translate('ui', 'Включить все фильтры')">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M3 6h18" />
         <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
@@ -29,15 +29,15 @@
       {{ translate('filter', 'Сбросить') }}
     </button>
   </div>
-  <div v-if="!isMobile" class="grid-cards">
-    <a v-for="pet in paginatedPets" :key="pet.uuid" :href="`${baseUrl}${lang}/pets/${type}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
-      <div class="grid-meta">
+  <div v-if="!isMobile" class="cards-grid">
+    <a v-for="pet in paginatedPets" :key="pet.uuid" :href="`${baseUrl}${lang}/pets/${type}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list card">
+      <div class="meta">
         <label v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</label>
         <label v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</label>
         <label v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</label>
       </div>
       <img :src="pet.image" loading="lazy" />
-      <div :class="['grid-card-body', useRandomClass(pet.uuid)]">
+      <div :class="['content', useRandomClass(pet.uuid)]">
         <h1 class="title">{{ pet.nameDisplay }}</h1>
         <p class="description">{{ pet.descriptionDisplay }}</p>
       </div>
@@ -58,23 +58,23 @@
       </div>
     </div>
   </div>
-  <div v-else class="carousel-cards">
+  <div v-else class="cards-carousel">
     <div class="carousel-wrapper">
-      <button class="carousel-btn prev" @click="prevSlide" :disabled="currentIndex === 0">
+      <button class="carousel prev" @click="prevSlide" :disabled="currentIndex === 0">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
           <path d="M15 18l-6-6 6-6" />
         </svg>
       </button>      
       <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
         <div v-for="(pet, index) in paginatedPets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }" >
-          <a :href="`${baseUrl}${lang}/pets/${type}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
-            <div class="grid-meta">
+          <a :href="`${baseUrl}${lang}/pets/${type}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list card">
+            <div class="meta">
               <label v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</label>
               <label v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</label>
               <label v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</label>
             </div>
             <img :src="pet.image" loading="lazy" />
-            <div :class="['grid-card-body', useRandomClass(pet.uuid)]">
+            <div :class="['content', useRandomClass(pet.uuid)]">
               <h1 class="title">{{ pet.nameDisplay }}</h1>
               <p class="description">{{ pet.descriptionDisplay }}</p>
             </div>
@@ -98,7 +98,7 @@
           </div>
         </div>
       </div> 
-      <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1">
+      <button class="carousel next" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
           <path d="M9 18l6-6-6-6" />
         </svg>

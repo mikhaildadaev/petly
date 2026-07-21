@@ -1,19 +1,19 @@
 <template>
-  <div v-if="randomOrganizations.length > 0" class="carousel-cards">
+  <div v-if="randomOrganizations.length > 0" class="cards-carousel">
     <div class="carousel-wrapper">
-      <button class="carousel-btn prev" @click="prevSlide" :disabled="currentIndex === 0">
+      <button class="carousel prev" @click="prevSlide" :disabled="currentIndex === 0">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
           <path d="M15 18l-6-6 6-6" />
         </svg>
       </button>
       <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
         <div v-for="(organization, index) in randomOrganizations" :key="organization.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-          <a :href="`${baseUrl}${lang}/organizations/${organization.type}/${organization.uuid}`" class="aspect-list grid-card">
-            <div class="grid-meta">
+          <a :href="`${baseUrl}${lang}/organizations/${organization.type}/${organization.uuid}`" class="aspect-list card">
+            <div class="meta">
               <label v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</label>
             </div>
             <img :src="organization.image" loading="lazy" />
-            <div :class="['grid-card-body', useRandomClass(organization.uuid)]">
+            <div :class="['content', useRandomClass(organization.uuid)]">
               <h1 class="title">{{ organization.nameDisplay }}</h1>
               <p class="description">{{ organization.descriptionDisplay }}</p>
             </div>
@@ -33,7 +33,7 @@
           </div>
         </div>
       </div>
-      <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1">
+      <button class="carousel next" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
           <path d="M9 18l6-6-6-6" />
         </svg>

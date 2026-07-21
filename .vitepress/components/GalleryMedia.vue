@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="gallery-media">
-      <div v-for="(item, index) in mediaItems" :key="index" class="gallery-item" :style="{ '--delay': index * 0.05 + 's' }" @click="openFullScreen(index)">
+      <div v-for="(item, index) in mediaItems" :key="index" class="item" :style="{ '--delay': index * 0.05 + 's' }" @click="openFullScreen(index)">
         <!-- Фотографии (превью) -->
         <img v-if="item.type === 'image'" :src="item.src" loading="lazy" />
         <!-- Видеозаписи (превью) -->
@@ -9,7 +9,7 @@
           <video :src="item.src" muted playsinline @mouseenter="playVideo" @mouseleave="pauseVideo" ref="videoPreviewRefs" />
         </div>
         <!-- Аудиозаписи (превью) -->
-        <div v-else class="audio-preview">
+        <div v-else-if="item.type === 'audio'" class="audio-preview">
           <div class="audio-icon">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
@@ -19,31 +19,31 @@
         </div>
       </div>
     </div>
-    <div v-if="fullScreenOpen" class="fullScreen" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-      <button class="fullScreen-close" @click.stop="closeFullScreen" aria-label="Закрыть">
+    <div v-if="fullScreenOpen" class="slider-fullscreen" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
+      <button class="fullscreen close" @click.stop="closeFullScreen" aria-label="Закрыть">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M18 6L6 18M6 6l12 12" />
         </svg>
       </button>
-      <button v-if="mediaItems.length > 1" class="fullScreen-prev" @click.stop="prevMedia" aria-label="Предыдущее">
+      <button v-if="mediaItems.length > 1" class="fullscreen prev" @click.stop="prevMedia" aria-label="Предыдущее">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M15 18l-6-6 6-6" />
         </svg>
       </button>
-      <button v-if="mediaItems.length > 1" class="fullScreen-next" @click.stop="nextMedia" aria-label="Следующее">
+      <button v-if="mediaItems.length > 1" class="fullscreen next" @click.stop="nextMedia" aria-label="Следующее">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M9 18l6-6-6-6" />
         </svg>
       </button>
-      <div class="fullScreen-content">
+      <div class="content">
         <!-- Фотографии -->
         <img v-if="currentMedia.type === 'image'" :src="currentMedia.src" />
         <!-- Видеозаписи -->
-        <video v-else-if="currentMedia.type === 'video'" :src="currentMedia.src" controls autoplay muted playsinline class="fullScreen-video" ref="fullScreenVideoRef"/>
+        <video v-else-if="currentMedia.type === 'video'" :src="currentMedia.src" controls autoplay muted playsinline class="video" ref="fullScreenVideoRef"/>
         <!-- Аудиозаписи -->
-        <audio v-else-if="currentMedia.type === 'audio'" :src="currentMedia.src" controls class="fullScreen-audio" ref="fullScreenAudioRef"/>
+        <audio v-else-if="currentMedia.type === 'audio'" :src="currentMedia.src" controls class="audio" ref="fullScreenAudioRef"/>
       </div>
-      <div class="fullScreen-dots">
+      <div class="dots">
         <span v-for="(_, index) in mediaItems" :key="index" class="dot" :class="{ active: index === currentIndex }" @click.stop="goToMedia(index)" />
       </div>
     </div>

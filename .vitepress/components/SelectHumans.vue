@@ -1,13 +1,13 @@
 <template>
   <div v-if="selectHumans && selectHumans.length > 0" class="grid-list">
-    <div v-if="!isMobile" class="grid-cards">
-      <a v-for="human in selectHumans" :key="human.uuid" :href="`${baseUrl}${lang}/humans/${human.type}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
-        <div class="grid-meta">
+    <div v-if="!isMobile" class="cards-grid">
+      <a v-for="human in selectHumans" :key="human.uuid" :href="`${baseUrl}${lang}/humans/${human.type}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list card">
+        <div class="meta">
           <label v-if="human.directionDisplay" class="tag direction-tag">{{ human.directionDisplay }}</label>
           <label v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</label>
         </div>
         <img :src="human.image" loading="lazy" />
-        <div :class="['grid-card-body', useRandomClass(human.uuid)]">
+        <div :class="['content', useRandomClass(human.uuid)]">
           <h1 class="title">{{ human.nameDisplay }}</h1>
           <p class="description">{{ human.descriptionDisplay }}</p>
         </div>
@@ -15,27 +15,27 @@
     </div>
     <div v-else class="carousel-container">
       <div class="carousel-wrapper">
-        <button class="carousel-btn prev" @click="prevSlide" :disabled="currentIndex === 0">
+        <button class="carousel prev" @click="prevSlide" :disabled="currentIndex === 0">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
             <path d="M15 18l-6-6 6-6" />
           </svg>
         </button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(human, index) in selectHumans" :key="human.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="`${baseUrl}${lang}/humans/${human.type}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list grid-card">
-              <div class="grid-meta">
+            <a :href="`${baseUrl}${lang}/humans/${human.type}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list card">
+              <div class="meta">
                 <label v-if="human.directionDisplay" class="tag direction-tag">{{ human.directionDisplay }}</label>
                 <label v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</label>
               </div>
               <img :src="human.image" loading="lazy" />
-              <div :class="['grid-card-body', useRandomClass(human.uuid)]">
+              <div :class="['content', useRandomClass(human.uuid)]">
                 <h1 class="title">{{ human.nameDisplay }}</h1>
                 <p class="description">{{ human.descriptionDisplay }}</p>
               </div>
             </a>
           </div>
         </div>
-        <button class="carousel-btn next" @click="nextSlide" :disabled="currentIndex >= (selectHumans ? selectHumans.length - 1 : 0)">
+        <button class="carousel next" @click="nextSlide" :disabled="currentIndex >= (selectHumans ? selectHumans.length - 1 : 0)">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
             <path d="M9 18l6-6-6-6" />
           </svg>
