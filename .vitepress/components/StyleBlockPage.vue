@@ -5,7 +5,7 @@
         <h1 class="title">{{ block.title }}</h1>
         <div class="container">
           <div v-for="(item, itemIndex) in block.list" :key="itemIndex" class="item">
-            <div class="chip-icon">
+            <div class="icon">
               <img :src="item.image" loading="lazy"/>
             </div>
             <div class="content">
@@ -20,7 +20,7 @@
         <h1 class="title">{{ block.title }}</h1>
         <div class="container">
           <div v-for="(item, itemIndex) in block.list" :key="itemIndex" class="item">
-            <div class="block-item-image">
+            <div class="image">
               <img :src="item.image" loading="lazy" />
             </div>
             <div class="content">
