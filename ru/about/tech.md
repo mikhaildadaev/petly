@@ -10,12 +10,12 @@ blocks:
     type: chips
     list:
       - name: GitHub
-        image: /assets/webp/tech-github.webp
+        image: /assets/svg/github.svg
         description: Хранение кода, CI/CD через GitHub Actions и бесплатный хостинг на GitHub Pages.
         link: https://github.com/
       
       - name: Cloudinary
-        image: /assets/webp/tech-cloudinary.webp
+        image: /assets/svg/cloudinary.svg
         description: Облачное хранилище для аудио/видео записей и изображений с доставкой контента.
         link: https://cloudinary.com/
 
