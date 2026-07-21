@@ -81,7 +81,6 @@ export default defineConfig({
             text: 'Über das Projekt',
             items: [
               { text: 'Mission', link: '/de/about/mission' },
-              { text: 'Team', link: '/de/about/team' },
               { text: 'Technologien', link: '/de/about/tech' },
               { text: 'Kontakte', link: '/de/about/contacts' }
             ]
@@ -121,7 +120,6 @@ export default defineConfig({
             text: 'Über das Projekt',
             items: [
               { text: 'Mission', link: '/de/about/mission' },
-              { text: 'Team', link: '/de/about/team' },
               { text: 'Technologien', link: '/de/about/tech' },
               { text: 'Kontakte', link: '/de/about/contacts' }
             ]
@@ -222,7 +220,6 @@ export default defineConfig({
             text: 'About Project',
             items: [
               { text: 'Mission', link: '/en/about/mission' },
-              { text: 'Team', link: '/en/about/team' },
               { text: 'Technologies', link: '/en/about/tech' },
               { text: 'Contacts', link: '/en/about/contacts' }
             ]
@@ -262,7 +259,6 @@ export default defineConfig({
             text: 'About Project',
             items: [
               { text: 'Mission', link: '/en/about/mission' },
-              { text: 'Team', link: '/en/about/team' },
               { text: 'Technologies', link: '/en/about/tech' },
               { text: 'Contacts', link: '/en/about/contacts' }
             ]
@@ -363,7 +359,6 @@ export default defineConfig({
             text: 'О проекте',
             items: [
               { text: 'Миссия', link: '/ru/about/mission' },
-              { text: 'Команда', link: '/ru/about/team' },
               { text: 'Технологии', link: '/ru/about/tech' },
               { text: 'Контакты', link: '/ru/about/contacts' }
             ]
@@ -403,7 +398,6 @@ export default defineConfig({
             text: 'О проекте',
             items: [
               { text: 'Миссия', link: '/ru/about/mission' },
-              { text: 'Команда', link: '/ru/about/team' },
               { text: 'Технологии', link: '/ru/about/tech' },
               { text: 'Контакты', link: '/ru/about/contacts' }
             ]
