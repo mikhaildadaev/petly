@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256px" height="256px" viewBox="0 0 256 256" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>paper</title>
+    <g id="Backgrounds" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Paper" fill="#FFFFFF" fill-rule="nonzero">
+            <polygon id="Path" points="0 2.12624585 28 6.37873754 55 0 85 9.35548173 115 2.97674419 150 13.6079734 180 1.27574751 215 10.6312292 256 1.27574751 256 254.724252 215 248.770764 180 251.747508 150 244.518272 115 254.724252 85 249.621262 55 256 28 247.495017 0 253.873754"></polygon>
+        </g>
+    </g>
+</svg>
