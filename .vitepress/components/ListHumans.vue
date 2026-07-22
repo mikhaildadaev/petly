@@ -2,26 +2,17 @@
   <div class="filters-compact hide-scrollbar">
       <div class="filter-group">
         <div class="filter-chips">
-          <button v-for="option in experienceOptions" :key="option.value" class="chip" :class="{ active: filters.experience[option.value] }" @click="toggleFilter('experience', option.value)" :title="option.label" v-html="option.icon"/>
+          <button v-for="option in experienceOptions" :key="option.value" class="chip" :class="[{ active: filters.experience[option.value] }, option.icon]" @click="toggleFilter('experience', option.value)" :title="option.label"/>
         </div>
         <label class="filter-label">{{ translate('filter', 'Опыт') }}</label>
       </div>
       <div class="filter-group">
         <div class="filter-chips">
-          <button v-for="option in directionOptions" :key="option.value" class="chip" :class="{ active: filters.direction[option.value] }" @click="toggleFilter('direction', option.value)" :title="option.label" v-html="option.icon"/>
+          <button v-for="option in directionOptions" :key="option.value" class="chip" :class="[{ active: filters.direction[option.value] }, option.icon]" @click="toggleFilter('direction', option.value)" :title="option.label"/>
         </div>
         <label class="filter-label">{{ translate('filter', 'Направление') }}</label>
       </div>
-      <button v-if="!areAllActive" class="reset" @click="resetFilters" :title="translate('ui', 'Включить все фильтры')">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 6h18" />
-          <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-          <path d="M10 11v6" />
-          <path d="M14 11v6" />
-        </svg>
-        {{ translate('filter', 'Сбросить') }}
-      </button>
+      <button v-if="!areAllActive" class="reset" @click="resetFilters" :title="translate('ui', 'Включить все фильтры')">{{ translate('filter', 'Сбросить') }}</button>
     </div>
   <div v-if="!isMobile" class="cards-grid">
     <a v-for="human in paginatedHumans" :key="human.uuid" :href="`${baseUrl}${lang}/humans/${human.type}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list card">
@@ -36,28 +27,19 @@
       </div>
     </a>
     <div v-if="hasMoreItems" class="load-more" @click="loadMore">
-      <div class="load-more-content">
-        <div class="load-more-icon">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 5v14" />
-            <path d="M5 12h14" />
-          </svg>
-        </div>
-        <div class="load-more-text">{{ translate('ui', 'Загрузить ещё') }}</div>
-        <div class="load-more-count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
-        <div class="load-more-progress">
-          <div class="progress-bar" :style="{ width: `${(visibleCount / filteredHumans.length) * 100}%` }"></div>
+      <div class="content">
+        <div class="icon"></div>
+        <div class="text">{{ translate('ui', 'Загрузить ещё') }}</div>
+        <div class="count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
+        <div class="progress">
+          <div class="bar" :style="{ width: `${(visibleCount / filteredHumans.length) * 100}%` }"></div>
         </div>
       </div>
     </div>
   </div>
   <div v-else class="cards-carousel">
     <div class="carousel-wrapper">
-      <button class="carousel prev" @click="prevSlide" :disabled="currentIndex === 0">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
-          <path d="M15 18l-6-6 6-6" />
-        </svg>
-      </button>      
+      <button class="carousel prev" @click="prevSlide" :disabled="currentIndex === 0"></button>
       <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
         <div v-for="(human, index) in paginatedHumans" :key="human.uuid" class="carousel-slide" :class="{ center: index === currentIndex }" >
           <a :href="`${baseUrl}${lang}/humans/${human.type}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list card">
@@ -74,27 +56,18 @@
         </div>
         <div v-if="hasMoreItems" class="carousel-slide load-more-slide" :class="{ center: currentIndex === paginatedHumans.length }">
           <div class="load-more" @click="loadMore">
-            <div class="load-more-content">
-              <div class="load-more-icon">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 5v14" />
-                  <path d="M5 12h14" />
-                </svg>
-              </div>
-              <div class="load-more-text">{{ translate('ui', 'Загрузить ещё') }}</div>
-              <div class="load-more-count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
-              <div class="load-more-progress">
-                <div class="progress-bar" :style="{ width: `${(visibleCount / filteredHumans.length) * 100}%` }"></div>
+            <div class="content">
+              <div class="icon"></div>
+              <div class="text">{{ translate('ui', 'Загрузить ещё') }}</div>
+              <div class="count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
+              <div class="progress">
+                <div class="bar" :style="{ width: `${(visibleCount / filteredHumans.length) * 100}%` }"></div>
               </div>
             </div>
           </div>
         </div>
       </div> 
-      <button class="carousel next" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
-          <path d="M9 18l6-6-6-6" />
-        </svg>
-      </button>
+      <button class="carousel next" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1"></button>
     </div>
   </div>
   <div v-if="filteredHumans.length === 0 && !isLoading" class="no-results">
@@ -145,9 +118,9 @@ export default {
     const EXPERIENCE_KEYS = ['Начинающий', 'Опытный', 'Эксперт']
     const experienceOptions = computed(() => {
       const experienceIcons = {
-        'Начинающий': `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="8" cy="9" r="1.5" fill="currentColor"/><circle cx="16" cy="9" r="1.5" fill="currentColor"/><path d="M8 14c1.5 2 3 2 4 2s2.5 0 4-2"/></svg>`,
-        'Опытный': `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/><circle cx="9" cy="10" r="1.5" fill="currentColor"/><circle cx="15" cy="10" r="1.5" fill="currentColor"/></svg>`,
-        'Эксперт': `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/><path d="M8 4L6 6"/><path d="M16 4l2 2"/><circle cx="9" cy="10" r="1.5" fill="currentColor"/><circle cx="15" cy="10" r="1.5" fill="currentColor"/></svg>`
+        'Начинающий': `begin`,
+        'Опытный': `versed`,
+        'Эксперт': `expert`
       }
       return EXPERIENCE_KEYS.map(key => ({
         value: key,

@@ -2,20 +2,11 @@
   <div class="filters-compact hide-scrollbar">
     <div class="filter-group">
       <div class="filter-chips">
-        <button v-for="option in formatOptions" :key="option.value" class="chip" :class="{ active: filters.format[option.value] }" @click="toggleFilter('format', option.value)" :title="option.label" v-html="option.icon"/>
+        <button v-for="option in formatOptions" :key="option.value" class="chip" :class="[{ active: filters.format[option.value] }, option.icon]" @click="toggleFilter('format', option.value)" :title="option.label"/>
       </div>
       <label class="filter-label">{{ translate('filter', 'Формат') }}</label>
     </div>
-    <button v-if="!areAllActive" class="reset" @click="resetFilters" :title="translate('ui', 'Включить все фильтры')">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M3 6h18" />
-        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-        <path d="M10 11v6" />
-        <path d="M14 11v6" />
-      </svg>
-      {{ translate('filter', 'Сбросить') }}
-    </button>
+    <button v-if="!areAllActive" class="reset" @click="resetFilters" :title="translate('ui', 'Включить все фильтры')">{{ translate('filter', 'Сбросить') }}</button>
   </div>
   <div v-if="!isMobile" class="cards-grid">
     <a v-for="organization in paginatedOrganizations" :key="organization.uuid" :href="`${baseUrl}${lang}/organizations/${organization.type}/${organization.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list card">
@@ -29,28 +20,19 @@
       </div>
     </a>
     <div v-if="hasMoreItems" class="load-more" @click="loadMore">
-      <div class="load-more-content">
-        <div class="load-more-icon">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 5v14" />
-            <path d="M5 12h14" />
-          </svg>
-        </div>
-        <div class="load-more-text">{{ translate('ui', 'Загрузить ещё') }}</div>
-        <div class="load-more-count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
-        <div class="load-more-progress">
-          <div class="progress-bar" :style="{ width: `${(visibleCount / filteredOrganizations.length) * 100}%` }"></div>
+      <div class="content">
+        <div class="icon"></div>
+        <div class="text">{{ translate('ui', 'Загрузить ещё') }}</div>
+        <div class="count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
+        <div class="progress">
+          <div class="bar" :style="{ width: `${(visibleCount / filteredOrganizations.length) * 100}%` }"></div>
         </div>
       </div>
     </div>
   </div>
   <div v-else class="cards-carousel">
     <div class="carousel-wrapper">
-      <button class="carousel prev" @click="prevSlide" :disabled="currentIndex === 0">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
-          <path d="M15 18l-6-6 6-6" />
-        </svg>
-      </button>      
+      <button class="carousel prev" @click="prevSlide" :disabled="currentIndex === 0"></button>      
       <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
         <div v-for="(organization, index) in paginatedOrganizations" :key="organization.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
           <a :href="`${baseUrl}${lang}/organizations/${organization.type}/${organization.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list card">
@@ -66,27 +48,18 @@
         </div>
         <div v-if="hasMoreItems" class="carousel-slide load-more-slide" :class="{ center: currentIndex === paginatedOrganizations.length }">
           <div class="load-more" @click="loadMore">
-            <div class="load-more-content">
-              <div class="load-more-icon">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 5v14" />
-                  <path d="M5 12h14" />
-                </svg>
-              </div>
-              <div class="load-more-text">{{ translate('ui', 'Загрузить ещё') }}</div>
-              <div class="load-more-count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
-              <div class="load-more-progress">
-                <div class="progress-bar" :style="{ width: `${(visibleCount / filteredOrganizations.length) * 100}%` }"></div>
+            <div class="content">
+              <div class="icon"></div>
+              <div class="text">{{ translate('ui', 'Загрузить ещё') }}</div>
+              <div class="count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
+              <div class="progress">
+                <div class="bar" :style="{ width: `${(visibleCount / filteredOrganizations.length) * 100}%` }"></div>
               </div>
             </div>
           </div>
         </div>
       </div> 
-      <button class="carousel next" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
-          <path d="M9 18l6-6-6-6" />
-        </svg>
-      </button>
+      <button class="carousel next" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1"></button>
     </div>
   </div>
   <div v-if="filteredOrganizations.length === 0 && !isLoading" class="no-results">
@@ -137,8 +110,8 @@ export default {
     const FORMAT_KEYS = ['Частный', 'Государственный']
     const formatOptions = computed(() => {
       const formatIcons = {
-        'Государственный': `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`,
-        'Частный': `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1"/></svg>`
+        'Государственный': `state`,
+        'Частный': `private`
       }
       return FORMAT_KEYS.map(key => ({
         value: key,
