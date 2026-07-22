@@ -2,19 +2,19 @@
   <div class="filters-compact hide-scrollbar">
     <div class="filter-group">
       <div class="filter-chips">
-        <button v-for="option in genderOptions" :key="option.value" class="chip" :class="{ active: filters.gender[option.value] }" @click="toggleFilter('gender', option.value)" :title="option.label" v-html="option.icon"/>
+        <button v-for="option in genderOptions" :key="option.value" class="chip" :class="[{ active: filters.gender[option.value]}, option.icon]" @click="toggleFilter('gender', option.value)" :title="option.label"/>
       </div>
       <label class="filter-label">{{ translate('filter', 'Пол') }}</label>
     </div>
     <div class="filter-group">
       <div class="filter-chips">
-        <button v-for="option in ageOptions" :key="option.value" class="chip" :class="{ active: filters.age[option.value] }" @click="toggleFilter('age', option.value)" :title="option.label" v-html="option.icon"/>
+        <button v-for="option in ageOptions" :key="option.value" class="chip" :class="[{ active: filters.age[option.value] }, option.icon]" @click="toggleFilter('age', option.value)" :title="option.label"/>
       </div>
       <label class="filter-label">{{ translate('filter', 'Возраст') }}</label>
     </div>
     <div class="filter-group">
       <div class="filter-chips">
-        <button v-for="option in sizeOptions" :key="option.value" class="chip" :class="{ active: filters.size[option.value] }" @click="toggleFilter('size', option.value)" :title="option.label" v-html="option.icon"/>
+        <button v-for="option in sizeOptions" :key="option.value" class="chip" :class="[{ active: filters.size[option.value] }, option.icon]" @click="toggleFilter('size', option.value)" :title="option.label"/>
       </div>
       <label class="filter-label">{{ translate('filter', 'Размер') }}</label>
     </div>
@@ -153,8 +153,8 @@ export default {
     const GENDER_KEYS = ['Девочка', 'Мальчик']
     const genderOptions = computed(() => {
       const genderIcons = {
-        'Девочка': `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><text x="12" y="16" text-anchor="middle" font-size="12" font-weight="100" fill="currentColor">♀</text></svg>`,
-        'Мальчик': `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><text x="12" y="16" text-anchor="middle" font-size="12" font-weight="100" fill="currentColor">♂</text></svg>`
+        'Девочка': `woman`,
+        'Мальчик': `man`
       }
       return GENDER_KEYS.map(key => ({
         value: key,
@@ -166,9 +166,9 @@ export default {
     const AGE_KEYS = ['Детеныш', 'Молодая', 'Взрослая']
     const ageOptions = computed(() => {
       const ageIcons = {
-        'Детеныш': `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10c0-1.5.8-3 2-3s2 1.5 2 3-.8 2.5-2 2.5S6 11.5 6 10z"/><path d="M14 10c0-1.5.8-3 2-3s2 1.5 2 3-.8 2.5-2 2.5-2-1-2-2.5z"/><path d="M4 13.5c0-1.5 1.5-2.5 3.5-2.5h9c2 0 3.5 1 3.5 2.5v1.5H4z"/><path d="M7.5 17v2"/><path d="M16.5 17v2"/></svg>`,
-        'Молодая': `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10c0-2 1-4 3-4s3 2 3 4-1 3-3 3-3-1-3-3z"/><path d="M17 10c0-2-1-4-3-4s-3 2-3 4 1 3 3 3 3-1 3-3z"/><path d="M5 16c0-3 2-4 5-4h4c3 0 5 1 5 4v2H5z"/><path d="M9 18v2"/><path d="M15 18v2"/></svg>`,
-        'Взрослая': `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10c0-3 2-5 4-5s4 2 4 5-2 4-4 4-4-1-4-4z"/><path d="M18 10c0-3-2-5-4-5s-4 2-4 5 2 4 4 4 4-1 4-4z"/><path d="M4 16c0-4 3-5 6-5h4c3 0 6 1 6 5v2H4z"/><path d="M8 18v2"/><path d="M16 18v2"/></svg>`
+        'Детеныш': `young`,
+        'Молодая': `middle`,
+        'Взрослая': `old`
       }
       return AGE_KEYS.map(key => ({
         value: key,
@@ -180,9 +180,9 @@ export default {
     const SIZE_KEYS = ['Маленькая', 'Средняя', 'Крупная']
     const sizeOptions = computed(() => {
       const sizeIcons = {
-        'Маленькая': `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><text x="12" y="16" text-anchor="middle" font-size="12" font-weight="100" fill="currentColor">S</text></svg>`,
-        'Средняя': `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><text x="12" y="16" text-anchor="middle" font-size="12" font-weight="100" fill="currentColor">M</text></svg>`,
-        'Крупная': `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><text x="12" y="16" text-anchor="middle" font-size="12" font-weight="100" fill="currentColor">L</text></svg>`
+        'Маленькая': `small`,
+        'Средняя': `medium`,
+        'Крупная': `large`
       }
       return SIZE_KEYS.map(key => ({
         value: key,
