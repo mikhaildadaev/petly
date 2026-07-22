@@ -20,21 +20,9 @@
       </div>
     </div>
     <div v-if="fullScreenOpen" class="slider-fullscreen" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-      <button class="fullscreen close" @click.stop="closeFullScreen" aria-label="Закрыть">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 6L6 18M6 6l12 12" />
-        </svg>
-      </button>
-      <button v-if="mediaItems.length > 1" class="fullscreen prev" @click.stop="prevMedia" aria-label="Предыдущее">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M15 18l-6-6 6-6" />
-        </svg>
-      </button>
-      <button v-if="mediaItems.length > 1" class="fullscreen next" @click.stop="nextMedia" aria-label="Следующее">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M9 18l6-6-6-6" />
-        </svg>
-      </button>
+      <button class="fullscreen close" @click.stop="closeFullScreen"></button>
+      <button v-if="mediaItems.length > 1" class="fullscreen prev" @click.stop="prevMedia"></button>
+      <button v-if="mediaItems.length > 1" class="fullscreen next" @click.stop="nextMedia"></button>
       <div class="content">
         <!-- Фотографии -->
         <img v-if="currentMedia.type === 'image'" :src="currentMedia.src" />
