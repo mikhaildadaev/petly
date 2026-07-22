@@ -15,11 +15,7 @@
     </div>
     <div v-else class="carousel-container">
       <div class="carousel-wrapper">
-        <button class="carousel prev" @click="prevSlide" :disabled="currentIndex === 0">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
-        </button>      
+        <button class="carousel prev" @click="prevSlide" :disabled="currentIndex === 0"></button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(human, index) in selectHumans" :key="human.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
             <a :href="`${baseUrl}${lang}/humans/${human.type}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list card">
@@ -35,11 +31,7 @@
             </a>
           </div>
         </div>
-        <button class="carousel next" @click="nextSlide" :disabled="currentIndex >= (selectHumans ? selectHumans.length - 1 : 0)">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
-            <path d="M9 18l6-6-6-6" />
-          </svg>
-        </button>
+        <button class="carousel next" @click="nextSlide" :disabled="currentIndex >= (selectHumans ? selectHumans.length - 1 : 0)"></button>
       </div>
     </div>
   </div>

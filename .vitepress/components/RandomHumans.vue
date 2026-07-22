@@ -1,11 +1,7 @@
 <template>
   <div v-if="randomHumans.length > 0" class="cards-carousel">
     <div class="carousel-wrapper">
-      <button class="carousel prev" @click="prevSlide" :disabled="currentIndex === 0">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
-          <path d="M15 18l-6-6 6-6" />
-        </svg>
-      </button>
+      <button class="carousel prev" @click="prevSlide" :disabled="currentIndex === 0"></button>
       <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
         <div v-for="(human, index) in randomHumans" :key="human.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
           <a :href="`${baseUrl}${lang}/humans/${human.type}/${human.uuid}`" class="aspect-list card">
@@ -22,23 +18,14 @@
         </div>
         <div class="carousel-slide load-more-slide" :class="{ center: currentIndex === randomHumans.length }">
           <div class="load-more" @click="goToLink">
-            <div class="load-more-content">
-              <div class="load-more-icon">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 5v14" />
-                  <path d="M5 12h14" />
-                </svg>
-              </div>
-              <div class="load-more-text">{{ translate('ui', 'Перейти в раздел') }}</div>
+            <div class="content">
+              <div class="icon"></div>
+              <div class="text">{{ translate('ui', 'Перейти в раздел') }}</div>
             </div>
           </div>
         </div>
       </div>
-      <button class="carousel next" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0">
-          <path d="M9 18l6-6-6-6" />
-        </svg>
-      </button>
+      <button class="carousel next" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1"></button>
     </div>
   </div>
   <div v-else-if="randomHumans && randomHumans.length === 0" class="no-results">
