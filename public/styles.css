@@ -531,6 +531,18 @@ p.withColor {
   mask-image: url('/petly/assets/svg/large.svg');
   -webkit-mask-image: url('/petly/assets/svg/large.svg');
 }
+.filter-chips .chip.begin {
+  mask-image: url('/petly/assets/svg/begin.svg');
+  -webkit-mask-image: url('/petly/assets/svg/begin.svg');
+}
+.filter-chips .chip.versed {
+  mask-image: url('/petly/assets/svg/versed.svg');
+  -webkit-mask-image: url('/petly/assets/svg/versed.svg');
+}
+.filter-chips .chip.expert {
+  mask-image: url('/petly/assets/svg/expert.svg');
+  -webkit-mask-image: url('/petly/assets/svg/expert.svg');
+}
 
 /* ============================================
    КАРТОЧКИ
