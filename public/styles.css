@@ -20,6 +20,7 @@
   --vp-c-border: #e0d5c5;
   --vp-c-dark: #3e3232;
   --vp-c-light: #f3f0eb;
+  --vp-c-universal: #3e3232;
   --vp-c-black: #000000;
   --vp-c-white: #ffffff;
   --radius: 24px;
@@ -39,6 +40,7 @@
   --vp-c-border: #3a3530;
   --vp-c-dark: #3e3232;
   --vp-c-light: #f3f0eb;
+  --vp-c-universal: #f3f0eb;
   --vp-c-black: #000000;
   --vp-c-white: #ffffff;
   --shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -1011,6 +1013,22 @@ p.withColor {
   position: relative;
   overflow: hidden;
 }
+.block-type-steps .container .item:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 64px;
+  background-color: var(--vp-c-universal);
+  mask-image: url('/petly/public/assets/svg/paws.svg');
+  -webkit-mask-image: url('/petly/public/assets/svg/paws.svg');
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  mask-repeat: repeat-y;
+  -webkit-mask-repeat: repeat-y;
+  mask-position: center;
+  -webkit-mask-position: center;
+}
 .block-type-steps .number {
   display: flex;
   align-items: center;
@@ -1018,32 +1036,20 @@ p.withColor {
   width: 56px;
   height: 56px;
   flex-shrink: 0;
-  background: rgba(230, 126, 34, 0.08);
+  background: linear-gradient(to top, rgba(230, 126, 34, 0.15), transparent);
   border-radius: 12px;
   line-height: 1;
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
 }
-.block-type-steps .number::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 30%;
-  background: linear-gradient(to top, var(--vp-c-bg-soft), transparent);
-  pointer-events: none;
-}
-.block-type-steps .item:nth-child(even) .number::after {
+.block-type-steps .item:nth-child(odd) .number {
   top: 0;
   bottom: auto;
-  height: 35%;
-  background: linear-gradient(to bottom, var(--vp-c-bg-soft), transparent);
+  background: linear-gradient(to bottom, rgba(230, 126, 34, 0.15), transparent);
 }
 .block-type-steps .item:hover .number {
   transform: scale(1.1);
-  background: rgba(230, 126, 34, 0.15);
 }
 .block-type-steps .content {
   flex: 1;
