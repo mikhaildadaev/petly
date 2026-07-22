@@ -910,20 +910,25 @@ p.withColor {
   display: inline-flex;
   top: 8px;
   right: 8px;
+  width: 32px;
+  height: 32px;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--vp-c-text-light);
+  background-color:var(--vp-c-text-light);
   transition: all 0.3s ease;
-  padding: 4px;
-  border-radius: 50%;
+  border-radius: var(--radius);
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-position: center;
+  mask-image: url('/petly/assets/svg/info.svg');
+  -webkit-mask-image: url('/petly/assets/svg/info.svg');
 }
 .block-type-cubes .content .info:hover {
-  color: var(--vp-c-brand);
-  background: rgba(230, 126, 34, 0.1);
-}
-.block-type-cubes .content .info svg {
-  display: block;
+  background-color:var(--vp-c-brand);
 }
 .block-type-intro {
   position: relative;
