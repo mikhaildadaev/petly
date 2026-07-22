@@ -90,12 +90,23 @@ button.carousel {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: transparent;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-position: center;
 }
 button.carousel.prev {
   left: 0;
+  mask-image: url('/petly/assets/svg/prev.svg');
+  -webkit-mask-image: url('/petly/assets/svg/prev.svg');
 }
 button.carousel.next {
   right: 0;
+  mask-image: url('/petly/assets/svg/next.svg');
+  -webkit-mask-image: url('/petly/assets/svg/next.svg');
 }
 button.favorite {
   position: absolute;
@@ -143,46 +154,43 @@ button.favorite.is-favorite:hover svg {
 button.favorite.is-favorite svg {
   animation: heart-pop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
-button.fullscreen.close {
+button.fullscreen {
   position: absolute;
-  top: 24px;
-  right: calc(50% - 24px);
-  width: 48px;
-  height: 48px;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: #fff;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
-  padding: 8px;
-  border-radius: 50%;
+  background-color: var(--vp-c-text-1);
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-position: center;
   z-index: 10;
+}
+button.fullscreen.close {
+  top: 0;
+  right: calc(50% - 24px);
+  mask-image: url('/petly/assets/svg/close.svg');
+  -webkit-mask-image: url('/petly/assets/svg/close.svg');
 }
 button.fullscreen.close:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background-color: var(--vp-c-brand);
   transform: rotate(90deg);
-}
-button.fullscreen.prev,
-button.fullscreen.next {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 48px;
-  padding: 8px;
-  background: rgba(255, 255, 255, 0);
-  color: #fff;
-  cursor: pointer;
-  z-index: 10;
-}
-button.fullscreen.prev:hover,
-button.fullscreen.next:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
 }
 button.fullscreen.prev {
   left: 0;
+  mask-image: url('/petly/assets/svg/prev.svg');
+  -webkit-mask-image: url('/petly/assets/svg/prev.svg');
 }
 button.fullscreen.next {
   right: 0;
+  mask-image: url('/petly/assets/svg/next.svg');
+  -webkit-mask-image: url('/petly/assets/svg/next.svg');
+}
+button.fullscreen.prev:hover,
+button.fullscreen.next:hover {
+  background-color: var(--vp-c-brand);
 }
 
 /* ============================================
@@ -1334,36 +1342,35 @@ p.withColor {
   bottom: 0;
   background: rgba(0, 0, 0, 0.95);
   backdrop-filter: blur(8px);
-  z-index: 9999;
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
   animation: fadeIn 0.3s ease;
 }
 .slider-fullscreen .content {
-  max-width: 90vw;
-  max-height: 85vh;
+  max-width: calc(100% - 64px);
+  max-height: calc(100% - 64px);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .slider-fullscreen .content img,
-.slider-fullscreen .video {
-  max-width: 90vw;
-  max-height: 85vh;
+.slider-fullscreen .content video {
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
   border-radius: 8px;
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
   animation: zoomIn 0.3s ease;
 }
 .slider-fullscreen video {
-  width: 90vw;
+  width: 100%;
   max-height: 85vh;
-  background: #000;
 }
 .slider-fullscreen .dots {
   position: absolute;
-  bottom: 30px;
+  bottom: 0;
+  margin-bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
