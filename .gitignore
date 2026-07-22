@@ -93,3 +93,6 @@ go.work.sum
 **/.vitepress/cache/
 **/.vitepress/dist/
 **/.vitepress/temp/
+
+# Cloudinary specific
+**/.cloudinary/environments.json
