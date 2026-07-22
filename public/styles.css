@@ -460,22 +460,51 @@ p.withColor {
   height: 32px;
   cursor: pointer;
   padding: 0;
-  line-height: 1;
-  color: var(--vp-c-text-light, #6b5b5b);
-  opacity: 0.35;
-  font-family: inherit;
+  background-color: var(--vp-c-dark);
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-position: center;
 }
 .filter-chips .chip:hover {
-  color: var(--vp-c-brand, #e67e22);
-  transform: scale(1.08);
-  opacity: 0.7;
-}
-.filter-chips .chip:active {
-  transform: scale(0.92);
+  transform: scale(1.15);
 }
 .filter-chips .chip.active {
-  color: var(--vp-c-brand, #e67e22);
-  opacity: 1;
+  background-color: var(--vp-c-brand);
+}
+.filter-chips .chip.woman {
+  mask-image: url('/petly/assets/svg/woman.svg');
+  -webkit-mask-image: url('/petly/assets/svg/woman.svg');
+}
+.filter-chips .chip.man {
+  mask-image: url('/petly/assets/svg/man.svg');
+  -webkit-mask-image: url('/petly/assets/svg/man.svg');
+}
+.filter-chips .chip.young {
+  mask-image: url('/petly/assets/svg/young.svg');
+  -webkit-mask-image: url('/petly/assets/svg/young.svg');
+}
+.filter-chips .chip.middle {
+  mask-image: url('/petly/assets/svg/middle.svg');
+  -webkit-mask-image: url('/petly/assets/svg/middle.svg');
+}
+.filter-chips .chip.old {
+  mask-image: url('/petly/assets/svg/old.svg');
+  -webkit-mask-image: url('/petly/assets/svg/old.svg');
+}
+.filter-chips .chip.small {
+  mask-image: url('/petly/assets/svg/small.svg');
+  -webkit-mask-image: url('/petly/assets/svg/small.svg');
+}
+.filter-chips .chip.medium {
+  mask-image: url('/petly/assets/svg/medium.svg');
+  -webkit-mask-image: url('/petly/assets/svg/medium.svg');
+}
+.filter-chips .chip.large {
+  mask-image: url('/petly/assets/svg/large.svg');
+  -webkit-mask-image: url('/petly/assets/svg/large.svg');
 }
 
 /* ============================================
