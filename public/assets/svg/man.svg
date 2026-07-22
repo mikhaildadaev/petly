@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>man</title>
+    <g id="Icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Man" stroke="#FFFFFF" stroke-width="2">
+            <g id="Group" transform="translate(8.000000, 8.000000)">
+                <path d="M10,11 C10,13.7614615 7.76146154,16 5,16 C2.23857692,16 0,13.7614615 0,11 C0,8.23853846 2.23857692,6 5,6 C7.76146154,6 10,8.23853846 10,11 Z" id="Path"></path>
+                <polyline id="Path" points="10 0 16 0 16 6"></polyline>
+                <line x1="9" y1="7" x2="16" y2="0" id="Path"></line>
+            </g>
+        </g>
+    </g>
+</svg>

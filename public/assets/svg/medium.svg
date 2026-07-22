@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>medium</title>
+    <g id="Icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" font-family="MDUFBold, MD_UF" font-size="16" font-weight="bold">
+        <g id="Medium" fill="#FFFFFF">
+            <text id="M">
+                <tspan x="9" y="22">M</tspan>
+            </text>
+        </g>
+    </g>
+</svg>
