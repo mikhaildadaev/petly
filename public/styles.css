@@ -1132,7 +1132,7 @@ p.withColor {
   padding: 16px 24px;
   border-radius: calc(var(--radius) - 2px) calc(var(--radius) / 2) calc(var(--radius) / 2) calc(var(--radius) - 2px);
   line-height: 1.5;
-  min-width: 200px;
+  min-width: 240px;
   max-width: 280px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   border: 1px solid var(--vp-c-border);
