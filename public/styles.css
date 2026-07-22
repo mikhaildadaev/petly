@@ -1071,7 +1071,7 @@ p.withColor {
   top: 0;
   bottom: 0;
   width: 64px;
-  background-color: var(--vp-c-universal);
+  background-color: var(--vp-c-text-light);
   mask-image: url('/petly/assets/svg/paws.svg');
   -webkit-mask-image: url('/petly/assets/svg/paws.svg');
   mask-size: contain;
