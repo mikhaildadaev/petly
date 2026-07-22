@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>man</title>
-    <g id="Icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-        <g id="Man" stroke="#FFFFFF" stroke-width="2">
-            <g id="Group" transform="translate(8.000000, 8.000000)">
-                <path d="M10,11 C10,13.7614615 7.76146154,16 5,16 C2.23857692,16 0,13.7614615 0,11 C0,8.23853846 2.23857692,6 5,6 C7.76146154,6 10,8.23853846 10,11 Z" id="Path"></path>
-                <polyline id="Path" points="10 0 16 0 16 6"></polyline>
-                <line x1="9" y1="7" x2="16" y2="0" id="Path"></line>
+    <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Young" transform="translate(31.653981, 0.000000)" stroke="#FFFFFF" stroke-width="2">
+            <g id="Group" transform="translate(0.000000, 0.395482)">
+                <circle id="Oval" cx="16" cy="16" r="15"></circle>
+            </g>
+        </g>
+        <g id="Man" transform="translate(-0.000000, 0.000000)" stroke="#FFFFFF" stroke-width="2">
+            <g id="Group">
+                <path d="M17.75,18.625 C17.75,21.0412788 15.7912788,23 13.375,23 C10.9587548,23 9,21.0412788 9,18.625 C9,16.2087212 10.9587548,14.25 13.375,14.25 C15.7912788,14.25 17.75,16.2087212 17.75,18.625 Z" id="Path" stroke-linecap="round" stroke-linejoin="round"></path>
+                <polyline id="Path" stroke-linecap="round" stroke-linejoin="round" points="17.75 9 23 9 23 14.25"></polyline>
+                <line x1="16.875" y1="15.125" x2="23" y2="9" id="Path" stroke-linecap="round" stroke-linejoin="round"></line>
+                <circle id="Oval" cx="16" cy="16" r="15"></circle>
             </g>
         </g>
     </g>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="128px" height="256px" viewBox="0 0 128 256" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>paws</title>
-    <g id="Elem" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="Backgrounds" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Paws" fill="#FFFFFF" fill-rule="nonzero">
-            <g id="Group" transform="translate(63.750000, 128.250000) scale(-1, 1) rotate(-90.000000) translate(-63.750000, -128.250000) translate(-56.000000, 90.500000)">
+            <g id="Group" transform="translate(63.750000, 128.250000) scale(-1, 1) rotate(90.000000) translate(-63.750000, -128.250000) translate(-56.000000, 90.500000)">
                 <g id="Paw10" transform="translate(0.000000, 28.500000)">
                     <path d="M6.94185994,21.5564465 C5.50430173,21.0120918 4.92374938,20.1411243 5.31078428,19.0796326 C5.61488313,18.2631005 6.85892389,17.4193507 7.77122045,17.4193507 C9.2917147,17.4193507 10.812209,18.834673 10.812209,20.3044307 C10.812209,21.9647125 9.3470054,22.4546318 6.94185994,21.5564465 Z" id="Path"></path>
                     <path d="M12.8303195,16.9838669 C11.8627323,16.5211654 11.2268892,15.2963673 11.5033427,14.4526175 C11.8903776,13.2278194 14.2955231,12.2207632 15.9265987,12.6290293 C17.8894186,13.1189485 18.6634884,15.4868915 17.2812209,16.7389073 C16.7006685,17.283262 16.2583429,17.4193507 15.1248836,17.4193507 C14.3508138,17.4193507 13.3279358,17.2288266 12.8303195,16.9838669 Z" id="Path"></path>
