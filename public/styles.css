@@ -1020,8 +1020,8 @@ p.withColor {
   bottom: 0;
   width: 64px;
   background-color: var(--vp-c-universal);
-  mask-image: url('/petly/public/assets/svg/paws.svg');
-  -webkit-mask-image: url('/petly/public/assets/svg/paws.svg');
+  mask-image: url('/petly/assets/svg/paws.svg');
+  -webkit-mask-image: url('/petly/assets/svg/paws.svg');
   mask-size: contain;
   -webkit-mask-size: contain;
   mask-repeat: repeat-y;
