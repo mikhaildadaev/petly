@@ -1028,6 +1028,7 @@ p.withColor {
   -webkit-mask-repeat: repeat-y;
   mask-position: center;
   -webkit-mask-position: center;
+  opacity: 0.4;
 }
 .block-type-steps .number {
   display: flex;
