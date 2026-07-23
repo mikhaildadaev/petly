@@ -567,10 +567,10 @@ p.withColor {
   width: 100%;
   margin: 2em 0 0;
 }
-.cards-carousel .carousel-wrapper.center .card img {
+.cards-carousel .carousel-wrapper .center .card img {
   transform: scale(1.06);
 }
-.cards-carousel .carousel-wrapper.center .card .content .title::after {
+.cards-carousel .carousel-wrapper .center .card .content .title::after {
   opacity: 1;
   transform: translateX(4px) scale(1.1);
 }
