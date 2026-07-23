@@ -80,6 +80,9 @@ button {
   font-weight: 600!important;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)!important;
 }
+button.none {
+  opacity: 0!important;
+}
 button.carousel {
   position: absolute;
   top: 0;
@@ -90,7 +93,7 @@ button.carousel {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: transparent;
+  background-color: var(--vp-c-dark);
   mask-size: contain;
   -webkit-mask-size: contain;
   mask-repeat: no-repeat;
@@ -550,15 +553,43 @@ p.withColor {
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
+  gap: 16px;
   margin: 2rem 0 0;
 }
-.cards-grid .card:hover {
-  transform: scale(1.05);
+.cards-grid .card:hover img  {
+  transform: scale(1.06);
+}
+.cards-grid .card .content .title::after {
+  opacity: 1;
+  transform: translateX(4px) scale(1.1);
 }
 .cards-carousel {
   width: 100%;
   margin: 2em 0 0;
+}
+.cards-carousel .carousel-wrapper.center .card img {
+  transform: scale(1.06);
+}
+.cards-carousel .carousel-wrapper.center .card .content .title::after {
+  opacity: 1;
+  transform: translateX(4px) scale(1.1);
+}
+.cards-carousel .carousel-wrapper::before,
+.cards-carousel .carousel-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 24px;
+  z-index: 3;
+}
+.cards-carousel .carousel-wrapper::before {
+  left: 0;
+  background: linear-gradient(var(--vp-c-bg), transparent, var(--vp-c-bg));
+}
+.cards-carousel .carousel-wrapper::after {
+  right: 0;
+  background: linear-gradient(var(--vp-c-bg), transparent, var(--vp-c-bg));
 }
 
 /* ============================================
@@ -594,9 +625,6 @@ p.withColor {
   z-index: 0;
   transition: transform 0.4s;
 }
-.card:hover img {
-  transform: scale(1.06);
-}
 .card .content {
   position: relative;
   bottom: 0;
@@ -631,10 +659,6 @@ p.withColor {
   -webkit-mask-repeat: no-repeat;
   transition: opacity 0.3s, transform 0.3s;
 }
-.card:hover .content .title::after {
-  opacity: 1;
-  transform: translateX(4px) scale(1.1);
-}
 
 /* ============================================
    КАРУСЕЛЬ
@@ -652,6 +676,7 @@ p.withColor {
   overflow-y: visible;
   scrollbar-width: none;
   flex: 1;
+  gap: 16px;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
@@ -674,10 +699,6 @@ p.withColor {
 }
 .carousel-slide.center {
   z-index: 2;
-}
-.carousel-slide:not(.center) {
-  opacity: 0.6;
-  transform: scale(0.95, 0.9);
 }
 .carousel-slide:first-child {
   margin-left: 24px;
@@ -1448,15 +1469,25 @@ p.withColor {
 
 /* Телефоны */
 @media (max-width: 735px) {
+  button.carousel {
+    background-color: transparent!important;
+  }
   .aspect-card {
     aspect-ratio: 9/15;
   }
   .aspect-list {
     aspect-ratio: 9/15;
   }
+  .carousel-track {
+    gap: 0;
+  }
   .carousel-slide {
     flex: 0 0 calc(100% - 48px);
     min-width: 280px;
+  }
+  .carousel-slide:not(.center) {
+    opacity: 0.6;
+    transform: scale(0.95, 0.9);
   }
   .hero-name {
     font-size: 1.5rem;
