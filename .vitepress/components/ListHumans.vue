@@ -283,77 +283,52 @@ export default {
       }, 100)
     }
 
+    const loadHumans = async () => {
+      try {
+        isLoading.value = true
+        const response = await fetch(`${baseUrl}data/humans-${lang.value}-${props.type}.json`)
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        const humansData = await response.json()
+        allHumans.value = humansData.map(human => ({
+          uuid: human.uuid,
+          nameDisplay: human.title || '',
+          descriptionDisplay: human.description || '',
+          experience: useExperience('ru', human.experience),
+          experienceDisplay: useExperience(lang.value, human.experience),
+          direction: useDirection('ru', human.direction),
+          directionDisplay: useDirection(lang.value, human.direction),
+          imageVertical: useUrlMedia(human.imageVertical, 'image'),
+          type: props.type,
+        }))
+        allHumans.value = allHumans.value.reverse()
+        resetPagination()
+      } catch (error) {
+        console.error('Ошибка загрузки данных:', error)
+        allHumans.value = []
+      } finally {
+        isLoading.value = false
+      }
+    }
+
     // ============================================================
     //  3.10. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
-    // --- Загрузка данных ---
-    const loadData = async () => {
-      try {
-        let modules
-        switch (lang.value) {
-          case 'en':
-            modules = import.meta.glob('/en/humans/*/*.md')
-            break
-          case 'de':
-            modules = import.meta.glob('/de/humans/*/*.md')
-            break
-          default:
-            modules = import.meta.glob('/ru/humans/*/*.md')
-        }
-        const filteredModules = Object.entries(modules).filter(([path]) => {
-          return path.includes(`/${lang.value}/humans/${props.type}/`) && !path.endsWith(`${props.type}_index.md`)
-        })
-
-        const loaded = await Promise.all(
-          filteredModules.map(async ([path, loader]) => {
-            const mod = await loader()
-            const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || path.replace(`/${lang.value}/humans/${props.type}/`, '').replace('.md', '')
-
-            return {
-              uuid,
-              nameDisplay: fm.title || '',
-              descriptionDisplay: fm.description || '',
-              experience: useExperience('ru', fm.experience),
-              experienceDisplay: useExperience(lang.value, fm.experience),
-              direction: useDirection('ru', fm.direction),
-              directionDisplay: useDirection(lang.value, fm.direction),
-              imageVertical: useUrlMedia(fm.imageVertical, 'image'),
-              type: props.type,
-            }
-          })
-        )
-        allHumans.value = loaded.reverse()
-      } catch (error) {
-        console.error('Ошибка загрузки данных:', error)
-      }
-    }
-
-    // --- Монтирование ---
     onMounted(async () => {
       isClient.value = true
-
       if (typeof window !== 'undefined') {
         window.addEventListener('resize', handleResize)
       }
-
-      isLoading.value = true
-      await loadData()
-      resetPagination()
-      isLoading.value = false
-    })
-
-    // --- Следим за изменением языка ---
-    watch(lang, async () => {
-      isLoading.value = true
-      await loadData()
-      resetPagination()
-      resetToFirstSlide()
-      isLoading.value = false
+      await loadHumans()
     })
 
     // --- Watchers ---
+    watch(lang, async () => {
+      await loadHumans()
+      resetToFirstSlide()
+    })
     watch(
       [() => filters.experience, () => filters.direction],
       () => {
@@ -362,13 +337,11 @@ export default {
       },
       { deep: true }
     )
-
     watch(isMobile, (newVal) => {
       if (isClient.value && newVal && paginatedHumans.value.length) {
         resetToFirstSlide()
       }
     })
-
     watch(
       () => paginatedHumans.value,
       (newVal) => {

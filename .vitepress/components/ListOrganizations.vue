@@ -139,8 +139,8 @@ export default {
     // ============================================================
 
     const filteredOrganizations = computed(() => {
-      return allOrganizations.value.filter(org => {
-        if (!filters.format[org.format]) return false
+      return allOrganizations.value.filter(organization => {
+        if (!filters.format[organization.format]) return false
         return true
       })
     })
@@ -239,75 +239,51 @@ export default {
       }, 100)
     }
 
+    const loadOrganizations = async () => {
+      try {
+        isLoading.value = true
+        const response = await fetch(`${baseUrl}data/organizations-${lang.value}-${props.type}.json`)
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        const orgsData = await response.json()
+        allOrganizations.value = orgsData.map(organization => ({
+          uuid: organization.uuid,
+          nameDisplay: organization.title || '',
+          descriptionDisplay: organization.description || '',
+          format: organization.format || '',
+          formatDisplay: organization.format ? translate('format', organization.format) : '',
+          imageHorizontal: useUrlMedia(organization.imageHorizontal, 'image'),
+          imageVertical: useUrlMedia(organization.imageVertical, 'image'),
+          type: props.type,
+        }))
+        allOrganizations.value = allOrganizations.value.reverse()
+        resetPagination()
+      } catch (error) {
+        console.error('Ошибка загрузки данных:', error)
+        allOrganizations.value = []
+      } finally {
+        isLoading.value = false
+      }
+    }
+
     // ============================================================
     //  3.10. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
-    // --- Загрузка данных ---
-    const loadData = async () => {
-      try {
-        let modules
-        switch (lang.value) {
-          case 'en':
-            modules = import.meta.glob('/en/organizations/*/*.md')
-            break
-          case 'de':
-            modules = import.meta.glob('/de/organizations/*/*.md')
-            break
-          default:
-            modules = import.meta.glob('/ru/organizations/*/*.md')
-        }
-        const filteredModules = Object.entries(modules).filter(([path]) => {
-          return path.includes(`/${lang.value}/organizations/${props.type}/`) && !path.endsWith(`${props.type}_index.md`)
-        })
-
-        const loaded = await Promise.all(
-          filteredModules.map(async ([path, loader]) => {
-            const mod = await loader()
-            const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || path.replace(`/${lang.value}/organizations/${props.type}/`, '').replace('.md', '')
-
-            return {
-              uuid,
-              nameDisplay: fm.title || '',
-              descriptionDisplay: fm.description || '',
-              format: fm.format || '',
-              formatDisplay: fm.format ? translate('format', fm.format) : '',
-              imageVertical: useUrlMedia(fm.imageVertical, 'image'),
-              type: props.type,
-            }
-          })
-        )
-        allOrganizations.value = loaded.reverse()
-      } catch (error) {
-        console.error('Ошибка загрузки данных:', error)
-      }
-    }
-
-    // --- Монтирование ---
     onMounted(async () => {
       isClient.value = true
-
       if (typeof window !== 'undefined') {
         window.addEventListener('resize', handleResize)
       }
-
-      isLoading.value = true
-      await loadData()
-      resetPagination()
-      isLoading.value = false
-    })
-
-    // --- Следим за изменением языка ---
-    watch(lang, async () => {
-      isLoading.value = true
-      await loadData()
-      resetPagination()
-      resetToFirstSlide()
-      isLoading.value = false
+      await loadOrganizations()
     })
 
     // --- Watchers ---
+    watch(lang, async () => {
+      await loadOrganizations()
+      resetToFirstSlide()
+    })
     watch(
       () => filters.format,
       () => {
@@ -316,13 +292,11 @@ export default {
       },
       { deep: true }
     )
-
     watch(isMobile, (newVal) => {
       if (isClient.value && newVal && paginatedOrganizations.value.length) {
         resetToFirstSlide()
       }
     })
-
     watch(
       () => paginatedOrganizations.value,
       (newVal) => {
