@@ -167,7 +167,7 @@ export default {
           throw new Error(`HTTP error! status: ${response.status}`)
         }
         const petsData = await response.json()
-        loaded = petsData.map(pet => ({
+        const loaded = petsData.map(pet => ({
           uuid: pet.uuid,
           nameDisplay: pet.title || '',
           descriptionDisplay: pet.description || '',
