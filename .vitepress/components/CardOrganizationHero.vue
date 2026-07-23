@@ -78,16 +78,44 @@ export default {
     const organization = computed(() => {
       const data = fm.value || {}
       const uuid = data.uuid || ''
+
+      const images = data.image || []
+      const imageHorizontal = getImageFromArray(images, 'horizontal')
+
+      const filter = data.filter || []
+      const format = getFilterValue(filter, 'format')
       
       return {
         uuid,
         nameDisplay: data.title || '',
         descriptionDisplay: data.description || '',
-        formatDisplay: data.format ? useTranslate(lang.value, 'format', data.format) : '',
-        imageHorizontal: useUrlMedia(data.imageHorizontal, 'image'),
+        formatDisplay: format ? useTranslate(lang.value, 'format', format) : '',
+        imageHorizontal: useUrlMedia(imageHorizontal, 'image'),
         type: props.type,
       }
     })
+
+    // ============================================================
+    //  3.4. ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ
+    // ============================================================
+
+    /**
+     * Извлекает значение из массива filter по ключу
+     */
+    const getFilterValue = (filter, key) => {
+      if (!filter || !Array.isArray(filter)) return ''
+      const found = filter.find(f => f[key] !== undefined)
+      return found ? found[key] : ''
+    }
+
+    /**
+     * Извлекает изображение из массива image по типу
+     */
+    const getImageFromArray = (images, type) => {
+      if (!images || !Array.isArray(images)) return ''
+      const found = images.find(img => img[type])
+      return found ? found[type] : ''
+    }
 
     // ============================================================
     //  3.5. ЖИЗНЕННЫЙ ЦИКЛ

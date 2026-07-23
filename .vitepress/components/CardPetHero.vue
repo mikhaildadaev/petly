@@ -85,21 +85,51 @@ export default {
     const pet = computed(() => {
       const data = fm.value || {}
       const uuid = data.uuid || ''
+
+      const images = data.image || []
+      const imageHorizontal = getImageFromArray(images, 'horizontal')
+
+      const filter = data.filter || []
+      const age = getFilterValue(filter, 'age')
+      const gender = getFilterValue(filter, 'gender')
+      const size = getFilterValue(filter, 'size')
       
       return {
         uuid,
         nameDisplay: data.title || '',
         descriptionDisplay: data.description || '',
-        gender: data.gender || '',
-        genderDisplay: data.gender ? useTranslate(lang.value, 'gender', data.gender) : '',
-        age: data.age ? useAgePetCategory(data.age) : '',
-        ageDisplay: data.age ? useAge(lang.value, data.age) : '',
-        size: data.size || '',
-        sizeDisplay: data.size ? useTranslate(lang.value, 'size', data.size) : '',
-        imageHorizontal: useUrlMedia(data.imageHorizontal, 'image'),
+        gender: gender || '',
+        genderDisplay: gender ? useTranslate(lang.value, 'gender', gender) : '',
+        age: age ? useAgePetCategory(age) : '',
+        ageDisplay: age ? useAge(lang.value, age) : '',
+        size: size || '',
+        sizeDisplay: size ? useTranslate(lang.value, 'size', size) : '',
+        imageHorizontal: useUrlMedia(imageHorizontal, 'image'),
         type: props.type,
       }
     })
+
+    // ============================================================
+    //  3.4. ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ
+    // ============================================================
+
+    /**
+     * Извлекает значение из массива filter по ключу
+     */
+    const getFilterValue = (filter, key) => {
+      if (!filter || !Array.isArray(filter)) return ''
+      const found = filter.find(f => f[key] !== undefined)
+      return found ? found[key] : ''
+    }
+
+    /**
+     * Извлекает изображение из массива image по типу
+     */
+    const getImageFromArray = (images, type) => {
+      if (!images || !Array.isArray(images)) return ''
+      const found = images.find(img => img[type])
+      return found ? found[type] : ''
+    }
 
     // ============================================================
     //  3.5. ЖИЗНЕННЫЙ ЦИКЛ

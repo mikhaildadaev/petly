@@ -79,17 +79,46 @@ export default {
     const human = computed(() => {
       const data = fm.value || {}
       const uuid = data.uuid || ''
+
+      const images = data.image || []
+      const imageHorizontal = getImageFromArray(images, 'horizontal')
+
+      const filter = data.filter || []
+      const direction = getFilterValue(filter, 'direction')
+      const experience = getFilterValue(filter, 'experience')
       
       return {
         uuid,
         nameDisplay: data.title || '',
         descriptionDisplay: data.description || '',
-        directionDisplay: data.direction ? useDirection(lang.value, data.direction) : '',
-        experienceDisplay: data.experience ? useExperience(lang.value, data.experience) : '',
-        imageHorizontal: useUrlMedia(data.imageHorizontal, 'image'),
+        directionDisplay: direction ? useDirection(lang.value, direction) : '',
+        experienceDisplay: experience ? useExperience(lang.value, experience) : '',
+        imageHorizontal: useUrlMedia(imageHorizontal, 'image'),
         type: props.type,
       }
     })
+
+    // ============================================================
+    //  3.4. ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ
+    // ============================================================
+
+    /**
+     * Извлекает значение из массива filter по ключу
+     */
+    const getFilterValue = (filter, key) => {
+      if (!filter || !Array.isArray(filter)) return ''
+      const found = filter.find(f => f[key] !== undefined)
+      return found ? found[key] : ''
+    }
+
+    /**
+     * Извлекает изображение из массива image по типу
+     */
+    const getImageFromArray = (images, type) => {
+      if (!images || !Array.isArray(images)) return ''
+      const found = images.find(img => img[type])
+      return found ? found[type] : ''
+    }
 
     // ============================================================
     //  3.5. ЖИЗНЕННЫЙ ЦИКЛ
