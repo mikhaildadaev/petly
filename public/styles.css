@@ -559,7 +559,7 @@ p.withColor {
 .cards-grid .card:hover img  {
   transform: scale(1.06);
 }
-.cards-grid .card .content .title::after {
+.cards-grid .card:hover .content .title::after {
   opacity: 1;
   transform: translateX(4px) scale(1.1);
 }
