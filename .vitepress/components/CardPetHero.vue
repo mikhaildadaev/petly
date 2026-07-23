@@ -22,7 +22,7 @@
 // ============================================================
 //  1. ИМПОРТЫ
 // ============================================================
-import { computed, ref, onMounted, watch, nextTick, inject } from 'vue'
+import { computed, ref, onMounted, watch, nextTick } from 'vue'
 import { useData } from 'vitepress'
 import { useFavorites } from '../utils/useFavorites'
 import { useRandomColor } from '../utils/useRandomColor'

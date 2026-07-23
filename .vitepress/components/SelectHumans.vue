@@ -44,7 +44,7 @@
 // ============================================================
 //  1. ИМПОРТЫ
 // ============================================================
-import { computed, ref, onMounted, onUnmounted, nextTick, inject, watch } from 'vue'
+import { computed, ref, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import { useData } from 'vitepress'
 import { useRandomColor } from '../utils/useRandomColor'
 import { useScrollCarusel } from '../utils/useScrollCarusel'

@@ -87,7 +87,7 @@
 // ============================================================
 //  1. ИМПОРТЫ
 // ============================================================
-import { computed, ref, onMounted, watch, nextTick, onUnmounted, reactive, inject } from 'vue'
+import { computed, ref, onMounted, watch, nextTick, onUnmounted, reactive } from 'vue'
 import { useData } from 'vitepress'
 import { usePagination } from '../utils/usePagination'
 import { useRandomColor } from '../utils/useRandomColor'

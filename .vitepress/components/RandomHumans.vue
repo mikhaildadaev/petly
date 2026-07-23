@@ -39,7 +39,7 @@
 // ============================================================
 //  1. ИМПОРТЫ
 // ============================================================
-import { ref, computed, onMounted, watch, onUnmounted, inject } from 'vue'
+import { ref, computed, onMounted, watch, onUnmounted } from 'vue'
 import { useData } from 'vitepress'
 import { useRandomArray } from '../utils/useRandomArray'
 import { useRandomColor } from '../utils/useRandomColor'
