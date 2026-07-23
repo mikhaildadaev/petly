@@ -1,5 +1,5 @@
 <template>
-  <div v-if="selectPets && selectPets.length > 0" class="grid-list">
+  <div v-if="selectPets && selectPets.length > 0" class="cards-carousel">
     <div v-if="!isMobile" class="cards-grid">
       <a v-for="pet in selectPets" :key="pet.uuid" :href="`${baseUrl}${lang}/pets/${type}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list card">
         <div class="meta">
@@ -16,7 +16,7 @@
     </div>
     <div v-else class="carousel-container">
       <div class="carousel-wrapper">
-        <button class="carousel prev" @click="prevSlide" :disabled="currentIndex === 0"></button>      
+        <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(pet, index) in selectPets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
             <a :href="`${baseUrl}${lang}/pets/${type}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list card">
@@ -33,7 +33,7 @@
             </a>
           </div>
         </div>
-        <button class="carousel next" @click="nextSlide" :disabled="currentIndex >= (selectPets ? selectPets.length - 1 : 0)"></button>
+        <button class="carousel next" :class="{ none: isLastSlide }" @click="nextSlide" :disabled="currentIndex >= (selectPets ? selectPets.length - 1 : 0)"></button>
       </div>
     </div>
   </div>
@@ -110,6 +110,9 @@ export default {
     // --- Рандомные цвета ---
     const { useRandomClass } = useRandomColor()
 
+    // --- Дополнительный слайд ---
+    const hasMoreItems = computed(() => false)
+
     // --- Скролл и карусель ---
     const carouselRef = ref(null)
     const {
@@ -130,6 +133,23 @@ export default {
     } = useScrollCarusel({
       containerRef: carouselRef,
       items: selectPets,
+      hasMoreItems: hasMoreItems,
+    })
+
+    // ============================================================
+    //  3.4. ВЫЧИСЛЕНИЯ
+    // ============================================================
+
+    const carouselTotalSlides = computed(() => {
+      return selectPets.value.length + (hasMoreItems.value ? 1 : 0)
+    })
+
+    const isFirstSlide = computed(() => {
+      return currentIndex.value === 0
+    })
+
+    const isLastSlide = computed(() => {
+      return currentIndex.value >= carouselTotalSlides.value - 1
     })
 
     // ============================================================
@@ -248,6 +268,8 @@ export default {
       prevSlide,
       goToSlide,
       resetToFirstSlide,
+      isFirstSlide,
+      isLastSlide,
       
       // Свайп
       handleTouchStart,

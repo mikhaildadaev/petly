@@ -1,30 +1,32 @@
 <template>
   <div v-if="randomOrganizations.length > 0" class="cards-carousel">
-    <div class="carousel-wrapper">
-      <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
-      <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-        <div v-for="(organization, index) in randomOrganizations" :key="organization.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-          <a :href="`${baseUrl}${lang}/organizations/${organization.type}/${organization.uuid}`" class="aspect-list card">
-            <div class="meta">
-              <label v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</label>
-            </div>
-            <img :src="organization.imageVertical" loading="lazy" />
-            <div :class="['content', useRandomClass(organization.uuid)]">
-              <h1 class="title">{{ organization.nameDisplay }}</h1>
-              <p class="description">{{ organization.descriptionDisplay }}</p>
-            </div>
-          </a>
-        </div>
-        <div class="carousel-slide load-more-slide" :class="{ center: currentIndex === randomOrganizations.length }">
-          <div class="load-more" @click="goToLink">
-            <div class="content">
-              <div class="icon"></div>
-              <div class="text">{{ translate('ui', 'Перейти в раздел') }}</div>
+    <div class="carousel-container">
+      <div class="carousel-wrapper">
+        <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
+        <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
+          <div v-for="(organization, index) in randomOrganizations" :key="organization.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
+            <a :href="`${baseUrl}${lang}/organizations/${organization.type}/${organization.uuid}`" class="aspect-list card">
+              <div class="meta">
+                <label v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</label>
+              </div>
+              <img :src="organization.imageVertical" loading="lazy" />
+              <div :class="['content', useRandomClass(organization.uuid)]">
+                <h1 class="title">{{ organization.nameDisplay }}</h1>
+                <p class="description">{{ organization.descriptionDisplay }}</p>
+              </div>
+            </a>
+          </div>
+          <div class="carousel-slide load-more-slide" :class="{ center: currentIndex === randomOrganizations.length }">
+            <div class="load-more" @click="goToLink">
+              <div class="content">
+                <div class="icon"></div>
+                <div class="text">{{ translate('ui', 'Перейти в раздел') }}</div>
+              </div>
             </div>
           </div>
         </div>
+        <button class="carousel next" :class="{ none: isLastSlide }" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1"></button>
       </div>
-      <button class="carousel next" :class="{ none: isLastSlide }" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1"></button>
     </div>
   </div>
   <div v-else-if="randomOrganizations && randomOrganizations.length === 0" class="no-results">

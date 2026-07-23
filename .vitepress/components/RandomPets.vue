@@ -1,32 +1,34 @@
 <template>
   <div v-if="randomPets.length > 0" class="cards-carousel">
-    <div class="carousel-wrapper">
-      <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
-      <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-        <div v-for="(pet, index) in randomPets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-          <a :href="`${baseUrl}${lang}/pets/${pet.type}/${pet.uuid}`" class="aspect-list card">
-            <div class="meta">
-              <label v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</label>
-              <label v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</label>
-              <label v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</label>
-            </div>
-            <img :src="pet.imageVertical" loading="lazy" />
-            <div :class="['content', useRandomClass(pet.uuid)]">
-              <h1 class="title">{{ pet.nameDisplay }}</h1>
-              <p class="description">{{ pet.descriptionDisplay }}</p>
-            </div>
-          </a>
-        </div>
-        <div class="carousel-slide load-more-slide" :class="{ center: currentIndex === randomPets.length }">
-          <div class="load-more" @click="goToLink">
-            <div class="content">
-              <div class="icon"></div>
-              <div class="text">{{ translate('ui', 'Перейти в раздел') }}</div>
+    <div class="carousel-container">
+      <div class="carousel-wrapper">
+        <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
+        <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
+          <div v-for="(pet, index) in randomPets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
+            <a :href="`${baseUrl}${lang}/pets/${pet.type}/${pet.uuid}`" class="aspect-list card">
+              <div class="meta">
+                <label v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</label>
+                <label v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</label>
+                <label v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</label>
+              </div>
+              <img :src="pet.imageVertical" loading="lazy" />
+              <div :class="['content', useRandomClass(pet.uuid)]">
+                <h1 class="title">{{ pet.nameDisplay }}</h1>
+                <p class="description">{{ pet.descriptionDisplay }}</p>
+              </div>
+            </a>
+          </div>
+          <div class="carousel-slide load-more-slide" :class="{ center: currentIndex === randomPets.length }">
+            <div class="load-more" @click="goToLink">
+              <div class="content">
+                <div class="icon"></div>
+                <div class="text">{{ translate('ui', 'Перейти в раздел') }}</div>
+              </div>
             </div>
           </div>
         </div>
+        <button class="carousel next" :class="{ none: isLastSlide }" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1"></button>
       </div>
-      <button class="carousel next" :class="{ none: isLastSlide }" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1"></button>
     </div>
   </div>
   <div v-else-if="randomPets && randomPets.length === 0" class="no-results">
