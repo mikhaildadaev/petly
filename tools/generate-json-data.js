@@ -19,9 +19,7 @@ const contentTypes = [
     name: 'pets',
     subdir: 'pets',
     types: ['cats', 'dogs'],
-    // Какие поля брать из frontmatter
     fields: ['uuid', 'title', 'description', 'age', 'gender', 'size', 'imageHorizontal', 'imageVertical', 'shelters', 'volunteers', 'photos', 'videos', 'audios'],
-    // Преобразование полей
     transform: (data) => ({
       uuid: data.uuid,
       title: data.title || '',
