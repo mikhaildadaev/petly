@@ -157,11 +157,16 @@ export default {
       try {
         isLoading.value = true
         const response = await fetch(`${baseUrl}data/pets-${lang.value}-${props.type}.json`)
+        if (response.status === 404) {
+          randomPets.value = []
+          isLoading.value = false
+          return
+        }
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)
         }
         const petsData = await response.json()
-        const loaded = petsData.map(pet => ({
+        loaded = petsData.map(pet => ({
           uuid: pet.uuid,
           nameDisplay: pet.title || '',
           descriptionDisplay: pet.description || '',

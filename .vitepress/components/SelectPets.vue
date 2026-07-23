@@ -170,6 +170,11 @@ export default {
       try {
         isLoading.value = true
         const response = await fetch(`${baseUrl}data/pets-${lang.value}-${props.type}.json`)
+        if (response.status === 404) {
+          allPets.value = []
+          isLoading.value = false
+          return
+        }
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)
         }

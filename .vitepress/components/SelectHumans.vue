@@ -168,6 +168,11 @@ export default {
       try {
         isLoading.value = true
         const response = await fetch(`${baseUrl}data/humans-${lang.value}-${props.type}.json`)
+        if (response.status === 404) {
+          allHumans.value = []
+          isLoading.value = false
+          return
+        }
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)
         }

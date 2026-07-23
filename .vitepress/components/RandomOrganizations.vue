@@ -155,16 +155,21 @@ export default {
       try {
         isLoading.value = true
         const response = await fetch(`${baseUrl}data/organizations-${lang.value}-${props.type}.json`)
+        if (response.status === 404) {
+          randomOrganizations.value = []
+          isLoading.value = false
+          return
+        }
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)
         }
-        const orgsData = await response.json()
-        const loaded = orgsData.map(org => ({
-          uuid: org.uuid,
-          nameDisplay: org.title || '',
-          descriptionDisplay: org.description || '',
-          formatDisplay: org.format ? translate('format', org.format) : '',
-          imageVertical: useUrlMedia(org.imageVertical, 'image'),
+        const organizationsData = await response.json()
+        const loaded = organizationsData.map(organization => ({
+          uuid: organization.uuid,
+          nameDisplay: organization.title || '',
+          descriptionDisplay: organization.description || '',
+          formatDisplay: organization.format ? translate('format', organization.format) : '',
+          imageVertical: useUrlMedia(organization.imageVertical, 'image'),
           type: props.type,
         }))
         const shuffled = useRandomArray(loaded)
