@@ -4,7 +4,7 @@
       <label v-if="human.directionDisplay" class="tag direction-tag">{{ human.directionDisplay }}</label>
       <label v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</label>
     </div>
-    <img :src="human.image" class="hero-image" loading="lazy" />
+    <img :src="human.imageHorizontal" class="hero-image" loading="lazy" />
     <div :class="['hero-overlay', useRandomClass(human.uuid)]">
       <h1 class="title">{{ human.nameDisplay }}</h1>
       <p class="description">{{ human.descriptionDisplay }}</p>
@@ -86,7 +86,7 @@ export default {
         descriptionDisplay: data.description || '',
         directionDisplay: data.direction ? useDirection(lang.value, data.direction) : '',
         experienceDisplay: data.experience ? useExperience(lang.value, data.experience) : '',
-        image: useUrlMedia(data.image, 'image'),
+        imageHorizontal: useUrlMedia(data.imageHorizontal, 'image'),
         type: props.type,
       }
     })

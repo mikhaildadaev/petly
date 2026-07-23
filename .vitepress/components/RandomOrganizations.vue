@@ -8,7 +8,7 @@
             <div class="meta">
               <label v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</label>
             </div>
-            <img :src="organization.image" loading="lazy" />
+            <img :src="organization.imageVertical" loading="lazy" />
             <div :class="['content', useRandomClass(organization.uuid)]">
               <h1 class="title">{{ organization.nameDisplay }}</h1>
               <p class="description">{{ organization.descriptionDisplay }}</p>
@@ -173,7 +173,7 @@ export default {
               nameDisplay: fm.title || '',
               descriptionDisplay: fm.description || '',
               formatDisplay: fm.format ? translate('format', fm.format) : '',
-              image: useUrlMedia(fm.image, 'image'),
+              imageVertical: useUrlMedia(fm.imageVertical, 'image'),
               type: props.type,
             }
           })
@@ -221,7 +221,7 @@ export default {
               nameDisplay: fm.title || '',
               descriptionDisplay: fm.description || '',
               formatDisplay: fm.format ? translate('format', fm.format) : '',
-              image: useUrlMedia(fm.image, 'image'),
+              imageVertical: useUrlMedia(fm.imageVertical, 'image'),
               type: props.type,
             }
           })

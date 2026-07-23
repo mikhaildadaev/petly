@@ -3,7 +3,7 @@
     <div class="hero-meta">
       <label v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</label>
     </div>
-    <img :src="organization.image" class="hero-image" loading="lazy" />
+    <img :src="organization.imageHorizontal" class="hero-image" loading="lazy" />
     <div :class="['hero-overlay', useRandomClass(organization.uuid)]">
       <h1 class="title">{{ organization.nameDisplay }}</h1>
       <p class="description">{{ organization.descriptionDisplay }}</p>
@@ -84,7 +84,7 @@ export default {
         nameDisplay: data.title || '',
         descriptionDisplay: data.description || '',
         formatDisplay: data.format ? useTranslate(lang.value, 'format', data.format) : '',
-        image: useUrlMedia(data.image, 'image'),
+        imageHorizontal: useUrlMedia(data.imageHorizontal, 'image'),
         type: props.type,
       }
     })

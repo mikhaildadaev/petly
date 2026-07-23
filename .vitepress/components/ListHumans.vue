@@ -20,7 +20,7 @@
         <label v-if="human.directionDisplay" class="tag direction-tag">{{ human.directionDisplay }}</label>
         <label v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</label>
       </div>
-      <img :src="human.image" loading="lazy" />
+      <img :src="human.imageVertical" loading="lazy" />
       <div :class="['content', useRandomClass(human.uuid)]">
         <h1 class="title">{{ human.nameDisplay }}</h1>
         <p class="description">{{ human.descriptionDisplay }}</p>
@@ -47,7 +47,7 @@
               <label v-if="human.directionDisplay" class="tag direction-tag">{{ human.directionDisplay }}</label>
               <label v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</label>
             </div>
-            <img :src="human.image" loading="lazy" />
+            <img :src="human.imageVertical" loading="lazy" />
             <div :class="['content', useRandomClass(human.uuid)]">
               <h1 class="title">{{ human.nameDisplay }}</h1>
               <p class="description">{{ human.descriptionDisplay }}</p>
@@ -311,7 +311,7 @@ export default {
               experienceDisplay: useExperience(lang.value, fm.experience),
               direction: useDirection('ru', fm.direction),
               directionDisplay: useDirection(lang.value, fm.direction),
-              image: useUrlMedia(fm.image, 'image'),
+              imageVertical: useUrlMedia(fm.imageVertical, 'image'),
               type: props.type,
             }
           })

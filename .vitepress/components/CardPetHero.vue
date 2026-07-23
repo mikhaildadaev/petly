@@ -5,7 +5,7 @@
       <label v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</label>
       <label v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</label>
     </div>
-    <img :src="pet.image" class="hero-image" loading="lazy" />
+    <img :src="pet.imageHorizontal" class="hero-image" loading="lazy" />
     <div :class="['hero-overlay', useRandomClass(pet.uuid)]">
       <h1 class="title">{{ pet.nameDisplay }}</h1>
       <button v-if="pet.uuid" class="favorite" :class="{ 'is-favorite': isFavorite }" @click.stop="toggleFavorite(pet.uuid)" :title="translate('ui', 'Добавить в избранное')">
@@ -96,7 +96,7 @@ export default {
         ageDisplay: data.age ? useAge(lang.value, data.age) : '',
         size: data.size || '',
         sizeDisplay: data.size ? useTranslate(lang.value, 'size', data.size) : '',
-        image: useUrlMedia(data.image, 'image'),
+        imageHorizontal: useUrlMedia(data.imageHorizontal, 'image'),
         type: props.type,
       }
     })

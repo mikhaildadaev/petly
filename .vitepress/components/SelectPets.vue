@@ -7,7 +7,7 @@
           <label v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</label>
           <label v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</label>
         </div>
-        <img :src="pet.image" loading="lazy" />
+        <img :src="pet.imageVertical" loading="lazy" />
         <div :class="['content', useRandomClass(pet.uuid)]">
           <h1 class="title">{{ pet.nameDisplay }}</h1>
           <p class="description">{{ pet.descriptionDisplay }}</p>
@@ -25,7 +25,7 @@
                 <label v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</label>
                 <label v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</label>
               </div>
-              <img :src="pet.image" loading="lazy" />
+              <img :src="pet.imageVertical" loading="lazy" />
               <div :class="['content', useRandomClass(pet.uuid)]">
                 <h1 class="title">{{ pet.nameDisplay }}</h1>
                 <p class="description">{{ pet.descriptionDisplay }}</p>
@@ -182,7 +182,7 @@ export default {
               genderDisplay: useTranslate(lang.value, 'gender', fm.gender),
               ageDisplay: useAge(lang.value, fm.age),
               sizeDisplay: useTranslate(lang.value, 'size', fm.size),
-              image: useUrlMedia(fm.image, 'image'),
+              imageVertical: useUrlMedia(fm.imageVertical, 'image'),
               type: props.type,
             }
           })
