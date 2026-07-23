@@ -44,9 +44,15 @@
 // ============================================================
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useScrollGallery } from '../utils/useScrollGallery'
+import { useUrlMedia } from '../utils/useUrlMedia'
 
 // ============================================================
-//  2. КОМПОНЕНТ
+//  2. КОНСТАНТЫ
+// ============================================================
+const baseUrl = import.meta.env.BASE_URL
+
+// ============================================================
+//  3. КОМПОНЕНТ
 // ============================================================
 export default {
   name: 'GalleryMedia',
@@ -68,14 +74,14 @@ export default {
 
   setup(props) {
     // ============================================================
-    //  2.1. СОСТОЯНИЕ
+    //  3.1. СОСТОЯНИЕ
     // ============================================================
     const fullScreenOpen = ref(false)
     const fullScreenAudioRef = ref(null)
     const fullScreenVideoRef = ref(null)
 
     // ============================================================
-    //  2.2. МЕДИА
+    //  3.2. МЕДИА
     // ============================================================
     const mediaItems = ref([])
 
@@ -87,16 +93,16 @@ export default {
       const maxLength = Math.max( audios.length, photos.length, videos.length)
       
       for (let i = 0; i < maxLength; i++) {
-        if (i < photos.length) items.push({ type: 'image', src: photos[i] })
-        if (i < videos.length) items.push({ type: 'video', src: videos[i] })
-        if (i < audios.length) items.push({ type: 'audio', src: audios[i] })
+        if (i < photos.length) items.push({ type: 'image', src: useUrlMedia(photos[i], 'image') })
+        if (i < videos.length) items.push({ type: 'video', src: useUrlMedia(videos[i], 'video') })
+        if (i < audios.length) items.push({ type: 'audio', src: useUrlMedia(audios[i], 'audio') })
       }
       
       mediaItems.value = items
     }
 
     // ============================================================
-    //  2.3. КОМПОЗАБЛ ДЛЯ ГАЛЕРЕИ
+    //  3.3. КОМПОЗАБЛ ДЛЯ ГАЛЕРЕИ
     // ============================================================
 
     const {
@@ -114,7 +120,7 @@ export default {
     })
 
     // ============================================================
-    //  2.4. ВЫЧИСЛЯЕМЫЕ
+    //  3.4. ВЫЧИСЛЯЕМЫЕ
     // ============================================================
 
     const currentMedia = computed(() => {
@@ -129,7 +135,7 @@ export default {
     })
 
     // ============================================================
-    //  2.5. МЕТОДЫ
+    //  3.5. МЕТОДЫ
     // ============================================================
 
     const openFullScreen = (index) => {
@@ -187,7 +193,7 @@ export default {
     }
 
     // ============================================================
-    //  2.6. WATCHERS
+    //  3.6. WATCHERS
     // ============================================================
 
     watch(currentIndex, () => {
@@ -201,7 +207,7 @@ export default {
     })
 
     // ============================================================
-    //  2.7. ЖИЗНЕННЫЙ ЦИКЛ
+    //  3.7. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(() => {
@@ -220,9 +226,10 @@ export default {
     })
 
     // ============================================================
-    //  2.8. ВОЗВРАТ
+    //  3.8. ВОЗВРАТ
     // ============================================================
     return {
+      baseUrl,
       fullScreenOpen,
       currentIndex,
       fullScreenAudioRef,
