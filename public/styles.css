@@ -169,8 +169,8 @@ button.fullscreen {
   z-index: 10;
 }
 button.fullscreen.close {
-  top: 0;
-  right: calc(50% - 24px);
+  right: calc(50% - 16px);
+  bottom: 0;
   mask-image: url('/petly/assets/svg/close.svg');
   -webkit-mask-image: url('/petly/assets/svg/close.svg');
 }
@@ -380,18 +380,18 @@ p.withColor {
 .experience-tag,
 .format-tag  {
   background: #9422e6;
-  color: var(--vp-c-bg);
+  color: var(--vp-c-light);
   font-weight: 700;
 }
 .age-tag,
 .extra-tag  {
   background: #e67e22;
-  color: var(--vp-c-bg);
+  color: var(--vp-c-light);
   font-weight: 700;
 }
 .gender-tag {
   background: #e74c3c;
-  color: var(--vp-c-bg);
+  color: var(--vp-c-light);
   font-weight: 700;
 }
 .gender-tag[data-gender="Мальчик"] {
@@ -400,7 +400,7 @@ p.withColor {
 .direction-tag,
 .size-tag {
   background: #27ae60;
-  color: var(--vp-c-bg);
+  color: var(--vp-c-light);
   font-weight: 700;
 }
 
@@ -1365,29 +1365,10 @@ p.withColor {
   justify-content: center;
   animation: fadeIn 0.3s ease;
 }
-.slider-fullscreen .content {
-  max-width: calc(100% - 64px);
-  max-height: calc(100% - 64px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.slider-fullscreen .content img,
-.slider-fullscreen .content video {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  border-radius: 8px;
-  animation: zoomIn 0.3s ease;
-}
-.slider-fullscreen video {
-  width: 100%;
-  max-height: 85vh;
-}
 .slider-fullscreen .dots {
   position: absolute;
-  bottom: 0;
-  margin-bottom: 24px;
+  top: 0;
+  margin-top: 8px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -1413,6 +1394,25 @@ p.withColor {
   box-shadow: 0 0 16px rgba(230, 126, 34, 0.4);
   transform: scale(1);
   animation: dotPulse 2s ease-in-out infinite;
+}
+.slider-fullscreen .content {
+  max-width: calc(100% - 64px);
+  max-height: calc(100% - 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.slider-fullscreen .content img,
+.slider-fullscreen .content video {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  animation: zoomIn 0.3s ease;
+}
+.slider-fullscreen video {
+  width: 100%;
+  max-height: 85vh;
 }
 
 /* ============================================
