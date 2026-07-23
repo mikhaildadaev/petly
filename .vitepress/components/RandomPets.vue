@@ -153,104 +153,51 @@ export default {
       }, 100)
     }
 
-    // ============================================================
-    //  3.7. ЖИЗНЕННЫЙ ЦИКЛ
-    // ============================================================
-
-    onMounted(async () => {
+    const loadRandomPets = async () => {
       try {
-        let modules
-        switch (lang.value) {
-          case 'en':
-            modules = import.meta.glob('/en/pets/*/*.md')
-            break
-          case 'de':
-            modules = import.meta.glob('/de/pets/*/*.md')
-            break
-          default:
-            modules = import.meta.glob('/ru/pets/*/*.md')
+        isLoading.value = true
+        const response = await fetch(`${baseUrl}data/pets-${lang.value}-${props.type}.json`)
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
         }
-        const filteredModules = Object.entries(modules).filter(([path]) => {
-          return path.includes(`/${lang.value}/pets/${props.type}/`) && !path.endsWith(`${props.type}_index.md`)
-        })
-
-        const loaded = await Promise.all(
-          filteredModules.map(async ([path, loader]) => {
-            const mod = await loader()
-            const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || path.replace(`/${lang.value}/pets/${props.type}/`, '').replace('.md', '')
-
-            return {
-              uuid,
-              nameDisplay: fm.title || '',
-              descriptionDisplay: fm.description || '',
-              gender: useTranslate('ru', 'gender', fm.gender),
-              genderDisplay: useTranslate(lang.value, 'gender', fm.gender),
-              age: useAgePetCategory(fm.age),
-              ageDisplay: useAge(lang.value, fm.age),
-              sizeDisplay: useTranslate(lang.value, 'size', fm.size),
-              imageVertical: useUrlMedia(fm.imageVertical, 'image'),
-              type: props.type,
-            }
-          })
-        )
-
-        // Перемешиваем и берём нужное количество
+        const petsData = await response.json()
+        const loaded = petsData.map(pet => ({
+          uuid: pet.uuid,
+          nameDisplay: pet.title || '',
+          descriptionDisplay: pet.description || '',
+          gender: useTranslate('ru', 'gender', pet.gender),
+          genderDisplay: useTranslate(lang.value, 'gender', pet.gender),
+          age: useAgePetCategory(pet.age),
+          ageDisplay: useAge(lang.value, pet.age),
+          sizeDisplay: useTranslate(lang.value, 'size', pet.size),
+          imageVertical: useUrlMedia(pet.imageVertical, 'image'),
+          type: props.type,
+        }))
         const shuffled = useRandomArray(loaded)
         randomPets.value = shuffled.slice(0, props.count)
         currentIndex.value = 0
       } catch (error) {
         console.error('Ошибка загрузки данных:', error)
+        randomPets.value = []
       } finally {
         isLoading.value = false
       }
+    }
+
+    // ============================================================
+    //  3.7. ЖИЗНЕННЫЙ ЦИКЛ
+    // ============================================================
+
+    onMounted(async () => {
+      if (typeof window !== 'undefined') {
+        window.addEventListener('resize', handleResize)
+      }
+      await loadRandomPets()
     })
 
-    // --- Следим за изменением языка ---
+    // --- Watchers ---
     watch(lang, async () => {
-      try {
-        let modules
-        switch (lang.value) {
-          case 'en':
-            modules = import.meta.glob('/en/pets/*/*.md')
-            break
-          case 'de':
-            modules = import.meta.glob('/de/pets/*/*.md')
-            break
-          default:
-            modules = import.meta.glob('/ru/pets/*/*.md')
-        }
-        const filteredModules = Object.entries(modules).filter(([path]) => {
-          return path.includes(`/${lang.value}/pets/${props.type}/`) && !path.endsWith(`${props.type}_index.md`)
-        })
-
-        const loaded = await Promise.all(
-          filteredModules.map(async ([path, loader]) => {
-            const mod = await loader()
-            const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || path.replace(`/${lang.value}/pets/${props.type}/`, '').replace('.md', '')
-
-            return {
-              uuid,
-              nameDisplay: fm.title || '',
-              descriptionDisplay: fm.description || '',
-              gender: useTranslate('ru', 'gender', fm.gender),
-              genderDisplay: useTranslate(lang.value, 'gender', fm.gender),
-              age: useAgePetCategory(fm.age),
-              ageDisplay: useAge(lang.value, fm.age),
-              sizeDisplay: useTranslate(lang.value, 'size', fm.size),
-              imageVertical: useUrlMedia(fm.imageVertical, 'image'),
-              type: props.type,
-            }
-          })
-        )
-
-        const shuffled = useRandomArray(loaded)
-        randomPets.value = shuffled.slice(0, props.count)
-        currentIndex.value = 0
-      } catch (error) {
-        console.error('Ошибка загрузки данных при смене языка:', error)
-      }
+      await loadRandomPets()
     })
 
     // --- Unmount ---

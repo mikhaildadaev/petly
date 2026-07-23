@@ -151,98 +151,47 @@ export default {
       }, 100)
     }
 
+    const loadRandomOrganizations = async () => {
+      try {
+        isLoading.value = true
+        const response = await fetch(`${baseUrl}data/organizations-${lang.value}-${props.type}.json`)
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        const orgsData = await response.json()
+        const loaded = orgsData.map(org => ({
+          uuid: org.uuid,
+          nameDisplay: org.title || '',
+          descriptionDisplay: org.description || '',
+          formatDisplay: org.format ? translate('format', org.format) : '',
+          imageVertical: useUrlMedia(org.imageVertical, 'image'),
+          type: props.type,
+        }))
+        const shuffled = useRandomArray(loaded)
+        randomOrganizations.value = shuffled.slice(0, props.count)
+        currentIndex.value = 0
+      } catch (error) {
+        console.error('Ошибка загрузки данных:', error)
+        randomOrganizations.value = []
+      } finally {
+        isLoading.value = false
+      }
+    }
+
     // ============================================================
     //  3.7. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(async () => {
-      try {
-        let modules
-        switch (lang.value) {
-          case 'en':
-            modules = import.meta.glob('/en/organizations/*/*.md')
-            break
-          case 'de':
-            modules = import.meta.glob('/de/organizations/*/*.md')
-            break
-          default:
-            modules = import.meta.glob('/ru/organizations/*/*.md')
-        }
-        const filteredModules = Object.entries(modules).filter(([path]) => {
-          return path.includes(`/${lang.value}/organizations/${props.type}/`) && !path.endsWith(`${props.type}_index.md`)
-        })
-
-        const loaded = await Promise.all(
-          filteredModules.map(async ([path, loader]) => {
-            const mod = await loader()
-            const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || path.replace(`/${lang.value}/organizations/${props.type}/`, '').replace('.md', '')
-
-            return {
-              uuid,
-              nameDisplay: fm.title || '',
-              descriptionDisplay: fm.description || '',
-              formatDisplay: fm.format ? translate('format', fm.format) : '',
-              imageVertical: useUrlMedia(fm.imageVertical, 'image'),
-              type: props.type,
-            }
-          })
-        )
-
-        // Перемешиваем и берём нужное количество
-        const shuffled = useRandomArray(loaded)
-        randomOrganizations.value = shuffled.slice(0, props.count)
-
-        // Сбрасываем индекс после загрузки
-        currentIndex.value = 0
-      } catch (error) {
-        console.error('Ошибка загрузки данных:', error)
-      } finally {
-        isLoading.value = false
+      if (typeof window !== 'undefined') {
+        window.addEventListener('resize', handleResize)
       }
+      await loadRandomOrganizations()
     })
 
-    // --- Следим за изменением языка ---
+    // --- Watchers ---
     watch(lang, async () => {
-      try {
-        let modules
-        switch (lang.value) {
-          case 'en':
-            modules = import.meta.glob('/en/organizations/*/*.md')
-            break
-          case 'de':
-            modules = import.meta.glob('/de/organizations/*/*.md')
-            break
-          default:
-            modules = import.meta.glob('/ru/organizations/*/*.md')
-        }
-        const filteredModules = Object.entries(modules).filter(([path]) => {
-          return path.includes(`/${lang.value}/organizations/${props.type}/`) && !path.endsWith(`${props.type}_index.md`)
-        })
-
-        const loaded = await Promise.all(
-          filteredModules.map(async ([path, loader]) => {
-            const mod = await loader()
-            const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || path.replace(`/${lang.value}/organizations/${props.type}/`, '').replace('.md', '')
-
-            return {
-              uuid,
-              nameDisplay: fm.title || '',
-              descriptionDisplay: fm.description || '',
-              formatDisplay: fm.format ? translate('format', fm.format) : '',
-              imageVertical: useUrlMedia(fm.imageVertical, 'image'),
-              type: props.type,
-            }
-          })
-        )
-
-        const shuffled = useRandomArray(loaded)
-        randomOrganizations.value = shuffled.slice(0, props.count)
-        currentIndex.value = 0
-      } catch (error) {
-        console.error('Ошибка загрузки данных при смене языка:', error)
-      }
+      await loadRandomOrganizations()
     })
 
     // --- Unmount ---

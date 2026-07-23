@@ -152,100 +152,48 @@ export default {
       }, 100)
     }
 
+    const loadRandomHumans = async () => {
+      try {
+        isLoading.value = true
+        const response = await fetch(`${baseUrl}data/humans-${lang.value}-${props.type}.json`)
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        const humansData = await response.json()
+        const loaded = humansData.map(human => ({
+          uuid: human.uuid,
+          nameDisplay: human.title || '',
+          descriptionDisplay: human.description || '',
+          directionDisplay: useDirection(lang.value, human.direction),
+          experienceDisplay: useExperience(lang.value, human.experience),
+          imageVertical: useUrlMedia(human.imageVertical, 'image'),
+          type: props.type,
+        }))
+        const shuffled = useRandomArray(loaded)
+        randomHumans.value = shuffled.slice(0, props.count)
+        currentIndex.value = 0
+      } catch (error) {
+        console.error('Ошибка загрузки данных:', error)
+        randomHumans.value = []
+      } finally {
+        isLoading.value = false
+      }
+    }
+
     // ============================================================
     //  3.7. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(async () => {
-      try {
-        let modules
-        switch (lang.value) {
-          case 'en':
-            modules = import.meta.glob('/en/humans/*/*.md')
-            break
-          case 'de':
-            modules = import.meta.glob('/de/humans/*/*.md')
-            break
-          default:
-            modules = import.meta.glob('/ru/humans/*/*.md')
-        }
-        const filteredModules = Object.entries(modules).filter(([path]) => {
-          return path.includes(`/${lang.value}/humans/${props.type}/`) && !path.endsWith(`${props.type}_index.md`)
-        })
-
-        const loaded = await Promise.all(
-          filteredModules.map(async ([path, loader]) => {
-            const mod = await loader()
-            const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || path.replace(`/${lang.value}/humans/${props.type}/`, '').replace('.md', '')
-
-            return {
-              uuid,
-              nameDisplay: fm.title || '',
-              descriptionDisplay: fm.description || '',
-              directionDisplay: useDirection(lang.value, fm.direction),
-              experienceDisplay: useExperience(lang.value, fm.experience),
-              imageVertical: useUrlMedia(fm.imageVertical, 'image'),
-              type: props.type,
-            }
-          })
-        )
-
-        // Перемешиваем и берём нужное количество
-        const shuffled = useRandomArray(loaded)
-        randomHumans.value = shuffled.slice(0, props.count)
-
-        // Сбрасываем индекс после загрузки
-        currentIndex.value = 0
-      } catch (error) {
-        console.error('Ошибка загрузки данных:', error)
-      } finally {
-        isLoading.value = false
+      if (typeof window !== 'undefined') {
+        window.addEventListener('resize', handleResize)
       }
+      await loadRandomHumans()
     })
 
-    // --- Следим за изменением языка ---
+    // --- Watchers ---
     watch(lang, async () => {
-      try {
-        let modules
-        switch (lang.value) {
-          case 'en':
-            modules = import.meta.glob('/en/humans/*/*.md')
-            break
-          case 'de':
-            modules = import.meta.glob('/de/humans/*/*.md')
-            break
-          default:
-            modules = import.meta.glob('/ru/humans/*/*.md')
-        }
-        const filteredModules = Object.entries(modules).filter(([path]) => {
-          return path.includes(`/${lang.value}/humans/${props.type}/`) && !path.endsWith(`${props.type}_index.md`)
-        })
-
-        const loaded = await Promise.all(
-          filteredModules.map(async ([path, loader]) => {
-            const mod = await loader()
-            const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || path.replace(`/${lang.value}/humans/${props.type}/`, '').replace('.md', '')
-
-            return {
-              uuid,
-              nameDisplay: fm.title || '',
-              descriptionDisplay: fm.description || '',
-              directionDisplay: useDirection(lang.value, fm.direction),
-              experienceDisplay: useExperience(lang.value, fm.experience),
-              imageVertical: useUrlMedia(fm.imageVertical, 'image'),
-              type: props.type,
-            }
-          })
-        )
-
-        const shuffled = useRandomArray(loaded)
-        randomHumans.value = shuffled.slice(0, props.count)
-        currentIndex.value = 0
-      } catch (error) {
-        console.error('Ошибка загрузки данных при смене языка:', error)
-      }
+      await loadRandomHumans()
     })
 
     // --- Unmount ---
