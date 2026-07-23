@@ -47,6 +47,7 @@
 //  1. ИМПОРТЫ
 // ============================================================
 import { computed, ref, onMounted, onUnmounted, nextTick, inject, watch } from 'vue'
+import { useData } from 'vitepress'
 import { useRandomColor } from '../utils/useRandomColor'
 import { useScrollCarusel } from '../utils/useScrollCarusel'
 import { useTranslate, useAge, useAgePetCategory } from '../utils/useTranslate'
@@ -79,7 +80,7 @@ export default {
     // ============================================================
     //  3.1. ЯЗЫК И ПЕРЕВОДЫ
     // ============================================================
-    const lang = inject('lang', 'ru')
+    const { lang } = useData()
     const translate = (category, key) => useTranslate(lang.value, category, key)
 
     // ============================================================

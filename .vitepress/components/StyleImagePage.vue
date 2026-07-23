@@ -6,6 +6,7 @@
 
 <script>
 import { computed } from 'vue'
+import { useData } from 'vitepress'
 import { useUrlMedia } from '../utils/useUrlMedia'
 
 const baseUrl = import.meta.env.BASE_URL

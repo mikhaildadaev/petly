@@ -43,6 +43,7 @@
 //  1. ИМПОРТЫ
 // ============================================================
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
+import { useData } from 'vitepress'
 import { useScrollGallery } from '../utils/useScrollGallery'
 import { useUrlMedia } from '../utils/useUrlMedia'
 
