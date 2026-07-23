@@ -1,7 +1,7 @@
 <template>
   <div v-if="randomOrganizations.length > 0" class="cards-carousel">
     <div class="carousel-wrapper">
-      <button class="carousel prev" @click="prevSlide" :disabled="currentIndex === 0"></button>
+      <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
       <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
         <div v-for="(organization, index) in randomOrganizations" :key="organization.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
           <a :href="`${baseUrl}${lang}/organizations/${organization.type}/${organization.uuid}`" class="aspect-list card">
@@ -24,7 +24,7 @@
           </div>
         </div>
       </div>
-      <button class="carousel next" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1"></button>
+      <button class="carousel next" :class="{ none: isLastSlide }" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1"></button>
     </div>
   </div>
   <div v-else-if="randomOrganizations && randomOrganizations.length === 0" class="no-results">
@@ -79,15 +79,6 @@ export default {
     const isLoading = ref(true)
 
     // ============================================================
-    //  3.3. ВЫЧИСЛЯЕМЫЕ
-    // ============================================================
-
-    const linkUrl = computed(() => {
-      const langPath = lang.value || 'ru'
-      return `${baseUrl}${langPath}/organizations/${props.type}`
-    })
-
-    // ============================================================
     //  3.3. ПОДКЛЮЧЕНИЕ КОМПОЗАБЛОВ
     // ============================================================
 
@@ -114,8 +105,25 @@ export default {
       hasMoreItems: hasMoreItems,
     })
 
+    // ============================================================
+    //  3.4. ВЫЧИСЛЯЕМЫЕ
+    // ============================================================
+
     const carouselTotalSlides = computed(() => {
       return randomOrganizations.value.length + (hasMoreItems.value ? 1 : 0)
+    })
+
+    const isFirstSlide = computed(() => {
+      return currentIndex.value === 0
+    })
+
+    const isLastSlide = computed(() => {
+      return currentIndex.value >= carouselTotalSlides.value - 1
+    })
+
+    const linkUrl = computed(() => {
+      const langPath = lang.value || 'ru'
+      return `${baseUrl}${langPath}/organizations/${props.type}`
     })
 
     // ============================================================
@@ -267,6 +275,8 @@ export default {
       nextSlide,
       prevSlide,
       goToSlide,
+      isFirstSlide,
+      isLastSlide,
       
       // Свайп
       handleTouchStart,

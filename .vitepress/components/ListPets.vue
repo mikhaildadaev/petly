@@ -46,7 +46,7 @@
   </div>
   <div v-else class="cards-carousel">
     <div class="carousel-wrapper">
-      <button class="carousel prev" @click="prevSlide" :disabled="currentIndex === 0"></button>
+      <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
       <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
         <div v-for="(pet, index) in paginatedPets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }" >
           <a :href="`${baseUrl}${lang}/pets/${type}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list card">
@@ -75,7 +75,7 @@
           </div>
         </div>
       </div> 
-      <button class="carousel next" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1"></button>
+      <button class="carousel next" :class="{ none: isLastSlide }" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1"></button>
     </div>
   </div>
   <div v-if="filteredPets.length === 0 && !isLoading" class="no-results">
@@ -216,6 +216,14 @@ export default {
 
     const carouselTotalSlides = computed(() => {
       return paginatedPets.value.length + (hasMoreItems.value ? 1 : 0)
+    })
+
+    const isFirstSlide = computed(() => {
+      return currentIndex.value === 0
+    })
+
+    const isLastSlide = computed(() => {
+      return currentIndex.value >= carouselTotalSlides.value - 1
     })
 
     // ============================================================
@@ -421,6 +429,8 @@ export default {
       prevSlide,
       goToSlide,
       resetToFirstSlide,
+      isFirstSlide,
+      isLastSlide,
 
       // Свайп
       handleTouchStart,
