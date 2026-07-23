@@ -96,3 +96,6 @@ go.work.sum
 
 # Cloudinary specific
 **/.cloudinary/environments.json
+
+# Platform specific
+public/data/
