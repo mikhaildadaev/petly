@@ -19,7 +19,7 @@ const contentTypes = [
     name: 'pets',
     subdir: 'pets',
     types: ['cats', 'dogs'],
-    fields: ['uuid', 'title', 'description', 'age', 'gender', 'size', 'imageHorizontal', 'imageVertical', 'shelters', 'volunteers', 'photos', 'videos', 'audios'],
+    fields: ['uuid', 'title', 'description', 'age', 'gender', 'size', 'imageVertical'],
     transform: (data) => ({
       uuid: data.uuid,
       title: data.title || '',
@@ -27,56 +27,80 @@ const contentTypes = [
       age: data.age || '',
       gender: data.gender || '',
       size: data.size || '',
-      imageHorizontal: data.imageHorizontal || '',
       imageVertical: data.imageVertical || '',
-      shelters: data.shelters || [],
-      volunteers: data.volunteers || [],
-      photos: data.photos || [],
-      videos: data.videos || [],
-      audios: data.audios || [],
     })
   },
   {
     name: 'humans',
     subdir: 'humans',
     types: ['volunteers', 'staff'],
-    fields: ['uuid', 'title', 'description', 'direction', 'experience', 'imageHorizontal', 'imageVertical', 'shelters'],
+    fields: ['uuid', 'title', 'description', 'direction', 'experience', 'imageVertical'],
     transform: (data) => ({
       uuid: data.uuid,
       title: data.title || '',
       description: data.description || '',
       direction: data.direction || '',
       experience: data.experience || '',
-      imageHorizontal: data.imageHorizontal || '',
       imageVertical: data.imageVertical || '',
-      shelters: data.shelters || [],
     })
   },
   {
     name: 'organizations',
     subdir: 'organizations',
     types: ['shelters'],
-    fields: ['uuid', 'title', 'description', 'format', 'address', 'mode', 'telephone', 'imageHorizontal', 'imageVertical', 'photos', 'videos', 'audios', 'repositories'],
+    fields: ['uuid', 'title', 'description', 'format', 'imageVertical'],
     transform: (data) => ({
       uuid: data.uuid,
       title: data.title || '',
       description: data.description || '',
       format: data.format || '',
-      address: data.address || '',
-      mode: data.mode || '',
-      telephone: data.telephone || '',
-      imageHorizontal: data.imageHorizontal || '',
       imageVertical: data.imageVertical || '',
-      photos: data.photos || [],
-      videos: data.videos || [],
-      audios: data.audios || [],
-      repositories: data.repositories || [],
     })
   }
 ];
 
 // ============================================================
-//  3. ФУНКЦИЯ ДЛЯ ЧТЕНИЯ ФАЙЛОВ
+//  3. УНИВЕРСАЛЬНАЯ ФУНКЦИЯ ДЛЯ ПАРСИНГА ДАННЫХ
+// ============================================================
+
+function extractData(frontmatter) {
+  // Парсим фильтры (если они в виде массива)
+  const filter = frontmatter.filter || []
+  const ageObj = filter.find(f => f.age)
+  const genderObj = filter.find(f => f.gender)
+  const sizeObj = filter.find(f => f.size)
+  const directionObj = filter.find(f => f.direction)
+  const experienceObj = filter.find(f => f.experience)
+  const formatObj = filter.find(f => f.format)
+  
+  // Парсим изображения (если они в виде массива)
+  const images = frontmatter.image || []
+  const verticalImg = images.find(img => img.vertical)
+  const horizontalImg = images.find(img => img.horizontal)
+  
+  // Возвращаем плоский объект с данными
+  // Если поле не найдено в новом формате, берём его как есть (для обратной совместимости)
+  return {
+    uuid: frontmatter.uuid,
+    title: frontmatter.title || '',
+    description: frontmatter.description || '',
+    // Поля для pets
+    age: ageObj?.age || frontmatter.age || '',
+    gender: genderObj?.gender || frontmatter.gender || '',
+    size: sizeObj?.size || frontmatter.size || '',
+    // Поля для humans
+    direction: directionObj?.direction || frontmatter.direction || '',
+    experience: experienceObj?.experience || frontmatter.experience || '',
+    // Поля для organizations
+    format: formatObj?.format || frontmatter.format || '',
+    // Изображения
+    imageVertical: verticalImg?.vertical || frontmatter.imageVertical || '',
+    imageHorizontal: horizontalImg?.horizontal || frontmatter.imageHorizontal || '',
+  }
+}
+
+// ============================================================
+//  4. ФУНКЦИЯ ДЛЯ ЧТЕНИЯ ФАЙЛОВ
 // ============================================================
 
 function getItemsFromDir(dir, transformFn) {
@@ -104,8 +128,8 @@ function getItemsFromDir(dir, transformFn) {
           console.log(`⚠️ Пропущен файл без uuid: ${fullPath}`);
           continue;
         }
-
-        items.push(transformFn(frontmatter));
+        const flatData = extractData(frontmatter);
+        items.push(transformFn(flatData));
       } catch (error) {
         console.error(`❌ Ошибка чтения файла ${fullPath}:`, error.message);
       }
@@ -116,7 +140,7 @@ function getItemsFromDir(dir, transformFn) {
 }
 
 // ============================================================
-//  4. ФУНКЦИЯ ДЛЯ ГЕНЕРАЦИИ JSON
+//  5. ФУНКЦИЯ ДЛЯ ГЕНЕРАЦИИ JSON
 // ============================================================
 
 function generateJson(lang, contentType, type) {
@@ -134,7 +158,6 @@ function generateJson(lang, contentType, type) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
 
-  // Имя файла: data-pets-ru-dogs.json, data-humans-ru-volunteers.json и т.д.
   const fileName = `${contentType.name}-${lang}-${type}.json`;
   const outputPath = path.join(outputDir, fileName);
 
@@ -143,7 +166,7 @@ function generateJson(lang, contentType, type) {
 }
 
 // ============================================================
-//  5. ГЛАВНАЯ ФУНКЦИЯ
+//  6. ГЛАВНАЯ ФУНКЦИЯ
 // ============================================================
 
 function generateAll() {
@@ -166,7 +189,7 @@ function generateAll() {
 }
 
 // ============================================================
-//  6. ЗАПУСК
+//  7. ЗАПУСК
 // ============================================================
 
 try {
