@@ -1,6 +1,5 @@
 import DefaultTheme from 'vitepress/theme'
 import { provide } from 'vue'
-import { useLang } from '../utils/useLang'
 
 import CardHumanHero from '../components/CardHumanHero.vue'
 import CardOrganizationHero from '../components/CardOrganizationHero.vue'
@@ -37,10 +36,4 @@ export default {
     app.component('StyleBlockPage', StyleBlockPage)
     app.component('StyleImagePage', StyleImagePage)
   },
-
-  setup() {
-    const { lang } = useLang()
-    provide('lang', lang)
-    return { lang }
-  }
 }
