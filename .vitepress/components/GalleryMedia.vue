@@ -20,9 +20,9 @@
       </div>
     </div>
     <div v-if="fullScreenOpen" class="slider-fullscreen" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-      <button class="fullscreen close" @click.stop="closeFullScreen"></button>
-      <button v-if="mediaItems.length > 1" class="fullscreen prev" @click.stop="prevMedia"></button>
-      <button v-if="mediaItems.length > 1" class="fullscreen next" @click.stop="nextMedia"></button>
+      <div class="dots">
+        <span v-for="(_, index) in mediaItems" :key="index" class="dot" :class="{ active: index === currentIndex }" @click.stop="goToMedia(index)" />
+      </div>
       <div class="content">
         <!-- Фотографии -->
         <img v-if="currentMedia.type === 'image'" :src="currentMedia.src" />
@@ -31,9 +31,9 @@
         <!-- Аудиозаписи -->
         <audio v-else-if="currentMedia.type === 'audio'" :src="currentMedia.src" controls class="audio" ref="fullScreenAudioRef"/>
       </div>
-      <div class="dots">
-        <span v-for="(_, index) in mediaItems" :key="index" class="dot" :class="{ active: index === currentIndex }" @click.stop="goToMedia(index)" />
-      </div>
+      <button class="fullscreen close" @click.stop="closeFullScreen"></button>
+      <button v-if="mediaItems.length > 1" class="fullscreen prev" @click.stop="prevMedia"></button>
+      <button v-if="mediaItems.length > 1" class="fullscreen next" @click.stop="nextMedia"></button>
     </div>
   </div>
 </template>
