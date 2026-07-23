@@ -166,73 +166,50 @@ export default {
       }, 100)
     }
 
+    const loadSelectPets = async () => {
+      try {
+        isLoading.value = true
+        const response = await fetch(`${baseUrl}data/pets-${lang.value}-${props.type}.json`)
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        const petsData = await response.json()
+        allPets.value = petsData.map(pet => ({
+          uuid: pet.uuid,
+          nameDisplay: pet.title || '',
+          descriptionDisplay: pet.description || '',
+          gender: useTranslate('ru', 'gender', pet.gender),
+          genderDisplay: useTranslate(lang.value, 'gender', pet.gender),
+          age: useAgePetCategory(pet.age),
+          ageDisplay: useAge(lang.value, pet.age),
+          sizeDisplay: useTranslate(lang.value, 'size', pet.size),
+          imageVertical: useUrlMedia(pet.imageVertical, 'image'),
+          type: props.type,
+        }))
+      } catch (error) {
+        console.error('Ошибка загрузки данных:', error)
+        allPets.value = []
+      } finally {
+        isLoading.value = false
+      }
+    }
+
     // ============================================================
     //  3.6. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
-    // --- Загрузка данных ---
-    const loadData = async () => {
-      try {
-        let modules
-        switch (lang.value) {
-          case 'en':
-            modules = import.meta.glob('/en/pets/*/*.md')
-            break
-          case 'de':
-            modules = import.meta.glob('/de/pets/*/*.md')
-            break
-          default:
-            modules = import.meta.glob('/ru/pets/*/*.md')
-        }
-        const filteredModules = Object.entries(modules).filter(([path]) => {
-          return path.includes(`/${lang.value}/pets/${props.type}/`) && !path.endsWith(`${props.type}_index.md`)
-        })
-
-        const loaded = await Promise.all(
-          filteredModules.map(async ([path, loader]) => {
-            const mod = await loader()
-            const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || path.replace(`/${lang.value}/pets/${props.type}/`, '').replace('.md', '')
-
-            return {
-              uuid: uuid,
-              nameDisplay: fm.title || '',
-              descriptionDisplay: fm.description || '',
-              gender: useTranslate('ru', 'gender', fm.gender),
-              genderDisplay: useTranslate(lang.value, 'gender', fm.gender),
-              ageDisplay: useAge(lang.value, fm.age),
-              sizeDisplay: useTranslate(lang.value, 'size', fm.size),
-              imageVertical: useUrlMedia(fm.imageVertical, 'image'),
-              type: props.type,
-            }
-          })
-        )
-
-        allPets.value = loaded
-      } catch (error) {
-        console.error('Ошибка загрузки данных:', error)
-      }
-    }
-
-    // --- Монтирование ---
     onMounted(async () => {
       isClient.value = true
-
       if (typeof window !== 'undefined') {
         window.addEventListener('resize', handleResize)
       }
-
-      isLoading.value = true
-      await loadData()
-      isLoading.value = false
+      await loadSelectPets()
     })
 
-    // --- Следим за изменением языка ---
+    // --- Watchers ---
     watch(lang, async () => {
-      isLoading.value = true
-      await loadData()
+      await loadSelectPets()
       resetToFirstSlide()
-      isLoading.value = false
     })
 
     // --- Unmount ---

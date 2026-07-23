@@ -162,70 +162,46 @@ export default {
       }, 100)
     }
 
+    const loadSelectOrganizations = async () => {
+      try {
+        isLoading.value = true
+        const response = await fetch(`${baseUrl}data/organizations-${lang.value}-${props.type}.json`)
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        const orgsData = await response.json()
+        allOrganizations.value = orgsData.map(org => ({
+          uuid: org.uuid,
+          nameDisplay: org.title || '',
+          descriptionDisplay: org.description || '',
+          formatDisplay: org.format ? translate('format', org.format) : '',
+          imageVertical: useUrlMedia(org.imageVertical, 'image'),
+          type: props.type,
+        }))
+      } catch (error) {
+        console.error('Ошибка загрузки данных:', error)
+        allOrganizations.value = []
+      } finally {
+        isLoading.value = false
+      }
+    }
+
     // ============================================================
     //  3.6. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
-    // --- Загрузка данных ---
-    const loadData = async () => {
-      try {
-        let modules
-        switch (lang.value) {
-          case 'en':
-            modules = import.meta.glob('/en/organizations/*/*.md')
-            break
-          case 'de':
-            modules = import.meta.glob('/de/organizations/*/*.md')
-            break
-          default:
-            modules = import.meta.glob('/ru/organizations/*/*.md')
-        }
-        const filteredModules = Object.entries(modules).filter(([path]) => {
-          return path.includes(`/${lang.value}/organizations/${props.type}/`) && !path.endsWith(`${props.type}_index.md`)
-        })
-
-        const loaded = await Promise.all(
-          filteredModules.map(async ([path, loader]) => {
-            const mod = await loader()
-            const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || path.replace(`/${lang.value}/organizations/${props.type}/`, '').replace('.md', '')
-
-            return {
-              uuid: uuid,
-              nameDisplay: fm.title || '',
-              descriptionDisplay: fm.description || '',
-              formatDisplay: fm.format ? translate('format', fm.format) : '',
-              imageVertical: useUrlMedia(fm.imageVertical, 'image'),
-              type: props.type,
-            }
-          })
-        )
-
-        allOrganizations.value = loaded
-      } catch (error) {
-        console.error('Ошибка загрузки данных:', error)
-      }
-    }
-
-    // --- Монтирование ---
     onMounted(async () => {
       isClient.value = true
-
       if (typeof window !== 'undefined') {
         window.addEventListener('resize', handleResize)
       }
-
-      isLoading.value = true
-      await loadData()
-      isLoading.value = false
+      await loadSelectOrganizations()
     })
 
-    // --- Следим за изменением языка ---
+    // --- Watchers ---
     watch(lang, async () => {
-      isLoading.value = true
-      await loadData()
+      await loadSelectOrganizations()
       resetToFirstSlide()
-      isLoading.value = false
     })
 
     // --- Unmount ---

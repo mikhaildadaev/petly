@@ -160,76 +160,51 @@ export default {
         clearTimeout(resizeTimeout)
       }
       resizeTimeout = setTimeout(() => {
-        // checkMobile уже есть в useScrollCarusel
         resizeTimeout = null
       }, 100)
+    }
+
+    const loadSelectHumans = async () => {
+      try {
+        isLoading.value = true
+        const response = await fetch(`${baseUrl}data/humans-${lang.value}-${props.type}.json`)
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        const humansData = await response.json()
+        allHumans.value = humansData.map(human => ({
+          uuid: human.uuid,
+          nameDisplay: human.title || '',
+          descriptionDisplay: human.description || '',
+          experienceDisplay: useExperience(lang.value, human.experience),
+          directionDisplay: useDirection(lang.value, human.direction),
+          imageVertical: useUrlMedia(human.imageVertical, 'image'),
+          type: props.type,
+        }))
+      } catch (error) {
+        console.error('Ошибка загрузки данных:', error)
+        allHumans.value = []
+      } finally {
+        isLoading.value = false
+      }
     }
 
     // ============================================================
     //  3.6. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
-    // --- Загрузка данных ---
-    const loadData = async () => {
-      try {
-        let modules
-        switch (lang.value) {
-          case 'en':
-            modules = import.meta.glob('/en/humans/*/*.md')
-            break
-          case 'de':
-            modules = import.meta.glob('/de/humans/*/*.md')
-            break
-          default:
-            modules = import.meta.glob('/ru/humans/*/*.md')
-        }
-        const filteredModules = Object.entries(modules).filter(([path]) => {
-          return path.includes(`/${lang.value}/humans/${props.type}/`) && !path.endsWith(`${props.type}_index.md`)
-        })
-
-        const loaded = await Promise.all(
-          filteredModules.map(async ([path, loader]) => {
-            const mod = await loader()
-            const fm = mod.default?.frontmatter || mod.frontmatter || mod.__pageData?.frontmatter || {}
-            const uuid = fm.uuid || path.replace(`/${lang.value}/humans/${props.type}/`, '').replace('.md', '')
-
-            return {
-              uuid: uuid,
-              nameDisplay: fm.title || '',
-              descriptionDisplay: fm.description || '',
-              experienceDisplay: useExperience(lang.value, fm.experience),
-              directionDisplay: useDirection(lang.value, fm.direction),
-              imageVertical: useUrlMedia(fm.imageVertical, 'image'),
-              type: props.type,
-            }
-          })
-        )
-
-        allHumans.value = loaded
-      } catch (error) {
-        console.error('Ошибка загрузки данных:', error)
-      }
-    }
-
-    // --- Монтирование ---
     onMounted(async () => {
       isClient.value = true
-
       if (typeof window !== 'undefined') {
         window.addEventListener('resize', handleResize)
       }
-
-      isLoading.value = true
-      await loadData()
-      isLoading.value = false
+      await loadSelectHumans()
     })
 
-    // --- Следим за изменением языка ---
+    // --- Watchers ---
     watch(lang, async () => {
-      isLoading.value = true
-      await loadData()
+      await loadSelectHumans()
       resetToFirstSlide()
-      isLoading.value = false
     })
 
     // --- Unmount ---
