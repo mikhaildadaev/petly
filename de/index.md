@@ -37,3 +37,7 @@ features:
 ## Freiwillige
 
 <RandomOrganizations type="volunteers" :count="8"/>
+
+## Tierheime
+
+<RandomOrganizations type="shelters" :count="8"/

@@ -37,3 +37,7 @@ features:
 ## Volunteers
 
 <RandomOrganizations type="volunteers" :count="8"/>
+
+## Shelters
+
+<RandomOrganizations type="shelters" :count="8"/>
