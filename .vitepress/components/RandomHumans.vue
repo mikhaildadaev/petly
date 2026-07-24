@@ -180,8 +180,6 @@ export default {
           descriptionDisplay: human.description || '',
           directionDisplay: useDirection(lang.value, human.direction),
           experienceDisplay: useExperience(lang.value, human.experience),
-          covenantID: human.covenantID || '',
-          covenantType: human.covenantType || '',
           imageHorizontal: useUrlMedia(human.imageHorizontal, 'image'),
           imageVertical: useUrlMedia(human.imageVertical, 'image'),
           type: props.type,

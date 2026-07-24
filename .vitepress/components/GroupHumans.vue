@@ -5,7 +5,7 @@
         <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(human, index) in paginatedHumans" :key="human.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="`${baseUrl}${lang}/humans/${type}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list card">
+            <a :href="getHumanLink(human)" target="_blank" rel="noopener noreferrer" class="aspect-list card">
               <div class="meta">
                 <label v-if="human.directionDisplay" class="tag direction-tag">{{ human.directionDisplay }}</label>
                 <label v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</label>
@@ -153,6 +153,10 @@ export default {
     //  3.6. ВЫЧИСЛЕНИЯ ДЛЯ КАРУСЕЛИ
     // ============================================================
 
+    const getHumanLink = (human) => {
+      return human.covenantID ? `${baseUrl}${lang.value}/humans/${human.covenantID}/${props.type}/${human.uuid}` : `${baseUrl}${lang.value}/humans/${props.type}/${human.uuid}`
+    }
+
     const carouselTotalSlides = computed(() => {
       return paginatedHumans.value.length + (hasMoreItems.value ? 1 : 0)
     })
@@ -293,7 +297,7 @@ export default {
       // Прочее
       type: props.type,
       useRandomClass,
-      baseUrl,
+      getHumanLink,
     }
   },
 }

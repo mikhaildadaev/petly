@@ -5,7 +5,7 @@
         <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(pet, index) in paginatedPets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="`${baseUrl}${lang}/pets/${type}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list card">
+            <a :href="getPetLink(pet)" target="_blank" rel="noopener noreferrer" class="aspect-list card">
               <div class="meta">
                 <label v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</label>
                 <label v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</label>
@@ -155,6 +155,10 @@ export default {
     //  3.6. ВЫЧИСЛЕНИЯ ДЛЯ КАРУСЕЛИ
     // ============================================================
 
+    const getPetLink = (pet) => {
+      return pet.covenantID ? `${baseUrl}${lang.value}/pets/${pet.covenantID}/${props.type}/${pet.uuid}` : `${baseUrl}${lang.value}/pets/${props.type}/${pet.uuid}`
+    }
+
     const carouselTotalSlides = computed(() => {
       return paginatedPets.value.length + (hasMoreItems.value ? 1 : 0)
     })
@@ -207,6 +211,8 @@ export default {
           age: useAgePetCategory(pet.age),
           ageDisplay: useAge(lang.value, pet.age),
           sizeDisplay: useTranslate(lang.value, 'size', pet.size),
+          covenantID: pet.covenantID || '',
+          covenantType: pet.covenantType || '',
           imageVertical: useUrlMedia(pet.imageVertical, 'image'),
           shelters: pet.shelters || [],
           type: props.type,
@@ -297,7 +303,7 @@ export default {
       // Прочее
       type: props.type,
       useRandomClass,
-      baseUrl,
+      getPetLink,
     }
   },
 }

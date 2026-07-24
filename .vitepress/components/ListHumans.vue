@@ -313,8 +313,6 @@ export default {
           experienceDisplay: useExperience(lang.value, human.experience),
           direction: useDirection('ru', human.direction),
           directionDisplay: useDirection(lang.value, human.direction),
-          covenantID: human.covenantID || '',
-          covenantType: human.covenantType || '',
           imageHorizontal: useUrlMedia(human.imageHorizontal, 'image'),
           imageVertical: useUrlMedia(human.imageVertical, 'image'),
           type: props.type,

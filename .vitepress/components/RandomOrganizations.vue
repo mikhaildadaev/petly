@@ -178,6 +178,7 @@ export default {
           nameDisplay: organization.title || '',
           descriptionDisplay: organization.description || '',
           formatDisplay: organization.format ? translate('format', organization.format) : '',
+          imageHorizontal: useUrlMedia(organization.imageVertical, 'image'),
           imageVertical: useUrlMedia(organization.imageVertical, 'image'),
           type: props.type,
         }))
