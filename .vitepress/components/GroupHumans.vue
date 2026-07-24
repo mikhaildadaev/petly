@@ -216,7 +216,7 @@ export default {
           directionDisplay: useDirection(lang.value, human.direction),
           experienceDisplay: useExperience(lang.value, human.experience),
           covenantID: human.covenantID || '',
-          imageHorizontal: useUrlMedia(pet.imageHorizontal, 'image'),
+          imageHorizontal: useUrlMedia(human.imageHorizontal, 'image'),
           imageVertical: useUrlMedia(human.imageVertical, 'image'),
           shelters: human.shelters || [],
           type: props.type,
