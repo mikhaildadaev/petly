@@ -16,6 +16,34 @@ const outputDir = './public/data';
 
 const contentTypes = [
   {
+    name: 'humans',
+    subdir: 'humans',
+    types: ['volunteers'],
+    fields: ['uuid', 'title', 'description', 'direction', 'experience', 'imageVertical', 'shelters'],
+    transform: (data) => ({
+      uuid: data.uuid,
+      title: data.title || '',
+      description: data.description || '',
+      direction: data.direction || '',
+      experience: data.experience || '',
+      imageVertical: data.imageVertical || '',
+      shelters: data.shelters || [],
+    })
+  },
+  {
+    name: 'organizations',
+    subdir: 'organizations',
+    types: ['shelters'],
+    fields: ['uuid', 'title', 'description', 'format', 'imageVertical'],
+    transform: (data) => ({
+      uuid: data.uuid,
+      title: data.title || '',
+      description: data.description || '',
+      format: data.format || '',
+      imageVertical: data.imageVertical || '',
+    })
+  },
+  {
     name: 'pets',
     subdir: 'pets',
     types: ['cats', 'dogs'],
@@ -32,36 +60,6 @@ const contentTypes = [
       imageVertical: data.imageVertical || '',
       shelters: data.shelters || [],
       volunteers: data.volunteers || [],
-    })
-  },
-  {
-    name: 'humans',
-    subdir: 'humans',
-    types: ['volunteers'],
-    fields: ['uuid', 'title', 'description', 'direction', 'experience', 'covenantID', 'covenantType', 'imageVertical', 'shelters'],
-    transform: (data) => ({
-      uuid: data.uuid,
-      title: data.title || '',
-      description: data.description || '',
-      direction: data.direction || '',
-      experience: data.experience || '',
-      covenantID: data.covenantID || '',
-      covenantType: data.covenantType || '',
-      imageVertical: data.imageVertical || '',
-      shelters: data.shelters || [],
-    })
-  },
-  {
-    name: 'organizations',
-    subdir: 'organizations',
-    types: ['shelters'],
-    fields: ['uuid', 'title', 'description', 'format', 'imageVertical'],
-    transform: (data) => ({
-      uuid: data.uuid,
-      title: data.title || '',
-      description: data.description || '',
-      format: data.format || '',
-      imageVertical: data.imageVertical || '',
     })
   }
 ];
@@ -116,17 +114,13 @@ function extractData(frontmatter) {
 
 function getItemsFromDir(dir, transformFn) {
   const items = [];
-  
   if (!fs.existsSync(dir)) {
     console.log(`⚠️ Папка не найдена: ${dir}`);
     return items;
   }
-
   const entries = fs.readdirSync(dir, { withFileTypes: true });
-
   for (const entry of entries) {
     const fullPath = path.join(dir, entry.name);
-
     if (entry.isDirectory()) {
       const subItems = getItemsFromDir(fullPath, transformFn);
       items.push(...subItems);
@@ -134,7 +128,6 @@ function getItemsFromDir(dir, transformFn) {
       try {
         const content = fs.readFileSync(fullPath, 'utf-8');
         const { data: frontmatter } = matter(content);
-
         if (!frontmatter.uuid) {
           console.log(`⚠️ Пропущен файл без uuid: ${fullPath}`);
           continue;
@@ -146,7 +139,6 @@ function getItemsFromDir(dir, transformFn) {
       }
     }
   }
-
   return items;
 }
 
@@ -156,57 +148,49 @@ function getItemsFromDir(dir, transformFn) {
 
 function getAllItems(lang, contentType, type) {
   const items = [];
-  
-  // 1. Данные проекта
-  const myDir = path.join(rootDir, lang, contentType.subdir, type);
-  if (fs.existsSync(myDir)) {
-    console.log(`📂 Твои данные: ${myDir}`);
-    const myItems = getItemsFromDir(myDir, contentType.transform);
-    items.push(...myItems);
+  const langDir = path.join(rootDir, lang);
+  let baseDir;
+  switch (contentType.name) {
+    case 'humans':
+      baseDir = path.join(langDir, 'humans');
+      break;
+    case 'organizations':
+      baseDir = path.join(langDir, 'organizations');
+      break;
+    case 'pets':
+      baseDir = path.join(langDir, 'pets');
+      break;
+    default:
+      console.log(`⚠️ Неизвестный тип контента: ${contentType.name}`);
+      return items;
   }
-  
-  // 2. Данные волонтеров (сабмодули в humans)
-  const volunteersDir = path.join(rootDir, lang, 'humans');
-  if (fs.existsSync(volunteersDir)) {
-    const volunteers = fs.readdirSync(volunteersDir, { withFileTypes: true })
-      .filter(entry => entry.isDirectory());
-    
-    for (const volunteer of volunteers) {
-      const volunteerDir = path.join(volunteersDir, volunteer.name, contentType.subdir, type);
-      if (fs.existsSync(volunteerDir)) {
-        console.log(`📂 Волонтер ${volunteer.name}: ${volunteerDir}`);
-        const volunteerItems = getItemsFromDir(volunteerDir, contentType.transform);
-        const itemsWithVolunteer = volunteerItems.map(item => ({
-          ...item,
-          covenantID: volunteer.name,
-          covenantType: 'humans',
-        }));
-        items.push(...itemsWithVolunteer);
+  if (!fs.existsSync(baseDir)) {
+    console.log(`⚠️ Папка не найдена: ${baseDir}`);
+    return items;
+  }
+  function walkDir(dir, depth = 0) {
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        if (entry.name === type) {
+          const dirItems = getItemsFromDir(fullPath, contentType.transform);
+          const parentName = path.basename(dir);
+          const isSystem = parentName === 'humans' || parentName === 'organizations' || parentName === 'pets';
+          const itemsWithMeta = dirItems.map(item => ({
+            ...item,
+            addedBy: isSystem ? 'system' : parentName,
+            covenantType: isSystem ? 'owner' : 'volunteer',
+            ...(isSystem ? {} : { covenantID: parentName }),
+          }));
+          items.push(...itemsWithMeta);
+        } else {
+          walkDir(fullPath, depth + 1);
+        }
       }
     }
   }
-
-  // 2. Данные приютов (сабмодули в organizations)
-  const sheltersDir = path.join(rootDir, lang, 'organizations');
-  if (fs.existsSync(sheltersDir)) {
-    const shelters = fs.readdirSync(sheltersDir, { withFileTypes: true })
-      .filter(entry => entry.isDirectory());
-    
-    for (const shelter of shelters) {
-      const shelterDir = path.join(sheltersDir, shelter.name, contentType.subdir, type);
-      if (fs.existsSync(shelterDir)) {
-        console.log(`📂 Приют ${shelter.name}: ${shelterDir}`);
-        const shelterItems = getItemsFromDir(shelterDir, contentType.transform);
-        const itemsWithShelter = shelterItems.map(item => ({
-          ...item,
-          covenantID: shelter.name,
-          covenantType: 'organizations',
-        }));
-        items.push(...itemsWithShelter);
-      }
-    }
-  }
-  
+  walkDir(baseDir);
   return items;
 }
 
@@ -215,18 +199,15 @@ function getAllItems(lang, contentType, type) {
 // ============================================================
 
 function generateJson(lang, contentType, type) {
-  console.log(`📂 Обработка: ${lang}/${contentType.name}/${type}`);
   const items = getAllItems(lang, contentType, type);
   if (items.length === 0) {
-    console.log(`⚠️ Нет данных для ${lang}/${contentType.name}/${type}, создаём пустой JSON`);
-    // Создание пустого JSON
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
     }
     const fileName = `${contentType.name}-${lang}-${type}.json`;
     const outputPath = path.join(outputDir, fileName);
     fs.writeFileSync(outputPath, JSON.stringify([], null, 2));
-    console.log(`✅ Создан пустой JSON: ${outputPath}`);
+    console.log(`Сгенерирован: ${outputPath} (0 записей)`);
     return;
   }
   // Сортировка по UUIDv7 (по убыванию)
@@ -241,7 +222,7 @@ function generateJson(lang, contentType, type) {
   const fileName = `${contentType.name}-${lang}-${type}.json`;
   const outputPath = path.join(outputDir, fileName);
   fs.writeFileSync(outputPath, JSON.stringify(items, null, 2));
-  console.log(`✅ Сохранено: ${outputPath} (${items.length} записей)`);
+  console.log(`Сгенерирован: ${outputPath} (${items.length} записей)`);
 }
 
 // ============================================================
@@ -249,11 +230,8 @@ function generateJson(lang, contentType, type) {
 // ============================================================
 
 function generateAll() {
-  console.log('🚀 Начинаем генерацию JSON файлов...');
-  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
-
+  console.log('Генерацию JSON файлов...');
   let totalFiles = 0;
-
   for (const lang of languages) {
     for (const contentType of contentTypes) {
       for (const type of contentType.types) {
@@ -262,9 +240,7 @@ function generateAll() {
       }
     }
   }
-
-  console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-  console.log(`✅ Генерация завершена! Создано ${totalFiles} JSON файлов.`);
+  console.log(`✅ Сгенерировано ${totalFiles} JSON файлов.`);
 }
 
 // ============================================================
