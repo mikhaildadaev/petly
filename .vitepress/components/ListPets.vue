@@ -211,13 +211,22 @@ export default {
       paginatedItems: paginatedPets,
       remaining,
       hasMoreItems,
-      loadMore,
+      loadMore: originalLoadMore,
       isLoadingMore,
       resetPagination,
       visibleCount,
     } = usePagination(filteredPets, {
       perPage: 8,
     })
+
+    const loadMore = async () => {
+      const currentPosition = currentIndex.value
+      await originalLoadMore()
+      await nextTick()
+      if (paginatedPets.value.length > 0) {
+        goToSlide(currentPosition)
+      }
+    }
 
     const carouselTotalSlides = computed(() => {
       return paginatedPets.value.length + (hasMoreItems.value ? 1 : 0)

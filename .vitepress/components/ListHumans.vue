@@ -198,20 +198,33 @@ export default {
     })
 
     // ============================================================
-    //  3.5. ПАГИНАЦИЯ
+    //  3.4. ПАГИНАЦИЯ
     // ============================================================
 
     const {
       paginatedItems: paginatedHumans,
       remaining,
       hasMoreItems,
-      loadMore,
+      loadMore: originalLoadMore,
       isLoadingMore,
       resetPagination,
       visibleCount,
     } = usePagination(filteredHumans, {
       perPage: 8,
     })
+
+    const loadMore = async () => {
+      const currentPosition = currentIndex.value
+      await originalLoadMore()
+      await nextTick()
+      if (paginatedPets.value.length > 0) {
+        goToSlide(currentPosition)
+      }
+    }
+
+    // ============================================================
+    //  3.5. ВЫЧИСЛЯЕМЫЕ
+    // ============================================================
 
     const carouselTotalSlides = computed(() => {
       return paginatedHumans.value.length + (hasMoreItems.value ? 1 : 0)

@@ -111,13 +111,22 @@ export default {
       paginatedItems: paginatedHumans,
       remaining,
       hasMoreItems,
-      loadMore,
+      loadMore: originalLoadMore,
       isLoadingMore,
       resetPagination,
       visibleCount,
     } = usePagination(groupHumans, {
       perPage: 8,
     })
+
+    const loadMore = async () => {
+      const currentPosition = currentIndex.value
+      await originalLoadMore()
+      await nextTick()
+      if (paginatedPets.value.length > 0) {
+        goToSlide(currentPosition)
+      }
+    }
 
     // ============================================================
     //  3.5. ПОДКЛЮЧЕНИЕ КОМПОЗАБЛОВ
