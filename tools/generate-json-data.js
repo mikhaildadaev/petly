@@ -19,7 +19,7 @@ const contentTypes = [
     name: 'pets',
     subdir: 'pets',
     types: ['cats', 'dogs'],
-    fields: ['uuid', 'title', 'description', 'age', 'gender', 'size', 'imageVertical'],
+    fields: ['uuid', 'title', 'description', 'age', 'gender', 'size', 'imageVertical', 'shelters'],
     transform: (data) => ({
       uuid: data.uuid,
       title: data.title || '',
@@ -28,13 +28,14 @@ const contentTypes = [
       gender: data.gender || '',
       size: data.size || '',
       imageVertical: data.imageVertical || '',
+      shelters: data.shelters || [],
     })
   },
   {
     name: 'humans',
     subdir: 'humans',
     types: ['volunteers', 'staff'],
-    fields: ['uuid', 'title', 'description', 'direction', 'experience', 'imageVertical'],
+    fields: ['uuid', 'title', 'description', 'direction', 'experience', 'imageVertical', 'shelters'],
     transform: (data) => ({
       uuid: data.uuid,
       title: data.title || '',
@@ -42,6 +43,7 @@ const contentTypes = [
       direction: data.direction || '',
       experience: data.experience || '',
       imageVertical: data.imageVertical || '',
+      shelters: data.shelters || [],
     })
   },
   {
@@ -79,7 +81,6 @@ function extractData(frontmatter) {
   const horizontalImg = images.find(img => img.horizontal)
   
   // Возвращаем плоский объект с данными
-  // Если поле не найдено в новом формате, берём его как есть (для обратной совместимости)
   return {
     uuid: frontmatter.uuid,
     title: frontmatter.title || '',
@@ -96,6 +97,8 @@ function extractData(frontmatter) {
     // Изображения
     imageVertical: verticalImg?.vertical || frontmatter.imageVertical || '',
     imageHorizontal: horizontalImg?.horizontal || frontmatter.imageHorizontal || '',
+    // Группировка по shelters
+    shelters: frontmatter.shelters || [],
   }
 }
 
