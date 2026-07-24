@@ -179,8 +179,6 @@ export default {
           descriptionDisplay: human.description || '',
           experienceDisplay: useExperience(lang.value, human.experience),
           directionDisplay: useDirection(lang.value, human.direction),
-          covenantID: human.covenantID || '',
-          covenantType: human.covenantType || '',
           imageHorizontal: useUrlMedia(human.imageHorizontal, 'image'),
           imageVertical: useUrlMedia(human.imageVertical, 'image'),
           shelters: human.shelters || [],

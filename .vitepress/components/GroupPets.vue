@@ -215,6 +215,7 @@ export default {
           covenantType: pet.covenantType || '',
           imageVertical: useUrlMedia(pet.imageVertical, 'image'),
           shelters: pet.shelters || [],
+          volunteers: pet.volunteers || [],
           type: props.type,
         }))
         resetPagination()
