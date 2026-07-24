@@ -47,7 +47,7 @@ const contentTypes = [
     name: 'pets',
     subdir: 'pets',
     types: ['cats', 'dogs'],
-    fields: ['uuid', 'title', 'description', 'age', 'gender', 'size', 'imageVertical', 'covenantID', 'covenantType', 'shelters', 'volunteers'],
+    fields: ['uuid', 'title', 'description', 'age', 'gender', 'size', 'imageVertical', 'covenantID', 'shelters', 'volunteers'],
     transform: (data) => ({
       uuid: data.uuid,
       title: data.title || '',
@@ -56,7 +56,6 @@ const contentTypes = [
       gender: data.gender || '',
       size: data.size || '',
       covenantID: data.covenantID || '',
-      covenantType: data.covenantType || '',
       imageVertical: data.imageVertical || '',
       shelters: data.shelters || [],
       volunteers: data.volunteers || [],
@@ -98,7 +97,6 @@ function extractData(frontmatter) {
     format: formatObj?.format || frontmatter.format || '',
     // Завет
     covenantID: frontmatter.covenantID || '',
-    covenantType: frontmatter.covenantType || '',
     // Изображения
     imageVertical: verticalImg?.vertical || frontmatter.imageVertical || '',
     imageHorizontal: horizontalImg?.horizontal || frontmatter.imageHorizontal || '',
@@ -179,9 +177,7 @@ function getAllItems(lang, contentType, type) {
           const isSystem = parentName === 'humans' || parentName === 'organizations' || parentName === 'pets';
           const itemsWithMeta = dirItems.map(item => ({
             ...item,
-            addedBy: isSystem ? 'system' : parentName,
-            covenantType: isSystem ? 'owner' : 'volunteer',
-            ...(isSystem ? {} : { covenantID: parentName }),
+            covenantID: isSystem ? '' : parentName,
           }));
           items.push(...itemsWithMeta);
         } else {
