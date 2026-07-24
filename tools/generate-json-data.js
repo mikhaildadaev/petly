@@ -11,7 +11,7 @@ const rootDir = './';
 const outputDir = './public/data';
 
 // ============================================================
-//  2. КОНФИГУРАЦИЯ ТИПОВ КОНТЕНТА
+//  2. КОНФИГУРАЦИЯ
 // ============================================================
 
 const contentTypes = [
@@ -19,7 +19,7 @@ const contentTypes = [
     name: 'pets',
     subdir: 'pets',
     types: ['cats', 'dogs'],
-    fields: ['uuid', 'title', 'description', 'age', 'gender', 'size', 'imageVertical', 'shelters'],
+    fields: ['uuid', 'title', 'description', 'age', 'gender', 'size', 'imageVertical', 'covenantID', 'covenantType', 'shelters', 'volunteers'],
     transform: (data) => ({
       uuid: data.uuid,
       title: data.title || '',
@@ -27,21 +27,26 @@ const contentTypes = [
       age: data.age || '',
       gender: data.gender || '',
       size: data.size || '',
+      covenantID: data.covenantID || '',
+      covenantType: data.covenantType || '',
       imageVertical: data.imageVertical || '',
       shelters: data.shelters || [],
+      volunteers: data.volunteers || [],
     })
   },
   {
     name: 'humans',
     subdir: 'humans',
-    types: ['volunteers', 'staff'],
-    fields: ['uuid', 'title', 'description', 'direction', 'experience', 'imageVertical', 'shelters'],
+    types: ['volunteers'],
+    fields: ['uuid', 'title', 'description', 'direction', 'experience', 'covenantID', 'covenantType', 'imageVertical', 'shelters'],
     transform: (data) => ({
       uuid: data.uuid,
       title: data.title || '',
       description: data.description || '',
       direction: data.direction || '',
       experience: data.experience || '',
+      covenantID: data.covenantID || '',
+      covenantType: data.covenantType || '',
       imageVertical: data.imageVertical || '',
       shelters: data.shelters || [],
     })
@@ -62,11 +67,11 @@ const contentTypes = [
 ];
 
 // ============================================================
-//  3. УНИВЕРСАЛЬНАЯ ФУНКЦИЯ ДЛЯ ПАРСИНГА ДАННЫХ
+//  3. ПАРСИНГ ДАННЫХ
 // ============================================================
 
 function extractData(frontmatter) {
-  // Парсим фильтры (если они в виде массива)
+  // Фильтры
   const filter = frontmatter.filter || []
   const ageObj = filter.find(f => f.age)
   const genderObj = filter.find(f => f.gender)
@@ -75,12 +80,11 @@ function extractData(frontmatter) {
   const experienceObj = filter.find(f => f.experience)
   const formatObj = filter.find(f => f.format)
   
-  // Парсим изображения (если они в виде массива)
+  // Изображения
   const images = frontmatter.image || []
   const verticalImg = images.find(img => img.vertical)
   const horizontalImg = images.find(img => img.horizontal)
   
-  // Возвращаем плоский объект с данными
   return {
     uuid: frontmatter.uuid,
     title: frontmatter.title || '',
@@ -94,16 +98,20 @@ function extractData(frontmatter) {
     experience: experienceObj?.experience || frontmatter.experience || '',
     // Поля для organizations
     format: formatObj?.format || frontmatter.format || '',
+    // Завет
+    covenantID: frontmatter.covenantID || '',
+    covenantType: frontmatter.covenantType || '',
     // Изображения
     imageVertical: verticalImg?.vertical || frontmatter.imageVertical || '',
     imageHorizontal: horizontalImg?.horizontal || frontmatter.imageHorizontal || '',
-    // Группировка по shelters
+    // Группировка
     shelters: frontmatter.shelters || [],
+    volunteers: frontmatter.volunteers || [],
   }
 }
 
 // ============================================================
-//  4. ФУНКЦИЯ ДЛЯ ЧТЕНИЯ ФАЙЛОВ
+//  4. ЧТЕНИЯ ФАЙЛОВ ИЗ ПАПКИ
 // ============================================================
 
 function getItemsFromDir(dir, transformFn) {
@@ -143,19 +151,88 @@ function getItemsFromDir(dir, transformFn) {
 }
 
 // ============================================================
-//  5. ФУНКЦИЯ ДЛЯ ГЕНЕРАЦИИ JSON
+//  5. СБОР ДАННЫХ
+// ============================================================
+
+function getAllItems(lang, contentType, type) {
+  const items = [];
+  
+  // 1. Данные проекта
+  const myDir = path.join(rootDir, lang, contentType.subdir, type);
+  if (fs.existsSync(myDir)) {
+    console.log(`📂 Твои данные: ${myDir}`);
+    const myItems = getItemsFromDir(myDir, contentType.transform);
+    items.push(...myItems);
+  }
+  
+  // 2. Данные волонтеров (сабмодули в humans)
+  const volunteersDir = path.join(rootDir, lang, 'humans');
+  if (fs.existsSync(volunteersDir)) {
+    const volunteers = fs.readdirSync(volunteersDir, { withFileTypes: true })
+      .filter(entry => entry.isDirectory());
+    
+    for (const volunteer of volunteers) {
+      const volunteerDir = path.join(volunteersDir, volunteer.name, contentType.subdir, type);
+      if (fs.existsSync(volunteerDir)) {
+        console.log(`📂 Волонтер ${volunteer.name}: ${volunteerDir}`);
+        const volunteerItems = getItemsFromDir(volunteerDir, contentType.transform);
+        const itemsWithVolunteer = volunteerItems.map(item => ({
+          ...item,
+          covenantID: volunteer.name,
+          covenantType: 'humans',
+          volunteers: [...(item.shelters || []), volunteer.name],
+        }));
+        items.push(...itemsWithVolunteer);
+      }
+    }
+  }
+
+  // 2. Данные приютов (сабмодули в organizations)
+  const sheltersDir = path.join(rootDir, lang, 'organizations');
+  if (fs.existsSync(sheltersDir)) {
+    const shelters = fs.readdirSync(sheltersDir, { withFileTypes: true })
+      .filter(entry => entry.isDirectory());
+    
+    for (const shelter of shelters) {
+      const shelterDir = path.join(sheltersDir, shelter.name, contentType.subdir, type);
+      if (fs.existsSync(shelterDir)) {
+        console.log(`📂 Приют ${shelter.name}: ${shelterDir}`);
+        const shelterItems = getItemsFromDir(shelterDir, contentType.transform);
+        const itemsWithShelter = shelterItems.map(item => ({
+          ...item,
+          covenantID: shelter.name,
+          covenantType: 'organizations',
+          shelters: [...(item.shelters || []), shelter.name],
+        }));
+        items.push(...itemsWithShelter);
+      }
+    }
+  }
+  
+  return items;
+}
+
+// ============================================================
+//  6. ГЕНЕРАЦИИ JSON
 // ============================================================
 
 function generateJson(lang, contentType, type) {
-  const dir = path.join(rootDir, lang, contentType.subdir, type);
-  console.log(`📂 Обработка: ${lang}/${contentType.name}/${type} → ${dir}`);
+  console.log(`📂 Обработка: ${lang}/${contentType.name}/${type}`);
 
-  const items = getItemsFromDir(dir, contentType.transform);
+  const items = getAllItems(lang, contentType, type);
   
   if (items.length === 0) {
-    console.log(`⚠️ Нет данных для ${lang}/${contentType.name}/${type}`);
-    return;
+  console.log(`⚠️ Нет данных для ${lang}/${contentType.name}/${type}, создаём пустой JSON`);
+  // Создаём пустой JSON
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
   }
+  const fileName = `${contentType.name}-${lang}-${type}.json`;
+  const outputPath = path.join(outputDir, fileName);
+  fs.writeFileSync(outputPath, JSON.stringify([], null, 2));
+  console.log(`✅ Создан пустой JSON: ${outputPath}`);
+  return;
+}
 
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
@@ -169,7 +246,7 @@ function generateJson(lang, contentType, type) {
 }
 
 // ============================================================
-//  6. ГЛАВНАЯ ФУНКЦИЯ
+//  7. ГЛАВНАЯ ФУНКЦИЯ
 // ============================================================
 
 function generateAll() {
@@ -192,7 +269,7 @@ function generateAll() {
 }
 
 // ============================================================
-//  7. ЗАПУСК
+//  8. ЗАПУСК
 // ============================================================
 
 try {
