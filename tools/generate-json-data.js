@@ -216,29 +216,30 @@ function getAllItems(lang, contentType, type) {
 
 function generateJson(lang, contentType, type) {
   console.log(`📂 Обработка: ${lang}/${contentType.name}/${type}`);
-
   const items = getAllItems(lang, contentType, type);
-  
   if (items.length === 0) {
-  console.log(`⚠️ Нет данных для ${lang}/${contentType.name}/${type}, создаём пустой JSON`);
-  // Создаём пустой JSON
+    console.log(`⚠️ Нет данных для ${lang}/${contentType.name}/${type}, создаём пустой JSON`);
+    // Создание пустого JSON
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
+    const fileName = `${contentType.name}-${lang}-${type}.json`;
+    const outputPath = path.join(outputDir, fileName);
+    fs.writeFileSync(outputPath, JSON.stringify([], null, 2));
+    console.log(`✅ Создан пустой JSON: ${outputPath}`);
+    return;
+  }
+  // Сортировка по UUIDv7 (по убыванию)
+  items.sort((a, b) => {
+    if (a.uuid > b.uuid) return -1;
+    if (a.uuid < b.uuid) return 1;
+    return 0;
+  });
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
   const fileName = `${contentType.name}-${lang}-${type}.json`;
   const outputPath = path.join(outputDir, fileName);
-  fs.writeFileSync(outputPath, JSON.stringify([], null, 2));
-  console.log(`✅ Создан пустой JSON: ${outputPath}`);
-  return;
-}
-
-  if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir, { recursive: true });
-  }
-
-  const fileName = `${contentType.name}-${lang}-${type}.json`;
-  const outputPath = path.join(outputDir, fileName);
-
   fs.writeFileSync(outputPath, JSON.stringify(items, null, 2));
   console.log(`✅ Сохранено: ${outputPath} (${items.length} записей)`);
 }
