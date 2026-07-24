@@ -180,7 +180,6 @@ function getAllItems(lang, contentType, type) {
           ...item,
           covenantID: volunteer.name,
           covenantType: 'humans',
-          volunteers: [...(item.shelters || []), volunteer.name],
         }));
         items.push(...itemsWithVolunteer);
       }
@@ -202,7 +201,6 @@ function getAllItems(lang, contentType, type) {
           ...item,
           covenantID: shelter.name,
           covenantType: 'organizations',
-          shelters: [...(item.shelters || []), shelter.name],
         }));
         items.push(...itemsWithShelter);
       }
