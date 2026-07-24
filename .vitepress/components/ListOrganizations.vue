@@ -271,6 +271,7 @@ export default {
           descriptionDisplay: organization.description || '',
           format: organization.format || '',
           formatDisplay: organization.format ? translate('format', organization.format) : '',
+          covenantID: organization.covenantID || '',
           imageHorizontal: useUrlMedia(organization.imageHorizontal, 'image'),
           imageVertical: useUrlMedia(organization.imageVertical, 'image'),
           type: props.type,

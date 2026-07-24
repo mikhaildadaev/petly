@@ -177,6 +177,7 @@ export default {
           nameDisplay: organization.title || '',
           descriptionDisplay: organization.description || '',
           formatDisplay: organization.format ? translate('format', organization.format) : '',
+          covenantID: organization.covenantID || '',
           imageHorizontal: useUrlMedia(organization.imageHorizontal, 'image'),
           imageVertical: useUrlMedia(organization.imageVertical, 'image'),
           type: props.type,
@@ -233,6 +234,7 @@ export default {
       // Карусель
       carouselRef,
       currentIndex,
+      carouselTotalSlides,
       scrollToSlide,
       nextSlide,
       prevSlide,
@@ -251,7 +253,6 @@ export default {
       touchEndY,
       
       // Прочее
-      type: props.type,
       useRandomClass,
       getOrganizationLink,
     }

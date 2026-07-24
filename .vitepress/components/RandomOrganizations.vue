@@ -80,6 +80,7 @@ export default {
     // ============================================================
     const randomOrganizations = ref([])
     const isLoading = ref(true)
+    const isClient = ref(false)
 
     // ============================================================
     //  3.3. ПОДКЛЮЧЕНИЕ КОМПОЗАБЛОВ
@@ -88,20 +89,26 @@ export default {
     // --- Рандомные цвета ---
     const { useRandomClass } = useRandomColor()
 
-    // --- Дополнительный слайд "Перейти в раздел" ---
+    // --- Дополнительный слайд ---
     const hasMoreItems = computed(() => randomOrganizations.value.length > 0)
 
     // --- Скролл и карусель ---
     const carouselRef = ref(null)
     const {
+      isMobile,
       currentIndex,
       scrollToSlide,
       nextSlide,
       prevSlide,
       goToSlide,
+      resetToFirstSlide,
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
+      touchStartX,
+      touchStartY,
+      touchEndX,
+      touchEndY,
     } = useScrollCarusel({
       containerRef: carouselRef,
       items: randomOrganizations,
@@ -109,8 +116,12 @@ export default {
     })
 
     // ============================================================
-    //  3.4. ВЫЧИСЛЯЕМЫЕ
+    //  3.4. ВЫЧИСЛЕНИЯ
     // ============================================================
+    
+    const goToLink = () => {
+      window.location.href = `${baseUrl}${lang.value}/organizations/${props.type}`
+    }
 
     const getOrganizationLink = (organization) => {
       return organization.covenantID ? `${baseUrl}${lang.value}/organizations/${organization.covenantID}${props.type}/${organization.uuid}` : `${baseUrl}${lang.value}/organizations/${props.type}/${organization.uuid}`
@@ -128,22 +139,8 @@ export default {
       return currentIndex.value >= carouselTotalSlides.value - 1
     })
 
-    const linkUrl = computed(() => {
-      const langPath = lang.value || 'ru'
-      return `${baseUrl}${langPath}/organizations/${props.type}`
-    })
-
     // ============================================================
-    //  3.5. МЕТОДЫ
-    // ============================================================
-
-    // --- Переход на страницу всех организаций ---
-    const goToLink = () => {
-      window.location.href = linkUrl.value
-    }
-
-    // ============================================================
-    //  3.6. RESIZE
+    //  3.5. RESIZE
     // ============================================================
     let resizeTimeout = null
 
@@ -157,7 +154,7 @@ export default {
     }
 
     // ============================================================
-    //  3.7. ЗАГРУЗКА ДАННЫХ
+    //  3.6. ЗАГРУЗКА ДАННЫХ
     // ============================================================
 
     const loadRandomOrganizations = async () => {
@@ -178,7 +175,8 @@ export default {
           nameDisplay: organization.title || '',
           descriptionDisplay: organization.description || '',
           formatDisplay: organization.format ? translate('format', organization.format) : '',
-          imageHorizontal: useUrlMedia(organization.imageVertical, 'image'),
+          covenantID: organization.covenantID || '',
+          imageHorizontal: useUrlMedia(organization.imageHorizontal, 'image'),
           imageVertical: useUrlMedia(organization.imageVertical, 'image'),
           type: props.type,
         }))
@@ -194,10 +192,11 @@ export default {
     }
 
     // ============================================================
-    //  3.8. ЖИЗНЕННЫЙ ЦИКЛ
+    //  3.7. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(async () => {
+      isClient.value = true
       if (typeof window !== 'undefined') {
         window.addEventListener('resize', handleResize)
       }
@@ -230,6 +229,7 @@ export default {
 
       // Состояние
       isLoading,
+      isMobile,
       
       // Карусель
       carouselRef,
@@ -239,6 +239,7 @@ export default {
       nextSlide,
       prevSlide,
       goToSlide,
+      resetToFirstSlide,
       isFirstSlide,
       isLastSlide,
       
@@ -246,13 +247,15 @@ export default {
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
+      touchStartX,
+      touchStartY,
+      touchEndX,
+      touchEndY,
       
       // Прочее
-      baseUrl,
-      linkUrl,
-      goToLink,
       useRandomClass,
       getOrganizationLink,
+      goToLink,
     }
   },
 }

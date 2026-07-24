@@ -184,7 +184,6 @@ export default {
           ageDisplay: useAge(lang.value, pet.age),
           sizeDisplay: useTranslate(lang.value, 'size', pet.size),
           covenantID: pet.covenantID || '',
-          covenantType: pet.covenantType || '',
           imageHorizontal: useUrlMedia(pet.imageHorizontal, 'image'),
           imageVertical: useUrlMedia(pet.imageVertical, 'image'),
           shelters: pet.shelters || [],
@@ -226,7 +225,7 @@ export default {
     })
 
     // ============================================================
-    //  3.7. ВОЗВРАТ
+    //  3.8. ВОЗВРАТ
     // ============================================================
     return {
       // Данные
@@ -243,6 +242,7 @@ export default {
       // Карусель
       carouselRef,
       currentIndex,
+      carouselTotalSlides,
       scrollToSlide,
       nextSlide,
       prevSlide,
@@ -261,7 +261,6 @@ export default {
       touchEndY,
       
       // Прочее
-      type: props.type,
       useRandomClass,
       getPetLink,
     }

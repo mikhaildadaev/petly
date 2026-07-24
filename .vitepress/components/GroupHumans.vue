@@ -206,6 +206,8 @@ export default {
           descriptionDisplay: human.description || '',
           directionDisplay: useDirection(lang.value, human.direction),
           experienceDisplay: useExperience(lang.value, human.experience),
+          covenantID: human.covenantID || '',
+          imageHorizontal: useUrlMedia(pet.imageHorizontal, 'image'),
           imageVertical: useUrlMedia(human.imageVertical, 'image'),
           shelters: human.shelters || [],
           type: props.type,
@@ -295,7 +297,6 @@ export default {
       touchEndY,
       
       // Прочее
-      type: props.type,
       useRandomClass,
       getHumanLink,
     }

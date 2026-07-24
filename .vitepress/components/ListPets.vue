@@ -323,7 +323,6 @@ export default {
           size: pet.size || '',
           sizeDisplay: useTranslate(lang.value, 'size', pet.size),
           covenantID: pet.covenantID || '',
-          covenantType: pet.covenantType || '',
           imageHorizontal: useUrlMedia(pet.imageHorizontal, 'image'),
           imageVertical: useUrlMedia(pet.imageVertical, 'image'),
           type: props.type,

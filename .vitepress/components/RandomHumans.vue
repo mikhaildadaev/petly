@@ -81,6 +81,7 @@ export default {
     // ============================================================
     const randomHumans = ref([])
     const isLoading = ref(true)
+    const isClient = ref(false)
 
     // ============================================================
     //  3.3. ПОДКЛЮЧЕНИЕ КОМПОЗАБЛОВ
@@ -89,20 +90,26 @@ export default {
     // --- Рандомные цвета ---
     const { useRandomClass } = useRandomColor()
 
-    // --- Дополнительный слайд "Перейти в раздел" ---
+    // --- Дополнительный слайд ---
     const hasMoreItems = computed(() => randomHumans.value.length > 0)
 
     // --- Скролл и карусель ---
     const carouselRef = ref(null)
     const {
+      isMobile,
       currentIndex,
       scrollToSlide,
       nextSlide,
       prevSlide,
       goToSlide,
+      resetToFirstSlide,
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
+      touchStartX,
+      touchStartY,
+      touchEndX,
+      touchEndY,
     } = useScrollCarusel({
       containerRef: carouselRef,
       items: randomHumans,
@@ -110,8 +117,12 @@ export default {
     })
 
     // ============================================================
-    //  3.4. ВЫЧИСЛЯЕМЫЕ
+    //  3.4. ВЫЧИСЛЕНИЯ
     // ============================================================
+
+    const goToLink = () => {
+      window.location.href = `${baseUrl}${lang.value}/humans/${props.type}`
+    }
 
     const getHumanLink = (human) => {
       return human.covenantID ? `${baseUrl}${lang.value}/humans/${human.covenantID}/${props.type}/${human.uuid}` : `${baseUrl}${lang.value}/humans/${props.type}/${human.uuid}`
@@ -129,22 +140,8 @@ export default {
       return currentIndex.value >= carouselTotalSlides.value - 1
     })
 
-    const linkUrl = computed(() => {
-      const langPath = lang.value || 'ru'
-      return `${baseUrl}${langPath}/humans/${props.type}`
-    })
-
     // ============================================================
-    //  3.5. МЕТОДЫ
-    // ============================================================
-
-    // --- Переход на страницу всех людей ---
-    const goToLink = () => {
-      window.location.href = linkUrl.value
-    }
-
-    // ============================================================
-    //  3.6. RESIZE
+    //  3.5. RESIZE
     // ============================================================
     let resizeTimeout = null
 
@@ -158,7 +155,7 @@ export default {
     }
 
     // ============================================================
-    //  3.7. ЗАГРУЗКА ДАННЫХ
+    //  3.6. ЗАГРУЗКА ДАННЫХ
     // ============================================================
 
     const loadRandomHumans = async () => {
@@ -180,6 +177,7 @@ export default {
           descriptionDisplay: human.description || '',
           directionDisplay: useDirection(lang.value, human.direction),
           experienceDisplay: useExperience(lang.value, human.experience),
+          covenantID: human.covenantID || '',
           imageHorizontal: useUrlMedia(human.imageHorizontal, 'image'),
           imageVertical: useUrlMedia(human.imageVertical, 'image'),
           type: props.type,
@@ -196,10 +194,11 @@ export default {
     }
 
     // ============================================================
-    //  3.8. ЖИЗНЕННЫЙ ЦИКЛ
+    //  3.7. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(async () => {
+      isClient.value = true
       if (typeof window !== 'undefined') {
         window.addEventListener('resize', handleResize)
       }
@@ -220,7 +219,7 @@ export default {
     })
 
     // ============================================================
-    //  3.9. ВОЗВРАТ
+    //  3.8. ВОЗВРАТ
     // ============================================================
     return {
       // Данные
@@ -232,6 +231,7 @@ export default {
 
       // Состояние
       isLoading,
+      isMobile,
       
       // Карусель
       carouselRef,
@@ -241,6 +241,7 @@ export default {
       nextSlide,
       prevSlide,
       goToSlide,
+      resetToFirstSlide,
       isFirstSlide,
       isLastSlide,
       
@@ -248,13 +249,15 @@ export default {
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
+      touchStartX,
+      touchStartY,
+      touchEndX,
+      touchEndY,
       
       // Прочее
-      baseUrl,
-      linkUrl,
-      goToLink,
       useRandomClass,
       getHumanLink,
+      goToLink,
     }
   },
 }

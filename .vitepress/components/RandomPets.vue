@@ -82,6 +82,7 @@ export default {
     // ============================================================
     const randomPets = ref([])
     const isLoading = ref(true)
+    const isClient = ref(false)
 
     // ============================================================
     //  3.3. ПОДКЛЮЧЕНИЕ КОМПОЗАБЛОВ
@@ -90,20 +91,26 @@ export default {
     // --- Рандомные цвета ---
     const { useRandomClass } = useRandomColor()
 
-    // --- Дополнительный слайд "Перейти в раздел" ---
+    // --- Дополнительный слайд ---
     const hasMoreItems = computed(() => randomPets.value.length > 0)
 
     // --- Скролл и карусель ---
     const carouselRef = ref(null)
     const {
+      isMobile,
       currentIndex,
       scrollToSlide,
       nextSlide,
       prevSlide,
       goToSlide,
+      resetToFirstSlide,
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
+      touchStartX,
+      touchStartY,
+      touchEndX,
+      touchEndY,
     } = useScrollCarusel({
       containerRef: carouselRef,
       items: randomPets,
@@ -111,8 +118,12 @@ export default {
     })
 
     // ============================================================
-    //  3.4. ВЫЧИСЛЯЕМЫЕ
+    //  3.4. ВЫЧИСЛЕНИЯ
     // ============================================================
+
+    const goToLink = () => {
+      window.location.href = `${baseUrl}${lang.value}/pets/${props.type}`
+    }
 
     const getPetLink = (pet) => {
       return pet.covenantID ? `${baseUrl}${lang.value}/pets/${pet.covenantID}/${props.type}/${pet.uuid}` : `${baseUrl}${lang.value}/pets/${props.type}/${pet.uuid}`
@@ -130,22 +141,8 @@ export default {
       return currentIndex.value >= carouselTotalSlides.value - 1
     })
 
-    const linkUrl = computed(() => {
-      const langPath = lang.value || 'ru'
-      return `${baseUrl}${langPath}/pets/${props.type}`
-    })
-
     // ============================================================
-    //  3.5. МЕТОДЫ
-    // ============================================================
-
-    // --- Переход на страницу всех питомцев ---
-    const goToLink = () => {
-      window.location.href = linkUrl.value
-    }
-
-    // ============================================================
-    //  3.6. RESIZE
+    //  3.5. RESIZE
     // ============================================================
     let resizeTimeout = null
 
@@ -159,7 +156,7 @@ export default {
     }
 
     // ============================================================
-    //  3.7. ЗАГРУЗКА ДАННЫХ
+    //  3.6. ЗАГРУЗКА ДАННЫХ
     // ============================================================
 
     const loadRandomPets = async () => {
@@ -185,7 +182,6 @@ export default {
           ageDisplay: useAge(lang.value, pet.age),
           sizeDisplay: useTranslate(lang.value, 'size', pet.size),
           covenantID: pet.covenantID || '',
-          covenantType: pet.covenantType || '',
           imageHorizontal: useUrlMedia(pet.imageHorizontal, 'image'),
           imageVertical: useUrlMedia(pet.imageVertical, 'image'),
           type: props.type,
@@ -202,10 +198,11 @@ export default {
     }
 
     // ============================================================
-    //  3.8. ЖИЗНЕННЫЙ ЦИКЛ
+    //  3.7. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(async () => {
+      isClient.value = true
       if (typeof window !== 'undefined') {
         window.addEventListener('resize', handleResize)
       }
@@ -238,7 +235,8 @@ export default {
 
       // Состояние
       isLoading,
-      
+      isMobile,    
+
       // Карусель
       carouselRef,
       currentIndex,
@@ -247,6 +245,7 @@ export default {
       nextSlide,
       prevSlide,
       goToSlide,
+      resetToFirstSlide,
       isFirstSlide,
       isLastSlide,
       
@@ -254,13 +253,15 @@ export default {
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
+      touchStartX,
+      touchStartY,
+      touchEndX,
+      touchEndY,
       
       // Прочее
-      baseUrl,
-      linkUrl,
-      goToLink,
       useRandomClass,
       getPetLink,
+      goToLink,
     }
   },
 }
