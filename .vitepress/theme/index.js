@@ -5,6 +5,8 @@ import CardHumanHero from '../components/CardHumanHero.vue'
 import CardOrganizationHero from '../components/CardOrganizationHero.vue'
 import CardPetHero from '../components/CardPetHero.vue'
 import GalleryMedia from '../components/GalleryMedia.vue'
+import GroupHumans from '../components/GroupHumans.vue'
+import GroupPets from '../components/GroupPets.vue'
 import ListHumans from '../components/ListHumans.vue'
 import ListOrganizations from '../components/ListOrganizations.vue'
 import ListPets from '../components/ListPets.vue'
@@ -24,6 +26,8 @@ export default {
     app.component('CardOrganizationHero', CardOrganizationHero)
     app.component('CardPetHero', CardPetHero)
     app.component('GalleryMedia', GalleryMedia)
+    app.component('GroupHumans', GroupHumans)
+    app.component('GroupPets', GroupPets)
     app.component('ListHumans', ListHumans)
     app.component('ListOrganizations', ListOrganizations)
     app.component('ListPets', ListPets)
