@@ -1,23 +1,11 @@
 <template>
   <div v-if="selectOrganizations && selectOrganizations.length > 0" class="cards-carousel">
-    <div v-if="!isMobile" class="cards-grid">
-      <a v-for="organization in selectOrganizations" :key="organization.uuid" :href="`${baseUrl}${lang}/organizations/${type}/${organization.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list card">
-        <div class="meta">
-          <label v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</label>
-        </div>
-        <img :src="organization.imageVertical" loading="lazy" />
-        <div :class="['content', useRandomClass(organization.uuid)]">
-          <h1 class="title">{{ organization.nameDisplay }}</h1>
-          <p class="description">{{ organization.descriptionDisplay }}</p>
-        </div>
-      </a>
-    </div>
-    <div v-else class="carousel-container">
+    <div class="carousel-container">
       <div class="carousel-wrapper">
         <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(organization, index) in selectOrganizations" :key="organization.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="`${baseUrl}${lang}/organizations/${type}/${organization.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list card">
+            <a :href="getOrganizationLink(organization)" target="_blank" rel="noopener noreferrer" class="aspect-list card">
               <div class="meta">
                 <label v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</label>
               </div>
@@ -137,6 +125,12 @@ export default {
     //  3.4. ВЫЧИСЛЕНИЯ
     // ============================================================
 
+    const getOrganizationLink = (organization) => {
+      const routes = {}
+      const route = routes[organization.covenantType]
+      return route ? `${baseUrl}${lang.value}${route}/organizations/${props.type}/${organization.uuid}` : `${baseUrl}${lang.value}/organizations/${props.type}/${organization.uuid}`
+    }
+    
     const carouselTotalSlides = computed(() => {
       return selectOrganizations.value.length + (hasMoreItems.value ? 1 : 0)
     })
@@ -185,6 +179,9 @@ export default {
           nameDisplay: organization.title || '',
           descriptionDisplay: organization.description || '',
           formatDisplay: organization.format ? translate('format', organization.format) : '',
+          covenantID: organization.covenantID || '',
+          covenantType: organization.covenantType || '',
+          imageHorizontal: useUrlMedia(organization.imageHorizontal, 'image'),
           imageVertical: useUrlMedia(organization.imageVertical, 'image'),
           type: props.type,
         }))
@@ -260,7 +257,7 @@ export default {
       // Прочее
       type: props.type,
       useRandomClass,
-      baseUrl,
+      getOrganizationLink,
     }
   },
 }
