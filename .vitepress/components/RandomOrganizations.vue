@@ -5,7 +5,7 @@
         <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(organization, index) in randomOrganizations" :key="organization.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="`${baseUrl}${lang}/organizations/${organization.type}/${organization.uuid}`" class="aspect-list card">
+            <a :href="getOrganizationLink(organization)" class="aspect-list card">
               <div class="meta">
                 <label v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</label>
               </div>
@@ -251,6 +251,7 @@ export default {
       linkUrl,
       goToLink,
       useRandomClass,
+      getOrganizationLink,
     }
   },
 }

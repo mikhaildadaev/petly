@@ -9,7 +9,7 @@
     <button v-if="!areAllActive" class="reset" @click="resetFilters" :title="translate('ui', 'Включить все фильтры')">{{ translate('filter', 'Сбросить') }}</button>
   </div>
   <div v-if="!isMobile" class="cards-grid">
-    <a v-for="organization in paginatedOrganizations" :key="organization.uuid" :href="`${baseUrl}${lang}/organizations/${organization.type}/${organization.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list card">
+    <a v-for="organization in paginatedOrganizations" :key="organization.uuid" :href="getOrganizationLink(organization)" target="_blank" rel="noopener noreferrer" class="aspect-list card">
       <div class="meta">
         <label v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</label>
       </div>
@@ -35,7 +35,7 @@
       <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>      
       <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
         <div v-for="(organization, index) in paginatedOrganizations" :key="organization.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-          <a :href="`${baseUrl}${lang}/organizations/${organization.type}/${organization.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list card">
+          <a :href="getOrganizationLink(organization)" target="_blank" rel="noopener noreferrer" class="aspect-list card">
             <div class="meta">
               <label v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</label>
             </div>
@@ -165,6 +165,14 @@ export default {
     } = usePagination(filteredOrganizations, {
       perPage: 8,
     })
+
+    // ============================================================
+    //  3.3. ВЫЧИСЛЯЕМЫЕ
+    // ============================================================
+
+    const getOrganizationLink = (organization) => {
+      return organization.covenantID ? `${baseUrl}${lang.value}/organizations/${organization.covenantID}${props.type}/${organization.uuid}` : `${baseUrl}${lang.value}/organizations/${props.type}/${organization.uuid}`
+    }
 
     const carouselTotalSlides = computed(() => {
       return paginatedOrganizations.value.length + (hasMoreItems.value ? 1 : 0)
@@ -384,6 +392,7 @@ export default {
 
       // Прочее
       useRandomClass,
+      getOrganizationLink,
     }
   },
 }
