@@ -154,6 +154,10 @@ export default {
       }, 100)
     }
 
+    // ============================================================
+    //  3.7. ЗАГРУЗКА ДАННЫХ
+    // ============================================================
+
     const loadRandomPets = async () => {
       try {
         isLoading.value = true
@@ -191,7 +195,7 @@ export default {
     }
 
     // ============================================================
-    //  3.7. ЖИЗНЕННЫЙ ЦИКЛ
+    //  3.8. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(async () => {
@@ -201,12 +205,10 @@ export default {
       await loadRandomPets()
     })
 
-    // --- Watchers ---
     watch(lang, async () => {
       await loadRandomPets()
     })
 
-    // --- Unmount ---
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)

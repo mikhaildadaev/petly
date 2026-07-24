@@ -163,6 +163,10 @@ export default {
       }, 100)
     }
 
+    // ============================================================
+    //  3.6. ЗАГРУЗКА ДАННЫХ
+    // ============================================================
+
     const loadSelectOrganizations = async () => {
       try {
         isLoading.value = true
@@ -193,7 +197,7 @@ export default {
     }
 
     // ============================================================
-    //  3.6. ЖИЗНЕННЫЙ ЦИКЛ
+    //  3.7. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(async () => {
@@ -204,13 +208,11 @@ export default {
       await loadSelectOrganizations()
     })
 
-    // --- Watchers ---
     watch(lang, async () => {
       await loadSelectOrganizations()
       resetToFirstSlide()
     })
 
-    // --- Unmount ---
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)
@@ -221,7 +223,7 @@ export default {
     })
 
     // ============================================================
-    //  3.7. ВОЗВРАТ
+    //  3.8. ВОЗВРАТ
     // ============================================================
     return {
       // Данные

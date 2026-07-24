@@ -1,26 +1,31 @@
 <template>
-  <div v-if="randomOrganizations.length > 0" class="cards-carousel">
+  <div v-if="paginatedHumans && paginatedHumans.length > 0" class="cards-carousel">
     <div class="carousel-container">
       <div class="carousel-wrapper">
-        <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
+        <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-          <div v-for="(organization, index) in randomOrganizations" :key="organization.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="`${baseUrl}${lang}/organizations/${organization.type}/${organization.uuid}`" class="aspect-list card">
+          <div v-for="(human, index) in paginatedHumans" :key="human.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
+            <a :href="`${baseUrl}${lang}/humans/${type}/${human.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list card">
               <div class="meta">
-                <label v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</label>
+                <label v-if="human.directionDisplay" class="tag direction-tag">{{ human.directionDisplay }}</label>
+                <label v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</label>
               </div>
-              <img :src="organization.imageVertical" loading="lazy" />
-              <div :class="['content', useRandomClass(organization.uuid)]">
-                <h1 class="title">{{ organization.nameDisplay }}</h1>
-                <p class="description">{{ organization.descriptionDisplay }}</p>
+              <img :src="human.imageVertical" loading="lazy" />
+              <div :class="['content', useRandomClass(human.uuid)]">
+                <h1 class="title">{{ human.nameDisplay }}</h1>
+                <p class="description">{{ human.descriptionDisplay }}</p>
               </div>
             </a>
           </div>
-          <div class="carousel-slide load-more-slide" :class="{ center: currentIndex === randomOrganizations.length }">
-            <div class="load-more" @click="goToLink">
+          <div v-if="hasMoreItems" class="carousel-slide load-more-slide" :class="{ center: currentIndex === paginatedHumans.length }">
+            <div class="load-more" @click="loadMore">
               <div class="content">
                 <div class="icon"></div>
-                <div class="text">{{ translate('ui', 'Перейти в раздел') }}</div>
+                <div class="text">{{ translate('ui', 'Загрузить ещё') }}</div>
+                <div class="count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
+                <div class="progress">
+                  <div class="bar" :style="{ width: `${(visibleCount / groupHumans.length) * 100}%` }"></div>
+                </div>
               </div>
             </div>
           </div>
@@ -29,7 +34,7 @@
       </div>
     </div>
   </div>
-  <div v-else-if="randomOrganizations && randomOrganizations.length === 0" class="no-results">
+  <div v-else-if="!isLoading && (!groupHumans || groupHumans.length === 0)" class="no-results">
     <p>{{ translate('ui', 'Нет результатов') }}</p>
   </div>
 </template>
@@ -38,12 +43,12 @@
 // ============================================================
 //  1. ИМПОРТЫ
 // ============================================================
-import { ref, computed, onMounted, watch, onUnmounted } from 'vue'
+import { computed, ref, onMounted, onUnmounted, watch } from 'vue'
 import { useData } from 'vitepress'
-import { useRandomArray } from '../utils/useRandomArray'
 import { useRandomColor } from '../utils/useRandomColor'
 import { useScrollCarusel } from '../utils/useScrollCarusel'
-import { useTranslate } from '../utils/useTranslate'
+import { usePagination } from '../utils/usePagination'
+import { useTranslate, useDirection, useExperience } from '../utils/useTranslate'
 import { useUrlMedia } from '../utils/useUrlMedia'
 
 // ============================================================
@@ -55,19 +60,19 @@ const baseUrl = import.meta.env.BASE_URL
 //  3. КОМПОНЕНТ
 // ============================================================
 export default {
-  name: 'RandomOrganizations',
-
+  name: 'GroupHumans',
   props: {
+    uuids: {
+      type: String,
+      required: true,
+      default: ''
+    },
     type: {
       type: String,
-      default: 'all',
-    },
-    count: {
-      type: Number,
-      default: 8,
+      required: true,
+      default: 'volunteers'
     }
   },
-
   setup(props) {
     // ============================================================
     //  3.1. ЯЗЫК И ПЕРЕВОДЫ
@@ -78,42 +83,78 @@ export default {
     // ============================================================
     //  3.2. СОСТОЯНИЕ
     // ============================================================
-    const randomOrganizations = ref([])
+    const allHumans = ref([])
     const isLoading = ref(true)
+    const isClient = ref(false)
 
     // ============================================================
-    //  3.3. ПОДКЛЮЧЕНИЕ КОМПОЗАБЛОВ
+    //  3.3. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
     // ============================================================
 
-    // --- Рандомные цвета ---
+    const groupHumans = computed(() => {
+      if (isLoading.value) return []
+      if (!allHumans.value || allHumans.value.length === 0) return []
+      if (!props.uuids) return []
+
+      const filtered = allHumans.value.filter(human =>
+        human.shelters && human.shelters.includes(props.uuids)
+      )
+      
+      return filtered.reverse()
+    })
+
+    // ============================================================
+    //  3.4. ПАГИНАЦИЯ
+    // ============================================================
+
+    const {
+      paginatedItems: paginatedHumans,
+      remaining,
+      hasMoreItems,
+      loadMore,
+      isLoadingMore,
+      resetPagination,
+      visibleCount,
+    } = usePagination(groupHumans, {
+      perPage: 8,
+    })
+
+    // ============================================================
+    //  3.5. ПОДКЛЮЧЕНИЕ КОМПОЗАБЛОВ
+    // ============================================================
+
     const { useRandomClass } = useRandomColor()
 
-    // --- Дополнительный слайд "Перейти в раздел" ---
-    const hasMoreItems = computed(() => randomOrganizations.value.length > 0)
+    const hasMoreItemsForCarousel = computed(() => hasMoreItems.value)
 
-    // --- Скролл и карусель ---
     const carouselRef = ref(null)
     const {
+      isMobile,
       currentIndex,
       scrollToSlide,
       nextSlide,
       prevSlide,
       goToSlide,
+      resetToFirstSlide,
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
+      touchStartX,
+      touchStartY,
+      touchEndX,
+      touchEndY,
     } = useScrollCarusel({
       containerRef: carouselRef,
-      items: randomOrganizations,
-      hasMoreItems: hasMoreItems,
+      items: paginatedHumans,
+      hasMoreItems: hasMoreItemsForCarousel,
     })
 
     // ============================================================
-    //  3.4. ВЫЧИСЛЯЕМЫЕ
+    //  3.6. ВЫЧИСЛЕНИЯ ДЛЯ КАРУСЕЛИ
     // ============================================================
 
     const carouselTotalSlides = computed(() => {
-      return randomOrganizations.value.length + (hasMoreItems.value ? 1 : 0)
+      return paginatedHumans.value.length + (hasMoreItems.value ? 1 : 0)
     })
 
     const isFirstSlide = computed(() => {
@@ -124,22 +165,8 @@ export default {
       return currentIndex.value >= carouselTotalSlides.value - 1
     })
 
-    const linkUrl = computed(() => {
-      const langPath = lang.value || 'ru'
-      return `${baseUrl}${langPath}/organizations/${props.type}`
-    })
-
     // ============================================================
-    //  3.5. МЕТОДЫ
-    // ============================================================
-
-    // --- Переход на страницу всех организаций ---
-    const goToLink = () => {
-      window.location.href = linkUrl.value
-    }
-
-    // ============================================================
-    //  3.6. RESIZE
+    //  3.7. RESIZE
     // ============================================================
     let resizeTimeout = null
 
@@ -153,55 +180,62 @@ export default {
     }
 
     // ============================================================
-    //  3.7. ЗАГРУЗКА ДАННЫХ
+    //  3.8. ЗАГРУЗКА ДАННЫХ
     // ============================================================
 
-    const loadRandomOrganizations = async () => {
+    const loadGroupHumans = async () => {
       try {
         isLoading.value = true
-        const response = await fetch(`${baseUrl}data/organizations-${lang.value}-${props.type}.json`)
+        const response = await fetch(`${baseUrl}data/humans-${lang.value}-${props.type}.json`)
         if (response.status === 404) {
-          randomOrganizations.value = []
+          allHumans.value = []
           isLoading.value = false
           return
         }
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)
         }
-        const organizationsData = await response.json()
-        const loaded = organizationsData.map(organization => ({
-          uuid: organization.uuid,
-          nameDisplay: organization.title || '',
-          descriptionDisplay: organization.description || '',
-          formatDisplay: organization.format ? translate('format', organization.format) : '',
-          imageVertical: useUrlMedia(organization.imageVertical, 'image'),
+        const humansData = await response.json()
+        allHumans.value = humansData.map(human => ({
+          uuid: human.uuid,
+          nameDisplay: human.title || '',
+          descriptionDisplay: human.description || '',
+          directionDisplay: useDirection(lang.value, human.direction),
+          experienceDisplay: useExperience(lang.value, human.experience),
+          imageVertical: useUrlMedia(human.imageVertical, 'image'),
+          shelters: human.shelters || [],
           type: props.type,
         }))
-        const shuffled = useRandomArray(loaded)
-        randomOrganizations.value = shuffled.slice(0, props.count)
-        currentIndex.value = 0
+        resetPagination()
       } catch (error) {
         console.error('Ошибка загрузки данных:', error)
-        randomOrganizations.value = []
+        allHumans.value = []
       } finally {
         isLoading.value = false
       }
     }
 
     // ============================================================
-    //  3.8. ЖИЗНЕННЫЙ ЦИКЛ
+    //  3.9. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(async () => {
+      isClient.value = true
       if (typeof window !== 'undefined') {
         window.addEventListener('resize', handleResize)
       }
-      await loadRandomOrganizations()
+      await loadGroupHumans()
     })
 
     watch(lang, async () => {
-      await loadRandomOrganizations()
+      await loadGroupHumans()
+      resetToFirstSlide()
     })
+
+    // 🔥 Сброс пагинации при изменении фильтрации
+    watch(groupHumans, () => {
+      resetPagination()
+    }, { deep: true })
 
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
@@ -213,18 +247,27 @@ export default {
     })
 
     // ============================================================
-    //  3.8. ВОЗВРАТ
+    //  3.10. ВОЗВРАТ
     // ============================================================
     return {
       // Данные
-      randomOrganizations,
+      groupHumans,
+      paginatedHumans,
       
       // Язык
       lang,
       translate,
-
+      
       // Состояние
       isLoading,
+      isMobile,
+      
+      // Пагинация
+      visibleCount,
+      remaining,
+      hasMoreItems,
+      loadMore,
+      isLoadingMore,
       
       // Карусель
       carouselRef,
@@ -234,6 +277,7 @@ export default {
       nextSlide,
       prevSlide,
       goToSlide,
+      resetToFirstSlide,
       isFirstSlide,
       isLastSlide,
       
@@ -241,12 +285,15 @@ export default {
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
+      touchStartX,
+      touchStartY,
+      touchEndX,
+      touchEndY,
       
       // Прочее
-      baseUrl,
-      linkUrl,
-      goToLink,
+      type: props.type,
       useRandomClass,
+      baseUrl,
     }
   },
 }

@@ -1,26 +1,32 @@
 <template>
-  <div v-if="randomOrganizations.length > 0" class="cards-carousel">
+  <div v-if="paginatedPets && paginatedPets.length > 0" class="cards-carousel">
     <div class="carousel-container">
       <div class="carousel-wrapper">
-        <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
+        <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>      
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-          <div v-for="(organization, index) in randomOrganizations" :key="organization.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="`${baseUrl}${lang}/organizations/${organization.type}/${organization.uuid}`" class="aspect-list card">
+          <div v-for="(pet, index) in paginatedPets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
+            <a :href="`${baseUrl}${lang}/pets/${type}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list card">
               <div class="meta">
-                <label v-if="organization.formatDisplay" class="tag format-tag">{{ organization.formatDisplay }}</label>
+                <label v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</label>
+                <label v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</label>
+                <label v-if="pet.sizeDisplay" class="tag size-tag">{{ pet.sizeDisplay }}</label>
               </div>
-              <img :src="organization.imageVertical" loading="lazy" />
-              <div :class="['content', useRandomClass(organization.uuid)]">
-                <h1 class="title">{{ organization.nameDisplay }}</h1>
-                <p class="description">{{ organization.descriptionDisplay }}</p>
+              <img :src="pet.imageVertical" loading="lazy" />
+              <div :class="['content', useRandomClass(pet.uuid)]">
+                <h1 class="title">{{ pet.nameDisplay }}</h1>
+                <p class="description">{{ pet.descriptionDisplay }}</p>
               </div>
             </a>
           </div>
-          <div class="carousel-slide load-more-slide" :class="{ center: currentIndex === randomOrganizations.length }">
-            <div class="load-more" @click="goToLink">
+          <div v-if="hasMoreItems" class="carousel-slide load-more-slide" :class="{ center: currentIndex === paginatedPets.length }">
+            <div class="load-more" @click="loadMore">
               <div class="content">
                 <div class="icon"></div>
-                <div class="text">{{ translate('ui', 'Перейти в раздел') }}</div>
+                <div class="text">{{ translate('ui', 'Загрузить ещё') }}</div>
+                <div class="count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
+                <div class="progress">
+                  <div class="bar" :style="{ width: `${(visibleCount / groupPets.length) * 100}%` }"></div>
+                </div>
               </div>
             </div>
           </div>
@@ -29,7 +35,7 @@
       </div>
     </div>
   </div>
-  <div v-else-if="randomOrganizations && randomOrganizations.length === 0" class="no-results">
+  <div v-else-if="!isLoading && (!groupPets || groupPets.length === 0)" class="no-results">
     <p>{{ translate('ui', 'Нет результатов') }}</p>
   </div>
 </template>
@@ -38,12 +44,12 @@
 // ============================================================
 //  1. ИМПОРТЫ
 // ============================================================
-import { ref, computed, onMounted, watch, onUnmounted } from 'vue'
+import { computed, ref, onMounted, onUnmounted, watch } from 'vue'
 import { useData } from 'vitepress'
-import { useRandomArray } from '../utils/useRandomArray'
 import { useRandomColor } from '../utils/useRandomColor'
 import { useScrollCarusel } from '../utils/useScrollCarusel'
-import { useTranslate } from '../utils/useTranslate'
+import { usePagination } from '../utils/usePagination'
+import { useTranslate, useAge, useAgePetCategory } from '../utils/useTranslate'
 import { useUrlMedia } from '../utils/useUrlMedia'
 
 // ============================================================
@@ -55,19 +61,19 @@ const baseUrl = import.meta.env.BASE_URL
 //  3. КОМПОНЕНТ
 // ============================================================
 export default {
-  name: 'RandomOrganizations',
-
+  name: 'GroupPets',
   props: {
+    uuids: {
+      type: String,
+      required: true,
+      default: ''
+    },
     type: {
       type: String,
-      default: 'all',
-    },
-    count: {
-      type: Number,
-      default: 8,
+      required: true,
+      default: 'dogs'
     }
   },
-
   setup(props) {
     // ============================================================
     //  3.1. ЯЗЫК И ПЕРЕВОДЫ
@@ -78,42 +84,79 @@ export default {
     // ============================================================
     //  3.2. СОСТОЯНИЕ
     // ============================================================
-    const randomOrganizations = ref([])
+    const allPets = ref([])
     const isLoading = ref(true)
+    const isClient = ref(false)
 
     // ============================================================
-    //  3.3. ПОДКЛЮЧЕНИЕ КОМПОЗАБЛОВ
+    //  3.3. ВЫЧИСЛЯЕМЫЕ СВОЙСТВА
     // ============================================================
 
-    // --- Рандомные цвета ---
+    // Фильтруем питомцев по приюту
+    const groupPets = computed(() => {
+      if (isLoading.value) return []
+      if (!allPets.value || allPets.value.length === 0) return []
+      if (!props.uuids) return []
+
+      const filtered = allPets.value.filter(pet =>
+        pet.shelters && pet.shelters.includes(props.uuids)
+      )
+      
+      return filtered.reverse()
+    })
+
+    // ============================================================
+    //  3.4. ПАГИНАЦИЯ
+    // ============================================================
+
+    const {
+      paginatedItems: paginatedPets,
+      remaining,
+      hasMoreItems,
+      loadMore,
+      isLoadingMore,
+      resetPagination,
+      visibleCount,
+    } = usePagination(groupPets, {
+      perPage: 8,
+    })
+
+    // ============================================================
+    //  3.5. ПОДКЛЮЧЕНИЕ КОМПОЗАБЛОВ
+    // ============================================================
+
     const { useRandomClass } = useRandomColor()
 
-    // --- Дополнительный слайд "Перейти в раздел" ---
-    const hasMoreItems = computed(() => randomOrganizations.value.length > 0)
+    const hasMoreItemsForCarousel = computed(() => hasMoreItems.value)
 
-    // --- Скролл и карусель ---
     const carouselRef = ref(null)
     const {
+      isMobile,
       currentIndex,
       scrollToSlide,
       nextSlide,
       prevSlide,
       goToSlide,
+      resetToFirstSlide,
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
+      touchStartX,
+      touchStartY,
+      touchEndX,
+      touchEndY,
     } = useScrollCarusel({
       containerRef: carouselRef,
-      items: randomOrganizations,
-      hasMoreItems: hasMoreItems,
+      items: paginatedPets,
+      hasMoreItems: hasMoreItemsForCarousel,
     })
 
     // ============================================================
-    //  3.4. ВЫЧИСЛЯЕМЫЕ
+    //  3.6. ВЫЧИСЛЕНИЯ ДЛЯ КАРУСЕЛИ
     // ============================================================
 
     const carouselTotalSlides = computed(() => {
-      return randomOrganizations.value.length + (hasMoreItems.value ? 1 : 0)
+      return paginatedPets.value.length + (hasMoreItems.value ? 1 : 0)
     })
 
     const isFirstSlide = computed(() => {
@@ -124,22 +167,8 @@ export default {
       return currentIndex.value >= carouselTotalSlides.value - 1
     })
 
-    const linkUrl = computed(() => {
-      const langPath = lang.value || 'ru'
-      return `${baseUrl}${langPath}/organizations/${props.type}`
-    })
-
     // ============================================================
-    //  3.5. МЕТОДЫ
-    // ============================================================
-
-    // --- Переход на страницу всех организаций ---
-    const goToLink = () => {
-      window.location.href = linkUrl.value
-    }
-
-    // ============================================================
-    //  3.6. RESIZE
+    //  3.7. RESIZE
     // ============================================================
     let resizeTimeout = null
 
@@ -153,55 +182,64 @@ export default {
     }
 
     // ============================================================
-    //  3.7. ЗАГРУЗКА ДАННЫХ
+    //  3.8. ЗАГРУЗКА ДАННЫХ
     // ============================================================
 
-    const loadRandomOrganizations = async () => {
+    const loadGroupPets = async () => {
       try {
         isLoading.value = true
-        const response = await fetch(`${baseUrl}data/organizations-${lang.value}-${props.type}.json`)
+        const response = await fetch(`${baseUrl}data/pets-${lang.value}-${props.type}.json`)
         if (response.status === 404) {
-          randomOrganizations.value = []
+          allPets.value = []
           isLoading.value = false
           return
         }
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)
         }
-        const organizationsData = await response.json()
-        const loaded = organizationsData.map(organization => ({
-          uuid: organization.uuid,
-          nameDisplay: organization.title || '',
-          descriptionDisplay: organization.description || '',
-          formatDisplay: organization.format ? translate('format', organization.format) : '',
-          imageVertical: useUrlMedia(organization.imageVertical, 'image'),
+        const petsData = await response.json()
+        allPets.value = petsData.map(pet => ({
+          uuid: pet.uuid,
+          nameDisplay: pet.title || '',
+          descriptionDisplay: pet.description || '',
+          gender: useTranslate('ru', 'gender', pet.gender),
+          genderDisplay: useTranslate(lang.value, 'gender', pet.gender),
+          age: useAgePetCategory(pet.age),
+          ageDisplay: useAge(lang.value, pet.age),
+          sizeDisplay: useTranslate(lang.value, 'size', pet.size),
+          imageVertical: useUrlMedia(pet.imageVertical, 'image'),
+          shelters: pet.shelters || [],
           type: props.type,
         }))
-        const shuffled = useRandomArray(loaded)
-        randomOrganizations.value = shuffled.slice(0, props.count)
-        currentIndex.value = 0
+        resetPagination()
       } catch (error) {
         console.error('Ошибка загрузки данных:', error)
-        randomOrganizations.value = []
+        allPets.value = []
       } finally {
         isLoading.value = false
       }
     }
 
     // ============================================================
-    //  3.8. ЖИЗНЕННЫЙ ЦИКЛ
+    //  3.9. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(async () => {
+      isClient.value = true
       if (typeof window !== 'undefined') {
         window.addEventListener('resize', handleResize)
       }
-      await loadRandomOrganizations()
+      await loadGroupPets()
     })
 
     watch(lang, async () => {
-      await loadRandomOrganizations()
+      await loadGroupPets()
+      resetToFirstSlide()
     })
+
+    watch(groupPets, () => {
+      resetPagination()
+    }, { deep: true })
 
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
@@ -213,11 +251,12 @@ export default {
     })
 
     // ============================================================
-    //  3.8. ВОЗВРАТ
+    //  3.10. ВОЗВРАТ
     // ============================================================
     return {
       // Данные
-      randomOrganizations,
+      groupPets,
+      paginatedPets,
       
       // Язык
       lang,
@@ -225,6 +264,14 @@ export default {
 
       // Состояние
       isLoading,
+      isMobile,
+      
+      // Пагинация
+      visibleCount,
+      remaining,
+      hasMoreItems,
+      loadMore,
+      isLoadingMore,
       
       // Карусель
       carouselRef,
@@ -234,6 +281,7 @@ export default {
       nextSlide,
       prevSlide,
       goToSlide,
+      resetToFirstSlide,
       isFirstSlide,
       isLastSlide,
       
@@ -241,12 +289,15 @@ export default {
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
+      touchStartX,
+      touchStartY,
+      touchEndX,
+      touchEndY,
       
       // Прочее
-      baseUrl,
-      linkUrl,
-      goToLink,
+      type: props.type,
       useRandomClass,
+      baseUrl,
     }
   },
 }

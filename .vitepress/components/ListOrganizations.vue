@@ -240,6 +240,10 @@ export default {
       }, 100)
     }
 
+    // ============================================================
+    //  3.10. ЗАГРУЗКА ДАННЫХ
+    // ============================================================
+
     const loadOrganizations = async () => {
       try {
         isLoading.value = true
@@ -274,7 +278,7 @@ export default {
     }
 
     // ============================================================
-    //  3.10. ЖИЗНЕННЫЙ ЦИКЛ
+    //  3.11. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(async () => {
@@ -285,7 +289,6 @@ export default {
       await loadOrganizations()
     })
 
-    // --- Watchers ---
     watch(lang, async () => {
       await loadOrganizations()
       resetToFirstSlide()

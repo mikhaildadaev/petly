@@ -167,6 +167,10 @@ export default {
       }, 100)
     }
 
+    // ============================================================
+    //  3.6. ЗАГРУЗКА ДАННЫХ
+    // ============================================================
+
     const loadSelectPets = async () => {
       try {
         isLoading.value = true
@@ -201,7 +205,7 @@ export default {
     }
 
     // ============================================================
-    //  3.6. ЖИЗНЕННЫЙ ЦИКЛ
+    //  3.7. ЖИЗНЕННЫЙ ЦИКЛ
     // ============================================================
 
     onMounted(async () => {
@@ -212,13 +216,11 @@ export default {
       await loadSelectPets()
     })
 
-    // --- Watchers ---
     watch(lang, async () => {
       await loadSelectPets()
       resetToFirstSlide()
     })
 
-    // --- Unmount ---
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)
