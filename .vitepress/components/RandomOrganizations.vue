@@ -112,6 +112,10 @@ export default {
     //  3.4. ВЫЧИСЛЯЕМЫЕ
     // ============================================================
 
+    const getOrganizationLink = (organization) => {
+      return organization.covenantID ? `${baseUrl}${lang.value}/organizations/${organization.covenantID}${props.type}/${organization.uuid}` : `${baseUrl}${lang.value}/organizations/${props.type}/${organization.uuid}`
+    }
+
     const carouselTotalSlides = computed(() => {
       return randomOrganizations.value.length + (hasMoreItems.value ? 1 : 0)
     })

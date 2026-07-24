@@ -126,9 +126,7 @@ export default {
     // ============================================================
 
     const getOrganizationLink = (organization) => {
-      const routes = {}
-      const route = routes[organization.covenantType]
-      return route ? `${baseUrl}${lang.value}${route}/organizations/${props.type}/${organization.uuid}` : `${baseUrl}${lang.value}/organizations/${props.type}/${organization.uuid}`
+      return organization.covenantID ? `${baseUrl}${lang.value}/organizations/${organization.covenantID}${props.type}/${organization.uuid}` : `${baseUrl}${lang.value}/organizations/${props.type}/${organization.uuid}`
     }
     
     const carouselTotalSlides = computed(() => {

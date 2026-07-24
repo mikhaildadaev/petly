@@ -115,12 +115,7 @@ export default {
     // ============================================================
 
     const getPetLink = (pet) => {
-      const routes = {
-        'humans': `/humans/${pet.covenantID}`,
-        'organizations': `/organizations/${pet.covenantID}`,
-      }
-      const route = routes[pet.covenantType]
-      return route ? `${baseUrl}${lang.value}${route}/pets/${props.type}/${pet.uuid}` : `${baseUrl}${lang.value}/pets/${props.type}/${pet.uuid}`
+      return pet.covenantID ? `${baseUrl}${lang.value}/pets/${pet.covenantID}/${props.type}/${pet.uuid}` : `${baseUrl}${lang.value}/pets/${props.type}/${pet.uuid}`
     }
 
     const carouselTotalSlides = computed(() => {

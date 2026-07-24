@@ -127,11 +127,7 @@ export default {
     // ============================================================
 
     const getHumanLink = (human) => {
-      const routes = {
-        'organizations': `/organizations/${human.covenantID}`,
-      }
-      const route = routes[human.covenantType]
-      return route ? `${baseUrl}${lang.value}${route}/humans/${props.type}/${human.uuid}` : `${baseUrl}${lang.value}/humans/${props.type}/${human.uuid}`
+      return human.covenantID ? `${baseUrl}${lang.value}/humans/${human.covenantID}/${props.type}/${human.uuid}` : `${baseUrl}${lang.value}/humans/${props.type}/${human.uuid}`
     }
 
     const carouselTotalSlides = computed(() => {
