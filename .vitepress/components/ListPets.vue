@@ -21,7 +21,7 @@
     <button v-if="!areAllActive" class="reset" @click="resetFilters" :title="translate('ui', 'Включить все фильтры')">{{ translate('filter', 'Сбросить') }}</button>
   </div>
   <div v-if="!isMobile" class="cards-grid">
-    <a v-for="pet in paginatedPets" :key="pet.uuid" :href="`${baseUrl}${lang}/pets/${type}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list card">
+    <a v-for="pet in paginatedPets" :key="pet.uuid" :href="getPetLink(pet)" target="_blank" rel="noopener noreferrer" class="aspect-list card">
       <div class="meta">
         <label v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</label>
         <label v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</label>
@@ -49,7 +49,7 @@
       <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
       <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
         <div v-for="(pet, index) in paginatedPets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }" >
-          <a :href="`${baseUrl}${lang}/pets/${type}/${pet.uuid}`" target="_blank" rel="noopener noreferrer" class="aspect-list card">
+          <a :href="getPetLink(pet)" target="_blank" rel="noopener noreferrer" class="aspect-list card">
             <div class="meta">
               <label v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</label>
               <label v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</label>
@@ -179,8 +179,17 @@ export default {
     })
 
     // ============================================================
-    //  3.3. ВЫЧИСЛЯЕМЫЕ
+    //  3.4. ВЫЧИСЛЯЕМЫЕ
     // ============================================================
+
+    const getPetLink = (pet) => {
+      const routes = {
+        'humans': `/humans/${pet.covenantID}`,
+        'organizations': `/organizations/${pet.covenantID}`,
+      }
+      const route = routes[pet.covenantType]
+      return route ? `${baseUrl}${lang.value}${route}/pets/${props.type}/${pet.uuid}` : `${baseUrl}${lang.value}/pets/${props.type}/${pet.uuid}`
+    }
 
     const filteredPets = computed(() => {
       return allPets.value.filter(pet => {
@@ -318,8 +327,10 @@ export default {
           ageDisplay: useAge(lang.value, pet.age),
           size: pet.size || '',
           sizeDisplay: useTranslate(lang.value, 'size', pet.size),
-          imageVertical: useUrlMedia(pet.imageVertical, 'image'),
+          covenantID: pet.covenantID || '',
+          covenantType: pet.covenantType || '',
           imageHorizontal: useUrlMedia(pet.imageHorizontal, 'image'),
+          imageVertical: useUrlMedia(pet.imageVertical, 'image'),
           type: props.type,
         }))
         allPets.value = allPets.value.reverse()
@@ -441,6 +452,7 @@ export default {
 
       // Прочее
       useRandomClass,
+      getPetLink,
     }
   }
 }

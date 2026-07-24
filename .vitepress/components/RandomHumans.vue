@@ -5,7 +5,7 @@
         <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(human, index) in randomHumans" :key="human.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="`${baseUrl}${lang}/humans/${human.type}/${human.uuid}`" class="aspect-list card">
+            <a :href="getHumanLink(human)" class="aspect-list card">
               <div class="meta">
                 <label v-if="human.directionDisplay" class="tag direction-tag">{{ human.directionDisplay }}</label>
                 <label v-if="human.experienceDisplay" class="tag experience-tag">{{ human.experienceDisplay }}</label>
@@ -113,6 +113,14 @@ export default {
     //  3.4. ВЫЧИСЛЯЕМЫЕ
     // ============================================================
 
+    const getHumanLink = (human) => {
+      const routes = {
+        'organizations': `/organizations/${human.covenantID}`,
+      } 
+      const route = routes[human.covenantType]
+      return route ? `${baseUrl}${lang.value}${route}/humans/${props.type}/${human.uuid}` : `${baseUrl}${lang.value}/humans/${props.type}/${human.uuid}`
+    }
+
     const carouselTotalSlides = computed(() => {
       return randomHumans.value.length + (hasMoreItems.value ? 1 : 0)
     })
@@ -176,6 +184,9 @@ export default {
           descriptionDisplay: human.description || '',
           directionDisplay: useDirection(lang.value, human.direction),
           experienceDisplay: useExperience(lang.value, human.experience),
+          covenantID: human.covenantID || '',
+          covenantType: human.covenantType || '',
+          imageHorizontal: useUrlMedia(human.imageHorizontal, 'image'),
           imageVertical: useUrlMedia(human.imageVertical, 'image'),
           type: props.type,
         }))
@@ -249,6 +260,7 @@ export default {
       linkUrl,
       goToLink,
       useRandomClass,
+      getHumanLink,
     }
   },
 }

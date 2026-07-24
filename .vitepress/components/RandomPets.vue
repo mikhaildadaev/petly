@@ -5,7 +5,7 @@
         <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(pet, index) in randomPets" :key="pet.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="`${baseUrl}${lang}/pets/${pet.type}/${pet.uuid}`" class="aspect-list card">
+            <a :href="getPetLink(pet)" class="aspect-list card">
               <div class="meta">
                 <label v-if="pet.genderDisplay" class="tag gender-tag" :data-gender="pet.gender">{{ pet.genderDisplay }}</label>
                 <label v-if="pet.ageDisplay" class="tag age-tag">{{ pet.ageDisplay }}</label>
@@ -114,6 +114,15 @@ export default {
     //  3.4. ВЫЧИСЛЯЕМЫЕ
     // ============================================================
 
+    const getPetLink = (pet) => {
+      const routes = {
+        'humans': `/humans/${pet.covenantID}`,
+        'organizations': `/organizations/${pet.covenantID}`,
+      }
+      const route = routes[pet.covenantType]
+      return route ? `${baseUrl}${lang.value}${route}/pets/${props.type}/${pet.uuid}` : `${baseUrl}${lang.value}/pets/${props.type}/${pet.uuid}`
+    }
+
     const carouselTotalSlides = computed(() => {
       return randomPets.value.length + (hasMoreItems.value ? 1 : 0)
     })
@@ -180,6 +189,9 @@ export default {
           age: useAgePetCategory(pet.age),
           ageDisplay: useAge(lang.value, pet.age),
           sizeDisplay: useTranslate(lang.value, 'size', pet.size),
+          covenantID: pet.covenantID || '',
+          covenantType: pet.covenantType || '',
+          imageHorizontal: useUrlMedia(pet.imageHorizontal, 'image'),
           imageVertical: useUrlMedia(pet.imageVertical, 'image'),
           type: props.type,
         }))
@@ -253,6 +265,7 @@ export default {
       linkUrl,
       goToLink,
       useRandomClass,
+      getPetLink,
     }
   },
 }
