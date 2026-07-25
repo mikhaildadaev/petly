@@ -57,7 +57,7 @@ export default {
   props: {
     type: { type: String, required: true },
     itemType: { type: String, required: true },
-    shelterUuid: { type: String, required: true, default: '' }
+    uuid: { type: String, required: true, default: '' }
   },
   setup(props) {
     const { lang } = useData()
@@ -71,10 +71,10 @@ export default {
     const groupedItems = computed(() => {
       if (isLoading.value) return []
       if (!allItems.value || allItems.value.length === 0) return []
-      if (!props.shelterUuid) return []
+      if (!props.uuid) return []
 
       const filtered = allItems.value.filter(item =>
-        item.shelters && item.shelters.includes(props.shelterUuid)
+        item.shelters && item.shelters.includes(props.uuid)
       )
       return filtered.reverse()
     })
