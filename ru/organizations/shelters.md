@@ -4,7 +4,6 @@ description: Список приютов, где живут питомцы в о
 ---
 
 # Приюты
-
-<ListOrganizations :type="'shelters'"/>
+<ItemsList type="organizations" item-type="shelters"/>
 
 <StyleImagePage src="/assets/webp/handsCatAndDog.webp" width="284" float="center"/>

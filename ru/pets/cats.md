@@ -4,7 +4,6 @@ description: Пушистые, ласковые и независимые.
 ---
 
 # Кошки
-
-<ListPets :type="'cats'"/>
+<ItemsList type="pets" item-type="cats"/>
 
 <StyleImagePage src="/assets/webp/catFilter.webp" width="284" float="left"/>

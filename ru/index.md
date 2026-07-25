@@ -27,17 +27,13 @@ features:
 
 
 ## Кошки
-
-<RandomPets type="cats" :count="8"/>
+<ItemsRandom type="pets" item-type="cats"/>
 
 ## Собаки
-
-<RandomPets type="dogs" :count="8"/>
+<ItemsRandom type="pets" item-type="dogs"/>
 
 ## Волонтеры
-
-<RandomHumans type="volunteers" :count="8"/>
+<ItemsRandom type="humans" item-type="volunteers"/>
 
 ## Приюты
-
-<RandomOrganizations type="shelters" :count="8"/>
+<ItemsRandom type="organizations" item-type="shelters"/>
