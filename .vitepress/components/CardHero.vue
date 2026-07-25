@@ -65,7 +65,8 @@ export default {
     }
     const item = computed(() => {
       const data = fm.value || {}
-      return transformItem(data)
+      const result = transformItem(data)
+      return result
     })
     const checkFavoriteStatus = (uuid) => {
       if (uuid) {
