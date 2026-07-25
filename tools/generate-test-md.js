@@ -153,7 +153,7 @@ ${pet.title} — это замечательный питомец, которы�
 
 ## Приют
 
-<ItemsSelect :type="'organizations'" item-:type="'shelters'" :uuids="$frontmatter.shelters || []"/>
+<ItemsSelect :type="'organizations'" item-type="'shelters'" :uuids="$frontmatter.shelters || []"/>
 <StyleImagePage src="/assets/webp/dogWithGirlPhoto.webp" width="320px" float="center"/>
 `;
 }
