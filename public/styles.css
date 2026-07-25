@@ -694,7 +694,7 @@ p.withColor {
   flex: 0 0 calc(25% - 48px);
   scroll-snap-align: center;
   min-height: 420px;
-  min-width: 340px;
+  min-width: 336px;
   scroll-snap-stop: always;
   transition: all 0.5s ease;
 }
