@@ -128,7 +128,7 @@ videos:
 
 # Питомец
 <div class="uuid">${pet.uuid}</div>
-<CardHero :type="'dogs'"/>
+<CardHero :type="'pets'" :type-item="'dogs'"/>
 
 ## Характер
 
@@ -152,9 +152,7 @@ ${pet.title} — это замечательный питомец, которы�
 <ItemsSelect :type="'humans'" :item-type="'volunteers'" :uuids="$frontmatter.volunteers || []"/>
 
 ## Приют
-
 <ItemsSelect :type="'organizations'" item-type="'shelters'" :uuids="$frontmatter.shelters || []"/>
-<StyleImagePage src="/assets/webp/dogWithGirlPhoto.webp" width="320px" float="center"/>
 `;
 }
 
