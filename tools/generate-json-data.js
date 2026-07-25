@@ -16,50 +16,67 @@ const outputDir = './public/data';
 
 const contentTypes = [
   {
+    name: 'pets',
+    subdir: 'pets',
+    types: ['cats', 'dogs'],
+    fields: ['uuid', 'title', 'description', 'age', 'gender', 'size', 'imageVertical', 'imageHorizontal', 'covenantID', 'shelters', 'volunteers'],
+    transform: (data) => {
+      const filter = []
+      if (data.age) filter.push({ age: data.age })
+      if (data.gender) filter.push({ gender: data.gender })
+      if (data.size) filter.push({ size: data.size })
+      return {
+        uuid: data.uuid,
+        title: data.title || '',
+        description: data.description || '',
+        filter: filter,
+        imageVertical: data.imageVertical || '',
+        imageHorizontal: data.imageHorizontal || '',
+        shelters: data.shelters || [],
+        volunteers: data.volunteers || [],
+        covenantID: data.covenantID || '',
+      }
+    }
+  },
+  {
     name: 'humans',
     subdir: 'humans',
     types: ['volunteers'],
-    fields: ['uuid', 'title', 'description', 'direction', 'experience', 'imageVertical', 'shelters'],
-    transform: (data) => ({
-      uuid: data.uuid,
-      title: data.title || '',
-      description: data.description || '',
-      direction: data.direction || '',
-      experience: data.experience || '',
-      imageVertical: data.imageVertical || '',
-      shelters: data.shelters || [],
-    })
+    fields: ['uuid', 'title', 'description', 'direction', 'experience', 'imageVertical', 'imageHorizontal', 'covenantID', 'shelters'],
+    transform: (data) => {
+      const filter = []
+      if (data.direction) filter.push({ direction: data.direction })
+      if (data.experience) filter.push({ experience: data.experience })
+      return {
+        uuid: data.uuid,
+        title: data.title || '',
+        description: data.description || '',
+        filter: filter,
+        imageVertical: data.imageVertical || '',
+        imageHorizontal: data.imageHorizontal || '',
+        shelters: data.shelters || [],
+        covenantID: data.covenantID || '',
+      }
+    }
   },
   {
     name: 'organizations',
     subdir: 'organizations',
     types: ['shelters'],
-    fields: ['uuid', 'title', 'description', 'format', 'imageVertical'],
-    transform: (data) => ({
-      uuid: data.uuid,
-      title: data.title || '',
-      description: data.description || '',
-      format: data.format || '',
-      imageVertical: data.imageVertical || '',
-    })
-  },
-  {
-    name: 'pets',
-    subdir: 'pets',
-    types: ['cats', 'dogs'],
-    fields: ['uuid', 'title', 'description', 'age', 'gender', 'size', 'imageVertical', 'covenantID', 'shelters', 'volunteers'],
-    transform: (data) => ({
-      uuid: data.uuid,
-      title: data.title || '',
-      description: data.description || '',
-      age: data.age || '',
-      gender: data.gender || '',
-      size: data.size || '',
-      covenantID: data.covenantID || '',
-      imageVertical: data.imageVertical || '',
-      shelters: data.shelters || [],
-      volunteers: data.volunteers || [],
-    })
+    fields: ['uuid', 'title', 'description', 'format', 'imageVertical', 'imageHorizontal', 'covenantID'],
+    transform: (data) => {
+      const filter = []
+      if (data.format) filter.push({ format: data.format })
+      return {
+        uuid: data.uuid,
+        title: data.title || '',
+        description: data.description || '',
+        filter: filter,
+        imageVertical: data.imageVertical || '',
+        imageHorizontal: data.imageHorizontal || '',
+        covenantID: data.covenantID || '',
+      }
+    }
   }
 ];
 
@@ -68,7 +85,6 @@ const contentTypes = [
 // ============================================================
 
 function extractData(frontmatter) {
-  // Фильтры
   const filter = frontmatter.filter || []
   const ageObj = filter.find(f => f.age)
   const genderObj = filter.find(f => f.gender)
@@ -76,33 +92,24 @@ function extractData(frontmatter) {
   const directionObj = filter.find(f => f.direction)
   const experienceObj = filter.find(f => f.experience)
   const formatObj = filter.find(f => f.format)
-  
-  // Изображения
   const images = frontmatter.image || []
   const verticalImg = images.find(img => img.vertical)
   const horizontalImg = images.find(img => img.horizontal)
-  
   return {
     uuid: frontmatter.uuid,
     title: frontmatter.title || '',
     description: frontmatter.description || '',
-    // Поля для pets
     age: ageObj?.age || frontmatter.age || '',
     gender: genderObj?.gender || frontmatter.gender || '',
     size: sizeObj?.size || frontmatter.size || '',
-    // Поля для humans
     direction: directionObj?.direction || frontmatter.direction || '',
     experience: experienceObj?.experience || frontmatter.experience || '',
-    // Поля для organizations
     format: formatObj?.format || frontmatter.format || '',
-    // Завет
-    covenantID: frontmatter.covenantID || '',
-    // Изображения
     imageVertical: verticalImg?.vertical || frontmatter.imageVertical || '',
     imageHorizontal: horizontalImg?.horizontal || frontmatter.imageHorizontal || '',
-    // Группировка
     shelters: frontmatter.shelters || [],
     volunteers: frontmatter.volunteers || [],
+    covenantID: frontmatter.covenantID || '',
   }
 }
 

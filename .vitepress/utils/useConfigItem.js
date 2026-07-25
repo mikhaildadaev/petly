@@ -1,4 +1,11 @@
 import { useTranslate, useAge, useAgePetCategory, useDirection, useExperience } from './useTranslate'
+
+const getFilterValue = (filter, key) => {
+  if (!filter || !Array.isArray(filter)) return ''
+  const found = filter.find(f => f[key] !== undefined)
+  return found ? found[key] : ''
+}
+
 export const useConfigItem = {
   humans: {
     name: 'humans',
@@ -19,15 +26,20 @@ export const useConfigItem = {
       experience: { 'Начинающий': 'begin', 'Опытный': 'versed', 'Эксперт': 'expert' },
       direction: { 'Выгул': 'walk', 'Социализация': 'social', 'Лечение': 'treatment', 'Передержка': 'foster', 'Креатив': 'creative', 'Фандрайзинг': 'fundraising' }
     },
-    transform: (item, lang, translate) => ({
-      nameDisplay: item.title || '',
-      descriptionDisplay: item.description || '',
-      direction: useDirection('ru', item.direction),
-      directionDisplay: useDirection(lang, item.direction),
-      experience: useExperience('ru', item.experience),
-      experienceDisplay: useExperience(lang, item.experience),
-      shelters: item.shelters || [],
-    })
+    transform: (item, lang, translate) => {
+      const filter = item.filter || []
+      const direction = getFilterValue(filter, 'direction')
+      const experience = getFilterValue(filter, 'experience')
+      return {
+        nameDisplay: item.title || '',
+        descriptionDisplay: item.description || '',
+        direction: useDirection('ru', direction),
+        directionDisplay: useDirection(lang, direction),
+        experience: useExperience('ru', experience),
+        experienceDisplay: useExperience(lang, experience),
+        shelters: item.shelters || [],
+      }
+    }
   },
   organizations: {
     name: 'organizations',
@@ -46,12 +58,16 @@ export const useConfigItem = {
     icons: {
       format: { 'Государственный': 'state', 'Частный': 'private' }
     },
-    transform: (item, lang, translate) => ({
-      nameDisplay: item.title || '',
-      descriptionDisplay: item.description || '',
-      format: useTranslate('ru', 'format', item.format),
-      formatDisplay: useTranslate(lang, 'format', item.format),
-    })
+    transform: (item, lang, translate) => {
+      const filter = item.filter || []
+      const format = getFilterValue(filter, 'format')
+      return {
+        nameDisplay: item.title || '',
+        descriptionDisplay: item.description || '',
+        format: useTranslate('ru', 'format', format),
+        formatDisplay: useTranslate(lang, 'format', format),
+      }
+    }
   },
   pets: {
     name: 'pets',
@@ -74,17 +90,23 @@ export const useConfigItem = {
       age: { 'Детеныш': 'young', 'Молодая': 'middle', 'Взрослая': 'old' },
       size: { 'Маленькая': 'small', 'Средняя': 'medium', 'Крупная': 'large' }
     },
-    transform: (item, lang, translate) => ({
-      nameDisplay: item.title || '',
-      descriptionDisplay: item.description || '',
-      gender: useTranslate('ru', 'gender', item.gender),
-      genderDisplay: useTranslate(lang, 'gender', item.gender),
-      age: useAgePetCategory(item.age),
-      ageDisplay: useAge(lang, item.age),
-      size: item.size || '',
-      sizeDisplay: useTranslate(lang, 'size', item.size),
-      shelters: item.shelters || [],
-      volunteers: item.volunteers || [],
-    })
+    transform: (item, lang, translate) => {
+      const filter = item.filter || []
+      const age = getFilterValue(filter, 'age')
+      const gender = getFilterValue(filter, 'gender')
+      const size = getFilterValue(filter, 'size')
+      return {
+        nameDisplay: item.title || '',
+        descriptionDisplay: item.description || '',
+        gender: gender || '',
+        genderDisplay: gender ? translate('gender', gender) : '',
+        age: age ? useAgePetCategory(age) : '',
+        ageDisplay: age ? useAge(lang, age) : '',
+        size: size || '',
+        sizeDisplay: size ? translate('size', size) : '',
+        shelters: item.shelters || [],
+        volunteers: item.volunteers || [],
+      }
+    }
   }
 }
