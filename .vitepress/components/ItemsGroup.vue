@@ -135,8 +135,8 @@ export default {
         nameDisplay: item.title || '',
         descriptionDisplay: item.description || '',
         covenantID: item.covenantID || '',
-        imageVertical: useUrlMedia(item.imageVertical, 'image'),
         imageHorizontal: useUrlMedia(item.imageHorizontal, 'image'),
+        imageVertical: useUrlMedia(item.imageVertical, 'image'),
         type: props.itemType,
         shelters: item.shelters || [],
         ...(config.transform ? config.transform(item, lang.value, translate) : {})
