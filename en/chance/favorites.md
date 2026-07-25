@@ -12,10 +12,10 @@ This section is your own personal space. Only those who have already touched som
 Come back to them. Browse through the cards. Maybe today you'll decide: **«This is my pet.»**
 
 ## Cats
-<ItemsSelect type="pets" item-type="cats" :uuids="favoriteUUIDs"/>
+<ItemsSelect :type="'pets'" :item-type="'cats'" :uuids="favoriteUUIDs"/>
 
 ## Dogs
-<ItemsSelect type="pets" item-type="dogs" :uuids="favoriteUUIDs"/>
+<ItemsSelect :type="'pets'" :item-type="'dogs'" :uuids="favoriteUUIDs"/>
 
 <PageStyle/>
 
