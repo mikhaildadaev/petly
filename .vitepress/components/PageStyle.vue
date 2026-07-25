@@ -7,7 +7,7 @@
 <script>
 import { computed } from 'vue'
 import { useData } from 'vitepress'
-import { useStylePage } from '../utils/useStylePage'
+import { usePageStyle } from '../utils/usePageStyle'
 import { useUrlMedia } from '../utils/useUrlMedia'
 
 export default {
@@ -54,7 +54,7 @@ export default {
         currentPath = currentPath.slice(langPrefix.length)
       }
       if (!currentPath) currentPath = '/'
-      const config = useStylePage(currentPath)
+      const config = usePageStyle(currentPath)
       if (!config) {
         console.warn(`⚠️ Нет конфига для пути: ${currentPath}`)
         return {
