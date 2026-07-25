@@ -5,4 +5,4 @@ description: Was Sie wissen sollten, bevor Sie einen neuen Freund nach Hause hol
 
 # Tier aufnehmen
 
-<StyleImagePage src="/assets/webp/takePet.webp" width="320" float="center"/>
+<PageStyle/>

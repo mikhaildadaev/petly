@@ -5,4 +5,4 @@ description: Futter, Medikamente, Körbchen und Spielzeug – jeder Gegenstand h
 
 # Unterstützen
 
-<StyleImagePage src="/assets/webp/womanWithRug.webp" width="320" float="center"/>
+<PageStyle/>

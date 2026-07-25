@@ -36,3 +36,5 @@ features:
 
 ## Tierheime
 <ItemsRandom :type="'organizations'" :item-type="'shelters'"/>
+
+<PageStyle/>

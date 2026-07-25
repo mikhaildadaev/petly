@@ -17,7 +17,7 @@ Come back to them. Browse through the cards. Maybe today you'll decide: **«This
 ## Dogs
 <ItemsSelect type="pets" item-type="dogs" :uuids="favoriteUUIDs"/>
 
-<StyleImagePage :src="'/assets/webp/dogWithCat.webp'" :width="'284'" :float="'center'"/>
+<PageStyle/>
 
 <script setup>
 import { ref, onMounted } from 'vue'

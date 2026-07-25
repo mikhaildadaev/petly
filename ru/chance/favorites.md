@@ -17,7 +17,7 @@ description: Питомцы, что покорили ваше сердце.
 ## Собаки
 <ItemsSelect :type="'pets'" :item-type="'dogs'" :uuids="favoriteUUIDs"/>
 
-<StyleImagePage :src="'/assets/webp/dogWithCat.webp'" :width="'284'" :float="'center'"/>
+<PageStyle/>
 
 <script setup>
 import { ref, onMounted } from 'vue'

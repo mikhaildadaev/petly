@@ -5,4 +5,4 @@ description: Как сохранить здоровье питомца — со�
 
 # Здоровье
 
-<StyleImagePage :src="'/assets/webp/catWithDoctor.webp'" :width="'320'" :float="'center'"/>
+<PageStyle/>

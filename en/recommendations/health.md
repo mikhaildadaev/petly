@@ -5,4 +5,4 @@ description: How to keep your pet healthy — tips on care, nutrition and preven
 
 # Health
 
-<StyleImagePage src="/assets/webp/catWithDoctor.webp" width="320" float="center"/>
+<PageStyle/>

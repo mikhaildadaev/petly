@@ -46,7 +46,7 @@ blocks:
 ---
 
 # Присоединиться
-<StyleBlockPage :type="'cubes'"/>
-<StyleBlockPage :type="'steps'"/>
+<BlockStyle :type="'cubes'"/>
+<BlockStyle :type="'steps'"/>
 
-<StyleImagePage :src="'/assets/webp/womanWithRug.webp'" :width="'320'" :float="'center'"/>
+<PageStyle/>

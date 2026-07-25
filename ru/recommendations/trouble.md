@@ -5,4 +5,4 @@ description: Как действовать в экстренной ситуац�
 
 # Неприятности
 
-<StyleImagePage :src="'/assets/webp/responsibility.webp'" :width="'320'" :float="'right'"/>
+<PageStyle/>

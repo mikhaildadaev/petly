@@ -5,4 +5,4 @@ description: Что нужно знать, прежде чем привести 
 
 # Взять питомца
 
-<StyleImagePage :src="'/assets/webp/takePet.webp'" :width="'320'" :float="'center'"/>
+<PageStyle/>

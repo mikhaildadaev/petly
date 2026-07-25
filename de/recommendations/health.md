@@ -5,4 +5,4 @@ description: Wie Sie die Gesundheit Ihres Tieres erhalten – Tipps zur Pflege, 
 
 # Gesundheit
 
-<StyleImagePage src="/assets/webp/catWithDoctor.webp" width="320" float="center"/>
+<PageStyle/>

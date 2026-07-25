@@ -7,4 +7,4 @@ description: Menschen, die mit Taten helfen.
 
 <ListHumans :type="'volunteers'"/>
 
-<StyleImagePage :src="'/assets/webp/handsCatAndDog.webp'" :width="'284'" :float="'center'"/>
+<PageStyle/>

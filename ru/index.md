@@ -25,7 +25,6 @@ features:
     details: Стань для кого-то целым миром. Это проще, чем кажется — и важнее, чем что-либо ещё.
 ---
 
-
 ## Кошки
 <ItemsRandom :type="'pets'" :item-type="'cats'"/>
 
@@ -37,3 +36,5 @@ features:
 
 ## Приюты
 <ItemsRandom :type="'organizations'" :item-type="'shelters'"/>
+
+<PageStyle/>

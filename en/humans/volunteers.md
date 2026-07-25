@@ -7,4 +7,4 @@ description: People who help with action.
 
 <ListHumans :type="'volunteers'"/>
 
-<StyleImagePage :src="'/assets/webp/handsCatAndDog.webp'" :width="'284'" :float="'center'"/>
+<PageStyle/>

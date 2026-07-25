@@ -7,6 +7,6 @@ blocks:
 ---
 
 # Контакты
-<StyleBlockPage :type="'intro'"/>
+<BlockStyle :type="'intro'"/>
 
-<StyleImagePage :src="'/assets/webp/catWithSkein.webp'" :width="'320'" :float="'center'"/>
+<PageStyle/>
