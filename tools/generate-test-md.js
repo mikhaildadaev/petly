@@ -138,8 +138,7 @@ videos:
 - **На прогулке:** Любит долгие прогулки на свежем воздухе.
 
 ## Медиатека
-
-<GalleryMedia :audios="$frontmatter.audios" :photos="$frontmatter.photos" :videos="$frontmatter.videos" />
+<GalleryMedia :audios="$frontmatter.audios" :photos="$frontmatter.photos" :videos="$frontmatter.videos"/>
 
 ## История
 
@@ -150,13 +149,11 @@ ${pet.title} — это замечательный питомец, которы�
 Если вы ищете верного друга — ${pet.title} станет отличным выбором!
 
 ## Опекуны
-
-<SelectHumans :type="'volunteers'" :uuids="$frontmatter.volunteers || []" />
+<ItemsSelect type="humans" item-type="volunteers" :uuids="$frontmatter.volunteers || []"/>
 
 ## Приют
 
-<SelectOrganizations :type="'shelters'" :uuids="$frontmatter.shelters || []" />
-
+<ItemsSelect type="organizations" item-type="shelters" :uuids="$frontmatter.shelters || []"/>
 <StyleImagePage src="/assets/webp/dogWithGirlPhoto.webp" width="320px" float="center"/>
 `;
 }
