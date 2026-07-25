@@ -1,6 +1,5 @@
 <template>
   <div v-if="config && config.fields" class="list-items">
-    <!-- Фильтры -->
     <div v-if="hasFilters && config.filters" class="filters-compact hide-scrollbar">
       <div v-for="(filterConfig, filterName) in config.filters" :key="filterName" class="filter-group">
         <div class="filter-chips">
