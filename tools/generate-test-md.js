@@ -128,7 +128,7 @@ videos:
 
 # Питомец
 <div class="uuid">${pet.uuid}</div>
-<CardPetHero :type="'dogs'"/>
+<CardHero :type="'dogs'"/>
 
 ## Характер
 
