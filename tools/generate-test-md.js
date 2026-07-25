@@ -152,7 +152,7 @@ ${pet.title} — это замечательный питомец, которы�
 <ItemsSelect :type="'humans'" :item-type="'volunteers'" :uuids="$frontmatter.volunteers || []"/>
 
 ## Приют
-<ItemsSelect :type="'organizations'" item-type="'shelters'" :uuids="$frontmatter.shelters || []"/>
+<ItemsSelect :type="'organizations'" :item-type="'shelters'" :uuids="$frontmatter.shelters || []"/>
 `;
 }
 
