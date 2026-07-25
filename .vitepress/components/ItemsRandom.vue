@@ -49,7 +49,7 @@ import { useUrlMedia } from '../utils/useUrlMedia'
 const baseUrl = import.meta.env.BASE_URL
 
 export default {
-  name: 'RandomItems',
+  name: 'ItemsRandom',
   props: {
     type: { type: String, required: true },
     itemType: { type: String, required: true },
@@ -59,14 +59,11 @@ export default {
     const { lang } = useData()
     const translate = (category, key) => useTranslate(lang.value, category, key)
     const config = useConfigItem[props.type]
-
     const randomItems = ref([])
     const isLoading = ref(true)
     const isClient = ref(false)
-
     const { useRandomClass } = useRandomColor()
     const hasMoreItems = computed(() => randomItems.value.length > 0)
-
     const carouselRef = ref(null)
     const {
       isMobile,
@@ -88,29 +85,23 @@ export default {
       items: randomItems,
       hasMoreItems: hasMoreItems,
     })
-
     const goToLink = () => {
       window.location.href = `${baseUrl}${lang.value}/${config.name}/${props.itemType}`
     }
-
     const getItemLink = (item) => {
       const basePath = config.linkPath(item)
       return `${baseUrl}${lang.value}${basePath}${props.itemType}/${item.uuid}`
     }
-
     const carouselTotalSlides = computed(() => {
       return randomItems.value.length + (hasMoreItems.value ? 1 : 0)
     })
-
     const isFirstSlide = computed(() => currentIndex.value === 0)
     const isLastSlide = computed(() => currentIndex.value >= carouselTotalSlides.value - 1)
-
     let resizeTimeout = null
     const handleResize = () => {
       if (resizeTimeout) clearTimeout(resizeTimeout)
       resizeTimeout = setTimeout(() => { resizeTimeout = null }, 100)
     }
-
     const transformItem = (item) => {
       const base = {
         uuid: item.uuid,
@@ -124,7 +115,6 @@ export default {
       }
       return base
     }
-
     const loadItems = async () => {
       try {
         isLoading.value = true
@@ -148,24 +138,20 @@ export default {
         isLoading.value = false
       }
     }
-
     onMounted(async () => {
       isClient.value = true
       if (typeof window !== 'undefined') window.addEventListener('resize', handleResize)
       await loadItems()
     })
-
     watch(lang, async () => {
       await loadItems()
     })
-
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)
         if (resizeTimeout) clearTimeout(resizeTimeout)
       }
     })
-
     return {
       config,
       randomItems,
@@ -193,7 +179,6 @@ export default {
       useRandomClass,
       getItemLink,
       goToLink,
-      baseUrl,
     }
   }
 }

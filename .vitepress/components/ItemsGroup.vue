@@ -53,7 +53,7 @@ import { useUrlMedia } from '../utils/useUrlMedia'
 const baseUrl = import.meta.env.BASE_URL
 
 export default {
-  name: 'GroupItems',
+  name: 'ItemsGroup',
   props: {
     type: { type: String, required: true },
     itemType: { type: String, required: true },
@@ -63,22 +63,18 @@ export default {
     const { lang } = useData()
     const translate = (category, key) => useTranslate(lang.value, category, key)
     const config = useConfigItem[props.type]
-
     const allItems = ref([])
     const isLoading = ref(true)
     const isClient = ref(false)
-
     const groupedItems = computed(() => {
       if (isLoading.value) return []
       if (!allItems.value || allItems.value.length === 0) return []
       if (!props.uuid) return []
-
       const filtered = allItems.value.filter(item =>
         item.shelters && item.shelters.includes(props.uuid)
       )
       return filtered.reverse()
     })
-
     const {
       paginatedItems,
       remaining,
@@ -88,7 +84,6 @@ export default {
       resetPagination,
       visibleCount,
     } = usePagination(groupedItems, { perPage: 8 })
-
     const loadMore = async () => {
       const currentPosition = currentIndex.value
       await originalLoadMore()
@@ -97,10 +92,8 @@ export default {
         goToSlide(currentPosition)
       }
     }
-
     const { useRandomClass } = useRandomColor()
     const hasMoreItemsForCarousel = computed(() => hasMoreItems.value)
-
     const carouselRef = ref(null)
     const {
       isMobile,
@@ -122,25 +115,20 @@ export default {
       items: paginatedItems,
       hasMoreItems: hasMoreItemsForCarousel,
     })
-
     const carouselTotalSlides = computed(() => {
       return paginatedItems.value.length + (hasMoreItems.value ? 1 : 0)
     })
-
     const isFirstSlide = computed(() => currentIndex.value === 0)
     const isLastSlide = computed(() => currentIndex.value >= carouselTotalSlides.value - 1)
-
     const getItemLink = (item) => {
       const basePath = config.linkPath(item)
       return `${baseUrl}${lang.value}${basePath}${props.itemType}/${item.uuid}`
     }
-
     let resizeTimeout = null
     const handleResize = () => {
       if (resizeTimeout) clearTimeout(resizeTimeout)
       resizeTimeout = setTimeout(() => { resizeTimeout = null }, 100)
     }
-
     const transformItem = (item) => {
       const base = {
         uuid: item.uuid,
@@ -155,7 +143,6 @@ export default {
       }
       return base
     }
-
     const loadItems = async () => {
       try {
         isLoading.value = true
@@ -177,47 +164,42 @@ export default {
         isLoading.value = false
       }
     }
-
     onMounted(async () => {
       isClient.value = true
       if (typeof window !== 'undefined') window.addEventListener('resize', handleResize)
       await loadItems()
     })
-
     watch(lang, async () => {
       await loadItems()
       resetToFirstSlide()
     })
-
     watch(groupedItems, () => {
       resetPagination()
     }, { deep: true })
-
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)
         if (resizeTimeout) clearTimeout(resizeTimeout)
       }
     })
-
     return {
       config,
       groupedItems,
       paginatedItems,
-      lang,
-      translate,
       isLoading,
       isMobile,
       visibleCount,
-      remaining,
-      hasMoreItems,
-      loadMore,
-      isLoadingMore,
       carouselRef,
       currentIndex,
       carouselTotalSlides,
       isFirstSlide,
       isLastSlide,
+      remaining,
+      hasMoreItems,
+      loadMore,
+      isLoadingMore,
+      translate,
+      lang,
       scrollToSlide,
       nextSlide,
       prevSlide,
@@ -232,7 +214,6 @@ export default {
       touchEndY,
       useRandomClass,
       getItemLink,
-      baseUrl,
     }
   }
 }

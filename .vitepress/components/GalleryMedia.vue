@@ -2,13 +2,10 @@
   <div>
     <div class="gallery-media">
       <div v-for="(item, index) in mediaItems" :key="index" class="item" :style="{ '--delay': index * 0.05 + 's' }" @click="openFullScreen(index)">
-        <!-- Фотографии (превью) -->
         <img v-if="item.type === 'image'" :src="item.src" loading="lazy" />
-        <!-- Видеозаписи (превью) -->
         <div v-else-if="item.type === 'video'" class="video-preview">
           <video :src="item.src" muted playsinline @mouseenter="playVideo" @mouseleave="pauseVideo" ref="videoPreviewRefs" />
         </div>
-        <!-- Аудиозаписи (превью) -->
         <div v-else-if="item.type === 'audio'" class="audio-preview">
           <div class="audio-icon">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -24,11 +21,8 @@
         <span v-for="(_, index) in mediaItems" :key="index" class="dot" :class="{ active: index === currentIndex }" @click.stop="goToMedia(index)" />
       </div>
       <div class="content">
-        <!-- Фотографии -->
         <img v-if="currentMedia.type === 'image'" :src="currentMedia.src" />
-        <!-- Видеозаписи -->
         <video v-else-if="currentMedia.type === 'video'" :src="currentMedia.src" controls autoplay muted playsinline class="video" ref="fullScreenVideoRef"/>
-        <!-- Аудиозаписи -->
         <audio v-else-if="currentMedia.type === 'audio'" :src="currentMedia.src" controls class="audio" ref="fullScreenAudioRef"/>
       </div>
       <button class="fullscreen close" @click.stop="closeFullScreen"></button>
@@ -39,25 +33,15 @@
 </template>
 
 <script>
-// ============================================================
-//  1. ИМПОРТЫ
-// ============================================================
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useData } from 'vitepress'
 import { useScrollGallery } from '../utils/useScrollGallery'
 import { useUrlMedia } from '../utils/useUrlMedia'
 
-// ============================================================
-//  2. КОНСТАНТЫ
-// ============================================================
 const baseUrl = import.meta.env.BASE_URL
 
-// ============================================================
-//  3. КОМПОНЕНТ
-// ============================================================
 export default {
   name: 'GalleryMedia',
-
   props: {
     audios: {
       type: Array,
@@ -72,20 +56,11 @@ export default {
       default: () => [],
     }
   },
-
   setup(props) {
-    // ============================================================
-    //  3.1. СОСТОЯНИЕ
-    // ============================================================
     const fullScreenOpen = ref(false)
     const fullScreenAudioRef = ref(null)
     const fullScreenVideoRef = ref(null)
-
-    // ============================================================
-    //  3.2. МЕДИА
-    // ============================================================
     const mediaItems = ref([])
-
     const updateMediaItems = () => {
       const items = []
       const audios = props.audios || []
@@ -101,11 +76,6 @@ export default {
       
       mediaItems.value = items
     }
-
-    // ============================================================
-    //  3.3. КОМПОЗАБЛ ДЛЯ ГАЛЕРЕИ
-    // ============================================================
-
     const {
       currentIndex,
       goTo,
@@ -119,33 +89,21 @@ export default {
       items: mediaItems,
       initialIndex: 0,
     })
-
-    // ============================================================
-    //  3.4. ВЫЧИСЛЯЕМЫЕ
-    // ============================================================
-
     const currentMedia = computed(() => {
       return mediaItems.value[currentIndex.value] || { type: 'image', src: '' }
     })
-
     const hasMedia = computed(() => {
       const audios = props.audios || []
       const photos = props.photos || []
       const videos = props.videos || []
       return audios.length > 0 || photos.length > 0 || videos.length > 0
     })
-
-    // ============================================================
-    //  3.5. МЕТОДЫ
-    // ============================================================
-
     const openFullScreen = (index) => {
       if (!hasMedia.value) return
       goTo(index)
       fullScreenOpen.value = true
       document.body.style.overflow = 'hidden'
     }
-
     const closeFullScreen = () => {
       fullScreenOpen.value = false
       document.body.style.overflow = ''
@@ -156,35 +114,29 @@ export default {
         fullScreenVideoRef.value.pause()
       }
     }
-
     const nextMedia = () => next()
     const prevMedia = () => prev()
     const goToMedia = (index) => goTo(index)
-
     const playAudio = () => {
       if (fullScreenAudioRef.value) {
         fullScreenAudioRef.value.play().catch(() => {})
       }
     }
-
     const playVideo = (e) => {
       const video = e.target
       video.play().catch(() => {})
     }
-
     const pauseVideo = (e) => {
       const video = e.target
       video.pause()
       video.currentTime = 0
     }
-
     const stopCurrentVideo = () => {
       if (fullScreenVideoRef.value) {
         fullScreenVideoRef.value.pause()
         fullScreenVideoRef.value.currentTime = 0
       }
     }
-
     const playCurrentVideo = () => {
       if (fullScreenVideoRef.value && currentMedia.value.type === 'video') {
         setTimeout(() => {
@@ -192,11 +144,6 @@ export default {
         }, 100)
       }
     }
-
-    // ============================================================
-    //  3.6. WATCHERS
-    // ============================================================
-
     watch(currentIndex, () => {
       stopCurrentVideo()
       playCurrentVideo()
@@ -206,29 +153,18 @@ export default {
         }
       }, 300)
     })
-
-    // ============================================================
-    //  3.7. ЖИЗНЕННЫЙ ЦИКЛ
-    // ============================================================
-
     onMounted(() => {
       updateMediaItems()
       window.addEventListener('keydown', handleKeydown)
     })
-
     watch(() => [props.audios, props.photos, props.videos], updateMediaItems, { 
       deep: true,
       immediate: true 
     })
-
     onBeforeUnmount(() => {
       window.removeEventListener('keydown', handleKeydown)
       document.body.style.overflow = ''
     })
-
-    // ============================================================
-    //  3.8. ВОЗВРАТ
-    // ============================================================
     return {
       baseUrl,
       fullScreenOpen,

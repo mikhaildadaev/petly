@@ -82,53 +82,60 @@
   </div>
 </template>
 
-<script setup>
+<script>
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useData } from 'vitepress'
 import { useUrlMedia } from '../utils/useUrlMedia'
 
-const props = defineProps({
-  type: {
-    type: String,
-    default: 'default'
-  }
-})
-const { frontmatter } = useData()
-const activeTooltip = ref(null)
-const filteredBlocks = computed(() => {
-  const rawBlocks = frontmatter.value?.blocks || []
-  const matchedBlocks = rawBlocks.filter(block => block.type === props.type)
-  return matchedBlocks.map(block => ({
-    ...block,
-    image: block.image ? useUrlMedia(block.image, 'images', '', 'image') : '',
-    list: block.list?.map(item => ({
-      ...item,
-      image: item.image ? useUrlMedia(item.image, 'images', '', 'image') : ''
-    })) || []
-  }))
-})
-const toggleTooltip = (id) => {
-  if (activeTooltip.value === id) {
-    activeTooltip.value = null
-  } else {
-    activeTooltip.value = id
-  }
-}
-const closeAllTooltips = () => {
-  activeTooltip.value = null
-}
-const handleGlobalClick = (event) => {
-  const target = event.target
-  if (!target.closest('.info') && !target.closest('.tooltip')) {
-    activeTooltip.value = null
-  }
-}
+const baseUrl = import.meta.env.BASE_URL
 
-onMounted(() => {
-  document.addEventListener('click', handleGlobalClick)
-})
-
-onBeforeUnmount(() => {
-  document.removeEventListener('click', handleGlobalClick)
-})
+export default {
+  name: 'BlocksList',
+  props: {
+    type: {
+      type: String,
+      default: 'default'
+    }
+  },
+  setup(props) {
+    const { frontmatter } = useData()
+    const activeTooltip = ref(null)
+    const filteredBlocks = computed(() => {
+      const rawBlocks = frontmatter.value?.blocks || []
+      const matchedBlocks = rawBlocks.filter(block => block.type === props.type)
+      return matchedBlocks.map(block => ({
+        ...block,
+        image: block.image ? useUrlMedia(block.image, 'image') : '',
+        list: block.list?.map(item => ({
+          ...item,
+          image: item.image ? useUrlMedia(item.image, 'image') : ''
+        })) || []
+      }))
+    })
+    const toggleTooltip = (id) => {
+      activeTooltip.value = activeTooltip.value === id ? null : id
+    }
+    const closeAllTooltips = () => {
+      activeTooltip.value = null
+    }
+    const handleGlobalClick = (event) => {
+      const target = event.target
+      if (!target.closest('.info') && !target.closest('.tooltip')) {
+        activeTooltip.value = null
+      }
+    }
+    onMounted(() => {
+      document.addEventListener('click', handleGlobalClick)
+    })
+    onBeforeUnmount(() => {
+      document.removeEventListener('click', handleGlobalClick)
+    })
+    return {
+      filteredBlocks,
+      activeTooltip,
+      toggleTooltip,
+      closeAllTooltips,
+    }
+  }
+}
 </script>

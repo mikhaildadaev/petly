@@ -11,8 +11,7 @@ import { usePageStyle } from '../utils/usePageStyle'
 import { useUrlMedia } from '../utils/useUrlMedia'
 
 export default {
-  name: 'StylePage',
-
+  name: 'PageStyle',
   props: {
     src: {
       type: String,
@@ -35,7 +34,6 @@ export default {
       default: null,
     }
   },
-
   setup(props) {
     const { page, lang } = useData()
     const imageConfig = computed(() => {
@@ -72,17 +70,14 @@ export default {
         height: props.height || config.height || 'auto',
       }
     })
-
     const imageUrl = computed(() => {
       if (!imageConfig.value) return ''
       return useUrlMedia(imageConfig.value.src, 'image')
     })
-
     const handleImageError = (e) => {
       console.warn(`⚠️ Ошибка загрузки изображения: ${imageConfig.value?.src}`)
       e.target.style.display = 'none'
     }
-
     return {
       imageConfig,
       imageUrl,

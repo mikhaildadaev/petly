@@ -12,8 +12,6 @@
         {{ translate('filter', 'Сбросить') }}
       </button>
     </div>
-
-    <!-- Сетка (десктоп) -->
     <div v-if="!isMobile" class="cards-grid">
       <a v-for="item in paginatedItems" :key="item.uuid" :href="getItemLink(item)" target="_blank" rel="noopener noreferrer" class="aspect-list card">
         <div class="meta">
@@ -38,8 +36,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Карусель (мобильная) -->
     <div v-else class="cards-carousel">
       <div class="carousel-wrapper">
         <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
@@ -74,7 +70,6 @@
         <button class="carousel next" :class="{ none: isLastSlide }" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1"></button>
       </div>
     </div>
-
     <div v-if="filteredItems.length === 0 && !isLoading" class="no-results">
       <p>{{ translate('ui', 'Нет результатов') }}</p>
     </div>
@@ -94,7 +89,7 @@ import { useUrlMedia } from '../utils/useUrlMedia'
 const baseUrl = import.meta.env.BASE_URL
 
 export default {
-  name: 'ListItems',
+  name: 'ItemsList',
   props: {
     type: { type: String, required: true }, // 'pets', 'humans', 'organizations'
     itemType: { type: String, required: true } // 'dogs', 'cats', 'volunteers', 'shelters'
@@ -103,12 +98,9 @@ export default {
     const { lang } = useData()
     const translate = (category, key) => useTranslate(lang.value, category, key)
     const config = useConfigItem[props.type]
-
     const allItems = ref([])
     const isLoading = ref(true)
     const isClient = ref(false)
-
-    // Инициализация фильтров
     const filters = reactive({})
     if (config.filters) {
       Object.keys(config.filters).forEach(filterName => {
@@ -118,10 +110,7 @@ export default {
         })
       })
     }
-
     const hasFilters = computed(() => config.filters && Object.keys(config.filters).length > 0)
-
-    // Трансформация элемента
     const transformItem = (item) => {
       const base = {
         uuid: item.uuid,
@@ -135,8 +124,6 @@ export default {
       }
       return base
     }
-
-    // Фильтрация
     const filteredItems = computed(() => {
       return allItems.value.filter(item => {
         if (!config.filters) return true
@@ -157,8 +144,6 @@ export default {
         return isValid
       })
     })
-
-    // Пагинация
     const {
       paginatedItems,
       remaining,
@@ -168,7 +153,6 @@ export default {
       resetPagination,
       visibleCount,
     } = usePagination(filteredItems, { perPage: 8 })
-
     const loadMore = async () => {
       const currentPosition = currentIndex.value
       await originalLoadMore()
@@ -177,8 +161,6 @@ export default {
         goToSlide(currentPosition)
       }
     }
-
-    // Карусель
     const carouselRef = ref(null)
     const {
       isMobile,
@@ -200,23 +182,16 @@ export default {
       items: paginatedItems,
       hasMoreItems: hasMoreItems,
     })
-
     const carouselTotalSlides = computed(() => {
       return paginatedItems.value.length + (hasMoreItems.value ? 1 : 0)
     })
-
     const isFirstSlide = computed(() => currentIndex.value === 0)
     const isLastSlide = computed(() => currentIndex.value >= carouselTotalSlides.value - 1)
-
     const { useRandomClass } = useRandomColor()
-
-    // Ссылка на элемент
     const getItemLink = (item) => {
       const basePath = config.linkPath(item)
       return `${baseUrl}${lang.value}${basePath}${props.itemType}/${item.uuid}`
     }
-
-    // Фильтры
     const getFilterOptions = (filterName) => {
       const filterConfig = config.filters[filterName]
       return filterConfig.keys.map(key => ({
@@ -225,13 +200,11 @@ export default {
         icon: config.icons?.[filterName]?.[key] || ''
       }))
     }
-
     const toggleFilter = (group, value) => {
       filters[group][value] = !filters[group][value]
       resetPagination()
       resetToFirstSlide()
     }
-
     const resetFilters = () => {
       Object.keys(filters).forEach(group => {
         Object.keys(filters[group]).forEach(key => {
@@ -241,7 +214,6 @@ export default {
       resetPagination()
       resetToFirstSlide()
     }
-
     const areAllActive = computed(() => {
       if (!config.filters) return true
       let allActive = true
@@ -254,8 +226,6 @@ export default {
       })
       return allActive
     })
-
-    // Загрузка данных
     const loadItems = async () => {
       try {
         isLoading.value = true
@@ -278,15 +248,11 @@ export default {
         isLoading.value = false
       }
     }
-
-    // Resize
     let resizeTimeout = null
     const handleResize = () => {
       if (resizeTimeout) clearTimeout(resizeTimeout)
       resizeTimeout = setTimeout(() => { resizeTimeout = null }, 100)
     }
-
-    // Жизненный цикл
     onMounted(async () => {
       isClient.value = true
       if (typeof window !== 'undefined') {
@@ -294,12 +260,10 @@ export default {
       }
       await loadItems()
     })
-
     watch(lang, async () => {
       await loadItems()
       resetToFirstSlide()
     })
-
     watch(
       () => filters,
       () => {
@@ -308,13 +272,11 @@ export default {
       },
       { deep: true }
     )
-
     watch(isMobile, (newVal) => {
       if (isClient.value && newVal && paginatedItems.value.length) {
         resetToFirstSlide()
       }
     })
-
     watch(
       () => paginatedItems.value,
       (newVal) => {
@@ -325,14 +287,12 @@ export default {
       },
       { deep: true }
     )
-
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)
         if (resizeTimeout) clearTimeout(resizeTimeout)
       }
     })
-
     return {
       config,
       filters,
@@ -352,15 +312,12 @@ export default {
       isLoadingMore,
       resetPagination,
       visibleCount,
-      useRandomClass,
-      getItemLink,
       getFilterOptions,
       toggleFilter,
       resetFilters,
       areAllActive,
       translate,
       lang,
-      baseUrl,
       scrollToSlide,
       nextSlide,
       prevSlide,
@@ -373,6 +330,8 @@ export default {
       touchStartY,
       touchEndX,
       touchEndY,
+      useRandomClass,
+      getItemLink,
     }
   }
 }
