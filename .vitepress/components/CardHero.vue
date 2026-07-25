@@ -2,7 +2,7 @@
   <div v-if="config && config.fields" class="aspect-card hero-card">
     <div class="hero-meta">
       <template v-for="displayField in config.fields.display" :key="displayField">
-        <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`" :data-gender="displayField === 'genderDisplay' ? item.gender : null">{{ item[displayField] }}</label>
+        <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`">{{ item[displayField] }}</label>
       </template>
     </div>
     <img :src="item.image || ''" class="hero-image" loading="lazy" />
@@ -39,42 +39,22 @@ export default {
   setup(props) {
     const { lang, frontmatter } = useData()
     const translate = (category, key) => useTranslate(lang.value, category, key)
-    
-    // ✅ Получаем конфиг как в ItemsSelect
     const config = useConfigItem[props.type]
-    
     const { useRandomClass } = useRandomColor()
     const { isFavorite, toggleFavorite, checkIsFavorite } = useFavorites()
     const fm = computed(() => frontmatter.value || {})
     const isMobile = ref(false)
-    
     const checkMobile = () => {
       if (typeof window !== 'undefined') {
         isMobile.value = window.innerWidth < 735
       }
     }
-
     const item = computed(() => {
       const data = fm.value || {}
       const uuid = data.uuid || ''
-      
-      // Изображение
       const images = data.image || []
-      let image = isMobile.value 
-        ? images.find(img => img.vertical)?.vertical || '' 
-        : images.find(img => img.horizontal)?.horizontal || ''
-      
-      if (!image) {
-        image = images.find(img => img.horizontal)?.horizontal || 
-                images.find(img => img.vertical)?.vertical || 
-                ''
-      }
-
-      // ✅ Трансформация как в ItemsSelect
-      const transformed = config && config.transform 
-        ? config.transform(data, lang.value, translate) 
-        : {}
-
+      let image = isMobile.value ? images.find(img => img.vertical)?.vertical || '' : images.find(img => img.horizontal)?.horizontal || ''
+      const transformed = config && config.transform ? config.transform(data, lang.value, translate) : {}
       return {
         uuid,
         nameDisplay: data.title || '',
@@ -83,13 +63,11 @@ export default {
         ...transformed
       }
     })
-
     const checkFavoriteStatus = (uuid) => {
       if (uuid) {
         isFavorite.value = checkIsFavorite(uuid)
       }
     }
-
     let resizeTimeout = null
     const handleResize = () => {
       if (resizeTimeout) clearTimeout(resizeTimeout)
@@ -97,7 +75,6 @@ export default {
         checkMobile()
       }, 100)
     }
-
     onMounted(() => {
       checkMobile()
       if (typeof window !== 'undefined') {
@@ -105,26 +82,22 @@ export default {
       }
       nextTick(() => checkFavoriteStatus(item.value.uuid))
     })
-
     watch(() => item.value.uuid, (newUuid) => {
       if (newUuid) {
         setTimeout(() => checkFavoriteStatus(newUuid), 50)
       }
     }, { immediate: true })
-
     watch(fm, (newFm) => {
       if (newFm?.uuid) {
         isFavorite.value = checkIsFavorite(newFm.uuid)
       }
     }, { deep: true })
-
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)
         if (resizeTimeout) clearTimeout(resizeTimeout)
       }
     })
-
     return {
       config,
       item,
