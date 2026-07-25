@@ -25,19 +25,14 @@ features:
     details: Стань для кого-то целым миром. Это проще, чем кажется — и важнее, чем что-либо ещё.
 ---
 
-
 ## Cats
-
-<RandomPets type="cats" :count="8"/>
+<ItemsRandom :type="'pets'" :item-type="'cats'"/>
 
 ## Dogs
-
-<RandomPets type="dogs" :count="8"/>
+<ItemsRandom :type="'pets'" :item-type="'dogs'"/>
 
 ## Volunteers
-
-<RandomOrganizations type="volunteers" :count="8"/>
+<ItemsRandom :type="'humans'" :item-type="'volunteers'"/>
 
 ## Shelters
-
-<RandomOrganizations type="shelters" :count="8"/>
+<ItemsRandom :type="'organizations'" :item-type="'shelters'"/>

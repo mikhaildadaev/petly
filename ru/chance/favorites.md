@@ -12,14 +12,12 @@ description: Питомцы, что покорили ваше сердце.
 Вернитесь к ним. Полистайте карточки. Может быть, именно сегодня вы решите: **«Это мой питомец.»**
 
 ## Кошки
-
-<SelectPets :uuids="favoriteUUIDs" :type="'cats'"/>
+<ItemsSelect :type="'pets'" :item-type="'cats'" :uuids="favoriteUUIDs"/>
 
 ## Собаки
+<ItemsSelect :type="'pets'" :item-type="'dogs'" :uuids="favoriteUUIDs"/>
 
-<SelectPets :uuids="favoriteUUIDs" :type="'dogs'"/>
-
-<StyleImagePage src="/assets/webp/dogWithCat.webp" width="284" float="center"/>
+<StyleImagePage :src="'/assets/webp/dogWithCat.webp'" :width="'284'" :float="'center'"/>
 
 <script setup>
 import { ref, onMounted } from 'vue'

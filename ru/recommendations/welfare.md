@@ -5,4 +5,4 @@ description: Как защитить своего питомца и что го�
 
 # Права и защита
 
-<StyleImagePage src="/assets/webp/dogWithMan.webp" width="320" float="center"/>
+<StyleImagePage :src="'/assets/webp/dogWithMan.webp'" :width="'320'" :float="'center'"/>

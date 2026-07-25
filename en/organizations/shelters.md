@@ -7,4 +7,4 @@ description: A list of shelters where pets live while waiting for their new home
 
 <ListOrganizations :type="'shelters'"/>
 
-<StyleImagePage src="/assets/webp/handsCatAndDog.webp" width="284" float="center"/>
+<StyleImagePage :src="'/assets/webp/handsCatAndDog.webp'" :width="'284'" :float="'center'"/>

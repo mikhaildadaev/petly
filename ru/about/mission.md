@@ -38,11 +38,8 @@ blocks:
 ---
 
 # Миссия
+<StyleBlockPage :type="'intro'"/>
+<StyleBlockPage :type="'steps'"/>
+<StyleBlockPage :type="'cubes'"/>
 
-<StyleBlockPage type="intro"/>
-
-<StyleBlockPage type="steps"/>
-
-<StyleBlockPage type="cubes"/>
-
-<StyleImagePage src="/assets/webp/dogWithBoy.webp" width="320" float="center"/>
+<StyleImagePage :src="'/assets/webp/dogWithBoy.webp'" :width="'320'" :float="'center'"/>

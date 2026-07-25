@@ -56,13 +56,9 @@ blocks:
 ---
 
 # Технологии
+<StyleBlockPage :type="'intro'"/>
+<StyleBlockPage :type="'chips'"/>
+<StyleBlockPage :type="'cubes'"/>
+<StyleBlockPage :type="'rects'"/>
 
-<StyleBlockPage type="intro"/>
-
-<StyleBlockPage type="chips"/>
-
-<StyleBlockPage type="cubes"/>
-
-<StyleBlockPage type="rects"/>
-
-<StyleImagePage src="/assets/webp/catBoyWithHut.webp" width="320" float="center"/>
+<StyleImagePage :src="'/assets/webp/catBoyWithHut.webp'" :width="'320'" :float="'center'"/>

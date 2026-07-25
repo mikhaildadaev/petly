@@ -60,9 +60,7 @@ blocks:
 ---
 
 # Поддержать
+<StyleBlockPage :type="'cubes'"/>
+<StyleBlockPage :type="'social'"/>
 
-<StyleBlockPage type="cubes"/>
-
-<StyleBlockPage type="social"/>
-
-<StyleImagePage src="/assets/webp/dogWithGirl.webp" width="320" float="center"/>
+<StyleImagePage :src="'/assets/webp/dogWithGirl.webp'" :width="'320'" :float="'center'"/>
