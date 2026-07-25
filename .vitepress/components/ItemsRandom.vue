@@ -5,7 +5,7 @@
         <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(item, index) in randomItems" :key="item.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="getItemLink(item)" class="aspect-list card">
+            <a :href="getItemLink(item)" target="_blank" rel="noopener noreferrer" class="aspect-list card">
               <div class="meta">
                 <template v-for="displayField in config.fields.display" :key="displayField">
                   <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`">{{ item[displayField] }}</label>
