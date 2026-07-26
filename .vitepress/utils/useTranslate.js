@@ -52,9 +52,7 @@ export const translations = {
       email: 'E-Mail',
       phone: 'Telefon',
       social: 'Soziale Netzwerke',
-      site: 'Webseite',
-      telegram: 'Telegram',
-      vk: 'VK'
+      site: 'Webseite'
     },
     ui: {
       'Сбросить': 'Zurücksetzen',
@@ -118,9 +116,7 @@ export const translations = {
       email: 'Email',
       phone: 'Phone',
       social: 'Social media',
-      site: 'Website',
-      telegram: 'Telegram',
-      vk: 'VK'
+      site: 'Website'
     },
     ui: {
       'Сбросить': 'Reset',
@@ -184,9 +180,7 @@ export const translations = {
       email: 'Email',
       phone: 'Телефон',
       social: 'Социальные сети',
-      site: 'Сайт',
-      telegram: 'Telegram',
-      vk: 'ВКонтакте'
+      site: 'Сайт'
     },
     ui: {
       'Сбросить': 'Сбросить',
