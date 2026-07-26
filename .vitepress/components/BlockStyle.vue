@@ -83,7 +83,7 @@
             <div class="content">
               <h6 class="name">{{ item.name }}</h6>
               <p class="description withColor">{{ item.description }}</p>
-              <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="link">Перейти по ссылке</a>
+              <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="link">{{ translate('ui', 'Перейти по ссылке') }}</a>
             </div>
           </div>
         </div>
@@ -96,7 +96,7 @@
             <div class="content">
               <h6 class="name">{{ item.name }}</h6>
               <p class="description withColor">{{ item.description }}</p>
-              <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="link">Перейти по ссылке</a>
+              <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="link">{{ translate('ui', 'Перейти по ссылке') }}</a>
             </div>
           </div>
         </div>
@@ -115,7 +115,7 @@
 <script>
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useData } from 'vitepress'
-import { useInfoLabel } from '../utils/useTranslate'
+import { useTranslate, useInfoLabel } from '../utils/useTranslate'
 import { useUrlMedia } from '../utils/useUrlMedia'
 
 const baseUrl = import.meta.env.BASE_URL
@@ -130,6 +130,7 @@ export default {
   },
   setup(props) {
     const { frontmatter, lang } = useData()
+    const translate = (category, key) => useTranslate(lang.value, category, key)
     const activeTooltip = ref(null)
     const getLabel = (key) => {
       return useInfoLabel(lang.value, key)
@@ -167,6 +168,8 @@ export default {
     return {
       filteredBlocks,
       activeTooltip,
+      lang,
+      translate,
       toggleTooltip,
       closeAllTooltips,
       getLabel,
