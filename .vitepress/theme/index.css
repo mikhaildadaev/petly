@@ -964,6 +964,29 @@ p.withColor {
 .block-type-cubes .content .info:hover {
   background-color:var(--vp-c-brand);
 }
+.block-type-info {
+  position: relative;
+  display: block;
+}
+.block-type-info .container {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin: 1rem 0;
+}
+.block-type-info .container .item {
+  display: flex;
+  gap: 16px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+.block-type-info .container .item .label {
+  font-weight: 600;
+  min-width: 160px;
+  color: var(--vp-c-text-1);
+}
+.block-type-info .container .item .value {
+  color: var(--vp-c-text-2);
+}
 .block-type-intro {
   position: relative;
   display: block;
