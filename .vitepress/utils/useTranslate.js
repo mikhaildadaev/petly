@@ -51,7 +51,7 @@ export const translations = {
       mode: 'Öffnungszeiten',
       email: 'E-Mail',
       phone: 'Telefon',
-      social: 'Soziale Netzwerke',
+      telegram: 'Telegram',
       site: 'Webseite'
     },
     ui: {
@@ -60,7 +60,8 @@ export const translations = {
       'осталось': 'übrig',
       'Перейти в раздел': 'Zum Bereich',
       'Ничего не найдено': 'Nichts gefunden',
-      'Добавить в избранное': 'Zu Favoriten'
+      'Добавить в избранное': 'Zu Favoriten',
+      'Перейти по ссылке': 'Zum Link'
     }
   },
   en: {
@@ -115,7 +116,7 @@ export const translations = {
       mode: 'Working hours',
       email: 'Email',
       phone: 'Phone',
-      social: 'Social media',
+      telegram: 'Telegram',
       site: 'Website'
     },
     ui: {
@@ -125,6 +126,7 @@ export const translations = {
       'Перейти в раздел': 'Go to section',
       'Ничего не найдено': 'Nothing found',
       'Добавить в избранное': 'Add to favorites',
+      'Перейти по ссылке': 'Go to link'
     }
   },
   ru: {
@@ -179,7 +181,7 @@ export const translations = {
       mode: 'Режим работы',
       email: 'Email',
       phone: 'Телефон',
-      social: 'Социальные сети',
+      telegram: 'Telegram',
       site: 'Сайт'
     },
     ui: {
@@ -188,7 +190,8 @@ export const translations = {
       'осталось': 'осталось',
       'Перейти в раздел': 'Перейти в раздел',
       'Ничего не найдено': 'Ничего не найдено',
-      'Добавить в избранное': 'В любимцы'
+      'Добавить в избранное': 'В любимцы',
+      'Перейти по ссылке': 'Перейти по ссылке'
     }
   }
 }
