@@ -31,17 +31,26 @@
           </div>
         </div>
       </div>
+      <div v-else-if="block.type === 'feature'" :class="`block-type-${type}`">
+        <div class="container">
+          <div v-for="(item, index) in block.items" :key="index" class="item">
+            <span class="text">{{ item }}</span>
+          </div>
+        </div>
+      </div>
       <div v-else-if="block.type === 'info'" :class="`block-type-${type}`">
         <div class="container">
-          <div v-for="(value, key) in block.items" :key="key" class="item">
-            <span class="label">{{ getLabel(key) }}:</span>
-            <span class="value">
-              <a v-if="value != '' && key === 'phone'" :href="`tel:${String(value).replace(/[^0-9+]/g, '')}`">{{ value }}</a>
-              <a v-else-if="value != '' && key === 'email'" :href="`mailto:${value}`">{{ value }}</a>
-              <a v-else-if="value != '' && key === 'site'" :href="String(value).startsWith('http') ? value : `https://${value}`" target="_blank">{{ value }}</a>
-              <span v-else>{{ value || 'Не указано' }}</span>
-            </span>
-          </div>
+          <template v-for="(value, key) in block.items" :key="key">
+            <div v-if="value && value !== ''" class="item">
+              <span class="label">{{ getLabel(key) }}:</span>
+              <span class="value">
+                <a v-if="key === 'phone'" :href="`tel:${String(value).replace(/[^0-9+]/g, '')}`">{{ value }}</a>
+                <a v-else-if="key === 'email'" :href="`mailto:${value}`">{{ value }}</a>
+                <a v-else-if="key === 'site'" :href="String(value).startsWith('http') ? value : `https://${value}`" target="_blank">{{ value }}</a>
+                <span v-else>{{ value }}</span>
+              </span>
+            </div>
+          </template>
         </div>
       </div>
       <div v-else-if="block.type === 'intro'" :class="`block-type-${type}`">
