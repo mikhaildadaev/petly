@@ -152,7 +152,7 @@ button.fullscreen {
   width: 32px;
   height: 32px;
   cursor: pointer;
-  background-color: var(--vp-c-text-1);
+  background-color: var(--vp-c-light);
   mask-size: contain;
   -webkit-mask-size: contain;
   mask-repeat: no-repeat;
