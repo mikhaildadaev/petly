@@ -964,6 +964,33 @@ p.withColor {
 .block-type-cubes .content .info:hover {
   background-color:var(--vp-c-brand);
 }
+.block-type-feature {
+  position: relative;
+  display: block;
+}
+.block-type-feature .container {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+.block-type-feature .container .item {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+.block-type-feature .container .item:last-child {
+  border-bottom: none;
+}
+.block-type-feature .container .icon {
+  font-size: 1.2rem;
+  color: var(--vp-c-brand);
+  line-height: 1.5;
+  min-width: 20px;
+  text-align: center;
+}
+.block-type-feature .container .text {
+  color: var(--vp-c-text-2);
+  line-height: 1.6;
+}
 .block-type-info {
   position: relative;
   display: block;
@@ -978,10 +1005,12 @@ p.withColor {
 }
 .block-type-info .container .item {
   display: grid;
-  gap: 0 16px;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: 1fr;
   padding: 8px 0;
   border-bottom: 1px solid var(--vp-c-divider);
+}
+.block-type-info .container .item:last-child {
+  border-bottom: none;
 }
 .block-type-info .container .item .label {
   font-weight: 600;
