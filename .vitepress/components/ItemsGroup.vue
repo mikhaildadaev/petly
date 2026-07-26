@@ -73,7 +73,7 @@ export default {
       const filtered = allItems.value.filter(item =>
         item.shelters && item.shelters.includes(props.uuid)
       )
-      return filtered.reverse()
+      return filtered
     })
     const {
       paginatedItems,

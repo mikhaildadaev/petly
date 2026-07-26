@@ -238,7 +238,6 @@ export default {
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
         const data = await response.json()
         allItems.value = data.map(item => transformItem(item))
-        allItems.value = allItems.value.reverse()
         resetPagination()
       } catch (error) {
         console.error('Ошибка загрузки данных:', error)
