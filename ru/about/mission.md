@@ -2,11 +2,12 @@
 title: Миссия
 description: Мы верим, что каждый питомец заслуживает дом, а каждый человек может стать частью доброго дела.
 blocks:
-  - title: «Мы верим, что каждый питомец заслуживает дом, а каждый человек может стать частью доброго дела.»
+  - type: intro
+    title: «Мы верим, что каждый питомец заслуживает дом, а каждый человек может стать частью доброго дела.»
     description: Данный проект создан с целью помочь животным находить семьи, объединять людей, которым не всё равно, и делать добро простым и доступным.
-    type: intro
 
-  - title: ... Наши ценности
+  - type: steps
+    title: ... Наши ценности
     list:
       - name: Доброта
         image: /assets/webp/value-kindness.webp
@@ -19,9 +20,9 @@ blocks:
       - name: Открытость
         image: /assets/webp/value-openness.webp
         description: Мы честны с волонтёрами и прозрачны в своих действиях.
-    type: steps
 
-  - title: ... Наши цели
+  - type: cubes
+    title: ... Наши цели
     list:
       - name: Помогать животным
         image: /assets/webp/mission-help.webp
@@ -34,7 +35,6 @@ blocks:
       - name: Делать добро
         image: /assets/webp/mission-kindness.webp
         info: Показываем, что помогать — просто, важно и нужно.
-    type: cubes
 ---
 
 # Миссия

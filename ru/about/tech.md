@@ -2,12 +2,12 @@
 title: Технологии
 description: Мы строим мосты из простого тепла, чтоб каждая лапа свой дом обрела.
 blocks:
-  - title: «Мы строим мосты из простого тепла, чтоб каждая лапа свой дом обрела.»
+  - type: intro
+    title: «Мы строим мосты из простого тепла, чтоб каждая лапа свой дом обрела.»
     description: Для данного проекта используются современные технологии, чтобы помогать животным находить дом, а волонтёрам — объединяться.
-    type: intro
 
-  - title: ... Инфраструктура
-    type: chips
+  - type: chips
+    title: ... Инфраструктура
     list:
       - name: GitHub
         image: /assets/svg/github.svg
@@ -19,8 +19,8 @@ blocks:
         description: Облачное хранилище для аудио/видео записей и изображений с доставкой контента.
         link: https://cloudinary.com/
 
-  - title: ... Фронтенд
-    type: cubes
+  - type: cubes
+    title: ... Фронтенд
     list:
       - name: Vue 3 & VitePress
         image: /assets/svg/vue.svg
@@ -47,8 +47,8 @@ blocks:
         info: Шрифты Caveat и Days One для уютной атмосферы.
         link: https://fonts.google.com/
 
-  - title: ... Лицензия
-    type: rects
+  - type: rects
+    title: ... Лицензия
     list:
       - name: Apache License 2.0
         description: Проект распространяется под лицензией Apache License 2.0. Код открыт и вы можете использовать его в своих проектах.

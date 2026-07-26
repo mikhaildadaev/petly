@@ -2,7 +2,8 @@
 title: Поддержать
 description: Корм, лекарства, лежанки и игрушки — каждая вещь помогает животным жить лучше.
 blocks:
-  - title: ... Вещами
+  - type: "cubes"
+    title: ... Вещами
     list: 
       - name: Лакомства
         image: /assets/webp/things_yummy.webp
@@ -23,9 +24,9 @@ blocks:
       - name: Лекарства
         image: /assets/webp/things_medicines.webp
         info: Должены быть в закрытой заводской упаковке и действующим сроком годности.
-    type: "cubes"
   
-  - title: ... Делами
+  - type: "cubes"
+    title: ... Делами
     description: Передать необходимое можно лично или оформив доставку. Режим работы приютов и номера телефонов для уточнения деталей можно нацти в карточках опекуна или карточках приюта.
     list: 
       - name: Приучить к поводку и ошейнику.
@@ -43,9 +44,9 @@ blocks:
       - name: Создать контент о питомце
         image: /assets/webp/affairs_content.webp
         info: Сделайте фото/видео, напишите рассказ о характере питомца — это поможет найти любящую семью быстрее.
-    type: "cubes"
 
-  - title: ... Словами
+  - type: "social"
+    title: ... Словами
     description: Делитесь ссылкой на сервис в социальных сетях! Один репост — и кто-то найдет дом, а кто-то — верного друга.
     image: /assets/webp/words_post.webp
     list: 
@@ -54,9 +55,6 @@ blocks:
       
       - link: «Телеграм»
         url: https://t.me/share/url?url=https://mikhaildadaev.github.io/petly
-
-    type: "social"
-
 ---
 
 # Поддержать
