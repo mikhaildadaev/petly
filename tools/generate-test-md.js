@@ -124,6 +124,27 @@ photos:
   - '${pet.photos[1]}'
 videos:
   - '${pet.videos[0]}'
+blocks:
+  - type: list
+    title: ... Информация 
+    items: 
+      address: ''
+      mode: ''
+      email: ''
+      phone: ''
+      social: ''
+  
+  - type: feature
+    title: ... Характер 
+    items: 
+      - 'Описание особенностей питомца'
+      - 'Описание взаимодействия с другими собаками'
+      - 'Описание взаимодействия с людьми'
+      - 'Описание поведения на прогулке'
+
+  - type: text
+    title: ... История
+    content: 'История собаки. Как попала в приют, какой у неё характер, что она любит.'
 ---
 
 # Питомец
@@ -131,22 +152,13 @@ videos:
 <CardHero :type="'pets'" :item-type="'dogs'"/>
 
 ## Характер
-
-- **Особенности:** ${pet.title} — ${pet.description}
-- **С другими собаками:** Дружелюбно относится к сородичам.
-- **С людьми:** Преданный и ласковый друг.
-- **На прогулке:** Любит долгие прогулки на свежем воздухе.
+<BlockStyle :type="'feature'"/>
 
 ## Медиатека
 <GalleryMedia :audios="$frontmatter.audios" :photos="$frontmatter.photos" :videos="$frontmatter.videos"/>
 
 ## История
-
-${pet.title} — это замечательный питомец, который ищет свой дом. Он попал в приют в ${new Date(pet.age).toLocaleDateString('ru-RU')}. Сейчас ему нужна любящая семья.
-
-> «Каждый питомец заслуживает дом, а каждый человек может стать частью доброго дела.»
-
-Если вы ищете верного друга — ${pet.title} станет отличным выбором!
+<BlockStyle :type="'text'"/>
 
 ## Опекуны
 <ItemsSelect :type="'humans'" :item-type="'volunteers'" :uuids="$frontmatter.volunteers || []"/>
