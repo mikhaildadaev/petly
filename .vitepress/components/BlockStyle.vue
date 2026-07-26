@@ -31,6 +31,23 @@
           </div>
         </div>
       </div>
+      <div v-else-if="block.type === 'info'" :class="`block-type-${type}`">
+        <div class="container">
+          <div v-for="(value, key) in block.items" :key="key" class="item">
+            <span class="label">{{ getLabel(key) }}:</span>
+            <span v-if="key === 'phone' && value" class="value" >
+              <a :href="`tel:${value.replace(/[^0-9+]/g, '')}`" class="link">{{ value }}</a>
+            </span>
+            <span v-else-if="key === 'email' && value" class="value" >
+              <a :href="`mailto:${value}`" class="link">{{ value }}</a>
+            </span>
+            <span v-else-if="key === 'site' && value" class="value" >
+              <a :href="value.startsWith('http') ? value : `https://${value}`" target="_blank" rel="noopener" class="link">{{ value }}</a>
+            </span>
+            <span v-else class="value">{{ value || 'Не указано' }}</span>
+          </div>
+        </div>
+      </div>
       <div v-else-if="block.type === 'intro'" :class="`block-type-${type}`">
         <div class="background">
           <h1 class="title">{{ block.title }}</h1>
@@ -78,6 +95,13 @@
           </div>
         </div>
       </div>
+      <div v-else-if="block.type === 'text'" :class="`block-type-${type}`">
+        <div class="container">
+          <div class="content">
+            <p>{{ block.content || 'Нет информации' }}</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -85,12 +109,13 @@
 <script>
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useData } from 'vitepress'
+import { useInfoLabel } from '../utils/useTranslate'
 import { useUrlMedia } from '../utils/useUrlMedia'
 
 const baseUrl = import.meta.env.BASE_URL
 
 export default {
-  name: 'BlocksList',
+  name: 'BlockStyle',
   props: {
     type: {
       type: String,
@@ -98,8 +123,11 @@ export default {
     }
   },
   setup(props) {
-    const { frontmatter } = useData()
+    const { frontmatter, lang } = useData()
     const activeTooltip = ref(null)
+    const getLabel = (key) => {
+      return useInfoLabel(lang.value, key)
+    }
     const filteredBlocks = computed(() => {
       const rawBlocks = frontmatter.value?.blocks || []
       const matchedBlocks = rawBlocks.filter(block => block.type === props.type)
@@ -135,6 +163,7 @@ export default {
       activeTooltip,
       toggleTooltip,
       closeAllTooltips,
+      getLabel,
     }
   }
 }
