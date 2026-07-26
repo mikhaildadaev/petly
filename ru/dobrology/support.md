@@ -44,7 +44,7 @@ blocks:
       - link: '«ВКонтакте»'
         url: 'https://vk.com/share.php?url=https://mikhaildadaev.github.io/petly'
       
-      - link: '«Телеграм»'
+      - link: '«Telegram»'
         url: 'https://t.me/share/url?url=https://mikhaildadaev.github.io/petly'
 ---
 
