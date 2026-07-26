@@ -1,12 +1,13 @@
 export const pageImages = {
+  
   '/': {
     src: '/assets/webp/page_main.webp',
     width: 320,
     float: 'center'
   },
   
-  '/about/contact': {
-    src: '/assets/webp/page_contact.webp',
+  '/about/contacts': {
+    src: '/assets/webp/page_contacts.webp',
     width: 320,
     float: 'left'
   },
@@ -87,6 +88,7 @@ export const pageImages = {
     width: 320,
     float: 'center'
   }
+  
 }
 
 export function usePageStyle(path) {
