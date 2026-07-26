@@ -46,6 +46,16 @@ export const translations = {
       'Государственный': 'Staatlich',
       'Частный': 'Privat'
     },
+    info: {
+      address: 'Adresse',
+      mode: 'Öffnungszeiten',
+      email: 'E-Mail',
+      phone: 'Telefon',
+      social: 'Soziale Netzwerke',
+      site: 'Webseite',
+      telegram: 'Telegram',
+      vk: 'VK'
+    },
     ui: {
       'Сбросить': 'Zurücksetzen',
       'Загрузить ещё': 'Mehr laden',
@@ -102,6 +112,16 @@ export const translations = {
       'Государственный': 'State',
       'Частный': 'Private'
     },
+    info: {
+      address: 'Address',
+      mode: 'Working hours',
+      email: 'Email',
+      phone: 'Phone',
+      social: 'Social media',
+      site: 'Website',
+      telegram: 'Telegram',
+      vk: 'VK'
+    },
     ui: {
       'Сбросить': 'Reset',
       'Загрузить ещё': 'Load more',
@@ -157,6 +177,16 @@ export const translations = {
     format: {
       'Государственный': 'Государственный',
       'Частный': 'Частный'
+    },
+    info: {
+      address: 'Адрес',
+      mode: 'Режим работы',
+      email: 'Email',
+      phone: 'Телефон',
+      social: 'Социальные сети',
+      site: 'Сайт',
+      telegram: 'Telegram',
+      vk: 'ВКонтакте'
     },
     ui: {
       'Сбросить': 'Сбросить',
@@ -254,4 +284,7 @@ export const useExperience = (lang, startDate) => {
     categoryKey = 'Эксперт'
   }
   return useTranslate(lang, 'experience', categoryKey)
+}
+export const useInfoLabel = (lang, key) => {
+  return translations[lang]?.['info']?.[key] || key
 }
