@@ -47,6 +47,7 @@
                 <a v-if="key === 'phone'" :href="`tel:${String(value).replace(/[^0-9+]/g, '')}`">{{ value }}</a>
                 <a v-else-if="key === 'email'" :href="`mailto:${value}`">{{ value }}</a>
                 <a v-else-if="key === 'site'" :href="String(value).startsWith('http') ? value : `https://${value}`" target="_blank">{{ value }}</a>
+                <a v-else-if="key === 'telegram'" :href="`https://t.me/${String(value).replace('@', '')}`" target="_blank" rel="noopener">{{ value }}</a>
                 <span v-else>{{ value }}</span>
               </span>
             </div>
