@@ -36,7 +36,7 @@
     </div>
   </div>
   <div v-else-if="!isLoading && (!groupedItems || groupedItems.length === 0)" class="no-results">
-    <p>{{ translate('ui', 'Нет результатов') }}</p>
+    <p>{{ translate('ui', 'Ничего не найдено') }}</p>
   </div>
 </template>
 

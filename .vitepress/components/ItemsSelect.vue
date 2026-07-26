@@ -24,7 +24,7 @@
     </div>
   </div>
   <div v-else-if="selectedItems && selectedItems.length === 0" class="no-results">
-    <p>{{ translate('ui', 'Нет выбранных элементов') }}</p>
+    <p>{{ translate('ui', 'Ничего не найдено') }}</p>
   </div>
 </template>
 

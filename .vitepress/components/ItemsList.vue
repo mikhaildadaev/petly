@@ -7,8 +7,8 @@
         </div>
         <label class="filter-label">{{ translate('filter', filterConfig.label) }}</label>
       </div>
-      <button v-if="!areAllActive" class="reset" @click="resetFilters" :title="translate('ui', 'Включить все фильтры')">
-        {{ translate('filter', 'Сбросить') }}
+      <button v-if="!areAllActive" class="reset" @click="resetFilters" :title="translate('ui', 'Сбросить')">
+        {{ translate('ui', 'Сбросить') }}
       </button>
     </div>
     <div v-if="!isMobile" class="cards-grid">
@@ -70,7 +70,7 @@
       </div>
     </div>
     <div v-if="filteredItems.length === 0 && !isLoading" class="no-results">
-      <p>{{ translate('ui', 'Нет результатов') }}</p>
+      <p>{{ translate('ui', 'Ничего не найдено') }}</p>
     </div>
   </div>
 </template>
