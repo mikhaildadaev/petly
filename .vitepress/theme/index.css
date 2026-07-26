@@ -1067,10 +1067,15 @@ p.withColor {
   overflow: hidden;
 }
 .block-type-rects .link {
-  display: inline-block;
-  color: var(--vp-c-text);
-  font-weight: 500;
-  text-decoration: underline!important;
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px 16px;
+  background-color: var(--vp-c-bg);
+  border-radius: var(--radius);
+  color: var(--vp-c-text-1);
+  text-align: center;
+  font-weight: 900;
 }
 .block-type-rects .link:hover {
   color: var(--vp-c-brand);
