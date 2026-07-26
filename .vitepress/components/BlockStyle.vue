@@ -35,16 +35,12 @@
         <div class="container">
           <div v-for="(value, key) in block.items" :key="key" class="item">
             <span class="label">{{ getLabel(key) }}:</span>
-            <span v-if="key === 'phone' && value" class="value" >
-              <a :href="`tel:${value.replace(/[^0-9+]/g, '')}`" class="link">{{ value }}</a>
+            <span class="value">
+              <a v-if="value != '' && key === 'phone'" :href="`tel:${String(value).replace(/[^0-9+]/g, '')}`">{{ value }}</a>
+              <a v-else-if="value != '' && key === 'email'" :href="`mailto:${value}`">{{ value }}</a>
+              <a v-else-if="value != '' && key === 'site'" :href="String(value).startsWith('http') ? value : `https://${value}`" target="_blank">{{ value }}</a>
+              <span v-else>{{ value || 'Не указано' }}</span>
             </span>
-            <span v-else-if="key === 'email' && value" class="value" >
-              <a :href="`mailto:${value}`" class="link">{{ value }}</a>
-            </span>
-            <span v-else-if="key === 'site' && value" class="value" >
-              <a :href="value.startsWith('http') ? value : `https://${value}`" target="_blank" rel="noopener" class="link">{{ value }}</a>
-            </span>
-            <span v-else class="value">{{ value || 'Не указано' }}</span>
           </div>
         </div>
       </div>
