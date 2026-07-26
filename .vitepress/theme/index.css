@@ -174,7 +174,7 @@ button.fullscreen {
 }
 button.fullscreen.close {
   right: calc(50% - 16px);
-  bottom: 0;
+  bottom: 16px;
   mask-image: url('/petly/assets/svg/close.svg');
   -webkit-mask-image: url('/petly/assets/svg/close.svg');
 }
@@ -964,50 +964,22 @@ p.withColor {
 .block-type-cubes .content .info:hover {
   background-color:var(--vp-c-brand);
 }
-.block-type-feature {
-  position: relative;
-  display: block;
-}
-.block-type-feature .container {
-  display: flex;
-  flex-direction: column;
-  margin: 1rem 0;
-}
-.block-type-feature .container .item {
-  padding: 8px 0;
-  border-bottom: 1px solid var(--vp-c-divider);
-}
-.block-type-feature .container .item:last-child {
-  border-bottom: none;
-}
-.block-type-feature .container .icon {
-  font-size: 1.2rem;
-  color: var(--vp-c-brand);
-  line-height: 1.5;
-  min-width: 20px;
-  text-align: center;
-}
-.block-type-feature .container .text {
-  color: var(--vp-c-text-2);
-  line-height: 1.6;
-}
 .block-type-info {
   position: relative;
   display: block;
 }
 .block-type-info .container {
   display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
   margin: 1rem 0;
-  padding: 1rem 2em;
-  background: var(--vp-c-bg-soft);
-  border-radius: var(--radius);
-  border: 1px solid var(--vp-c-border);
 }
 .block-type-info .container .item {
   display: grid;
   grid-template-columns: 1fr;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--vp-c-divider);
+  padding: 1rem 2em;
+  background: var(--vp-c-bg-soft);
+  border-radius: var(--radius);
 }
 .block-type-info .container .item:last-child {
   border-bottom: none;
@@ -1448,7 +1420,7 @@ p.withColor {
 .slider-fullscreen .dots {
   position: absolute;
   top: 0;
-  margin-top: 8px;
+  margin-top: 28px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -1483,7 +1455,7 @@ p.withColor {
 .slider-fullscreen .content img,
 .slider-fullscreen .content video {
   max-width: calc(100dvw - 64px);
-  max-height: calc(100dvh - 64px);
+  max-height: calc(100dvh - 128px);
   object-fit: contain;
   border-radius: 8px;
   animation: zoomIn 0.3s ease;
