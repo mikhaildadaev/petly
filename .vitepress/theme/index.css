@@ -970,12 +970,16 @@ p.withColor {
 }
 .block-type-info .container {
   display: grid;
-  grid-template-columns: 1fr;
   margin: 1rem 0;
+  padding: 1rem 2em;
+  background: var(--vp-c-bg-soft);
+  border-radius: var(--radius);
+  border: 1px solid var(--vp-c-border);
 }
 .block-type-info .container .item {
-  display: flex;
-  gap: 16px;
+  display: grid;
+  gap: 0 16px;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   padding: 8px 0;
   border-bottom: 1px solid var(--vp-c-divider);
 }
