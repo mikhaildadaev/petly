@@ -36,5 +36,3 @@ features:
 
 ## Shelters
 <ItemsRandom :type="'organizations'" :item-type="'shelters'"/>
-
-<PageStyle/>

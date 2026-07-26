@@ -36,5 +36,3 @@ features:
 
 ## Приюты
 <ItemsRandom :type="'organizations'" :item-type="'shelters'"/>
-
-<PageStyle/>
