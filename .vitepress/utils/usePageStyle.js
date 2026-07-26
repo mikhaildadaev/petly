@@ -48,7 +48,7 @@ export const pageImages = {
   '/organizations/shelters': {
     src: '/assets/webp/page_shelters.webp',
     width: 320,
-    float: 'center'
+    float: 'right'
   },
 
   '/pets/cats': {
