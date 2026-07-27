@@ -251,7 +251,7 @@ export const useAgePetCategory = (birthday) => {
     months--
   }
   if (months <= 12) return 'Детеныш'
-  if (months <= 36) return 'Молодая'
+  if (months <= 60) return 'Молодая'
   return 'Взрослая'
 }
 export const useDirection = (lang, directionStr) => {
