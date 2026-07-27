@@ -4,8 +4,7 @@ export default defineConfig({
   base: '/petly/',
   head: [
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
-    ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap' }],
-    ['link', { rel: 'stylesheet', href: '/petly/styles.css' }]
+    ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap' }]
   ],
   lastUpdated: true,
   lang: 'ru',
