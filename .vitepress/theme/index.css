@@ -93,7 +93,7 @@ button.carousel {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--vp-c-dark);
+  background-color: var(--vp-c-text);
   mask-size: contain;
   -webkit-mask-size: contain;
   mask-repeat: no-repeat;
