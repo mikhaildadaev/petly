@@ -386,9 +386,6 @@ p.withColor {
   color: var(--vp-c-light);
   font-weight: 700;
 }
-.gender-tag[data-gender="Мальчик"] {
-  background: #2980b9;
-}
 .direction-tag,
 .size-tag {
   background: #27ae60;
@@ -785,7 +782,7 @@ p.withColor {
 }
 .load-more .content .progress .bar {
   height: 100%;
-  background: linear-gradient(90deg, var(--vp-c-brand, #4a90d9), var(--vp-c-brand-dark, #357abd));
+  background: linear-gradient(90deg, var(--vp-c-brand), var(--vp-c-brand-dark));
   border-radius: 2px;
   transition: width 0.3s ease;
 }
@@ -1338,16 +1335,16 @@ p.withColor {
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
-  border: 2px solid var(--vp-c-border, #e0d5c5);
+  border: 2px solid var(--vp-c-border);
   transition: all 0.3s ease;
   animation: fadeIn 0.5s ease forwards;
   animation-delay: var(--delay, 0s);
   opacity: 0;
-  background: var(--vp-c-bg-soft, #f5efe6);
+  background: var(--vp-c-bg-soft);
 }
 .gallery-media .item:hover {
   transform: scale(1.05);
-  border-color: var(--vp-c-brand, #e67e22);
+  border-color: var(--vp-c-brand);
   box-shadow: 0 8px 24px rgba(230, 126, 34, 0.2);
   z-index: 2;
 }
@@ -1385,7 +1382,7 @@ p.withColor {
   position: relative;
   width: 100%;
   height: 100%;
-  background: #000;
+  background: var(--vp-c-black);
 }
 .gallery-media .video-preview video {
   width: 100%;
@@ -1435,7 +1432,7 @@ p.withColor {
   width: 32px;
   height: 8px;
   border-radius: 4px;
-  background: var(--vp-c-brand, #e67e22);
+  background: var(--vp-c-brand);
   box-shadow: 0 0 16px rgba(230, 126, 34, 0.4);
   transform: scale(1);
   animation: dotPulse 2s ease-in-out infinite;
