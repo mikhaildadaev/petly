@@ -419,6 +419,7 @@ p.withColor {
   background: transparent;
   cursor: pointer;
   white-space: nowrap;
+  text-transform: uppercase;
   font-family: inherit;
   margin-left: auto;
   font-size: 0.65em;
@@ -473,7 +474,7 @@ p.withColor {
   height: 32px;
   cursor: pointer;
   padding: 0;
-  background-color: var(--vp-c-dark);
+  background-color: var(--vp-c-text-1);
   border-radius: var(--radius);
   mask-size: contain;
   -webkit-mask-size: contain;
