@@ -6,15 +6,15 @@ const matter = require('gray-matter');
 //  0. UUID → BASE64
 // ============================================================
 
-function uuidToBase64(uuid) {
-  const hex = uuid.replace(/-/g, '')
-  const bytes = new Uint8Array(hex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)))
-  return Buffer.from(bytes)
+const uuidToBase64 = (uuid) => 
+  Buffer.from(uuid.replace(/-/g, ''), 'hex')
     .toString('base64')
     .replace(/\+/g, '-')
     .replace(/\//g, '_')
     .replace(/=+$/, '')
-}
+    .split('')
+    .reverse()
+    .join('')
 
 // ============================================================
 //  1. НАСТРОЙКИ
