@@ -90,8 +90,8 @@ const baseUrl = import.meta.env.BASE_URL
 export default {
   name: 'ItemsList',
   props: {
-    type: { type: String, required: true }, // 'pets', 'humans', 'organizations'
-    itemType: { type: String, required: true } // 'dogs', 'cats', 'volunteers', 'shelters'
+    type: { type: String, required: true },
+    itemType: { type: String, required: true }
   },
   setup(props) {
     const { lang } = useData()
