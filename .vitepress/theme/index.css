@@ -484,54 +484,54 @@ p.withColor {
   -webkit-mask-position: center;
 }
 .filter-chips .chip:hover {
-  transform: scale(1.15);
+  transform: scale(1.05);
 }
 .filter-chips .chip.active {
   background-color: var(--vp-c-brand);
 }
 .filter-chips .chip.woman {
-  mask-image: url('/petly/assets/svg/woman.svg');
-  -webkit-mask-image: url('/petly/assets/svg/woman.svg');
+  mask-image: url('/petly/assets/svg/filter_gender_girl.svg');
+  -webkit-mask-image: url('/petly/assets/svg/filter_gender_girl.svg');
 }
 .filter-chips .chip.man {
-  mask-image: url('/petly/assets/svg/man.svg');
-  -webkit-mask-image: url('/petly/assets/svg/man.svg');
+  mask-image: url('/petly/assets/svg/filter_gender_boy.svg');
+  -webkit-mask-image: url('/petly/assets/svg/filter_gender_boy.svg');
 }
 .filter-chips .chip.young {
-  mask-image: url('/petly/assets/svg/young.svg');
-  -webkit-mask-image: url('/petly/assets/svg/young.svg');
+  mask-image: url('/petly/assets/svg/filter_age_young.svg');
+  -webkit-mask-image: url('/petly/assets/svg/filter_age_young.svg');
 }
 .filter-chips .chip.middle {
-  mask-image: url('/petly/assets/svg/middle.svg');
-  -webkit-mask-image: url('/petly/assets/svg/middle.svg');
+  mask-image: url('/petly/assets/svg/filter_age_middle.svg');
+  -webkit-mask-image: url('/petly/assets/svg/filter_age_middle.svg');
 }
 .filter-chips .chip.old {
-  mask-image: url('/petly/assets/svg/old.svg');
-  -webkit-mask-image: url('/petly/assets/svg/old.svg');
+  mask-image: url('/petly/assets/svg/filter_age_old.svg');
+  -webkit-mask-image: url('/petly/assets/svg/filter_age_old.svg');
 }
 .filter-chips .chip.small {
-  mask-image: url('/petly/assets/svg/small.svg');
-  -webkit-mask-image: url('/petly/assets/svg/small.svg');
+  mask-image: url('/petly/assets/svg/filter_size_small.svg');
+  -webkit-mask-image: url('/petly/assets/svg/filter_size_small.svg');
 }
 .filter-chips .chip.medium {
-  mask-image: url('/petly/assets/svg/medium.svg');
-  -webkit-mask-image: url('/petly/assets/svg/medium.svg');
+  mask-image: url('/petly/assets/svg/filter_size_medium.svg');
+  -webkit-mask-image: url('/petly/assets/svg/filter_size_medium.svg');
 }
 .filter-chips .chip.large {
-  mask-image: url('/petly/assets/svg/large.svg');
-  -webkit-mask-image: url('/petly/assets/svg/large.svg');
+  mask-image: url('/petly/assets/svg/filter_size_large.svg');
+  -webkit-mask-image: url('/petly/assets/svg/filter_size_large.svg');
 }
 .filter-chips .chip.begin {
-  mask-image: url('/petly/assets/svg/begin.svg');
-  -webkit-mask-image: url('/petly/assets/svg/begin.svg');
+  mask-image: url('/petly/assets/svg/filter_experience_begin.svg');
+  -webkit-mask-image: url('/petly/assets/svg/filter_experience_begin.svg');
 }
 .filter-chips .chip.versed {
-  mask-image: url('/petly/assets/svg/versed.svg');
-  -webkit-mask-image: url('/petly/assets/svg/versed.svg');
+  mask-image: url('/petly/assets/svg/filter_experience_versed.svg');
+  -webkit-mask-image: url('/petly/assets/svg/filter_experience_versed.svg');
 }
 .filter-chips .chip.expert {
-  mask-image: url('/petly/assets/svg/expert.svg');
-  -webkit-mask-image: url('/petly/assets/svg/expert.svg');
+  mask-image: url('/petly/assets/svg/filter_experience_expert.svg');
+  -webkit-mask-image: url('/petly/assets/svg/filter_experience_expert.svg');
 }
 
 /* ============================================
