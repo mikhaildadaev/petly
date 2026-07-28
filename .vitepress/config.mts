@@ -437,19 +437,5 @@ export default defineConfig({
         link: 'https://github.com/mikhaildadaev/petly' 
       }
     ],
-  },
-  vite: {
-    plugins: [
-      {
-        name: 'copy-redirects',
-        generateBundle() {
-          this.emitFile({
-            type: 'asset',
-            fileName: '_redirects',
-            source: '/petly/short/* /petly/short/index.html?code=:splat 200\n'
-          })
-        }
-      }
-    ]
   }
 })

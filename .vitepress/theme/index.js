@@ -21,7 +21,7 @@ export default {
     const supportedLangs = ['ru', 'en', 'de']
     const base = '/petly/'
     const isShortLink = (path) => {
-      return path.startsWith(`${base}short/`)
+      return path.startsWith(`${base}s/`)
     }
     watch(
       () => lang.value,

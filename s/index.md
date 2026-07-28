@@ -10,10 +10,10 @@ import { useData } from 'vitepress'
 const { lang } = useData()
 onMounted(async () => {
   const url = new URL(window.location.href)
-  let shortCode = url.searchParams.get('code')
+  let shortCode = url.searchParams.get('c')
   if (!shortCode) {
     const path = window.location.pathname
-    shortCode = path.replace(/^\/petly\/short\//, '').replace(/\/$/, '')
+    shortCode = path.replace(/^\/petly\/s\//, '').replace(/\/$/, '')
   }
   if (!shortCode || shortCode.length < 5) {
     window.location.href = '/petly/'
