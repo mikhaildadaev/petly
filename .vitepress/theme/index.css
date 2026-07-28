@@ -184,6 +184,33 @@ button.fullscreen.prev:hover,
 button.fullscreen.next:hover {
   background-color: var(--vp-c-brand);
 }
+button.share {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  background-color: var(--vp-c-dark);
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-position: center;
+  mask-image: url('/petly/assets/svg/share.svg');
+  -webkit-mask-image: url('/petly/assets/svg/share.svg');
+  z-index: 1;
+}
+button.share:hover {
+  background: var(--vp-c-brand);
+  transform: scale(1.15)
+}
+button.share.clicked {
+  background: rgba(34, 197, 94, 0.9);
+  animation: popSuccess 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
+}
 
 /* ============================================
    ЗАГОЛОВКИ
@@ -638,8 +665,8 @@ p.withColor {
   background-color: currentColor;
   pointer-events: none;
   z-index: 1;
-  mask-image: url('/petly/assets/svg/share.svg');
-  -webkit-mask-image: url('/petly/assets/svg/share.svg');
+  mask-image: url('/petly/assets/svg/goto.svg');
+  -webkit-mask-image: url('/petly/assets/svg/goto.svg');
   mask-position: center;
   -webkit-mask-position: center;
   mask-repeat: no-repeat;
@@ -886,8 +913,8 @@ p.withColor {
   transform: scale(1.05);
 }
 .block-type-chips .share{
-  mask-image: url('/petly/assets/svg/share.svg');
-  -webkit-mask-image: url('/petly/assets/svg/share.svg');
+  mask-image: url('/petly/assets/svg/goto.svg');
+  -webkit-mask-image: url('/petly/assets/svg/goto.svg');
 }
 .block-type-cubes {
   position: relative;
@@ -1529,6 +1556,12 @@ p.withColor {
   28% { transform: scale(1); }
   42% { transform: scale(1.2); }
   70% { transform: scale(1); }
+  100% { transform: scale(1); }
+}
+@keyframes popSuccess {
+  0% { transform: scale(1.15); }
+  30% { transform: scale(1.30); }
+  60% { transform: scale(0.95); }
   100% { transform: scale(1); }
 }
 @keyframes shimmerText {
