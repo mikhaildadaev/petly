@@ -37,6 +37,7 @@ export default {
   },
   setup(props) {
     const { lang, frontmatter } = useData()
+    const { site } = useData()
     const translate = (category, key) => useTranslate(lang.value, category, key)
     const config = useConfigItem[props.type]
     const { useRandomClass } = useRandomColor()
@@ -44,7 +45,9 @@ export default {
     const fm = computed(() => frontmatter.value || {})
     const baseUrl = computed(() => {
       if (typeof window !== 'undefined') {
-        return window.location.origin
+        const origin = window.location.origin
+        const base = site.value?.base || ''
+        return `${origin}${base}`.replace(/\/$/, '')
       }
       return ''
     })
