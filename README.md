@@ -41,11 +41,11 @@ cd petly
 # Install dependencies
 npm install
 # Run in development mode
-npm run docs:dev
+npm run dev
 # Build the project
-npm run docs:build
+npm run build
 # Preview the built project
-npm run docs:preview
+npm run preview
 ```
 
 ## 🌍 Multilingual Support
