@@ -132,7 +132,6 @@ export default {
         randomItems.value = shuffled.slice(0, props.count)
         currentIndex.value = 0
       } catch (error) {
-        console.error('Ошибка загрузки данных:', error)
         randomItems.value = []
       } finally {
         isLoading.value = false

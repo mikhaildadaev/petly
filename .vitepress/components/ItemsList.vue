@@ -240,7 +240,6 @@ export default {
         allItems.value = data.map(item => transformItem(item))
         resetPagination()
       } catch (error) {
-        console.error('Ошибка загрузки данных:', error)
         allItems.value = []
       } finally {
         isLoading.value = false

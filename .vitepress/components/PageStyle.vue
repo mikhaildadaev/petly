@@ -54,7 +54,6 @@ export default {
       if (!currentPath) currentPath = '/'
       const config = usePageStyle(currentPath)
       if (!config) {
-        console.warn(`⚠️ Нет конфига для пути: ${currentPath}`)
         return {
           src: '/assets/webp/default.webp',
           float: 'center',
@@ -75,7 +74,6 @@ export default {
       return useUrlMedia(imageConfig.value.src, 'image')
     })
     const handleImageError = (e) => {
-      console.warn(`⚠️ Ошибка загрузки изображения: ${imageConfig.value?.src}`)
       e.target.style.display = 'none'
     }
     return {

@@ -123,7 +123,6 @@ export default {
         const data = await response.json()
         allItems.value = data.map(item => transformItem(item))
       } catch (error) {
-        console.error('Ошибка загрузки данных:', error)
         allItems.value = []
       } finally {
         isLoading.value = false
