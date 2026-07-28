@@ -20,6 +20,9 @@ export default {
     const router = useRouter()
     const supportedLangs = ['ru', 'en', 'de']
     const base = '/petly/'
+    const isShortLink = (path) => {
+      return path.startsWith(`${base}short/`)
+    }
     watch(
       () => lang.value,
       (newLang) => {
@@ -30,6 +33,9 @@ export default {
       { immediate: true }
     )
     onMounted(() => {
+      if (isShortLink(route.path)) {
+        return
+      }
       const savedLang = localStorage.getItem('vitepress-lang')
       const currentLang = lang.value
       const currentPath = route.path
@@ -57,6 +63,9 @@ export default {
     watch(
       () => route.path,
       (newPath) => {
+        if (isShortLink(newPath)) {
+          return
+        }
         const doubleLangPattern = /\/(ru|en|de)\/(ru|en|de)\//
         if (doubleLangPattern.test(newPath)) {
           const pathWithoutBase = newPath.replace(base, '')

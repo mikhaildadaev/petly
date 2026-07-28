@@ -3,6 +3,20 @@ const path = require('path');
 const matter = require('gray-matter');
 
 // ============================================================
+//  0. UUID → BASE64
+// ============================================================
+
+function uuidToBase64(uuid) {
+  const hex = uuid.replace(/-/g, '')
+  const bytes = new Uint8Array(hex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)))
+  return Buffer.from(bytes)
+    .toString('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '')
+}
+
+// ============================================================
 //  1. НАСТРОЙКИ
 // ============================================================
 
@@ -27,6 +41,7 @@ const contentTypes = [
       if (data.size) filter.push({ size: data.size })
       return {
         uuid: data.uuid,
+        short: data.uuid ? uuidToBase64(data.uuid) : '',
         title: data.title || '',
         description: data.description || '',
         filter: filter,
@@ -49,6 +64,7 @@ const contentTypes = [
       if (data.experience) filter.push({ experience: data.experience })
       return {
         uuid: data.uuid,
+        short: data.uuid ? uuidToBase64(data.uuid) : '',
         title: data.title || '',
         description: data.description || '',
         filter: filter,
@@ -69,6 +85,7 @@ const contentTypes = [
       if (data.format) filter.push({ format: data.format })
       return {
         uuid: data.uuid,
+        short: data.uuid ? uuidToBase64(data.uuid) : '',
         title: data.title || '',
         description: data.description || '',
         filter: filter,
@@ -244,6 +261,27 @@ function generateAll() {
     }
   }
   console.log(`✅ Сгенерировано ${totalFiles} JSON файлов.`);
+  const outputDir = './public/data'
+  const files = fs.readdirSync(outputDir).filter(f => f.endsWith('.json') && f !== 'index.json')
+  const index = files.map(file => {
+    const name = file.replace('.json', '')
+    const parts = name.split('-')
+    const type = parts[0]
+    const lang = parts[1]
+    const subtype = parts.slice(2).join('-') || ''
+    return {
+      file,
+      type,
+      lang,
+      subtype,
+      path: `/data/${file}`
+    }
+  })
+  fs.writeFileSync(
+    path.join(outputDir, 'index.json'),
+    JSON.stringify(index, null, 2)
+  )
+  console.log(`✅ Сгенерирован index.json (${index.length} JSON файлов.)`)
 }
 
 // ============================================================
