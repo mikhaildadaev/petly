@@ -7,7 +7,6 @@ export default defineConfig({
     ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap' }]
   ],
   lastUpdated: true,
-  lang: 'ru',
   locales: {
     de: {
       description: 'Jedes Tier verdient ein Zuhause',
