@@ -5,7 +5,7 @@
         <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`" :data-gender="displayField === 'genderDisplay' ? item.gender : null">{{ item[displayField] }}</label>
       </template>
     </div>
-    <button class="share" :data-url="`${item.url}/?s=${item.short}`" @click="handleShare"></button>
+    <button class="share" :data-url="`${shareUrl}/?s=${item.short}`" @click="handleShare"></button>
     <picture>
       <source :srcset="item.imageVertical || ''" media="(max-width: 735px)" />
       <source :srcset="item.imageHorizontal || item.imageVertical || ''" media="(min-width: 736px)" />
@@ -51,10 +51,14 @@ export default {
       }
       return ''
     })
+    const shareUrl = computed(() => {
+      if (typeof window === 'undefined' || !item.value?.short) return ''
+      const url = new URL(window.location.href)
+      return `${url.origin}`
+    })
     const transformItem = (data) => {
       const base = {
         uuid: data.uuid,
-        url: baseUrl.value,
         short: usePageUUID(data.uuid),
         nameDisplay: data.title || '',
         descriptionDisplay: data.description || '',
@@ -152,6 +156,7 @@ export default {
       config,
       item,
       isFavorite,
+      shareUrl,
       useRandomClass,
       toggleFavorite: handleToggleFavorite,
       translate,
