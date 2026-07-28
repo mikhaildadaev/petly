@@ -15,102 +15,176 @@ import PageStyle from '../components/PageStyle.vue'
 export default {
   extends: DefaultTheme,
   setup() {
-    const { lang, page } = useData()
+    const { localeIndex } = useData()
     const route = useRoute()
     const router = useRouter()
     const supportedLangs = ['ru', 'en', 'de']
     const base = '/petly/'
-    const isShortLink = (path) => {
-      return path.startsWith(`${base}s/`)
+    let isRedirecting = false
+    const cleanPath = (path) => {
+      let cleaned = path
+      cleaned = cleaned.replace(/\/+/g, '/')
+      cleaned = cleaned.replace(/\/ly\//g, '/')
+      cleaned = cleaned.replace(/^\/ly\//, '/')
+      const parts = cleaned.split('/')
+      let langFound = false
+      const cleanParts = []
+      for (const part of parts) {
+        if (part && /^[a-z]{2}$/.test(part) && supportedLangs.includes(part)) {
+          if (!langFound) {
+            langFound = true
+            cleanParts.push(part)
+          }
+        } else {
+          cleanParts.push(part)
+        }
+      }
+      let result = cleanParts.join('/')
+      if (!result.startsWith(base)) {
+        if (result.startsWith('/')) {
+          result = base + result.slice(1)
+        } else {
+          result = base + result
+        }
+      }
+      return result
     }
-    watch(
-      () => lang.value,
-      (newLang) => {
-        if (newLang) {
-          localStorage.setItem('vitepress-lang', newLang)
+    const getLangFromPath = (path) => {
+      let pathWithoutBase = path.replace(base, '')
+      pathWithoutBase = pathWithoutBase.replace(/\.html$/, '')
+      const segments = pathWithoutBase.split('/')
+      for (const seg of segments) {
+        if (seg && /^[a-z]{2}$/.test(seg) && supportedLangs.includes(seg)) {
+          return seg
         }
-      },
-      { immediate: true }
-    )
-    onMounted(() => {
-      if (isShortLink(route.path)) {
-        return
       }
-      const savedLang = localStorage.getItem('vitepress-lang')
-      const currentLang = lang.value
+      return null
+    }
+    const getPathWithoutLang = (path) => {
+      let pathWithoutBase = path.replace(base, '')
+      const hasHtml = pathWithoutBase.endsWith('.html')
+      let cleanPath = pathWithoutBase.replace(/\.html$/, '')
+      const langPattern = new RegExp(`^(${supportedLangs.join('|')})/`)
+      cleanPath = cleanPath.replace(langPattern, '')
+      if (!cleanPath) {
+        cleanPath = '/'
+      } else if (!cleanPath.startsWith('/')) {
+        cleanPath = '/' + cleanPath
+      }
+      return hasHtml ? cleanPath + '.html' : cleanPath
+    }
+    const ensureLanguageInStorage = () => {
+      let storedLang = localStorage.getItem('vitepress-lang')
+      if (!storedLang || !supportedLangs.includes(storedLang)) {
+        storedLang = 'ru'
+        localStorage.setItem('vitepress-lang', storedLang)
+      }
+      return storedLang
+    }
+    const syncUrlWithStorage = () => {
+      if (isRedirecting) return
       const currentPath = route.path
-      let hasLang = false
-      for (const l of supportedLangs) {
-        if (currentPath.startsWith(`${base}${l}/`)) {
-          hasLang = true
-          break
-        }
+      const cleanedPath = cleanPath(currentPath)
+      if (cleanedPath !== currentPath) {
+        isRedirecting = true
+        router.go(cleanedPath)
+        setTimeout(() => { isRedirecting = false }, 300)
+        return true
       }
-      if (!hasLang && savedLang && supportedLangs.includes(savedLang)) {
-        const newPath = `${base}${savedLang}/`
+      const storedLang = localStorage.getItem('vitepress-lang')
+      const urlLang = getLangFromPath(currentPath)
+      if (!urlLang || urlLang !== storedLang) {
+        const cleanPathPart = getPathWithoutLang(currentPath)
+        const newPath = `${base}${storedLang}${cleanPathPart}`
+        isRedirecting = true
         router.go(newPath)
-        return
+        setTimeout(() => { isRedirecting = false }, 300)
+        return true
       }
-      if (savedLang && supportedLangs.includes(savedLang) && savedLang !== currentLang) {
-        const currentPath = route.path
-        const pathWithoutBase = currentPath.replace(base, '')
-        const langPattern = new RegExp(`^${currentLang}/`)
-        const cleanPath = pathWithoutBase.replace(langPattern, '') || '/'
-        const newPath = `${base}${savedLang}/${cleanPath}`
-        router.go(newPath)
-      }
+      return false
+    }
+    const updateLanguage = (newLang) => {
+      if (!newLang || !supportedLangs.includes(newLang)) return
+      if (isRedirecting) return
+      const currentLang = getLangFromPath(route.path)
+      if (currentLang === newLang) return
+      localStorage.setItem('vitepress-lang', newLang)
+      const cleanPathPart = getPathWithoutLang(route.path)
+      const newPath = `${base}${newLang}${cleanPathPart}`
+      isRedirecting = true
+      router.go(newPath)
+      setTimeout(() => {
+        isRedirecting = false
+      }, 300)
+    }
+    onMounted(() => {
+      ensureLanguageInStorage()
+      
+      nextTick(() => {
+        syncUrlWithStorage()
+      })
     })
     watch(
       () => route.path,
-      (newPath) => {
-        if (isShortLink(newPath)) {
+      (newPath, oldPath) => {
+        if (isRedirecting) {
           return
         }
-        const doubleLangPattern = /\/(ru|en|de)\/(ru|en|de)\//
-        if (doubleLangPattern.test(newPath)) {
-          const pathWithoutBase = newPath.replace(base, '')
-          const segments = pathWithoutBase.split('/')
-          const correctLang = segments[0]
-          const restPath = segments.slice(2).join('/')
-          const correctPath = `${base}${correctLang}/${restPath}`
-          localStorage.setItem('vitepress-lang', correctLang)
-          nextTick(() => {
-            router.go(correctPath)
-          })
+        const cleanedPath = cleanPath(newPath)
+        if (cleanedPath !== newPath) {
+          isRedirecting = true
+          router.go(cleanedPath)
+          setTimeout(() => { isRedirecting = false }, 300)
+          return
         }
-        if (page.value?.isNotFound) {
-          const currentPath = route.path
-          const pathWithoutBase = currentPath.replace(base, '')
-          const langFromUrl = pathWithoutBase.split('/')[0]
-          if (langFromUrl && supportedLangs.includes(langFromUrl)) {
-            localStorage.setItem('vitepress-lang', langFromUrl)
-          }
-          if (currentPath.includes('/ly/')) {
-            const fixedPath = currentPath.replace('/ly/', '/')
-            nextTick(() => {
-              router.go(fixedPath)
-            })
+        const storedLang = localStorage.getItem('vitepress-lang')
+        const urlLang = getLangFromPath(newPath)
+        if (!urlLang) {
+          const cleanPathPart = getPathWithoutLang(newPath)
+          const newFullPath = `${base}${storedLang}${cleanPathPart}`
+          isRedirecting = true
+          router.go(newFullPath)
+          setTimeout(() => { isRedirecting = false }, 300)
+          return
+        }
+        if (urlLang && urlLang !== storedLang) {
+          const currentLocale = localeIndex.value
+          if (currentLocale !== urlLang) {
+            const cleanPathPart = getPathWithoutLang(newPath)
+            const newFullPath = `${base}${storedLang}${cleanPathPart}`
+            isRedirecting = true
+            router.go(newFullPath)
+            setTimeout(() => { isRedirecting = false }, 300)
           }
         }
       },
       { immediate: true }
     )
-    const switchLanguage = (newLang) => {
-      if (newLang === lang.value) return
-      localStorage.setItem('vitepress-lang', newLang)
-      const currentPath = route.path
-      const pathWithoutBase = currentPath.replace(base, '')
-      const langPattern = new RegExp(`^${lang.value}/`)
-      const cleanPath = pathWithoutBase.replace(langPattern, '') || '/'
-      const newPath = `${base}${newLang}/${cleanPath}`
-      router.go(newPath)
-    }
-    if (typeof window !== 'undefined') {
-      window.__switchLanguage = switchLanguage
-    }
-    return {
-      switchLanguage
-    }
+    watch(
+      () => localeIndex.value,
+      (newLocale, oldLocale) => {
+        if (isRedirecting) {
+          return
+        }
+        if (!newLocale || !supportedLangs.includes(newLocale)) {
+          return
+        }
+        const storedLang = localStorage.getItem('vitepress-lang')
+        const urlLang = getLangFromPath(route.path)
+        if (newLocale !== storedLang || newLocale !== urlLang) {
+          localStorage.setItem('vitepress-lang', newLocale)
+          if (newLocale !== urlLang) {
+            const cleanPathPart = getPathWithoutLang(route.path)
+            const newPath = `${base}${newLocale}${cleanPathPart}`
+            isRedirecting = true
+            router.go(newPath)
+            setTimeout(() => { isRedirecting = false }, 300)
+          }
+        }
+      },
+      { immediate: true }
+    )
+    return {}
   },
   enhanceApp({ app }) {
     app.component('BlockStyle', BlockStyle)
