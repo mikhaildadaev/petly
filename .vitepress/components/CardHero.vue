@@ -5,7 +5,7 @@
         <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`" :data-gender="displayField === 'genderDisplay' ? item.gender : null">{{ item[displayField] }}</label>
       </template>
     </div>
-    <button class="share" :data-url="`${domainUrl}/?s=${item.short}`" @click="handleShare"></button>
+    <button class="share" :data-url="`${shortUrl}`" @click="handleShare"></button>
     <picture>
       <source :srcset="item.imageVertical || ''" media="(max-width: 735px)" />
       <source :srcset="item.imageHorizontal || item.imageVertical || ''" media="(min-width: 736px)" />
@@ -51,17 +51,9 @@ export default {
       }
       return ''
     })
-    const domainUrl = computed(() => {
-      if (typeof window === 'undefined' || !item.value?.short) return ''
-      const origin = window.location.origin
-      const base = site.value?.base || '/petly/'
-      const cleanBase = base.replace(/\/+$/, '')
-      return `${origin}${cleanBase}`
-    })
     const transformItem = (data) => {
       const base = {
         uuid: data.uuid,
-        short: usePageUUID(data.uuid),
         nameDisplay: data.title || '',
         descriptionDisplay: data.description || '',
         covenantID: data.covenantID || '',
@@ -78,6 +70,14 @@ export default {
       }
       return base
     }
+    const shortUrl = computed(() => {
+      if (typeof window === 'undefined') return ''
+      const origin = window.location.origin
+      const base = site.value?.base
+      const cleanBase = base.replace(/\/+$/, '')
+      const shortID = usePageUUID(fm.value?.uuid)
+      return `${origin}${cleanBase}/?s=${shortID}`
+    })
     const item = computed(() => {
       const data = fm.value || {}
       const result = transformItem(data)
@@ -158,7 +158,7 @@ export default {
       config,
       item,
       isFavorite,
-      domainUrl,
+      shortUrl,
       useRandomClass,
       toggleFavorite: handleToggleFavorite,
       translate,
