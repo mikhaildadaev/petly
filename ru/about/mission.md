@@ -25,7 +25,7 @@ blocks:
       - name: 'Объединять людей'
         image: '/assets/webp/mission-unite.webp'
         info: 'Создаём сообщество волонтёров, которым не всё равно'
-      - name: 'Делать добро'
+      - name: 'Творить добро'
         image: '/assets/webp/mission-kindness.webp'
         info: 'Показываем, что помогать — просто, важно и нужно'
 ---
