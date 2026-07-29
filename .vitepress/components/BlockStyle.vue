@@ -6,13 +6,15 @@
         <div class="container">
           <div v-for="(item, itemIndex) in block.list" :key="itemIndex" class="item">
             <div class="icon">
-              <img :src="item.image" loading="lazy"/>
+              <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="link">
+                <img :src="item.image" loading="lazy"/>
+              </a>
+              <img v-else :src="item.image" loading="lazy"/>
             </div>
             <div class="content">
               <h6 class="name">{{ item.name }}</h6>
               <p class="description withColor">{{ item.description }}</p>
             </div>
-            <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="link"></a>
           </div>
         </div>
       </div>
