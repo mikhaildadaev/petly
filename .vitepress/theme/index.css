@@ -917,7 +917,7 @@ p.withColor {
 }
 .block-type-cubes .container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
   gap: 16px;
 }
 .block-type-cubes .container .item {
@@ -950,8 +950,8 @@ p.withColor {
 .block-type-cubes .content .info {
   position: absolute;
   display: inline-flex;
-  top: 8px;
-  right: 8px;
+  top: 4px;
+  right: 4px;
   width: 32px;
   height: 32px;
   align-items: center;
@@ -994,7 +994,7 @@ p.withColor {
 }
 .block-type-info .container .item .label {
   font-weight: 600;
-  min-width: 160px;
+  min-width: 148px;
   color: var(--vp-c-text-1);
 }
 .block-type-info .container .item .value {
@@ -1222,7 +1222,7 @@ p.withColor {
   padding: 16px 24px;
   border-radius: calc(var(--radius) / 2);
   line-height: 1.5;
-  min-width: 174px;
+  min-width: 160px;
   width: calc(100% + 16px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   border: 1px solid var(--vp-c-border);
