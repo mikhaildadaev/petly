@@ -10,6 +10,7 @@ import ItemsGroup from '../components/ItemsGroup.vue'
 import ItemsList from '../components/ItemsList.vue'
 import ItemsRandom from '../components/ItemsRandom.vue'
 import ItemsSelect from '../components/ItemsSelect.vue'
+import PageRedirect from '../components/PageRedirect.vue'
 import PageStyle from '../components/PageStyle.vue'
 
 export default {
@@ -126,7 +127,18 @@ export default {
     }
     onMounted(() => {
       ensureLanguageInStorage()
-      
+      const params = new URLSearchParams(window.location.search)
+      if (params.has('s') && !isHomePage(route.path)) {
+        isShowingRedirect = true
+        setTimeout(() => {
+          isShowingRedirect = false
+          syncUrlWithStorage()
+        }, 3000)
+      } else {
+        nextTick(() => {
+          syncUrlWithStorage()
+        })
+      }
       nextTick(() => {
         syncUrlWithStorage()
       })
@@ -198,6 +210,7 @@ export default {
     app.component('ItemsList', ItemsList)
     app.component('ItemsRandom', ItemsRandom)
     app.component('ItemsSelect', ItemsSelect)
+    app.component('PageRedirect', PageRedirect)
     app.component('PageStyle', PageStyle)
   },
 }
