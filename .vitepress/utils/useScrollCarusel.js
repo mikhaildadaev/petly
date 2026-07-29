@@ -51,6 +51,41 @@ export function useScrollCarusel(options = {}) {
     })
   }
 
+   /**
+   * Обновление индекса по текущей позиции скролла
+   */
+  const updateIndexFromScroll = () => {
+    if (!containerRef.value) return
+    
+    const container = containerRef.value
+    const slides = container.querySelectorAll('.carousel-slide')
+    if (slides.length === 0) return
+    
+    const scrollLeft = container.scrollLeft
+    const containerWidth = container.offsetWidth
+    const containerCenter = scrollLeft + containerWidth / 2
+    
+    let closestIndex = 0
+    let closestDistance = Infinity
+    
+    slides.forEach((slide, index) => {
+      const slideLeft = slide.offsetLeft
+      const slideWidth = slide.offsetWidth
+      const slideCenter = slideLeft + slideWidth / 2
+      const distance = Math.abs(containerCenter - slideCenter)
+      
+      if (distance < closestDistance) {
+        closestDistance = distance
+        closestIndex = index
+      }
+    })
+    
+    if (closestIndex !== currentIndex.value) {
+      currentIndex.value = closestIndex
+      updateCenterClass(closestIndex)
+    }
+  }
+
   /**
    * Прокрутка к слайду
    */
@@ -149,7 +184,9 @@ export function useScrollCarusel(options = {}) {
     } else {
       scrollToSlide(currentIndex.value)
     }
-
+    setTimeout(() => {
+      updateIndexFromScroll()
+    }, 60)
     touchStartX.value = 0
     touchStartY.value = 0
     touchEndX.value = 0
@@ -271,6 +308,7 @@ export function useScrollCarusel(options = {}) {
     goToSlide,
     resetToFirstSlide,
     updateCenterClass,
+    updateIndexFromScroll,
 
     handleTouchStart,
     handleTouchMove,
