@@ -169,6 +169,10 @@ export function useScrollCarusel(options = {}) {
       return
     }
     e.preventDefault()
+    if (containerRef.value) {
+      const container = containerRef.value
+      container.scrollLeft = container.scrollLeft - deltaX * 1.5
+    }
     updateIndexFromScroll()
   }
   const handleTouchEnd = (e) => {
