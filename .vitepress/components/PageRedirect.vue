@@ -1,19 +1,11 @@
 <template>
   <div class="redirect">
     <div class="container" :class="statusClass">
-      <!-- Круговой лоадер -->
-      <div class="loader-wrapper">
+      <div class="wrapper">
         <svg class="loader" viewBox="0 0 50 50">
           <circle class="bg" cx="25" cy="25" r="20" />
-          <circle 
-            class="progress-ring" 
-            cx="25" 
-            cy="25" 
-            r="20"
-            :style="{ strokeDashoffset: 125.6 - (125.6 * progress) / 100 }"
-          />
+          <circle class="progress-ring" cx="25" cy="25"  r="20" :style="{ strokeDashoffset: 125.6 - (125.6 * progress) / 100 }" />
         </svg>
-        <span class="loader-text">{{ progress }}%</span>
       </div>
     </div>
   </div>
@@ -21,78 +13,55 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-
 const progress = ref(0)
 const statusClass = ref('')
 const redirectUrl = ref('')
-let progressInterval = null
-
-// Функция для плавного обновления прогресса к цели
-const animateToProgress = (target, duration = 800) => {
+const animateToProgress = (target) => {
   return new Promise((resolve) => {
     const start = progress.value
     const diff = target - start
+    const duration = 200
     const startTime = Date.now()
-    
-    if (progressInterval) {
-      clearInterval(progressInterval)
-      progressInterval = null
-    }
-    
-    progressInterval = setInterval(() => {
+    const step = () => {
       const elapsed = Date.now() - startTime
       const t = Math.min(elapsed / duration, 1)
       const eased = 1 - Math.pow(1 - t, 2)
       progress.value = Math.round(start + diff * eased)
-      
-      if (t >= 1) {
+      if (t < 1) {
+        requestAnimationFrame(step)
+      } else {
         progress.value = target
-        clearInterval(progressInterval)
-        progressInterval = null
         resolve()
       }
-    }, 16)
+    }
+    step()
   })
 }
-
-// Функция для обновления статуса с анимацией прогресса
-const updateStatusWithProgress = async (cls, progressTarget, delay = 800) => {
-  return new Promise((resolve) => {
-    statusClass.value = cls
-    animateToProgress(progressTarget, delay)
-    setTimeout(() => {
-      resolve()
-    }, delay)
-  })
+const updateStatus = async (cls, progressTarget) => {
+  statusClass.value = cls
+  await animateToProgress(progressTarget)
 }
-
-// Основная логика перенаправления
 const performRedirect = async () => {
   const base = '/petly/'
   const url = new URL(window.location.href)
   const path = window.location.pathname
-
   const langMatch = path.match(/^\/petly\/([a-z]{2})(?:\/|$)/)
   if (langMatch) {
-    await updateStatusWithProgress('status-success', 100, 1500)
+    await updateStatus('status-success', 100)
     const savedLang = localStorage.getItem('vitepress-lang') || 'ru'
-    setTimeout(() => {
-      window.location.href = `${base}${savedLang}/`
-    }, 500)
+    window.location.href = `${base}${savedLang}/`
     return
   }
-
   const shortCode = url.searchParams.get('s')
-
   if (shortCode && shortCode.length > 5) {
     try {
-      await updateStatusWithProgress('status-loading', 30, 1000)
-      
+      // ⚡ Этап 1: Начало загрузки (сразу 10%)
+      await updateStatus('status-loading', 10)
+      // ⚡ Этап 2: Загрузка index.json (10% → 40%)
       const indexResponse = await fetch('/petly/data/index.json')
       const index = await indexResponse.json()
-
-      await updateStatusWithProgress('status-loading', 60, 1000)
-
+      await updateStatus('status-loading', 40)
+      // ⚡ Этап 3: Загрузка всех файлов (40% → 70%)
       const results = await Promise.allSettled(
         index.map(async ({ file, type, subtype }) => {
           const response = await fetch(`/petly/data/${file}`)
@@ -101,15 +70,14 @@ const performRedirect = async () => {
           return data.map(item => ({ ...item, _type: type, _subtype: subtype }))
         })
       )
-
+      await updateStatus('status-loading', 70)
+      // ⚡ Этап 4: Поиск питомца (70% → 90%)
       const allItems = results
         .filter(r => r.status === 'fulfilled')
         .flatMap(r => r.value)
-
-      await updateStatusWithProgress('status-loading', 85, 1000)
-
+      await updateStatus('status-loading', 90)
+      // ⚡ Этап 5: Результат (90% → 100%)
       const item = allItems.find(p => p.short === shortCode)
-
       if (item) {
         const savedLang = localStorage.getItem('vitepress-lang') || 'ru'
         let redirectPath = `/${savedLang}/${item._type}/${item._subtype}/${item.uuid}`
@@ -117,30 +85,25 @@ const performRedirect = async () => {
           redirectPath = `/${savedLang}/${item._type}/${item.covenantID}/${item._subtype}/${item.uuid}`
         }
         redirectUrl.value = `${base}${redirectPath}`
-        
-        await updateStatusWithProgress('status-success', 100, 1500)
-        await new Promise(resolve => setTimeout(resolve, 500))
+
+        await updateStatus('status-success', 100)
         window.location.href = redirectUrl.value
       } else {
-        await updateStatusWithProgress('status-error', 100, 1500)
-        await new Promise(resolve => setTimeout(resolve, 500))
+        await updateStatus('status-error', 100)
         const savedLang = localStorage.getItem('vitepress-lang') || 'ru'
         window.location.href = `${base}${savedLang}/`
       }
     } catch (error) {
-      await updateStatusWithProgress('status-error', 100, 1500)
-      await new Promise(resolve => setTimeout(resolve, 500))
+      await updateStatus('status-error', 100)
       const savedLang = localStorage.getItem('vitepress-lang') || 'ru'
       window.location.href = `${base}${savedLang}/`
     }
   } else {
-    await updateStatusWithProgress('status-loading', 100, 1500)
-    await new Promise(resolve => setTimeout(resolve, 300))
+    await updateStatus('status-loading', 100)
     const savedLang = localStorage.getItem('vitepress-lang') || 'ru'
     window.location.href = `${base}${savedLang}/`
   }
 }
-
 onMounted(() => {
   performRedirect()
 })
@@ -159,59 +122,46 @@ onMounted(() => {
   background: var(--vp-c-bg, #fdfaf6);
   z-index: 9999;
 }
-
-.container {
+.redirect .container {
   max-width: 380px;
   width: 90%;
   padding: 48px 32px 40px;
   text-align: center;
+  animation: fadeIn 0.3s ease;
 }
-
-/* Круговой лоадер */
-.loader-wrapper {
+.redirect .container .wrapper {
   position: relative;
   width: 80px;
   height: 80px;
   margin: 0 auto;
 }
-
-.loader {
+.redirect .container .wrapper .loader {
   width: 100%;
   height: 100%;
   transform: rotate(-90deg);
 }
-
-.loader .bg {
+.redirect .container .wrapper .loader .bg {
   fill: none;
   stroke: var(--vp-c-border, #e0d5c5);
   stroke-width: 3;
 }
-
-.loader .progress-ring {
+.redirect .container .wrapper .loader .progress-ring {
   fill: none;
   stroke: var(--vp-c-brand, #e67e22);
   stroke-width: 3;
   stroke-linecap: round;
   stroke-dasharray: 125.6;
   stroke-dashoffset: 125.6;
-  transition: stroke-dashoffset 0.3s ease;
+  transition: stroke-dashoffset 0.3s ease, stroke 0.5s ease;
 }
-
-.container.status-success .progress-ring {
-  stroke: #4ade80;
-}
-
-.container.status-error .progress-ring {
+.redirect .container.status-error .wrapper .loader .progress-ring {
   stroke: #f87171;
 }
-
-.loader-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--vp-c-text, #3e3232);
+.redirect .container.status-success .wrapper .loader .progress-ring {
+  stroke: #4ade80;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 </style>
