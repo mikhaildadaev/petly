@@ -917,7 +917,7 @@ p.withColor {
 }
 .block-type-cubes .container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 16px;
 }
 .block-type-cubes .container .item {
@@ -1215,15 +1215,15 @@ p.withColor {
    ============================================================ */
 .tooltip {
   position: absolute;
-  top: 4px;
-  right: 40px;
+  top: 44px;
+  right: -8px;
   background: var(--vp-c-bg);
   color: var(--vp-c-text);
   padding: 16px 24px;
-  border-radius: calc(var(--radius) - 2px) calc(var(--radius) / 2) calc(var(--radius) / 2) calc(var(--radius) - 2px);
+  border-radius: calc(var(--radius) / 2);
   line-height: 1.5;
-  min-width: 240px;
-  max-width: 280px;
+  min-width: 174px;
+  width: calc(100% + 16px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   border: 1px solid var(--vp-c-border);
   z-index: 1;
@@ -1236,18 +1236,18 @@ p.withColor {
 .tooltip::after {
   content: '';
   position: absolute;
-  bottom: calc(100% - 22px);
-  right: -12px;
+  top: -12px;
+  right: 25px;
   border: 6px solid transparent;
-  border-left-color: var(--vp-c-border);
+  border-bottom-color: var(--vp-c-border);
 }
 .tooltip::before {
   content: '';
   position: absolute;
-  bottom: calc(100% - 22px);
-  right: -11px;
+  top: -11px;
+  right: 25px;
   border: 6px solid transparent;
-  border-left-color: var(--vp-c-bg);
+  border-bottom-color: var(--vp-c-bg);
   z-index: 1;
 }
 
@@ -1563,7 +1563,7 @@ p.withColor {
   100% { background-position: -200% center; }
 }
 @keyframes tooltipFade {
-  from { opacity: 0; transform: translateX(8px) translateY(0); }
+  from { opacity: 0; transform: translateX(0) translateY(-8px); }
   to { opacity: 1; transform: translateX(0) translateY(0); }
 }
 @keyframes zoomIn {
