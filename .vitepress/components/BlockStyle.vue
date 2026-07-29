@@ -12,7 +12,7 @@
               <img v-else :src="item.image" loading="lazy"/>
             </div>
             <div class="content">
-              <h6 class="name">{{ item.name }}</h6>
+              <h4 class="name">{{ item.name }}</h4>
               <p class="description withColor">{{ item.description }}</p>
             </div>
           </div>
@@ -26,7 +26,7 @@
               <img :src="item.image" loading="lazy" />
             </div>
             <div class="content">
-              <h6 class="name">{{ item.name }}</h6>
+              <h5 class="name">{{ item.name }}</h5>
               <div v-if="item.info" class="info" @click.stop="toggleTooltip(`${blockIndex}-${itemIndex}`)"></div>
               <div v-show="activeTooltip === `${blockIndex}-${itemIndex}`" class="tooltip" @click.stop>{{ item.info }}</div>
             </div>
@@ -84,7 +84,7 @@
         <div class="container">
           <div v-for="(item, itemIndex) in block.list" :key="itemIndex" class="item">
             <div class="content">
-              <h6 class="name">{{ item.name }}</h6>
+              <h4 class="name">{{ item.name }}</h4>
               <p class="description withColor">{{ item.description }}</p>
               <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="link">{{ translate('ui', 'Перейти по ссылке') }}</a>
             </div>
@@ -97,7 +97,7 @@
           <div v-for="(item, itemIndex) in block.list" :key="itemIndex" class="item">
             <div class="number">{{ itemIndex + 1 }}</div>
             <div class="content">
-              <h6 class="name">{{ item.name }}</h6>
+              <h4 class="name">{{ item.name }}</h4>
               <p class="description withColor">{{ item.description }}</p>
               <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="link">{{ translate('ui', 'Перейти по ссылке') }}</a>
             </div>
