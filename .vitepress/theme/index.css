@@ -361,7 +361,7 @@ p.withColor {
 .page-image {
   position: relative;
   width: 100%;
-  margin-bottom: -48px;
+  margin-bottom: -50px;
   border-bottom: 1px solid var(--vp-c-divider);
   line-height: 0;
 }
@@ -1530,6 +1530,13 @@ p.withColor {
 }
 .redirect .container.status-success .wrapper .loader .progress-ring {
   stroke: #4ade80;
+}
+
+/* ============================================
+   VitePress
+   ============================================ */
+.VPLastUpdated {
+  padding-left: 16px;
 }
 
 /* ============================================
