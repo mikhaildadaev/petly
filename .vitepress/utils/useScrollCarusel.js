@@ -51,7 +51,7 @@ export function useScrollCarusel(options = {}) {
     })
   }
 
-   /**
+  /**
    * Обновление индекса по текущей позиции скролла
    */
   const updateIndexFromScroll = () => {
@@ -169,6 +169,7 @@ export function useScrollCarusel(options = {}) {
       return
     }
     e.preventDefault()
+    updateIndexFromScroll()
   }
   const handleTouchEnd = (e) => {
     if (!isSwiping.value) return
@@ -186,7 +187,7 @@ export function useScrollCarusel(options = {}) {
     }
     setTimeout(() => {
       updateIndexFromScroll()
-    }, 60)
+    }, 50)
     touchStartX.value = 0
     touchStartY.value = 0
     touchEndX.value = 0
