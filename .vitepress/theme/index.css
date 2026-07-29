@@ -1215,7 +1215,7 @@ p.withColor {
    ============================================================ */
 .tooltip {
   position: absolute;
-  top: 44px;
+  top: 40px;
   right: -8px;
   background: var(--vp-c-bg);
   color: var(--vp-c-text);
@@ -1237,7 +1237,7 @@ p.withColor {
   content: '';
   position: absolute;
   top: -12px;
-  right: 25px;
+  right: 21px;
   border: 6px solid transparent;
   border-bottom-color: var(--vp-c-border);
 }
@@ -1245,7 +1245,7 @@ p.withColor {
   content: '';
   position: absolute;
   top: -11px;
-  right: 25px;
+  right: 21px;
   border: 6px solid transparent;
   border-bottom-color: var(--vp-c-bg);
   z-index: 1;
