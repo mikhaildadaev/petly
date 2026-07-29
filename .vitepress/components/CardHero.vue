@@ -5,7 +5,7 @@
         <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`" :data-gender="displayField === 'genderDisplay' ? item.gender : null">{{ item[displayField] }}</label>
       </template>
     </div>
-    <button class="share" :data-url="`${shortUrl}`" @click="handleShare"></button>
+    <button class="share" :data-url="`${item.baseURL}/?s=${item.shortID}`" @click="handleShare"></button>
     <picture>
       <source :srcset="item.imageVertical || ''" media="(max-width: 735px)" />
       <source :srcset="item.imageHorizontal || item.imageVertical || ''" media="(min-width: 736px)" />
@@ -43,17 +43,11 @@ export default {
     const { useRandomClass } = useRandomColor()
     const { isFavorite, toggleFavorite, checkIsFavorite } = useFavorites()
     const fm = computed(() => frontmatter.value || {})
-    const baseUrl = computed(() => {
-      if (typeof window !== 'undefined') {
-        const origin = window.location.origin
-        const base = site.value?.base || ''
-        return `${origin}${base}`.replace(/\/$/, '')
-      }
-      return ''
-    })
     const transformItem = (data) => {
       const base = {
         uuid: data.uuid,
+        baseURL: (site.value?.base || '').replace(/\/+$/, ''),
+        shortID: usePageUUID(data.uuid),
         nameDisplay: data.title || '',
         descriptionDisplay: data.description || '',
         covenantID: data.covenantID || '',
@@ -70,14 +64,6 @@ export default {
       }
       return base
     }
-    const shortUrl = computed(() => {
-      if (typeof window === 'undefined') return ''
-      const origin = window.location.origin
-      const base = site.value?.base
-      const cleanBase = base.replace(/\/+$/, '')
-      const shortID = usePageUUID(fm.value?.uuid)
-      return `${origin}${cleanBase}/?s=${shortID}`
-    })
     const item = computed(() => {
       const data = fm.value || {}
       const result = transformItem(data)
@@ -94,34 +80,24 @@ export default {
         checkFavoriteStatus(uuid)
       }, 50)
     }
-    const handleShare = async (event) => {
+    const handleShare = (event) => {
       const button = event.currentTarget
-      const urlToCopy = button.dataset.url
-      if (!urlToCopy) {
+      const shortPath = button.dataset.url
+      if (!shortPath) {
         return
       }
-      try {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          await navigator.clipboard.writeText(urlToCopy)
-        } else {
-          const textarea = document.createElement('textarea')
-          textarea.value = urlToCopy
-          textarea.style.position = 'fixed'
-          textarea.style.opacity = '0'
-          textarea.style.top = '-9999px'
-          textarea.style.left = '-9999px'
-          document.body.appendChild(textarea)
-          textarea.select()
-          document.execCommand('copy')
-          document.body.removeChild(textarea)
-        }
-        button.classList.add('clicked')
-        setTimeout(() => {
-          button.classList.remove('clicked')
-        }, 500)
-      } catch (error) {
-        console.error('❌ Ошибка копирования:', error)
-      }
+      const fullUrl = window.location.origin + shortPath
+      const textarea = document.createElement('textarea')
+      textarea.value = fullUrl
+      textarea.style.cssText = 'position:fixed;opacity:0;top:-9999px;left:-9999px;'
+      document.body.appendChild(textarea)
+      textarea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textarea)
+      button.classList.add('clicked')
+      setTimeout(() => {
+        button.classList.remove('clicked')
+      }, 500)
     }
     let resizeTimeout = null
     const handleResize = () => {
@@ -158,7 +134,6 @@ export default {
       config,
       item,
       isFavorite,
-      shortUrl,
       useRandomClass,
       toggleFavorite: handleToggleFavorite,
       translate,
