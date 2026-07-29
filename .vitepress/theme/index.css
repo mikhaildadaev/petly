@@ -203,7 +203,6 @@ button.share {
   z-index: 1;
 }
 button.share:hover {
-  background: var(--vp-c-brand);
   transform: scale(1.15)
 }
 button.share.clicked {
@@ -912,10 +911,6 @@ p.withColor {
   color: var(--vp-c-brand);
   transform: scale(1.05);
 }
-.block-type-chips .share{
-  mask-image: url('/petly/assets/svg/goto.svg');
-  -webkit-mask-image: url('/petly/assets/svg/goto.svg');
-}
 .block-type-cubes {
   position: relative;
   display: block;
@@ -1559,10 +1554,9 @@ p.withColor {
   100% { transform: scale(1); }
 }
 @keyframes popSuccess {
-  0% { transform: scale(1.15); }
-  30% { transform: scale(1.30); }
-  60% { transform: scale(0.95); }
-  100% { transform: scale(1); }
+  0% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(4px, 4px) rotate(20deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
 }
 @keyframes shimmerText {
   0% { background-position: 200% center; }
