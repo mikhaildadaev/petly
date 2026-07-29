@@ -56,30 +56,24 @@ export function useScrollCarusel(options = {}) {
    */
   const updateIndexFromScroll = () => {
     if (!containerRef.value) return
-    
     const container = containerRef.value
     const slides = container.querySelectorAll('.carousel-slide')
     if (slides.length === 0) return
-    
     const scrollLeft = container.scrollLeft
     const containerWidth = container.offsetWidth
     const containerCenter = scrollLeft + containerWidth / 2
-    
     let closestIndex = 0
     let closestDistance = Infinity
-    
     slides.forEach((slide, index) => {
       const slideLeft = slide.offsetLeft
       const slideWidth = slide.offsetWidth
       const slideCenter = slideLeft + slideWidth / 2
       const distance = Math.abs(containerCenter - slideCenter)
-      
       if (distance < closestDistance) {
         closestDistance = distance
         closestIndex = index
       }
     })
-    
     if (closestIndex !== currentIndex.value) {
       currentIndex.value = closestIndex
       updateCenterClass(closestIndex)
@@ -94,28 +88,19 @@ export function useScrollCarusel(options = {}) {
     const container = containerRef.value
     const slides = container.querySelectorAll('.carousel-slide')
     if (!slides.length || index < 0 || index >= slides.length) return
-
     isAnimating = true
-
-    // Обновляем классы
     updateCenterClass(index)
     currentIndex.value = index
-
-    // Рассчитываем позицию
     const slide = slides[index]
     const containerWidth = container.offsetWidth
     const slideWidth = slide.offsetWidth
     const paddingLeft = parseInt(getComputedStyle(container).paddingLeft) || 0
     const slideLeft = slide.offsetLeft - paddingLeft
     const scrollPosition = slideLeft - (containerWidth - slideWidth) / 2
-
-    // Прокручиваем
     container.scrollTo({
       left: Math.max(0, scrollPosition),
       behavior: 'smooth'
     })
-
-    // Снимаем флаг после анимации
     setTimeout(() => {
       isAnimating = false
     }, 400)
