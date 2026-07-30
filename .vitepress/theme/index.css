@@ -326,10 +326,10 @@ p.withColor {
    СООТНОШЕНИЕ
    ============================================ */
 .aspect-card {
-  aspect-ratio: 15/9;
+  aspect-ratio: 9/15;
 }
-.aspect-list {
-  aspect-ratio: 3/4;
+.aspect-hero {
+  aspect-ratio: 15/9;
 }
 
 /* ============================================
@@ -1559,12 +1559,6 @@ p.withColor {
 
 /* Планшеты */
 @media (min-width: 736px) and (max-width: 1280px) {
-  .aspect-card {
-    aspect-ratio: 4/3;
-  }
-  .aspect-list {
-    aspect-ratio: 3/4;
-  }
   .hero-name {
     font-size: 2rem;
   }
@@ -1587,12 +1581,6 @@ p.withColor {
   button.carousel {
     background-color: transparent!important;
   }
-  .aspect-card {
-    aspect-ratio: 9/15;
-  }
-  .aspect-list {
-    aspect-ratio: 9/15;
-  }
   .carousel-track {
     gap: 0;
   }
@@ -1605,6 +1593,9 @@ p.withColor {
   }
   .carousel-slide:not(.center) {
     transform: scale(0.95);
+  }
+  .aspect-hero {
+    aspect-ratio: 9/15;
   }
   .hero-name {
     font-size: 1.5rem;
