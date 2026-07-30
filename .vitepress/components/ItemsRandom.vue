@@ -147,20 +147,17 @@ export default {
       resetToFirstSlide()
     })
     watch(
-      () => allItems.value,
-      (newVal) => {
-        if (isClient.value && isMobile.value && newVal.length) {
+      () => allItems.value.length,
+      (newLength) => {
+        if (isClient.value && isMobile.value && newLength > 0) {
           const maxIndex = carouselTotalSlides.value - 1
-          if (currentIndex.value > maxIndex) resetToFirstSlide()
+          if (currentIndex.value > maxIndex) {
+            resetToFirstSlide()
+          }
         }
       },
-      { deep: true }
+      { immediate: true }
     )
-    watch(isMobile, (newVal) => {
-      if (isClient.value && newVal && allItems.value.length) {
-        resetToFirstSlide()
-      }
-    })
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)

@@ -98,11 +98,23 @@ export default {
       visibleCount,
     } = usePagination(filteredItems, { perPage: 8 })
     const loadMore = async () => {
-      const currentPosition = currentIndex.value
+      if (isLoadingMore.value) return
+      const beforeIndex = currentIndex.value
+      const beforeLength = paginatedItems.value.length
+      const wasOnLoadMore = beforeIndex === beforeLength
       await originalLoadMore()
       await nextTick()
       if (paginatedItems.value.length > 0) {
-        goToSlide(currentPosition)
+        const afterLength = paginatedItems.value.length
+        if (wasOnLoadMore) {
+          const targetIndex = beforeLength
+          goToSlide(targetIndex)
+        } else {
+          const safeIndex = Math.min(beforeIndex, afterLength - 1)
+          if (safeIndex !== beforeIndex) {
+            goToSlide(safeIndex)
+          }
+        }
       }
     }
     const carouselRef = ref(null)
@@ -173,20 +185,17 @@ export default {
       resetToFirstSlide()
     })
     watch(
-      () => filteredItems.value,
-      (newVal) => {
-        if (isClient.value && isMobile.value && newVal.length) {
+      () => filteredItems.value.length,
+      (newLength) => {
+        if (isClient.value && isMobile.value && newLength > 0) {
           const maxIndex = carouselTotalSlides.value - 1
-          if (currentIndex.value > maxIndex) resetToFirstSlide()
+          if (currentIndex.value > maxIndex) {
+            resetToFirstSlide()
+          }
         }
       },
-      { deep: true }
+      { immediate: true }
     )
-    watch(isMobile, (newVal) => {
-      if (isClient.value && newVal && paginatedItems.value.length) {
-        resetToFirstSlide()
-      }
-    })
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)
