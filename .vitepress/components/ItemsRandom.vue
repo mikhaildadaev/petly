@@ -5,7 +5,7 @@
         <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(item, index) in allItems" :key="item.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="getItemLink(item)" target="_blank" rel="noopener noreferrer" class="aspect-list card">
+            <a :href="getItemLink(item)" target="_blank" rel="noopener noreferrer" class="aspect-card card">
               <div class="meta">
                 <template v-for="displayField in config.fields.display" :key="displayField">
                   <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`">{{ item[displayField] }}</label>
@@ -19,7 +19,7 @@
             </a>
           </div>
           <div class="carousel-slide" :class="{ center: currentIndex === allItems.length }">
-            <div class="aspect-list load-more" @click="goToLink">
+            <div class="aspect-card load-more" @click="goToLink">
               <div class="content">
                 <div class="icon"></div>
                 <div class="text">{{ translate('ui', 'Перейти в раздел') }}</div>

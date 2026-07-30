@@ -1,5 +1,5 @@
 <template>
-  <div v-if="config && config.fields" class="aspect-card hero-card">
+  <div v-if="config && config.fields" class="aspect-hero hero-card">
     <div class="hero-meta">
       <template v-for="displayField in config.fields.display" :key="displayField">
         <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`" :data-gender="displayField === 'genderDisplay' ? item.gender : null">{{ item[displayField] }}</label>
