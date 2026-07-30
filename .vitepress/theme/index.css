@@ -93,7 +93,7 @@ button.carousel {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--vp-c-text);
+  background-color: var(--vp-c-bg);
   mask-size: contain;
   -webkit-mask-size: contain;
   mask-repeat: no-repeat;
@@ -702,6 +702,16 @@ p.withColor {
 .carousel-track::-webkit-scrollbar {
   display: none;
 }
+.carousel-track::before {
+  content: '';
+  flex: 0 0 calc(50% - 140px);
+  flex-shrink: 0;
+}
+.carousel-track::after {
+  content: '';
+  flex: 0 0 calc(50% - 140px);
+  flex-shrink: 0;
+}
 .carousel-slide {
   flex: 0 0 calc(25% - 48px);
   scroll-snap-align: center;
@@ -712,12 +722,6 @@ p.withColor {
 }
 .carousel-slide.center {
   z-index: 2;
-}
-.carousel-slide:first-child {
-  margin-left: 24px;
-}
-.carousel-slide:last-child {
-  margin-right: 24px;
 }
 
 /* ============================================
