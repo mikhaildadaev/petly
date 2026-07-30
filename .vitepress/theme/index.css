@@ -726,6 +726,13 @@ p.withColor {
 .carousel-slide.center {
   z-index: 2;
 }
+.carousel-slide.center .load-more {
+  border-color: var(--vp-c-brand-light);
+}
+.carousel-slide.center .load-more .content .icon {
+  background: var(--vp-c-brand);
+  transform: rotate(90deg);
+}
 
 /* ============================================
    СОСТОЯНИЯ
@@ -767,6 +774,10 @@ p.withColor {
 .load-more:hover {
   border-color: var(--vp-c-brand-light);
 }
+.load-more:hover .content .icon {
+  background: var(--vp-c-brand);
+  transform: rotate(90deg);
+}
 .load-more .content {
   display: flex;
   flex-direction: column;
@@ -791,11 +802,6 @@ p.withColor {
   -webkit-mask-repeat: no-repeat;
   mask-position: center;
   -webkit-mask-position: center;
-}
-.load-more:hover .content .icon {
-  background: var(--vp-c-brand);
-  transform: rotate(90deg);
-
 }
 .load-more .content .text {
   font-size: 18px;
