@@ -1,10 +1,10 @@
 <template>
-  <div v-if="randomItems.length > 0" class="cards-carousel">
-    <div class="carousel-container">
+  <div v-if="config && config.fields" class="random-items">
+    <div class="cards-carousel">
       <div class="carousel-wrapper">
         <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-          <div v-for="(item, index) in randomItems" :key="item.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
+          <div v-for="(item, index) in allItems" :key="item.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
             <a :href="getItemLink(item)" target="_blank" rel="noopener noreferrer" class="aspect-list card">
               <div class="meta">
                 <template v-for="displayField in config.fields.display" :key="displayField">
@@ -18,7 +18,7 @@
               </div>
             </a>
           </div>
-          <div class="carousel-slide load-more-slide" :class="{ center: currentIndex === randomItems.length }">
+          <div class="carousel-slide load-more-slide" :class="{ center: currentIndex === allItems.length }">
             <div class="load-more" @click="goToLink">
               <div class="content">
                 <div class="icon"></div>
@@ -31,13 +31,10 @@
       </div>
     </div>
   </div>
-  <div v-else-if="randomItems && randomItems.length === 0" class="no-results">
-    <p>{{ translate('ui', 'Ничего не найдено') }}</p>
-  </div>
 </template>
 
 <script>
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { computed, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { useData } from 'vitepress'
 import { useConfigItem } from '../utils/useConfigItem'
 import { useRandomArray } from '../utils/useRandomArray'
@@ -59,12 +56,24 @@ export default {
     const { lang } = useData()
     const translate = (category, key) => useTranslate(lang.value, category, key)
     const config = useConfigItem[props.type]
-    const randomItems = ref([])
+    const allItems = ref([])
     const isLoading = ref(true)
     const isClient = ref(false)
-    const { useRandomClass } = useRandomColor()
-    const hasMoreItems = computed(() => randomItems.value.length > 0)
+    const transformItem = (item) => {
+      const base = {
+        uuid: item.uuid,
+        nameDisplay: item.title || '',
+        descriptionDisplay: item.description || '',
+        covenantID: item.covenantID || '',
+        imageHorizontal: useUrlMedia(item.imageHorizontal, 'image'),
+        imageVertical: useUrlMedia(item.imageVertical, 'image'),
+        type: props.itemType,
+        ...(config.transform ? config.transform(item, lang.value, translate) : {})
+      }
+      return base
+    }
     const carouselRef = ref(null)
+    const hasMoreItems = true
     const {
       isMobile,
       currentIndex,
@@ -82,38 +91,21 @@ export default {
       touchEndY,
     } = useScrollCarusel({
       containerRef: carouselRef,
-      items: randomItems,
+      items: allItems,
       hasMoreItems: hasMoreItems,
     })
     const goToLink = () => {
       window.location.href = `${baseUrl}${lang.value}/${config.name}/${props.itemType}`
     }
-    const getItemLink = (item) => {
-      const basePath = config.linkPath(item)
-      return `${baseUrl}${lang.value}${basePath}${props.itemType}/${item.uuid}`
-    }
     const carouselTotalSlides = computed(() => {
-      return randomItems.value.length + (hasMoreItems.value ? 1 : 0)
+      return allItems.value.length + 1
     })
     const isFirstSlide = computed(() => currentIndex.value === 0)
     const isLastSlide = computed(() => currentIndex.value >= carouselTotalSlides.value - 1)
-    let resizeTimeout = null
-    const handleResize = () => {
-      if (resizeTimeout) clearTimeout(resizeTimeout)
-      resizeTimeout = setTimeout(() => { resizeTimeout = null }, 100)
-    }
-    const transformItem = (item) => {
-      const base = {
-        uuid: item.uuid,
-        nameDisplay: item.title || '',
-        descriptionDisplay: item.description || '',
-        covenantID: item.covenantID || '',
-        imageHorizontal: useUrlMedia(item.imageHorizontal, 'image'),
-        imageVertical: useUrlMedia(item.imageVertical, 'image'),
-        type: props.itemType,
-        ...(config.transform ? config.transform(item, lang.value, translate) : {})
-      }
-      return base
+    const { useRandomClass } = useRandomColor()
+    const getItemLink = (item) => {
+      const basePath = config.linkPath(item)
+      return `${baseUrl}${lang.value}${basePath}${props.itemType}/${item.uuid}`
     }
     const loadItems = async () => {
       try {
@@ -121,7 +113,7 @@ export default {
         const fileName = config.dataFile(lang.value, props.itemType)
         const response = await fetch(`${baseUrl}data/${fileName}`)
         if (response.status === 404) {
-          randomItems.value = []
+          allItems.value = []
           isLoading.value = false
           return
         }
@@ -129,21 +121,45 @@ export default {
         const data = await response.json()
         const loaded = data.map(item => transformItem(item))
         const shuffled = useRandomArray(loaded)
-        randomItems.value = shuffled.slice(0, props.count)
-        currentIndex.value = 0
+        allItems.value = shuffled.slice(0, props.count)
+        await nextTick()
+        resetToFirstSlide()
       } catch (error) {
-        randomItems.value = []
+        allItems.value = []
       } finally {
         isLoading.value = false
       }
     }
+    let resizeTimeout = null
+    const handleResize = () => {
+      if (resizeTimeout) clearTimeout(resizeTimeout)
+      resizeTimeout = setTimeout(() => { resizeTimeout = null }, 100)
+    }
     onMounted(async () => {
       isClient.value = true
-      if (typeof window !== 'undefined') window.addEventListener('resize', handleResize)
+      if (typeof window !== 'undefined') {
+        window.addEventListener('resize', handleResize)
+      }
       await loadItems()
     })
     watch(lang, async () => {
       await loadItems()
+      resetToFirstSlide()
+    })
+    watch(
+      () => allItems.value,
+      (newVal) => {
+        if (isClient.value && isMobile.value && newVal.length) {
+          const maxIndex = carouselTotalSlides.value - 1
+          if (currentIndex.value > maxIndex) resetToFirstSlide()
+        }
+      },
+      { deep: true }
+    )
+    watch(isMobile, (newVal) => {
+      if (isClient.value && newVal && allItems.value.length) {
+        resetToFirstSlide()
+      }
     })
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
@@ -153,9 +169,7 @@ export default {
     })
     return {
       config,
-      randomItems,
-      lang,
-      translate,
+      allItems,
       isLoading,
       isMobile,
       carouselRef,
@@ -163,6 +177,8 @@ export default {
       carouselTotalSlides,
       isFirstSlide,
       isLastSlide,
+      translate,
+      lang,
       scrollToSlide,
       nextSlide,
       prevSlide,
