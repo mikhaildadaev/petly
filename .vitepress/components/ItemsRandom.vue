@@ -19,7 +19,7 @@
             </a>
           </div>
           <div class="carousel-slide load-more-slide" :class="{ center: currentIndex === allItems.length }">
-            <div class="load-more" @click="goToLink">
+            <div class="aspect-list load-more" @click="goToLink">
               <div class="content">
                 <div class="icon"></div>
                 <div class="text">{{ translate('ui', 'Перейти в раздел') }}</div>

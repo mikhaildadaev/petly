@@ -19,7 +19,7 @@
             </a>
           </div>
           <div v-if="hasMoreItems" class="carousel-slide load-more-slide" :class="{ center: currentIndex === paginatedItems.length }">
-            <div class="load-more" @click="loadMore">
+            <div class="aspect-list load-more" @click="loadMore">
               <div class="content">
                 <div class="icon"></div>
                 <div class="text">{{ translate('ui', 'Загрузить ещё') }}</div>
