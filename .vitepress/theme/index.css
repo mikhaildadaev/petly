@@ -704,12 +704,15 @@ p.withColor {
 }
 .carousel-track::before {
   content: '';
-  flex: 0 0 calc(50% - 140px);
+  flex: 0 0 50%;
   flex-shrink: 0;
+  margin: 0;
+  background: var(--vp-c-bg-alt);
+  border-radius: var(--radius);
 }
 .carousel-track::after {
   content: '';
-  flex: 0 0 calc(50% - 140px);
+  flex: 0 0 50%;
   flex-shrink: 0;
 }
 .carousel-slide {
@@ -1585,6 +1588,9 @@ p.withColor {
   }
   .carousel-track {
     gap: 0;
+  }
+  .carousel-track::before {
+    margin: 0 24px 0 0;
   }
   .carousel-slide {
     flex: 0 0 calc(100% - 48px);
