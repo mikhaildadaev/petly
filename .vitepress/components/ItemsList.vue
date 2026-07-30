@@ -80,8 +80,8 @@ import { computed, ref, reactive, onMounted, onUnmounted, watch, nextTick } from
 import { useData } from 'vitepress'
 import { useConfigItem } from '../utils/useConfigItem'
 import { usePagination } from '../utils/usePagination'
-import { useScrollCarusel } from '../utils/useScrollCarusel'
 import { useRandomColor } from '../utils/useRandomColor'
+import { useScrollCarusel } from '../utils/useScrollCarusel'
 import { useTranslate, useAge, useAgePetCategory, useDirection, useExperience } from '../utils/useTranslate'
 import { useUrlMedia } from '../utils/useUrlMedia'
 
@@ -269,11 +269,6 @@ export default {
       },
       { deep: true }
     )
-    watch(isMobile, (newVal) => {
-      if (isClient.value && newVal && paginatedItems.value.length) {
-        resetToFirstSlide()
-      }
-    })
     watch(
       () => paginatedItems.value,
       (newVal) => {
@@ -284,6 +279,11 @@ export default {
       },
       { deep: true }
     )
+    watch(isMobile, (newVal) => {
+      if (isClient.value && newVal && paginatedItems.value.length) {
+        resetToFirstSlide()
+      }
+    })
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)

@@ -99,6 +99,7 @@ export default {
         button.classList.remove('clicked')
       }, 500)
     }
+    let notificationTimeout = null
     let resizeTimeout = null
     const handleResize = () => {
       if (resizeTimeout) clearTimeout(resizeTimeout)

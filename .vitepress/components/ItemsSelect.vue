@@ -1,10 +1,10 @@
 <template>
-  <div v-if="selectedItems && selectedItems.length > 0" class="cards-carousel">
-    <div class="carousel-container">
+  <div v-if="config && config.fields" class="select-items">
+    <div class="cards-carousel">
       <div class="carousel-wrapper">
         <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-          <div v-for="(item, index) in selectedItems" :key="item.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
+          <div v-for="(item, index) in paginatedItems" :key="item.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
             <a :href="getItemLink(item)" target="_blank" rel="noopener noreferrer" class="aspect-list card">
               <div class="meta">
                 <template v-for="displayField in config.fields.display" :key="displayField">
@@ -18,20 +18,33 @@
               </div>
             </a>
           </div>
+          <div v-if="hasMoreItems" class="carousel-slide load-more-slide" :class="{ center: currentIndex === paginatedItems.length }">
+            <div class="load-more" @click="loadMore">
+              <div class="content">
+                <div class="icon"></div>
+                <div class="text">{{ translate('ui', 'Загрузить ещё') }}</div>
+                <div class="count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
+                <div class="progress">
+                  <div class="bar" :style="{ width: `${(visibleCount / filteredItems.length) * 100}%` }"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <button class="carousel next" :class="{ none: isLastSlide }" @click="nextSlide" :disabled="currentIndex >= (selectedItems ? selectedItems.length - 1 : 0)"></button>
+        <button class="carousel next" :class="{ none: isLastSlide }" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1"></button>
       </div>
     </div>
-  </div>
-  <div v-else-if="selectedItems && selectedItems.length === 0" class="no-results">
-    <p>{{ translate('ui', 'Ничего не найдено') }}</p>
+    <div v-if="filteredItems.length === 0 && !isLoading" class="no-results">
+      <p>{{ translate('ui', 'Ничего не найдено') }}</p>
+    </div>
   </div>
 </template>
 
 <script>
-import { computed, ref, onMounted, onUnmounted, watch } from 'vue'
+import { computed, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { useData } from 'vitepress'
 import { useConfigItem } from '../utils/useConfigItem'
+import { usePagination } from '../utils/usePagination'
 import { useRandomColor } from '../utils/useRandomColor'
 import { useScrollCarusel } from '../utils/useScrollCarusel'
 import { useTranslate } from '../utils/useTranslate'
@@ -53,14 +66,42 @@ export default {
     const allItems = ref([])
     const isLoading = ref(true)
     const isClient = ref(false)
-    const selectedItems = computed(() => {
+    const filteredItems = computed(() => {
       if (isLoading.value) return []
       if (!allItems.value || allItems.value.length === 0) return []
       if (!props.uuids || props.uuids.length === 0) return []
       return allItems.value.filter(item => item.uuid && props.uuids.includes(item.uuid))
     })
-    const { useRandomClass } = useRandomColor()
-    const hasMoreItems = computed(() => false)
+    const transformItem = (item) => {
+      const base = {
+        uuid: item.uuid,
+        nameDisplay: item.title || '',
+        descriptionDisplay: item.description || '',
+        covenantID: item.covenantID || '',
+        imageHorizontal: useUrlMedia(item.imageHorizontal, 'image'),
+        imageVertical: useUrlMedia(item.imageVertical, 'image'),
+        type: props.itemType,
+        ...(config.transform ? config.transform(item, lang.value, translate) : {})
+      }
+      return base
+    }
+    const {
+      paginatedItems,
+      remaining,
+      hasMoreItems,
+      loadMore: originalLoadMore,
+      isLoadingMore,
+      resetPagination,
+      visibleCount,
+    } = usePagination(filteredItems, { perPage: 8 })
+    const loadMore = async () => {
+      const currentPosition = currentIndex.value
+      await originalLoadMore()
+      await nextTick()
+      if (paginatedItems.value.length > 0) {
+        goToSlide(currentPosition)
+      }
+    }
     const carouselRef = ref(null)
     const {
       isMobile,
@@ -79,35 +120,18 @@ export default {
       touchEndY,
     } = useScrollCarusel({
       containerRef: carouselRef,
-      items: selectedItems,
+      items: paginatedItems,
       hasMoreItems: hasMoreItems,
     })
-    const getItemLink = (item) => {
-      const basePath = config.linkPath(item)
-      return `${baseUrl}${lang.value}${basePath}${props.itemType}/${item.uuid}`
-    }
     const carouselTotalSlides = computed(() => {
-      return selectedItems.value.length + (hasMoreItems.value ? 1 : 0)
+      return paginatedItems.value.length + (hasMoreItems.value ? 1 : 0)
     })
     const isFirstSlide = computed(() => currentIndex.value === 0)
     const isLastSlide = computed(() => currentIndex.value >= carouselTotalSlides.value - 1)
-    let resizeTimeout = null
-    const handleResize = () => {
-      if (resizeTimeout) clearTimeout(resizeTimeout)
-      resizeTimeout = setTimeout(() => { resizeTimeout = null }, 100)
-    }
-    const transformItem = (item) => {
-      const base = {
-        uuid: item.uuid,
-        nameDisplay: item.title || '',
-        descriptionDisplay: item.description || '',
-        covenantID: item.covenantID || '',
-        imageHorizontal: useUrlMedia(item.imageHorizontal, 'image'),
-        imageVertical: useUrlMedia(item.imageVertical, 'image'),
-        type: props.itemType,
-        ...(config.transform ? config.transform(item, lang.value, translate) : {})
-      }
-      return base
+    const { useRandomClass } = useRandomColor()
+    const getItemLink = (item) => {
+      const basePath = config.linkPath(item)
+      return `${baseUrl}${lang.value}${basePath}${props.itemType}/${item.uuid}`
     }
     const loadItems = async () => {
       try {
@@ -122,20 +146,43 @@ export default {
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
         const data = await response.json()
         allItems.value = data.map(item => transformItem(item))
+        resetPagination()
       } catch (error) {
         allItems.value = []
       } finally {
         isLoading.value = false
       }
     }
+    let resizeTimeout = null
+    const handleResize = () => {
+      if (resizeTimeout) clearTimeout(resizeTimeout)
+      resizeTimeout = setTimeout(() => { resizeTimeout = null }, 100)
+    }
     onMounted(async () => {
       isClient.value = true
-      if (typeof window !== 'undefined') window.addEventListener('resize', handleResize)
+      if (typeof window !== 'undefined') {
+        window.addEventListener('resize', handleResize)
+      }
       await loadItems()
     })
     watch(lang, async () => {
       await loadItems()
       resetToFirstSlide()
+    })
+    watch(
+      () => filteredItems.value,
+      (newVal) => {
+        if (isClient.value && isMobile.value && newVal.length) {
+          const maxIndex = carouselTotalSlides.value - 1
+          if (currentIndex.value > maxIndex) resetToFirstSlide()
+        }
+      },
+      { deep: true }
+    )
+    watch(isMobile, (newVal) => {
+      if (isClient.value && newVal && paginatedItems.value.length) {
+        resetToFirstSlide()
+      }
     })
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
@@ -145,9 +192,8 @@ export default {
     })
     return {
       config,
-      selectedItems,
-      lang,
-      translate,
+      filteredItems,
+      paginatedItems,
       isLoading,
       isMobile,
       carouselRef,
@@ -155,6 +201,14 @@ export default {
       carouselTotalSlides,
       isFirstSlide,
       isLastSlide,
+      remaining,
+      hasMoreItems,
+      loadMore,
+      isLoadingMore,
+      resetPagination,
+      visibleCount,
+      translate,
+      lang,
       scrollToSlide,
       nextSlide,
       prevSlide,
