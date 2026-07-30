@@ -73,7 +73,7 @@ export default {
       return base
     }
     const carouselRef = ref(null)
-    const hasMoreItems = true
+    const hasMoreItems = computed(() => true)
     const {
       isMobile,
       currentIndex,
