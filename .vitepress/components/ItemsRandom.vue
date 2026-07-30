@@ -18,7 +18,7 @@
               </div>
             </a>
           </div>
-          <div class="carousel-slide load-more-slide" :class="{ center: currentIndex === allItems.length }">
+          <div class="carousel-slide" :class="{ center: currentIndex === allItems.length }">
             <div class="aspect-list load-more" @click="goToLink">
               <div class="content">
                 <div class="icon"></div>

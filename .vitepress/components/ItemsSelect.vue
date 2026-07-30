@@ -18,7 +18,7 @@
               </div>
             </a>
           </div>
-          <div v-if="hasMoreItems" class="carousel-slide load-more-slide" :class="{ center: currentIndex === paginatedItems.length }">
+          <div v-if="hasMoreItems" class="carousel-slide" :class="{ center: currentIndex === paginatedItems.length }">
             <div class="aspect-list load-more" @click="loadMore">
               <div class="content">
                 <div class="icon"></div>
