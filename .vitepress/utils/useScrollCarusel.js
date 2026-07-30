@@ -1,4 +1,4 @@
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick, watch } from 'vue'
 
 const MOBILE_BREAKPOINT = 735
 
@@ -101,9 +101,17 @@ export function useScrollCarusel(options = {}) {
       left: Math.max(0, scrollPosition),
       behavior: 'smooth'
     })
-    setTimeout(() => {
+    const onScrollEnd = () => {
       isAnimating = false
-    }, 400)
+      container.removeEventListener('scrollend', onScrollEnd)
+    }
+    if ('onscrollend' in window) {
+      container.addEventListener('scrollend', onScrollEnd, { passive: true })
+    } else {
+      setTimeout(() => {
+        isAnimating = false
+      }, 500)
+    }
   }
   const nextSlide = () => {
     const maxIndex = items.value.length + (hasMoreItems.value ? 1 : 0)
@@ -132,6 +140,17 @@ export function useScrollCarusel(options = {}) {
         }
       }
     })
+  }
+  const syncIndexWithItems = () => {
+    const totalSlides = items.value.length + (hasMoreItems.value ? 1 : 0)
+    const maxIndex = Math.max(0, totalSlides - 1)
+    if (currentIndex.value > maxIndex) {
+      const newIndex = Math.max(0, maxIndex)
+      currentIndex.value = newIndex
+      nextTick(() => {
+        updateCenterClass(newIndex)
+      })
+    }
   }
 
   // ============================================================
@@ -170,9 +189,9 @@ export function useScrollCarusel(options = {}) {
     } else {
       scrollToSlide(currentIndex.value)
     }
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       updateIndexFromScroll()
-    }, 50)
+    })
     touchStartX.value = 0
     touchStartY.value = 0
     touchEndX.value = 0
@@ -242,6 +261,14 @@ export function useScrollCarusel(options = {}) {
   //  ЖИЗНЕННЫЙ ЦИКЛ
   // ============================================================
 
+  watch(
+    () => [items.value.length, hasMoreItems.value],
+    () => {
+      syncIndexWithItems()
+    },
+    { immediate: true, deep: true }
+  )
+
   onMounted(() => {
     checkMobile()
     if (typeof window !== 'undefined') {
@@ -251,6 +278,7 @@ export function useScrollCarusel(options = {}) {
       if (containerRef.value) {
         containerRef.value.addEventListener('scroll', handleScroll, { passive: true })
       }
+      syncIndexWithItems()
     })
   })
 

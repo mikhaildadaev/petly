@@ -31,7 +31,6 @@ export function usePagination(items, options = {}) {
       return
     }
     isLoadingMore.value = true
-    await new Promise(resolve => setTimeout(resolve, 500))
     let addCount = perPage
     if (typeof count === 'number' && count > 0) {
       addCount = count
