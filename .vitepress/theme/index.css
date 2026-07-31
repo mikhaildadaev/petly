@@ -710,6 +710,7 @@ p.withColor {
   background-image: url('/petly/assets/svg/swipe.svg');
   background-repeat: no-repeat;
   background-position: 75% 50%;
+  background-size: 64px;
   animation: swipePulse 2s ease-in-out infinite;
 }
 .carousel-track::after {
