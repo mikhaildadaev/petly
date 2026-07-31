@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { computed, ref, reactive, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import { computed, ref, reactive, onMounted, onUnmounted, watch } from 'vue'
 import { useData } from 'vitepress'
 import { useConfigItem } from '../utils/useConfigItem'
 import { usePagination } from '../utils/usePagination'
@@ -152,20 +152,6 @@ export default {
       resetPagination,
       visibleCount,
     } = usePagination(filteredItems, { perPage: 8 })
-    const loadMore = async () => {
-      if (isLoadingMore.value) return
-      const beforeIndex = currentIndex.value
-      await originalLoadMore()
-      await nextTick()
-      if (paginatedItems.value.length === 0) return
-      const safeIndex = Math.min(beforeIndex, paginatedItems.value.length - 1)
-      requestAnimationFrame(() => {
-        if (safeIndex !== currentIndex.value) {
-          currentIndex.value = safeIndex
-          scrollToSlide(safeIndex)
-        }
-      })
-    }
     const carouselRef = ref(null)
     const {
       isMobile,
@@ -182,10 +168,12 @@ export default {
       touchStartY,
       touchEndX,
       touchEndY,
+      loadMore,
     } = useScrollCarusel({
       containerRef: carouselRef,
       items: paginatedItems,
       hasMoreItems: hasMoreItems,
+      loadFn: originalLoadMore,
     })
     const carouselTotalSlides = computed(() => {
       return paginatedItems.value.length + (hasMoreItems.value ? 1 : 0)
@@ -256,25 +244,19 @@ export default {
       if (resizeTimeout) clearTimeout(resizeTimeout)
       resizeTimeout = setTimeout(() => { resizeTimeout = null }, 100)
     }
-    const attachTouchEvents = () => {
-      if (carouselRef.value) {
-        carouselRef.value.addEventListener('touchstart', handleTouchStart, { passive: true })
-        carouselRef.value.addEventListener('touchmove', handleTouchMove, { passive: false })
-        carouselRef.value.addEventListener('touchend', handleTouchEnd, { passive: true })
-      }
-    }
     onMounted(async () => {
       isClient.value = true
       if (typeof window !== 'undefined') {
         window.addEventListener('resize', handleResize)
       }
       await loadItems()
-      attachTouchEvents()
+      if (paginatedItems.value.length > 0) {
+        resetToFirstSlide()
+      }
     })
     watch(lang, async () => {
       await loadItems()
       resetToFirstSlide()
-      attachTouchEvents()
     })
     watch(
       () => filters,
@@ -289,6 +271,22 @@ export default {
         resetToFirstSlide()
       }
     })
+    watch(
+      () => currentIndex.value,
+      (newVal, oldVal) => {
+        console.log(`📊 currentIndex изменился: ${oldVal} → ${newVal}`)
+        console.log(`   totalSlides: ${carouselTotalSlides.value}, hasMoreItems: ${hasMoreItems.value}`)
+      },
+      { immediate: true }
+    )
+    watch(
+      () => paginatedItems.value.length,
+      (newVal, oldVal) => {
+        console.log(`📦 paginatedItems.length: ${oldVal} → ${newVal}`)
+        console.log(`   currentIndex: ${currentIndex.value}`)
+      },
+      { immediate: true }
+    )
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)

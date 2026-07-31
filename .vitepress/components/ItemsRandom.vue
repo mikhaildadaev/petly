@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { computed, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import { computed, ref, onMounted, onUnmounted, watch } from 'vue'
 import { useData } from 'vitepress'
 import { useConfigItem } from '../utils/useConfigItem'
 import { useRandomArray } from '../utils/useRandomArray'
@@ -122,7 +122,6 @@ export default {
         const loaded = data.map(item => transformItem(item))
         const shuffled = useRandomArray(loaded)
         allItems.value = shuffled.slice(0, props.count)
-        await nextTick()
         resetToFirstSlide()
       } catch (error) {
         allItems.value = []
@@ -141,6 +140,9 @@ export default {
         window.addEventListener('resize', handleResize)
       }
       await loadItems()
+      if (allItems.value.length > 0) {
+        resetToFirstSlide()
+      }
     })
     watch(lang, async () => {
       await loadItems()
@@ -148,16 +150,16 @@ export default {
     })
     watch(
       () => allItems.value.length,
-      (newLength) => {
-        if (isClient.value && isMobile.value && newLength > 0) {
-          const maxIndex = carouselTotalSlides.value - 1
-          if (currentIndex.value > maxIndex) {
-            resetToFirstSlide()
-          }
-        }
+      () => {
+        resetToFirstSlide()
       },
-      { immediate: true }
+      { deep: true }
     )
+    watch(isMobile, (newVal) => {
+      if (isClient.value && newVal && allItems.value.length) {
+        resetToFirstSlide()
+      }
+    })
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)

@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { computed, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import { computed, ref, onMounted, onUnmounted, watch } from 'vue'
 import { useData } from 'vitepress'
 import { useConfigItem } from '../utils/useConfigItem'
 import { usePagination } from '../utils/usePagination'
@@ -97,26 +97,6 @@ export default {
       resetPagination,
       visibleCount,
     } = usePagination(filteredItems, { perPage: 8 })
-    const loadMore = async () => {
-      if (isLoadingMore.value) return
-      const beforeIndex = currentIndex.value
-      const beforeLength = paginatedItems.value.length
-      const wasOnLoadMore = beforeIndex === beforeLength
-      await originalLoadMore()
-      await nextTick()
-      if (paginatedItems.value.length > 0) {
-        const afterLength = paginatedItems.value.length
-        if (wasOnLoadMore) {
-          const targetIndex = beforeLength
-          goToSlide(targetIndex)
-        } else {
-          const safeIndex = Math.min(beforeIndex, afterLength - 1)
-          if (safeIndex !== beforeIndex) {
-            goToSlide(safeIndex)
-          }
-        }
-      }
-    }
     const carouselRef = ref(null)
     const {
       isMobile,
@@ -133,10 +113,12 @@ export default {
       touchStartY,
       touchEndX,
       touchEndY,
+      loadMore,
     } = useScrollCarusel({
       containerRef: carouselRef,
       items: paginatedItems,
       hasMoreItems: hasMoreItems,
+      loadFn: originalLoadMore,
     })
     const carouselTotalSlides = computed(() => {
       return paginatedItems.value.length + (hasMoreItems.value ? 1 : 0)
@@ -179,6 +161,9 @@ export default {
         window.addEventListener('resize', handleResize)
       }
       await loadItems()
+      if (paginatedItems.value.length > 0) {
+        resetToFirstSlide()
+      }
     })
     watch(lang, async () => {
       await loadItems()
@@ -186,16 +171,16 @@ export default {
     })
     watch(
       () => filteredItems.value.length,
-      (newLength) => {
-        if (isClient.value && isMobile.value && newLength > 0) {
-          const maxIndex = carouselTotalSlides.value - 1
-          if (currentIndex.value > maxIndex) {
-            resetToFirstSlide()
-          }
-        }
+      () => {
+        resetToFirstSlide()
       },
-      { immediate: true }
+      { deep: true }
     )
+    watch(isMobile, (newVal) => {
+      if (isClient.value && newVal && paginatedItems.value.length) {
+        resetToFirstSlide()
+      }
+    })
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)
