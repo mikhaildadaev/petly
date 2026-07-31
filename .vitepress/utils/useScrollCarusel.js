@@ -84,11 +84,11 @@ export function useScrollCarusel(options = {}) {
    * Прокрутка к слайду
    */
   const scrollToSlide = (index) => {
-    if (!containerRef.value || isAnimating) return
+    if (!containerRef.value) return
     const container = containerRef.value
     const slides = container.querySelectorAll('.carousel-slide')
-    if (!slides.length || index < 0 || index >= slides.length) return
-    isAnimating = true
+    if (!slides || slides.length === 0 || index < 0 || index >= slides.length) return
+    isAnimating = false
     updateCenterClass(index)
     currentIndex.value = index
     const slide = slides[index]
@@ -101,6 +101,7 @@ export function useScrollCarusel(options = {}) {
       left: Math.max(0, scrollPosition),
       behavior: 'smooth'
     })
+    isAnimating = true
     const onScrollEnd = () => {
       isAnimating = false
       container.removeEventListener('scrollend', onScrollEnd)
