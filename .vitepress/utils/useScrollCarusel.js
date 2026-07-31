@@ -1,4 +1,4 @@
-import { ref, onMounted, onUnmounted, nextTick, watch } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 
 const MOBILE_BREAKPOINT = 735
 
@@ -7,16 +7,29 @@ export function useScrollCarusel(options = {}) {
     items = ref([]),
     containerRef = ref(null),
     hasMoreItems = ref(false),
+    loadFn = null,
   } = options
+
+  // ============================================================
+  //  СОСТОЯНИЕ
+  // ============================================================
   const isMobile = ref(false)
   const currentIndex = ref(0)
   const isSwiping = ref(false)
   const touchStartX = ref(0)
   const touchStartY = ref(0)
+  const isLoadingMore = ref(false)
+
   let resizeTimeout = null
   let isAnimating = false
   let rafId = null
+  let isResetting = false
   const minSwipeDistance = 30
+
+  // ============================================================
+  //  ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ
+  // ============================================================
+
   const checkMobile = () => {
     if (typeof window !== 'undefined') {
       isMobile.value = window.innerWidth < MOBILE_BREAKPOINT
@@ -50,12 +63,18 @@ export function useScrollCarusel(options = {}) {
     return closestIndex
   }
   const syncIndex = () => {
+    if (isResetting || isAnimating) return
     const closest = getClosestSlide()
     if (closest !== currentIndex.value) {
       currentIndex.value = closest
       updateCenterClass(closest)
     }
   }
+
+  // ============================================================
+  //  ОСНОВНЫЕ МЕТОДЫ
+  // ============================================================
+
   const scrollToSlide = (index) => {
     if (!containerRef.value) return
     const container = containerRef.value
@@ -97,8 +116,43 @@ export function useScrollCarusel(options = {}) {
   const goToSlide = (index) => {
     scrollToSlide(index)
   }
+
+  // ============================================================
+  //  СБРОС (правильный, без циклов)
+  // ============================================================
+
   const resetToFirstSlide = () => {
     scrollToSlide(0)
+  }
+
+  // ============================================================
+  //  LOAD MORE
+  // ============================================================
+
+  const loadMore = async () => {
+    if (isLoadingMore.value || !loadFn) return
+    isLoadingMore.value = true
+    const beforeIndex = currentIndex.value
+    const beforeLength = items.value.length
+    const wasOnMore = beforeIndex === beforeLength
+    await loadFn()
+    await nextTick()
+    isLoadingMore.value = false
+    if (items.value.length === 0) return
+    if (wasOnMore) {
+      const targetIndex = beforeLength
+      isResetting = true
+      currentIndex.value = targetIndex
+      scrollToSlide(targetIndex)
+      setTimeout(() => {
+        isResetting = false
+      }, 100)
+    } else {
+      const safeIndex = Math.min(beforeIndex, items.value.length - 1)
+      if (safeIndex !== currentIndex.value) {
+        scrollToSlide(safeIndex)
+      }
+    }
   }
 
   // ============================================================
@@ -121,20 +175,26 @@ export function useScrollCarusel(options = {}) {
       return
     }
     e.preventDefault()
-    syncIndex()
+    if (!isResetting && !isAnimating) {
+      const closest = getClosestSlide()
+      if (closest !== currentIndex.value) {
+        currentIndex.value = closest
+        updateCenterClass(closest)
+      }
+    }
   }
   const handleTouchEnd = (e) => {
     if (!isSwiping.value) return
     isSwiping.value = false
     const touch = e.changedTouches[0]
     const diffX = touchStartX.value - touch.clientX
-    if (Math.abs(diffX) > minSwipeDistance) {
+    if (Math.abs(diffX) > minSwipeDistance && !isResetting) {
       if (diffX > 0) {
         nextSlide()
       } else {
         prevSlide()
       }
-    } else {
+    } else if (!isResetting) {
       const closest = getClosestSlide()
       if (closest !== currentIndex.value) {
         scrollToSlide(closest)
@@ -144,12 +204,13 @@ export function useScrollCarusel(options = {}) {
     touchStartY.value = 0
   }
   const handleScroll = () => {
+    if (isResetting || isAnimating) return
     if (rafId) {
       cancelAnimationFrame(rafId)
       rafId = null
     }
     rafId = requestAnimationFrame(() => {
-      if (!containerRef.value) {
+      if (!containerRef.value || isResetting || isAnimating) {
         rafId = null
         return
       }
@@ -167,29 +228,24 @@ export function useScrollCarusel(options = {}) {
     }
     resizeTimeout = setTimeout(() => {
       checkMobile()
-      syncIndex()
+      if (!isResetting) {
+        syncIndex()
+      }
       resizeTimeout = null
     }, 200)
+  }
+  const attachTouchEvents = () => {
+    if (containerRef.value) {
+      containerRef.value.addEventListener('touchstart', handleTouchStart, { passive: true })
+      containerRef.value.addEventListener('touchmove', handleTouchMove, { passive: false })
+      containerRef.value.addEventListener('touchend', handleTouchEnd, { passive: true })
+    }
   }
 
   // ============================================================
   //  ЖИЗНЕННЫЙ ЦИКЛ
   // ============================================================
 
-  watch(
-    () => [items.value.length, hasMoreItems.value],
-    () => {
-      nextTick(() => {
-        const maxIndex = items.value.length + (hasMoreItems.value ? 1 : 0) - 1
-        if (currentIndex.value > maxIndex) {
-          scrollToSlide(Math.max(0, maxIndex))
-        } else {
-          syncIndex()
-        }
-      })
-    },
-    { immediate: true, deep: true }
-  )
   onMounted(() => {
     checkMobile()
     if (typeof window !== 'undefined') {
@@ -199,6 +255,7 @@ export function useScrollCarusel(options = {}) {
       if (containerRef.value) {
         containerRef.value.addEventListener('scroll', handleScroll, { passive: true })
       }
+      attachTouchEvents()
       syncIndex()
     })
   })
@@ -220,17 +277,21 @@ export function useScrollCarusel(options = {}) {
     }
   })
 
+  // ============================================================
+  //  ВОЗВРАТ
+  // ============================================================
   return {
     isMobile,
     currentIndex,
+    isLoadingMore,
     scrollToSlide,
     nextSlide,
     prevSlide,
     goToSlide,
     resetToFirstSlide,
+    loadMore,
     syncIndex,
     updateCenterClass,
-
     handleTouchStart,
     handleTouchMove,
     handleTouchEnd,
