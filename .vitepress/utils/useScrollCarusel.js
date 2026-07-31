@@ -8,41 +8,20 @@ export function useScrollCarusel(options = {}) {
     containerRef = ref(null),
     hasMoreItems = ref(false),
   } = options
-
-  // ============================================================
-  //  СОСТОЯНИЕ
-  // ============================================================
   const isMobile = ref(false)
   const currentIndex = ref(0)
-  const savedIndex = ref(0)
   const isSwiping = ref(false)
   const touchStartX = ref(0)
   const touchStartY = ref(0)
-  const touchEndX = ref(0)
-  const touchEndY = ref(0)
-
   let resizeTimeout = null
-  let scrollTimeout = null
   let isAnimating = false
   let rafId = null
-  let minSize = 30
-
-  // ============================================================
-  //  МЕТОДЫ
-  // ============================================================
-
+  const minSwipeDistance = 30
   const checkMobile = () => {
     if (typeof window !== 'undefined') {
-      const newIsMobile = window.innerWidth < MOBILE_BREAKPOINT
-      if (isMobile.value !== newIsMobile) {
-        isMobile.value = newIsMobile
-      }
+      isMobile.value = window.innerWidth < MOBILE_BREAKPOINT
     }
   }
-
-  /**
-   * Обновление классов .center
-   */
   const updateCenterClass = (index) => {
     if (!containerRef.value) return
     const slides = containerRef.value.querySelectorAll('.carousel-slide')
@@ -50,108 +29,76 @@ export function useScrollCarusel(options = {}) {
       s.classList.toggle('center', i === index)
     })
   }
-
-  /**
-   * Обновление индекса по текущей позиции скролла
-   */
-  const updateIndexFromScroll = () => {
-    if (!containerRef.value) return
+  const getClosestSlide = () => {
+    if (!containerRef.value) return 0
     const container = containerRef.value
     const slides = container.querySelectorAll('.carousel-slide')
-    if (slides.length === 0) return
-    const scrollLeft = container.scrollLeft
-    const containerWidth = container.offsetWidth
-    const containerCenter = scrollLeft + containerWidth / 2
+    if (slides.length === 0) return 0
+    const containerCenter = container.scrollLeft + container.offsetWidth / 2
     let closestIndex = 0
     let closestDistance = Infinity
     slides.forEach((slide, index) => {
-      const slideLeft = slide.offsetLeft
-      const slideWidth = slide.offsetWidth
-      const slideCenter = slideLeft + slideWidth / 2
-      const distance = Math.abs(containerCenter - slideCenter)
+      const rect = slide.getBoundingClientRect()
+      const containerRect = container.getBoundingClientRect()
+      const slideCenter = rect.left + rect.width / 2 - containerRect.left
+      const distance = Math.abs(slideCenter - container.offsetWidth / 2)
       if (distance < closestDistance) {
         closestDistance = distance
         closestIndex = index
       }
     })
-    if (closestIndex !== currentIndex.value) {
-      currentIndex.value = closestIndex
-      updateCenterClass(closestIndex)
+    return closestIndex
+  }
+  const syncIndex = () => {
+    const closest = getClosestSlide()
+    if (closest !== currentIndex.value) {
+      currentIndex.value = closest
+      updateCenterClass(closest)
     }
   }
-
-  /**
-   * Прокрутка к слайду
-   */
   const scrollToSlide = (index) => {
     if (!containerRef.value) return
     const container = containerRef.value
     const slides = container.querySelectorAll('.carousel-slide')
-    if (!slides || slides.length === 0 || index < 0 || index >= slides.length) return
-    isAnimating = false
-    updateCenterClass(index)
+    if (slides.length === 0 || index < 0 || index >= slides.length) return
+    if (isAnimating) {
+      container.scrollTo({ left: container.scrollLeft, behavior: 'auto' })
+      isAnimating = false
+    }
+    isAnimating = true
     currentIndex.value = index
+    updateCenterClass(index)
     const slide = slides[index]
     const containerWidth = container.offsetWidth
     const slideWidth = slide.offsetWidth
-    const paddingLeft = parseInt(getComputedStyle(container).paddingLeft) || 0
-    const slideLeft = slide.offsetLeft - paddingLeft
+    const slideLeft = slide.offsetLeft
     const scrollPosition = slideLeft - (containerWidth - slideWidth) / 2
     container.scrollTo({
       left: Math.max(0, scrollPosition),
       behavior: 'smooth'
     })
-    isAnimating = true
-    const onScrollEnd = () => {
+    clearTimeout(container._scrollTimer)
+    container._scrollTimer = setTimeout(() => {
       isAnimating = false
-      container.removeEventListener('scrollend', onScrollEnd)
-    }
-    if ('onscrollend' in window) {
-      container.addEventListener('scrollend', onScrollEnd, { passive: true })
-    } else {
-      setTimeout(() => {
-        isAnimating = false
-      }, 500)
-    }
+      syncIndex()
+    }, 400)
   }
   const nextSlide = () => {
     const maxIndex = items.value.length + (hasMoreItems.value ? 1 : 0)
-    if (currentIndex.value < maxIndex - 1 && !isAnimating) {
+    if (currentIndex.value < maxIndex - 1) {
       scrollToSlide(currentIndex.value + 1)
     }
   }
   const prevSlide = () => {
-    if (currentIndex.value > 0 && !isAnimating) {
+    if (currentIndex.value > 0) {
       scrollToSlide(currentIndex.value - 1)
     }
   }
   const goToSlide = (index) => {
-    if (!isAnimating) {
-      scrollToSlide(index)
-    }
+    scrollToSlide(index)
   }
   const resetToFirstSlide = () => {
-    currentIndex.value = 0
-    savedIndex.value = 0
-    nextTick(() => {
-      if (containerRef.value) {
-        const slides = containerRef.value.querySelectorAll('.carousel-slide')
-        if (slides && slides.length > 0) {
-          scrollToSlide(0)
-        }
-      }
-    })
-  }
-  const syncIndexWithItems = () => {
-    const totalSlides = items.value.length + (hasMoreItems.value ? 1 : 0)
-    const maxIndex = Math.max(0, totalSlides - 1)
-    if (currentIndex.value > maxIndex) {
-      const newIndex = Math.max(0, maxIndex)
-      currentIndex.value = newIndex
-      nextTick(() => {
-        updateCenterClass(newIndex)
-      })
-    }
+    scrollToSlide(0)
   }
 
   // ============================================================
@@ -174,29 +121,27 @@ export function useScrollCarusel(options = {}) {
       return
     }
     e.preventDefault()
-    updateIndexFromScroll()
+    syncIndex()
   }
   const handleTouchEnd = (e) => {
     if (!isSwiping.value) return
     isSwiping.value = false
     const touch = e.changedTouches[0]
-    touchEndX.value = touch.clientX
-    touchEndY.value = touch.clientY
-    const diffX = touchStartX.value - touchEndX.value
-    if (diffX > minSize && !isAnimating) {
-      nextSlide()
-    } else if (diffX < -minSize && !isAnimating) {
-      prevSlide()
+    const diffX = touchStartX.value - touch.clientX
+    if (Math.abs(diffX) > minSwipeDistance) {
+      if (diffX > 0) {
+        nextSlide()
+      } else {
+        prevSlide()
+      }
     } else {
-      scrollToSlide(currentIndex.value)
+      const closest = getClosestSlide()
+      if (closest !== currentIndex.value) {
+        scrollToSlide(closest)
+      }
     }
-    requestAnimationFrame(() => {
-      updateIndexFromScroll()
-    })
     touchStartX.value = 0
     touchStartY.value = 0
-    touchEndX.value = 0
-    touchEndY.value = 0
   }
   const handleScroll = () => {
     if (rafId) {
@@ -204,31 +149,14 @@ export function useScrollCarusel(options = {}) {
       rafId = null
     }
     rafId = requestAnimationFrame(() => {
-      if (!containerRef.value) return
-      const container = containerRef.value
-      const slides = container.querySelectorAll('.carousel-slide')
-      if (slides.length === 0) {
+      if (!containerRef.value) {
         rafId = null
         return
       }
-      const scrollLeft = container.scrollLeft
-      const containerWidth = container.offsetWidth
-      const containerCenter = scrollLeft + containerWidth / 2
-      let closestIndex = 0
-      let closestDistance = Infinity
-      slides.forEach((slide, index) => {
-        const slideLeft = slide.offsetLeft
-        const slideWidth = slide.offsetWidth
-        const slideCenter = slideLeft + slideWidth / 2
-        const distance = Math.abs(containerCenter - slideCenter)
-        if (distance < closestDistance) {
-          closestDistance = distance
-          closestIndex = index
-        }
-      })
-      if (closestIndex !== currentIndex.value) {
-        currentIndex.value = closestIndex
-        updateCenterClass(closestIndex)
+      const closest = getClosestSlide()
+      if (closest !== currentIndex.value) {
+        currentIndex.value = closest
+        updateCenterClass(closest)
       }
       rafId = null
     })
@@ -239,21 +167,7 @@ export function useScrollCarusel(options = {}) {
     }
     resizeTimeout = setTimeout(() => {
       checkMobile()
-      if (containerRef.value && items.value.length > 0) {
-        const slides = containerRef.value.querySelectorAll('.carousel-slide')
-        if (slides.length > 0) {
-          const index = Math.min(currentIndex.value, slides.length - 1)
-          const container = containerRef.value
-          const slide = slides[index]
-          const containerWidth = container.offsetWidth
-          const slideWidth = slide.offsetWidth
-          const paddingLeft = parseInt(getComputedStyle(container).paddingLeft) || 0
-          const slideLeft = slide.offsetLeft - paddingLeft
-          const scrollPosition = slideLeft - (containerWidth - slideWidth) / 2
-          container.scrollLeft = Math.max(0, scrollPosition)
-          updateCenterClass(index)
-        }
-      }
+      syncIndex()
       resizeTimeout = null
     }, 200)
   }
@@ -265,11 +179,17 @@ export function useScrollCarusel(options = {}) {
   watch(
     () => [items.value.length, hasMoreItems.value],
     () => {
-      syncIndexWithItems()
+      nextTick(() => {
+        const maxIndex = items.value.length + (hasMoreItems.value ? 1 : 0) - 1
+        if (currentIndex.value > maxIndex) {
+          scrollToSlide(Math.max(0, maxIndex))
+        } else {
+          syncIndex()
+        }
+      })
     },
     { immediate: true, deep: true }
   )
-
   onMounted(() => {
     checkMobile()
     if (typeof window !== 'undefined') {
@@ -279,51 +199,37 @@ export function useScrollCarusel(options = {}) {
       if (containerRef.value) {
         containerRef.value.addEventListener('scroll', handleScroll, { passive: true })
       }
-      syncIndexWithItems()
+      syncIndex()
     })
   })
-
   onUnmounted(() => {
     if (typeof window !== 'undefined') {
       window.removeEventListener('resize', handleResize)
-      if (resizeTimeout) {
-        clearTimeout(resizeTimeout)
-        resizeTimeout = null
-      }
     }
     if (containerRef.value) {
       containerRef.value.removeEventListener('scroll', handleScroll)
-    }
-    if (scrollTimeout) {
-      clearTimeout(scrollTimeout)
-      scrollTimeout = null
+      clearTimeout(containerRef.value._scrollTimer)
     }
     if (rafId) {
-    cancelAnimationFrame(rafId)
-    rafId = null
-  }
+      cancelAnimationFrame(rafId)
+      rafId = null
+    }
+    if (resizeTimeout) {
+      clearTimeout(resizeTimeout)
+      resizeTimeout = null
+    }
   })
 
-  // ============================================================
-  //  ВОЗВРАТ
-  // ============================================================
   return {
     isMobile,
     currentIndex,
-    savedIndex,
-    touchStartX,
-    touchStartY,
-    touchEndX,
-    touchEndY,
-    isSwiping,
-
     scrollToSlide,
     nextSlide,
     prevSlide,
     goToSlide,
     resetToFirstSlide,
+    syncIndex,
     updateCenterClass,
-    updateIndexFromScroll,
 
     handleTouchStart,
     handleTouchMove,
