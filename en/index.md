@@ -1,18 +1,20 @@
 ---
 layout: home
 hero:
-  title: "IN GOODOLOGY"
+  name: "IN GOODOLOGY"
   highlight: "- you"
   cards:
     - icon: 🐱
-      title: 'Кошки'
-      description: 'Найди своего пушистого друга'
-      link: '/ru/pets/cats'
+      title: 'Cats'
+      description: '...'
+      link: '/en/pets/cats'
     - icon: 🐶
-      title: 'Собаки'
-      description: 'Верный друг ждёт тебя'
-      link: '/ru/pets/dogs'
+      title: 'Dogs'
+      description: '...'
+      link: '/en/pets/dogs'
 ---
+
+<HomeStyle/>
 
 ## Cats
 <ItemsRandom :type="'pets'" :item-type="'cats'"/>

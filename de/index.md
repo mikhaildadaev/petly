@@ -1,18 +1,20 @@
 ---
 layout: home
 hero:
-  title: "IN GUTER WISSENSCHAFT"
+  name: "IN GUTER WISSENSCHAFT"
   highlight: "- du"
   cards:
     - icon: 🐱
-      title: 'Кошки'
-      description: 'Найди своего пушистого друга'
-      link: '/ru/pets/cats'
+      title: 'Katzen'
+      description: '...'
+      link: '/de/pets/cats'
     - icon: 🐶
-      title: 'Собаки'
-      description: 'Верный друг ждёт тебя'
-      link: '/ru/pets/dogs'
+      title: 'Hunde'
+      description: '...'
+      link: '/de/pets/dogs'
 ---
+
+<HomeStyle/>
 
 ## Katzen
 <ItemsRandom :type="'pets'" :item-type="'cats'"/>
