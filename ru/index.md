@@ -1,8 +1,17 @@
 ---
 layout: home
 home: 
-  - title: "В ДОБРОЛОГИЯХ"
-  - subtitle: "- ТЫ"
+  title: 'В ДОБРОЛОГИЯХ'
+  highlight: '- ты'
+  cards:
+    - icon: 🐱
+      title: 'Кошки'
+      description: 'Найди своего пушистого друга'
+      link: '/ru/pets/cats'
+    - icon: 🐶
+      title: 'Собаки'
+      description: 'Верный друг ждёт тебя'
+      link: '/ru/pets/dogs'
 ---
 
 <HomeStyle/>

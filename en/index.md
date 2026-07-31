@@ -1,11 +1,18 @@
 ---
 layout: home
-home: 
-  - title: "В ДОБРОЛОГИЯХ"
-  - subtitle: "- ТЫ"
+hero:
+  title: "IN GOODOLOGY"
+  highlight: "- you"
+  cards:
+    - icon: 🐱
+      title: 'Кошки'
+      description: 'Найди своего пушистого друга'
+      link: '/ru/pets/cats'
+    - icon: 🐶
+      title: 'Собаки'
+      description: 'Верный друг ждёт тебя'
+      link: '/ru/pets/dogs'
 ---
-
-<HomeStyle/>
 
 ## Cats
 <ItemsRandom :type="'pets'" :item-type="'cats'"/>
