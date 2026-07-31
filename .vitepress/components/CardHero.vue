@@ -1,5 +1,5 @@
 <template>
-  <div v-if="config && config.fields" class="aspect-hero hero-card">
+  <section v-if="config && config.fields" class="aspect-hero hero-card">
     <div class="hero-meta">
       <template v-for="displayField in config.fields.display" :key="displayField">
         <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`" :data-gender="displayField === 'genderDisplay' ? item.gender : null">{{ item[displayField] }}</label>
@@ -16,7 +16,7 @@
       <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': isFavorite }" @click.stop="toggleFavorite(item.uuid)" :title="translate('ui', 'Добавить в избранное')"></button>
       <p class="description">{{ item.descriptionDisplay || '' }}</p>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>

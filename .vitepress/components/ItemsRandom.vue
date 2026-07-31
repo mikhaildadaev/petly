@@ -1,5 +1,5 @@
 <template>
-  <div v-if="config && config.fields" class="random-items">
+  <section v-if="config && config.fields" class="random-items">
     <div class="cards-carousel">
       <div class="carousel-wrapper">
         <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
@@ -30,7 +30,7 @@
         <button class="carousel next" :class="{ none: isLastSlide }" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1"></button>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>

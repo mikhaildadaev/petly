@@ -1,5 +1,5 @@
 <template>
-  <div class="redirect">
+  <section class="redirect">
     <div class="container" :class="statusClass">
       <div class="wrapper">
         <svg class="loader" viewBox="0 0 50 50">
@@ -8,7 +8,7 @@
         </svg>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup>

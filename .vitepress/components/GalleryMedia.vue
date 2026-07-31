@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <section>
     <div class="gallery-media">
       <div v-for="(item, index) in mediaItems" :key="index" class="item" :style="{ '--delay': index * 0.05 + 's' }" @click="openFullScreen(index)">
         <img v-if="item.type === 'image'" :src="item.src" loading="lazy" />
@@ -29,7 +29,7 @@
       <button v-if="mediaItems.length > 1" class="fullscreen prev" @click.stop="prevMedia"></button>
       <button v-if="mediaItems.length > 1" class="fullscreen next" @click.stop="nextMedia"></button>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="config && config.fields" class="select-items">
+  <section v-if="config && config.fields" class="select-items">
     <div class="cards-carousel">
       <div class="carousel-wrapper">
         <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
@@ -37,7 +37,7 @@
     <div v-if="filteredItems.length === 0 && !isLoading" class="no-results">
       <p>{{ translate('ui', 'Ничего не найдено') }}</p>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>

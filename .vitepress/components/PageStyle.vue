@@ -1,7 +1,7 @@
 <template>
-  <div v-if="imageConfig" class="page-image" :class="imageConfig.float">
+  <section v-if="imageConfig" class="page-image" :class="imageConfig.float">
     <img :src="imageUrl" :width="imageConfig.width" :height="imageConfig.height || 'auto'" :alt="imageConfig.alt || 'Изображение'" loading="lazy" @error="handleImageError"/>
-  </div>
+  </section>
 </template>
 
 <script>

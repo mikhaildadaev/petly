@@ -1,5 +1,5 @@
 <template>
-  <div class="style-block-page" @click="closeAllTooltips">
+  <section class="style-block-page" @click="closeAllTooltips">
     <div v-for="(block, blockIndex) in filteredBlocks" :key="blockIndex" class="block-section">
       <div v-if="block.type === 'chips'" :class="`block-type-${type}`">
         <h1 class="title">{{ block.title }}</h1>
@@ -112,7 +112,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
