@@ -155,22 +155,16 @@ export default {
     const loadMore = async () => {
       if (isLoadingMore.value) return
       const beforeIndex = currentIndex.value
-      const beforeLength = paginatedItems.value.length
-      const wasOnLoadMore = beforeIndex === beforeLength
       await originalLoadMore()
       await nextTick()
-      if (paginatedItems.value.length > 0) {
-        const afterLength = paginatedItems.value.length
-        if (wasOnLoadMore) {
-          const targetIndex = beforeLength
-          goToSlide(targetIndex)
-        } else {
-          const safeIndex = Math.min(beforeIndex, afterLength - 1)
-          if (safeIndex !== beforeIndex) {
-            goToSlide(safeIndex)
-          }
+      if (paginatedItems.value.length === 0) return
+      const safeIndex = Math.min(beforeIndex, paginatedItems.value.length - 1)
+      requestAnimationFrame(() => {
+        if (safeIndex !== currentIndex.value) {
+          currentIndex.value = safeIndex
+          scrollToSlide(safeIndex)
         }
-      }
+      })
     }
     const carouselRef = ref(null)
     const {
@@ -262,16 +256,25 @@ export default {
       if (resizeTimeout) clearTimeout(resizeTimeout)
       resizeTimeout = setTimeout(() => { resizeTimeout = null }, 100)
     }
+    const attachTouchEvents = () => {
+      if (carouselRef.value) {
+        carouselRef.value.addEventListener('touchstart', handleTouchStart, { passive: true })
+        carouselRef.value.addEventListener('touchmove', handleTouchMove, { passive: false })
+        carouselRef.value.addEventListener('touchend', handleTouchEnd, { passive: true })
+      }
+    }
     onMounted(async () => {
       isClient.value = true
       if (typeof window !== 'undefined') {
         window.addEventListener('resize', handleResize)
       }
       await loadItems()
+      attachTouchEvents()
     })
     watch(lang, async () => {
       await loadItems()
       resetToFirstSlide()
+      attachTouchEvents()
     })
     watch(
       () => filters,
@@ -280,18 +283,6 @@ export default {
         resetToFirstSlide()
       },
       { deep: true }
-    )
-    watch(
-      () => paginatedItems.value.length,
-      (newLength) => {
-        if (isClient.value && isMobile.value && newLength > 0) {
-          const maxIndex = carouselTotalSlides.value - 1
-          if (currentIndex.value > maxIndex) {
-            resetToFirstSlide()
-          }
-        }
-      },
-      { immediate: true }
     )
     watch(isMobile, (newVal) => {
       if (isClient.value && newVal && paginatedItems.value.length) {
