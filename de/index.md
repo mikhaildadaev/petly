@@ -1,16 +1,11 @@
 ---
 layout: home
-hero:
-  text: "IN GUTER WISSENSCHAFT"
-  subtext: "du"
-  actions:
-    - theme: brand
-      text: Посмотреть кошек
-      link: /de/pets/cats
-    - theme: brand
-      text: Посмотреть собак
-      link: /de/pets/dogs
+home: 
+  - title: "В ДОБРОЛОГИЯХ"
+  - subtitle: "- ТЫ"
 ---
+
+<HomeStyle/>
 
 ## Katzen
 <ItemsRandom :type="'pets'" :item-type="'cats'"/>

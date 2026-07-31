@@ -1,16 +1,11 @@
 ---
 layout: home
-hero:
-  text: "В ДОБРОЛОГИЯХ"
-  subtext: "ты"
-  actions:
-    - theme: brand
-      text: Посмотреть кошек
-      link: /ru/pets/cats
-    - theme: brand
-      text: Посмотреть собак
-      link: /ru/pets/dogs
+home: 
+  - title: "В ДОБРОЛОГИЯХ"
+  - subtitle: "- ТЫ"
 ---
+
+<HomeStyle/>
 
 ## Кошки
 <ItemsRandom :type="'pets'" :item-type="'cats'"/>
