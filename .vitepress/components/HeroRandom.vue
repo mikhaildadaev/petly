@@ -27,86 +27,114 @@
   </section>
 </template>
 
-<script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+<script>
+import { computed, ref, onMounted, watch } from 'vue'
 import { useData } from 'vitepress'
 import { useConfigItem } from '../utils/useConfigItem'
 import { useRandomArray } from '../utils/useRandomArray'
 import { useUrlMedia } from '../utils/useUrlMedia'
 
-const { lang } = useData()
-const config = useConfigItem['pets']
-const baseUrl = import.meta.env.BASE_URL
-const translate = (category, key) => {
-  return key
-}
-const item = ref(null)
-const isLoading = ref(true)
-const error = ref(null)
-const transformItem = (data) => {
-  const base = {
-    uuid: data.uuid,
-    title: data.title || 'Без имени',
-    description: data.description || '',
-    covenantID: data.covenantID || '',
-    imageHorizontal: useUrlMedia(data.imageHorizontal, 'image'),
-    imageVertical: useUrlMedia(data.imageVertical, 'image'),
-    filter: data.filter || [],
-    ...(config.transform ? config.transform(data, lang.value, translate) : {})
-  }
-  return base
-}
-const loadRandomPet = async () => {
-  try {
-    isLoading.value = true
-    error.value = null
-    const catsUrl = `${baseUrl}data/pets-${lang.value}-cats.json`
-    const dogsUrl = `${baseUrl}data/pets-${lang.value}-dogs.json`
-    const [catsRes, dogsRes] = await Promise.all([
-      fetch(catsUrl),
-      fetch(dogsUrl)
-    ])
-    const catsData = catsRes.ok ? await catsRes.json() : []
-    const dogsData = dogsRes.ok ? await dogsRes.json() : []
-    const allPets = [...catsData, ...dogsData].map(item => transformItem(item))
-    if (allPets.length === 0) {
-      item.value = null
-      return
+export default {
+  name: 'HeroRandom',
+  props: {
+    type: { type: String, required: true },
+  },
+  setup(props) {
+    const { lang } = useData()
+    const config = useConfigItem[props.type] || useConfigItem['pets']
+    const baseUrl = import.meta.env.BASE_URL
+    const translate = (category, key) => key
+    const item = ref(null)
+    const isLoading = ref(true)
+    const error = ref(null)
+    const transformItem = (data, subtype = '') => {
+      const base = {
+        uuid: data.uuid,
+        title: data.title || '',
+        description: data.description || '',
+        covenantID: data.covenantID || '',
+        type: props.type,
+        subtype: subtype,
+        imageHorizontal: useUrlMedia(data.imageHorizontal, 'image'),
+        imageVertical: useUrlMedia(data.imageVertical, 'image'),
+        filter: data.filter || [],
+        ...(config.transform ? config.transform(data, lang.value, translate) : {})
+      }
+      return base
     }
-    const shuffled = useRandomArray(allPets)
-    item.value = shuffled[0]
-  } catch (err) {
-    console.error('❌ Ошибка:', err)
-    error.value = err.message
-    item.value = null
-  } finally {
-    isLoading.value = false
+    const loadRandomPet = async () => {
+      try {
+        isLoading.value = true
+        error.value = null
+        const indexRes = await fetch(`${baseUrl}data/index.json`)
+        if (!indexRes.ok) throw new Error('Failed to load index.json')
+        const index = await indexRes.json()
+        const files = index.filter(item => 
+          item.type === props.type && item.lang === lang.value
+        )
+        if (files.length === 0) {
+          item.value = null
+          return
+        }
+        const results = await Promise.allSettled(
+          files.map(async ({ path, subtype }) => {
+            const res = await fetch(`${baseUrl}${path}`)
+            if (!res.ok) throw new Error(`Failed to load ${path}`)
+            const data = await res.json()
+            return data.map(item => transformItem(item, subtype))
+          })
+        )
+        const allItems = results
+          .filter(r => r.status === 'fulfilled')
+          .flatMap(r => r.value)
+
+        if (allItems.length === 0) {
+          item.value = null
+          return
+        }
+        const shuffled = useRandomArray(allItems)
+        item.value = shuffled[0]
+      } catch (err) {
+        error.value = err.message
+        item.value = null
+      } finally {
+        isLoading.value = false
+      }
+    }
+    const petTags = computed(() => {
+      if (!item.value) return []
+      const tags = []
+      const filter = item.value.filter || []
+      const gender = filter.find(f => f.gender)?.gender
+      const age = filter.find(f => f.age)?.age
+      const size = filter.find(f => f.size)?.size
+      if (gender) tags.push(gender)
+      if (age) tags.push(age)
+      if (size) tags.push(size)
+      return tags
+    })
+    const getItemLink = (item) => {
+      const subtype = item.subtype || 'pets'
+      if (item.covenantID) {
+        return `${baseUrl}${lang.value}/${props.type}/${item.covenantID}/${subtype}/${item.uuid}`
+      }
+      return `${baseUrl}${lang.value}/${props.type}/${subtype}/${item.uuid}`
+    }
+    onMounted(() => {
+      loadRandomPet()
+    })
+    watch(lang, () => {
+      loadRandomPet()
+    })
+    return {
+      item,
+      isLoading,
+      error,
+      petTags,
+      getItemLink
+    }
   }
 }
-const petTags = computed(() => {
-  if (!item.value) return []
-  const tags = []
-  const filter = item.value.filter || []
-  const gender = filter.find(f => f.gender)?.gender
-  const age = filter.find(f => f.age)?.age
-  const size = filter.find(f => f.size)?.size
-  if (gender) tags.push(gender)
-  if (age) tags.push(age)
-  if (size) tags.push(size)
-  return tags
-})
-const getItemLink = (item) => {
-  if (item.covenantID) {
-    return `${baseUrl}${lang.value}/pets/${item.covenantID}/${item.uuid}`
-  }
-  return `${baseUrl}${lang.value}/pets/${item.uuid}`
-}
-onMounted(() => {
-  loadRandomPet()
-})
-watch(lang, () => {
-  loadRandomPet()
-})
 </script>
 
 <style scoped>
@@ -220,12 +248,12 @@ watch(lang, () => {
 .hero-button.primary:hover {
   background: var(--vp-c-brand-2);
 }
-.hero-button.primary:hover {
-  background: var(--vp-c-brand-2);
-}
 .button-arrow {
   font-size: 18px;
   transition: transform 0.3s ease;
+}
+.hero-button.primary:hover .button-arrow {
+  transform: translateX(4px);
 }
 .hero-loading {
   padding: 40px;
