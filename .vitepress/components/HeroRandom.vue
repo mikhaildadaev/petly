@@ -2,7 +2,7 @@
   <section v-if="item" class="random-hero">
     <div class="container">
       <div class="hero-card">
-        <div class="hero-image">
+        <div class="aspect-hero hero-image">
           <picture>
             <source :srcset="item.imageVertical" media="(max-width: 735px)" />
             <source :srcset="item.imageHorizontal" media="(min-width: 736px)" />
@@ -13,7 +13,7 @@
           <div class="hero-tags">
             <span v-for="tag in petTags" :key="tag" class="tag">{{ tag }}</span>
           </div>
-          <h2 class="hero-name">{{ item.title || 'Без имени' }}</h2>
+          <h2 class="hero-name">{{ item.title || '' }}</h2>
           <p class="hero-description">{{ item.description || '' }}</p>
           <div class="hero-actions">
             <a :href="getItemLink(item)" class="hero-button primary">
