@@ -1,17 +1,8 @@
 ---
 layout: home
 hero:
-  name: "IN GUTER WISSENSCHAFT"
-  highlight: "- du"
-  cards:
-    - icon: 🐱
-      title: 'Katzen'
-      description: '...'
-      link: '/de/pets/cats'
-    - icon: 🐶
-      title: 'Hunde'
-      description: '...'
-      link: '/de/pets/dogs'
+  name: 'IN GUTER WISSENSCHAFT'
+  highlight: '- du'
 ---
 
 <HomeStyle/>

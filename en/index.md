@@ -1,17 +1,8 @@
 ---
 layout: home
 hero:
-  name: "IN GOODOLOGY"
-  highlight: "- you"
-  cards:
-    - icon: 🐱
-      title: 'Cats'
-      description: '...'
-      link: '/en/pets/cats'
-    - icon: 🐶
-      title: 'Dogs'
-      description: '...'
-      link: '/en/pets/dogs'
+  name: 'IN GOODOLOGY'
+  highlight: '- you'
 ---
 
 <HomeStyle/>

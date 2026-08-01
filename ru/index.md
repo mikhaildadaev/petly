@@ -3,15 +3,6 @@ layout: home
 home: 
   name: 'В ДОБРОЛОГИЯХ'
   highlight: '- ты'
-  cards:
-    - icon: 🐱
-      title: 'Кошки'
-      description: '...'
-      link: '/ru/pets/cats'
-    - icon: 🐶
-      title: 'Собаки'
-      description: '...'
-      link: '/ru/pets/dogs'
 ---
 
 <HeroRandom/>
