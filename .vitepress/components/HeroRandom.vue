@@ -37,11 +37,9 @@ import { useUrlMedia } from '../utils/useUrlMedia'
 const { lang } = useData()
 const config = useConfigItem['pets']
 const baseUrl = import.meta.env.BASE_URL
-
 const translate = (category, key) => {
   return key
 }
-
 const item = ref(null)
 const isLoading = ref(true)
 const error = ref(null)
