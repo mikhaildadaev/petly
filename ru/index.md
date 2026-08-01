@@ -14,7 +14,7 @@ home:
       link: '/ru/pets/dogs'
 ---
 
-<HomeStyle/>
+<HeroRandom/>
 
 ## Кошки
 <ItemsRandom :type="'pets'" :item-type="'cats'"/>
