@@ -12,26 +12,9 @@ Dieser Bereich ist deine ganz persönliche Ecke. Hier leben nur diejenigen, die 
 Komm zurück zu ihnen. Blättere durch die Karten. Vielleicht entscheidest du genau heute: **«Das ist mein Tier.»**
 
 ## Katzen
-<ItemsSelect :type="'pets'" :item-type="'cats'" :uuids="favoriteUUIDs"/>
+<ItemsSelect :type="'pets'" :item-type="'cats'"/>
 
 ## Hunde
-<ItemsSelect :type="'pets'" :item-type="'dogs'" :uuids="favoriteUUIDs"/>
+<ItemsSelect :type="'pets'" :item-type="'dogs'"/>
 
 <PageStyle/>
-
-<script setup>
-import { ref, onMounted } from 'vue'
-
-const STORAGE_KEY = 'pets_favorites'
-const favoriteUUIDs = ref([])
-
-onMounted(() => {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    favoriteUUIDs.value = stored ? JSON.parse(stored) : []
-  } catch (error) {
-    console.error('Ошибка загрузки избранного:', error)
-    favoriteUUIDs.value = []
-  }
-})
-</script>

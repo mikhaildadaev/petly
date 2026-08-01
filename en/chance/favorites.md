@@ -12,26 +12,9 @@ This section is your own personal space. Only those who have already touched som
 Come back to them. Browse through the cards. Maybe today you'll decide: **«This is my pet.»**
 
 ## Cats
-<ItemsSelect :type="'pets'" :item-type="'cats'" :uuids="favoriteUUIDs"/>
+<ItemsSelect :type="'pets'" :item-type="'cats'"/>
 
 ## Dogs
-<ItemsSelect :type="'pets'" :item-type="'dogs'" :uuids="favoriteUUIDs"/>
+<ItemsSelect :type="'pets'" :item-type="'dogs'"/>
 
 <PageStyle/>
-
-<script setup>
-import { ref, onMounted } from 'vue'
-
-const STORAGE_KEY = 'pets_favorites'
-const favoriteUUIDs = ref([])
-
-onMounted(() => {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    favoriteUUIDs.value = stored ? JSON.parse(stored) : []
-  } catch (error) {
-    console.error('Ошибка загрузки избранного:', error)
-    favoriteUUIDs.value = []
-  }
-})
-</script>
