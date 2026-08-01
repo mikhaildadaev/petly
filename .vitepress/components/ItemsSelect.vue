@@ -44,6 +44,7 @@
 import { computed, ref, onMounted, onUnmounted, watch } from 'vue'
 import { useData } from 'vitepress'
 import { useConfigItem } from '../utils/useConfigItem'
+import { useFavorites } from '../utils/useFavorites'
 import { usePagination } from '../utils/usePagination'
 import { useRandomColor } from '../utils/useRandomColor'
 import { useScrollCarusel } from '../utils/useScrollCarusel'
@@ -66,11 +67,23 @@ export default {
     const allItems = ref([])
     const isLoading = ref(true)
     const isClient = ref(false)
+    const {
+      getFavorites,
+      isFavorite,
+      toggleFavorite,
+    } = useFavorites()
+    const displayUUIDs = computed(() => {
+      if (props.uuids && props.uuids.length > 0) {
+        return props.uuids
+      }
+      return getFavorites()
+    })
     const filteredItems = computed(() => {
       if (isLoading.value) return []
       if (!allItems.value || allItems.value.length === 0) return []
-      if (!props.uuids || props.uuids.length === 0) return []
-      return allItems.value.filter(item => item.uuid && props.uuids.includes(item.uuid))
+      const uuids = displayUUIDs.value
+      if (!uuids || uuids.length === 0) return []
+      return allItems.value.filter(item => item.uuid && uuids.includes(item.uuid))
     })
     const transformItem = (item) => {
       const base = {
@@ -190,6 +203,7 @@ export default {
       paginatedItems,
       isLoading,
       isMobile,
+      isFavorite,
       carouselRef,
       currentIndex,
       carouselTotalSlides,

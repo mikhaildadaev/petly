@@ -41,8 +41,12 @@ export default {
     const translate = (category, key) => useTranslate(lang.value, category, key)
     const config = useConfigItem[props.type]
     const { useRandomClass } = useRandomColor()
-    const { isFavorite, toggleFavorite, checkIsFavorite } = useFavorites()
     const fm = computed(() => frontmatter.value || {})
+    const currentUuid = computed(() => fm.value?.uuid || '')
+    const { 
+      isFavorite, 
+      toggleFavorite
+    } = useFavorites(currentUuid)
     const transformItem = (data) => {
       const base = {
         uuid: data.uuid,
@@ -76,9 +80,6 @@ export default {
     }
     const handleToggleFavorite = (uuid) => {
       toggleFavorite(uuid)
-      setTimeout(() => {
-        checkFavoriteStatus(uuid)
-      }, 50)
     }
     const handleShare = (event) => {
       const button = event.currentTarget
@@ -111,17 +112,6 @@ export default {
       }
       nextTick(() => checkFavoriteStatus(item.value.uuid))
     })
-    watch(() => item.value.uuid, (newUuid) => {
-      if (newUuid) {
-        isFavorite.value = false
-        setTimeout(() => checkFavoriteStatus(newUuid), 50)
-      }
-    }, { immediate: true })
-    watch(fm, (newFm) => {
-      if (newFm?.uuid) {
-        isFavorite.value = checkIsFavorite(newFm.uuid)
-      }
-    }, { deep: true })
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)
