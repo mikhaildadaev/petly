@@ -5,7 +5,7 @@ home:
   highlight: '- ты'
 ---
 
-<HeroRandom/>
+<HeroRandom :type="'pets'"/>
 
 ## Кошки
 <ItemsRandom :type="'pets'" :item-type="'cats'"/>

@@ -5,7 +5,7 @@ hero:
   highlight: '- du'
 ---
 
-<HomeStyle/>
+<HomeStyle :type="'pets'"/>
 
 ## Katzen
 <ItemsRandom :type="'pets'" :item-type="'cats'"/>
