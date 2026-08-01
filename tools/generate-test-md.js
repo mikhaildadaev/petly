@@ -149,7 +149,7 @@ blocks:
 
 # Питомец
 <div class="uuid">${pet.uuid}</div>
-<CardHero :type="'pets'" :item-type="'dogs'"/>
+<HeroSelect :type="'pets'" :item-type="'dogs'"/>
 
 ## Характер
 <BlockStyle :type="'feature'"/>

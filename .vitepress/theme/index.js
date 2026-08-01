@@ -4,7 +4,7 @@ import { watch, onMounted, nextTick, provide } from 'vue'
 import { useData, useRoute, useRouter } from 'vitepress'
 
 import BlockStyle from '../components/BlockStyle.vue'
-import CardHero from '../components/CardHero.vue'
+import HeroSelect from '../components/HeroSelect.vue'
 import GalleryMedia from '../components/GalleryMedia.vue'
 import HeroRandom from '../components/HeroRandom.vue'
 import ItemsGroup from '../components/ItemsGroup.vue'
@@ -205,7 +205,7 @@ export default {
   },
   enhanceApp({ app }) {
     app.component('BlockStyle', BlockStyle)
-    app.component('CardHero', CardHero)
+    app.component('HeroSelect', HeroSelect)
     app.component('GalleryMedia', GalleryMedia)
     app.component('HeroRandom', HeroRandom)
     app.component('ItemsGroup', ItemsGroup)
