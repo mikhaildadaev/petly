@@ -1,6 +1,7 @@
 import { ref, onMounted, watch } from 'vue'
 
 const STORAGE_KEY = 'pets_favorites'
+let cachedFavorites = null
 
 export function useFavorites(uuid = null) {
   const favorites = ref([])
@@ -9,15 +10,19 @@ export function useFavorites(uuid = null) {
   const loadFavorites = () => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY)
-      return stored ? JSON.parse(stored) : []
+      const data = stored ? JSON.parse(stored) : []
+      cachedFavorites = data
+      return data
     } catch (error) {
       console.error('Ошибка загрузки избранного:', error)
+      cachedFavorites = []
       return []
     }
   }
   const saveFavorites = (favoritesList) => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(favoritesList))
+      cachedFavorites = favoritesList
     } catch (error) {
       console.error('Ошибка сохранения избранного:', error)
     }
@@ -25,8 +30,8 @@ export function useFavorites(uuid = null) {
   const checkIsFavorite = (itemUuid) => {
     if (!itemUuid) return false
     try {
-      const stored = loadFavorites()
-      return stored.includes(itemUuid)
+      const list = cachedFavorites !== null ? cachedFavorites : loadFavorites()
+      return list.includes(itemUuid)
     } catch (error) {
       console.error('Ошибка проверки избранного:', error)
       return false
@@ -51,7 +56,7 @@ export function useFavorites(uuid = null) {
       }
       saveFavorites(stored)
       favorites.value = stored
-      if (itemUuid === uuid?.value) {
+      if (uuid?.value && itemUuid === uuid.value) {
         isFavorite.value = newState
       }
       return newState
@@ -60,13 +65,49 @@ export function useFavorites(uuid = null) {
       return false
     }
   }
-  const useFavoriteUUIDs = () => {
+  const addFavorite = (itemUuid) => {
+    if (!itemUuid) return false
+    const stored = loadFavorites()
+    if (!stored.includes(itemUuid)) {
+      stored.push(itemUuid)
+      saveFavorites(stored)
+      favorites.value = stored
+      if (uuid?.value && itemUuid === uuid.value) {
+        isFavorite.value = true
+      }
+      return true
+    }
+    return false
+  }
+  const removeFavorite = (itemUuid) => {
+    if (!itemUuid) return false
+    const stored = loadFavorites()
+    const index = stored.indexOf(itemUuid)
+    if (index > -1) {
+      stored.splice(index, 1)
+      saveFavorites(stored)
+      favorites.value = stored
+      if (uuid?.value && itemUuid === uuid.value) {
+        isFavorite.value = false
+      }
+      return true
+    }
+    return false
+  }
+  const getFavorites = () => {
+    if (cachedFavorites !== null) {
+      return cachedFavorites
+    }
     return loadFavorites()
   }
   const clearFavorites = () => {
     saveFavorites([])
     favorites.value = []
     isFavorite.value = false
+    cachedFavorites = []
+  }
+  if (cachedFavorites === null && typeof window !== 'undefined') {
+    loadFavorites()
   }
   onMounted(() => {
     if (uuid?.value) {
@@ -85,17 +126,16 @@ export function useFavorites(uuid = null) {
     }, { immediate: true })
   }
   return {
-    // Состояние
     favorites,
     isFavorite,
     isInitialized,
-    
-    // Методы
     loadFavorites,
     saveFavorites,
     checkIsFavorite,
     toggleFavorite,
-    useFavoriteUUIDs,
+    addFavorite,
+    removeFavorite,
+    getFavorites,
     clearFavorites,
   }
 }
