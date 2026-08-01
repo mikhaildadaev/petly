@@ -1029,8 +1029,8 @@ p.withColor {
   -webkit-mask-repeat: repeat-x;
   mask-image: url('/petly/assets/svg/paper.svg');
   -webkit-mask-image: url('/petly/assets/svg/paper.svg');
-  mask-size: contain;
-  -webkit-mask-size: contain;
+  mask-size: auto 100%;
+  -webkit-mask-size: auto 100%;
 }
 .block-type-intro .background::before {
   content: '';
