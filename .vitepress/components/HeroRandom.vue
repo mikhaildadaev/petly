@@ -218,16 +218,14 @@ watch(lang, () => {
   color: white;
 }
 .hero-button.primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(230, 126, 34, 0.3);
+  background: var(--vp-c-brand-2);
+}
+.hero-button.primary:hover {
   background: var(--vp-c-brand-2);
 }
 .button-arrow {
   font-size: 18px;
   transition: transform 0.3s ease;
-}
-.hero-button.primary:hover .button-arrow {
-  transform: translateX(4px);
 }
 .hero-loading {
   padding: 40px;
