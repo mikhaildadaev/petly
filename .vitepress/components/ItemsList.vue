@@ -271,22 +271,6 @@ export default {
         resetToFirstSlide()
       }
     })
-    watch(
-      () => currentIndex.value,
-      (newVal, oldVal) => {
-        console.log(`📊 currentIndex изменился: ${oldVal} → ${newVal}`)
-        console.log(`   totalSlides: ${carouselTotalSlides.value}, hasMoreItems: ${hasMoreItems.value}`)
-      },
-      { immediate: true }
-    )
-    watch(
-      () => paginatedItems.value.length,
-      (newVal, oldVal) => {
-        console.log(`📦 paginatedItems.length: ${oldVal} → ${newVal}`)
-        console.log(`   currentIndex: ${currentIndex.value}`)
-      },
-      { immediate: true }
-    )
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)

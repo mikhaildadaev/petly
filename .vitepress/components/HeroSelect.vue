@@ -7,9 +7,9 @@
     </div>
     <button class="share" :data-url="`${item.baseURL}/?s=${item.shortID}`" @click="handleShare"></button>
     <picture>
-      <source :srcset="item.imageVertical || ''" media="(max-width: 735px)" />
-      <source :srcset="item.imageHorizontal || item.imageVertical || ''" media="(min-width: 736px)" />
-      <img :src="item.imageHorizontal || item.imageVertical || ''" class="hero-image" loading="lazy" />
+      <source :srcset="item.imageVertical" media="(max-width: 735px)" />
+      <source :srcset="item.imageHorizontal" media="(min-width: 736px)" />
+      <img :src="item.imageHorizontal" class="hero-image" loading="lazy" />
     </picture>
     <div :class="['hero-overlay', useRandomClass(item.uuid || '')]">
       <h1 class="title">{{ item.nameDisplay || '' }}</h1>
@@ -30,7 +30,7 @@ import { useTranslate } from '../utils/useTranslate'
 import { useUrlMedia } from '../utils/useUrlMedia'
 
 export default {
-  name: 'CardHero',
+  name: 'HeroSelect',
   props: {
     type: { type: String, required: true },
     itemType: { type: String, required: true }
@@ -45,7 +45,8 @@ export default {
     const currentUuid = computed(() => fm.value?.uuid || '')
     const { 
       isFavorite, 
-      toggleFavorite
+      toggleFavorite,
+      checkIsFavorite
     } = useFavorites(currentUuid)
     const transformItem = (data) => {
       const base = {
@@ -55,14 +56,8 @@ export default {
         nameDisplay: data.title || '',
         descriptionDisplay: data.description || '',
         covenantID: data.covenantID || '',
-        imageHorizontal: useUrlMedia(
-          data.image?.find(img => img.horizontal)?.horizontal || '',
-          'image'
-        ),
-        imageVertical: useUrlMedia(
-          data.image?.find(img => img.vertical)?.vertical || '',
-          'image'
-        ),
+        imageHorizontal: useUrlMedia(data.image?.find(img => img.horizontal)?.horizontal || '', 'image'),
+        imageVertical: useUrlMedia(data.image?.find(img => img.vertical)?.vertical || '', 'image'),
         type: props.itemType,
         ...(config.transform ? config.transform(data, lang.value, translate) : {})
       }
