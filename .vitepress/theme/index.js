@@ -6,7 +6,7 @@ import { useData, useRoute, useRouter } from 'vitepress'
 import BlockStyle from '../components/BlockStyle.vue'
 import CardHero from '../components/CardHero.vue'
 import GalleryMedia from '../components/GalleryMedia.vue'
-import HomeStyle from '../components/HomeStyle.vue'
+import HeroRandom from '../components/HeroRandom.vue'
 import ItemsGroup from '../components/ItemsGroup.vue'
 import ItemsList from '../components/ItemsList.vue'
 import ItemsRandom from '../components/ItemsRandom.vue'
@@ -207,7 +207,7 @@ export default {
     app.component('BlockStyle', BlockStyle)
     app.component('CardHero', CardHero)
     app.component('GalleryMedia', GalleryMedia)
-    app.component('HomeStyle', HomeStyle)
+    app.component('HeroRandom', HeroRandom)
     app.component('ItemsGroup', ItemsGroup)
     app.component('ItemsList', ItemsList)
     app.component('ItemsRandom', ItemsRandom)
