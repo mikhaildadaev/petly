@@ -1,0 +1,24 @@
+{
+  "name": "PETLY — Волонтёрский проект помощи животным",
+  "short_name": "PETLY",
+  "description": "Помогаем питомцам найти дом",
+  "start_url": "/petly/",
+  "scope": "/petly/",
+  "display": "fullscreen",
+  "background_color": "#fdfaf6",
+  "theme_color": "#e67e22",
+  "icons": [
+    {
+      "src": "/petly/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/petly/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
