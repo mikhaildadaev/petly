@@ -23,6 +23,7 @@ export default {
     const supportedLangs = ['ru', 'en', 'de']
     const base = '/petly/'
     let isRedirecting = false
+    let isShowingRedirect = false
     const isHomePage = (path) => {
       const clean = path.replace(/\/+$/, '')
       return clean === base || clean === base.slice(0, -1)
@@ -128,6 +129,17 @@ export default {
     }
     onMounted(() => {
       ensureLanguageInStorage()
+      if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+        const baseUrl = import.meta.env.BASE_URL || '/'
+        navigator.serviceWorker
+          .register(`${baseUrl}assets/js/sw.js`)
+          .then(registration => {
+            console.log('✅ Service Worker зарегистрирован:', registration.scope)
+          })
+          .catch(error => {
+            console.warn('⚠️ Service Worker не зарегистрирован:', error.message)
+          })
+      }
       const params = new URLSearchParams(window.location.search)
       if (params.has('s') && !isHomePage(route.path)) {
         isShowingRedirect = true
@@ -140,9 +152,6 @@ export default {
           syncUrlWithStorage()
         })
       }
-      nextTick(() => {
-        syncUrlWithStorage()
-      })
     })
     watch(
       () => route.path,
