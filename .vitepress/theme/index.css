@@ -4,8 +4,6 @@
    БАЗОВЫЕ ПЕРЕМЕННЫЕ
    ============================================ */
 :root {
-  --vp-c-black: #000000;
-  --vp-c-white: #ffffff;
   --vp-c-brand: #e67e22;
   --vp-c-brand-light: #f0a04b;
   --vp-c-brand-dark: #c96a1c;
@@ -18,6 +16,8 @@
   --vp-c-dark: #3e3232;
   --vp-c-light: #f3f0eb;
   --vp-c-universal: #3e3232;
+  --vp-c-black: #000000;
+  --vp-c-white: #ffffff;
   --vp-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --vp-font-family-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
   --vp-font-family-write: 'Caveat', cursive;
@@ -345,6 +345,102 @@ p.withColor {
   height: 10px;
   opacity: 0;
   overflow: hidden;
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.random-hero {
+  margin: 0 -24px;
+  background: var(--vp-c-bg);
+}
+.random-hero .container {
+  display: grid;
+  grid-template-columns: auto minmax(312px, 1fr);
+  margin: 0 auto;
+  background: var(--vp-c-bg-soft);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+.random-hero .container .meta {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 14px;
+  margin-bottom: 0.8rem;
+}
+.random-hero .container .media {
+  position: relative;
+  overflow: hidden;
+  min-height: 380px;
+}
+.random-hero .container .media picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.random-hero .container .media .img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.random-hero .container .content {
+  margin: 0 0 0 -24px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--vp-c-bg-soft);
+  border-radius: var(--radius);
+  z-index: 1;
+}
+.random-hero .container .content .actions {
+  margin-top: auto;
+}
+.random-hero .container .content .name {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--vp-c-text-1);
+  margin: 0 0 8px;
+  font-family: var(--vp-font-family-print);
+}
+.random-hero .container .content .description {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--vp-c-text-2);
+  margin: 0 0 20px;
+}
+.random-hero .container .content .hero-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+.random-hero .container .content .hero-button.primary {
+  background: var(--vp-c-brand-1);
+  color: var(--vp-c-white);
+}
+.random-hero .container .content .hero-button.primary:hover {
+  background: var(--vp-c-brand-2);
+}
+.random-hero .container .content .hero-button .button-arrow {
+  font-size: 18px;
+  transition: transform 0.3s ease;
+}
+.random-hero .container .content .hero-button.primary:hover .button-arrow {
+  transform: translateX(4px);
 }
 
 /* ============================================================
@@ -1583,6 +1679,17 @@ p.withColor {
 @media (max-width: 735px) {
   button.carousel {
     background-color: transparent !important;
+  }
+  .random-hero .container {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .random-hero .container .media {
+    min-height: 240px;
+  }
+  .random-hero .container .content {
+    margin: 0;
+    padding: 24px;
   }
   .carousel-track {
     gap: 0;
