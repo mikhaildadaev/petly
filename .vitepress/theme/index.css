@@ -631,9 +631,8 @@ p.withColor {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin: 14px;
-  margin-bottom: 0.8rem;
+  gap: 8px;
+  margin: 16px;
 }
 .card img {
   position: absolute;
@@ -715,10 +714,10 @@ p.withColor {
   flex: 0 0 50%;
   flex-shrink: 0;
   background: var(--vp-c-bg-alt);
-  background-image: url('/petly/assets/svg/swipe.svg');
+  background-image: url('/petly/assets/svg/skeleton.svg');
   background-repeat: no-repeat;
-  background-position: 75% 50%;
-  background-size: 64px;
+  background-position: 100% 50%;
+  background-size: contain;
   border-radius: var(--radius);
   animation: swipePulse 2s ease-in-out infinite;
 }
