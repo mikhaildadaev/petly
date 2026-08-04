@@ -1688,7 +1688,7 @@ p.withColor {
     min-height: 240px;
   }
   .random-hero .container .content {
-    margin: 0;
+    margin: -24px 0;
     padding: 24px;
   }
   .carousel-track {
