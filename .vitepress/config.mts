@@ -11,6 +11,7 @@ export default defineConfig({
     ['link', { rel: 'icon', type: 'image/png', sizes: '48x48', href: '/petly/assets/favicon/48x48.png' }],
     ['link', { rel: 'icon', type: 'image/png', sizes: '57x57', href: '/petly/assets/favicon/57x57.png' }],
     ['link', { rel: 'icon', type: 'image/png', sizes: '60x60', href: '/petly/assets/favicon/60x60.png' }],
+    ['link', { rel: 'icon', type: 'image/png', sizes: '64x64', href: '/petly/assets/favicon/64x64.png' }],
     ['link', { rel: 'icon', type: 'image/png', sizes: '70x70', href: '/petly/assets/favicon/70x70.png' }],
     ['link', { rel: 'icon', type: 'image/png', sizes: '72x72', href: '/petly/assets/favicon/72x72.png' }],
     ['link', { rel: 'icon', type: 'image/png', sizes: '76x76', href: '/petly/assets/favicon/76x76.png' }],
