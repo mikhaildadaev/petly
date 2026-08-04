@@ -39,6 +39,12 @@
       "purpose": "any"
     },
     {
+      "src": "/petly/assets/favicon/64x64.png",
+      "sizes": "64x64",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
       "src": "/petly/assets/favicon/70x70.png",
       "sizes": "70x70",
       "type": "image/png",
