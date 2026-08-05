@@ -526,7 +526,6 @@ p.withColor {
 .filters-compact {
   display: flex;
   flex-flow: row;
-  flex-wrap: wrap;
   align-items: center;
   gap: 14px;
   height: 48px;
