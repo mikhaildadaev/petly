@@ -4,7 +4,6 @@ export default defineConfig({
   base: '/petly/',
   head: [
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
-    ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap' }],
     ['link', { rel: 'manifest', href: '/petly/assets/json/manifest.json' }],
     ['link', { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/petly/assets/favicon/16x16.png' }],
     ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/petly/assets/favicon/32x32.png' }],
@@ -45,10 +44,11 @@ export default defineConfig({
     ['meta', { name: 'msapplication-wide310x150logo', content: '/petly/assets/favicon/310x150.png' }],
     ['meta', { name: 'msapplication-square310x310logo', content: '/petly/assets/favicon/310x310.png' }],
     ['meta', { name: 'msapplication-TileColor', content: '#e67e22' }],
-    ['meta', { name: 'theme-color', content: '#e67e22' }],
     ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
     ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' }],
     ['meta', { name: 'apple-touch-fullscreen', content: 'yes' }],
+    ['meta', { name: 'mobile-web-app-capable', content: 'yes' }],
+    ['meta', { name: 'theme-color', content: '#e67e22' }],
     ['meta', { name: 'viewport', content: 'width=device-width, initial-scale=1.0, viewport-fit=cover' }]
   ],
   cleanUrls: true,
