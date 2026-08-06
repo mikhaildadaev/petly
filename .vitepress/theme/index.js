@@ -13,6 +13,8 @@ import ItemsSelect from '../components/ItemsSelect.vue'
 import PageRedirect from '../components/PageRedirect.vue'
 import PageStyle from '../components/PageStyle.vue'
 
+const base = import.meta.env.BASE_URL || ''
+
 export default {
   extends: DefaultTheme,
   setup() {
@@ -20,7 +22,6 @@ export default {
     const route = useRoute()
     const router = useRouter()
     const supportedLangs = ['ru', 'en', 'de']
-    const base = '/petly/'
     let isRedirecting = false
     let isShowingRedirect = false
     const isHomePage = (path) => {
