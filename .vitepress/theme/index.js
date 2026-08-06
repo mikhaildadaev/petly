@@ -2,7 +2,6 @@ import DefaultTheme from 'vitepress/theme'
 import './index.css'
 import { watch, onMounted, nextTick, provide } from 'vue'
 import { useData, useRoute, useRouter } from 'vitepress'
-
 import BlockStyle from '../components/BlockStyle.vue'
 import HeroSelect from '../components/HeroSelect.vue'
 import GalleryMedia from '../components/GalleryMedia.vue'
