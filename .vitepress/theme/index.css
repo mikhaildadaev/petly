@@ -4,9 +4,6 @@
    БАЗОВЫЕ ПЕРЕМЕННЫЕ
    ============================================ */
 :root {
-  --vp-c-brand: #e67e22;
-  --vp-c-brand-light: #f0a04b;
-  --vp-c-brand-dark: #c96a1c;
   --vp-c-bg: #fdfaf6;
   --vp-c-bg-soft: #f5efe6;
   --vp-c-bg-alt: #ede4d8;
@@ -581,13 +578,13 @@ p.withColor {
   gap: 8px;
   height: 100%;
   padding: 4px 8px;
-  background: var(--vp-c-bg-soft);
-  border: 1px solid var(--vp-c-border);
+  border: 1px solid var(--vp-c-divider);
   border-radius: var(--radius);
 }
 .filter-label {
   margin-left: 4px;
   margin-right: 12px;
+  color: var(--vp-c-text-2);
   text-transform: uppercase;
 }
 .filter-chips {
@@ -871,7 +868,6 @@ p.withColor {
   padding: 40px 20px;
   cursor: pointer;
   background: var(--vp-c-bg-soft);
-  border: 2px dashed var(--vp-c-border);
   border-radius: var(--radius);
   transition: all 0.3s ease;
 }
@@ -941,7 +937,6 @@ p.withColor {
   min-height: 280px;
   text-decoration: none;
   background: var(--vp-c-bg-soft);
-  border: 2px dashed var(--vp-c-border);
   border-radius: var(--radius);
   transition: all 0.3s ease;
   overflow: hidden;
@@ -1300,7 +1295,7 @@ p.withColor {
   width: 56px;
   height: 56px;
   line-height: 1;
-  background: linear-gradient(to top, rgba(230, 126, 34, 0.15), transparent);
+  background: linear-gradient(to top, rgba(51, 81, 178, 0.24), transparent);
   border-radius: 12px;
   transition: all 0.3s ease;
   overflow: hidden;
@@ -1308,7 +1303,7 @@ p.withColor {
 .block-type-steps .item:nth-child(odd) .number {
   top: 0;
   bottom: auto;
-  background: linear-gradient(to bottom, rgba(230, 126, 34, 0.15), transparent);
+  background: linear-gradient(to bottom, rgba(51, 81, 178, 0.24), transparent);
 }
 .block-type-steps .item:hover .number {
   transform: scale(1.1);
@@ -1687,7 +1682,7 @@ p.withColor {
     min-height: 240px;
   }
   .random-hero .container .content {
-    margin: -24px 0;
+    margin: -24px 0 0;
     padding: 24px;
   }
   .carousel-track {
