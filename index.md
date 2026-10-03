@@ -1,5 +1,5 @@
 ---
-title: 'Petly'
+title: '🏠❤️🐾'
 titleTemplate: false
 navbar: false
 sidebar: false
