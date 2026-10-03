@@ -59,7 +59,7 @@ export default defineConfig({
       label: 'Deutsch',
       lang: 'de',
       link: '/de/',
-      title: 'PETLY',
+      title: 'BRAUCHE ZUHAUSE',
       themeConfig: {
         notFound: {
           title: 'Hoppla! Seite nicht gefunden 🐾',
@@ -198,7 +198,7 @@ export default defineConfig({
       label: 'English',
       lang: 'en',
       link: '/en/',
-      title: 'PETLY',
+      title: 'NEED HOME',
       themeConfig: {
         notFound: {
           title: 'Oops! Page not found 🐾',
@@ -337,7 +337,7 @@ export default defineConfig({
       label: 'Русский',
       lang: 'ru',
       link: '/ru/',
-      title: 'PETLY',
+      title: 'НУЖЕН ДОМ',
       themeConfig: {
         notFound: {
           title: 'Ой! Страница не найдена 🐾',
