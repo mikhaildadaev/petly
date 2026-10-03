@@ -82,12 +82,11 @@ const performRedirect = async () => {
       const item = allItems.find(p => p.short === shortCode)
       if (item) {
         const savedLang = localStorage.getItem('vitepress-lang') || 'ru'
-        let redirectPath = `/${savedLang}/${item._type}/${item._subtype}/${item.uuid}`
+        let redirectPath = `${base}${savedLang}/${item._type}/${item._subtype}/${item.uuid}`
         if (item.covenantID) {
-          redirectPath = `/${savedLang}/${item._type}/${item.covenantID}/${item._subtype}/${item.uuid}`
+          redirectPath = `${base}${savedLang}/${item._type}/${item.covenantID}/${item._subtype}/${item.uuid}`
         }
         redirectUrl.value = `${base}${redirectPath}`
-
         await updateStatus('status-success', 100)
         window.location.href = redirectUrl.value
       } else {
