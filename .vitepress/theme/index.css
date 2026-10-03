@@ -829,6 +829,10 @@ p.withColor {
 .carousel-slide.center {
   z-index: 2;
 }
+.carousel-slide:not(.center) {
+  pointer-events: none;
+  opacity: 0.5;
+}
 .carousel-slide.center .load-more {
   border-color: var(--vp-c-brand-light);
 }
