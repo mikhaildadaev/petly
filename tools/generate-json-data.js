@@ -274,7 +274,7 @@ function generateAll() {
       type,
       lang,
       subtype,
-      path: `/data/${file}`
+      path: `data/${file}`
     }
   })
   fs.writeFileSync(
