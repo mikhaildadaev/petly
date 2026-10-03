@@ -1,4 +1,4 @@
-const CACHE_NAME = 'petly-v1'
+const CACHE_NAME = 'needhome-v1'
 const STATIC_ASSETS = ['/']
 
 self.addEventListener('install', event => {
