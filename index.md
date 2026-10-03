@@ -1,5 +1,5 @@
 ---
-title: '🏠❤️🐾'
+title: ''
 titleTemplate: false
 navbar: false
 sidebar: false
