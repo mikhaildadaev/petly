@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitepress'
 export default defineConfig({
   appearance: 'dark',
-  base: '/petly/',
+  base: '/',
   head: [
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'manifest', href: '/petly/assets/json/manifest.json' }],
