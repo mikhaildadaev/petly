@@ -92,7 +92,7 @@ export const pageImages = {
 }
 
 export function usePageStyle(path) {
-  const cleanPath = path.replace(/^\/petly/, '').replace(/\/$/, '')
+  const cleanPath = path.replace(/\/$/, '')
   if (!cleanPath || cleanPath === '/') {
     return pageImages['/']
   }
