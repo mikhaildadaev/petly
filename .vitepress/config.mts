@@ -59,7 +59,7 @@ export default defineConfig({
       label: 'Deutsch',
       lang: 'de',
       link: '/de/',
-      title: 'BrauchtHeim',
+      title: '#BrauchtHeim',
       themeConfig: {
         notFound: {
           title: 'Hoppla! Seite nicht gefunden 🐾',
@@ -198,7 +198,7 @@ export default defineConfig({
       label: 'English',
       lang: 'en',
       link: '/en/',
-      title: 'NeedHome',
+      title: '#NeedHome',
       themeConfig: {
         notFound: {
           title: 'Oops! Page not found 🐾',
@@ -337,7 +337,7 @@ export default defineConfig({
       label: 'Русский',
       lang: 'ru',
       link: '/ru/',
-      title: 'НуженДом',
+      title: '#НуженДом',
       themeConfig: {
         notFound: {
           title: 'Ой! Страница не найдена 🐾',
