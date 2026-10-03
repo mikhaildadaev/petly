@@ -922,7 +922,7 @@ p.withColor {
 }
 .load-more .content .progress .bar {
   height: 100%;
-  background: linear-gradient(90deg, var(--vp-c-brand), var(--vp-c-brand-dark));
+  background-color: var(--vp-c-brand);
   border-radius: 2px;
   transition: width 0.3s ease;
 }
