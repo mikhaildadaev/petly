@@ -103,13 +103,13 @@ button.carousel {
 }
 button.carousel.prev {
   left: 0;
-  mask-image: url('/petly/assets/svg/prev.svg');
-  -webkit-mask-image: url('/petly/assets/svg/prev.svg');
+  mask-image: url('/assets/svg/prev.svg');
+  -webkit-mask-image: url('/assets/svg/prev.svg');
 }
 button.carousel.next {
   right: 0;
-  mask-image: url('/petly/assets/svg/next.svg');
-  -webkit-mask-image: url('/petly/assets/svg/next.svg');
+  mask-image: url('/assets/svg/next.svg');
+  -webkit-mask-image: url('/assets/svg/next.svg');
 }
 button.favorite {
   position: absolute;
@@ -126,8 +126,8 @@ button.favorite {
   -webkit-mask-position: center;
   mask-size: contain;
   -webkit-mask-size: contain;
-  mask-image: url('/petly/assets/svg/like.svg');
-  -webkit-mask-image: url('/petly/assets/svg/like.svg');
+  mask-image: url('/assets/svg/like.svg');
+  -webkit-mask-image: url('/assets/svg/like.svg');
 }
 button.favorite:hover {
   transform: scale(1.15);
@@ -163,8 +163,8 @@ button.fullscreen {
 button.fullscreen.close {
   right: calc(50% - 16px);
   bottom: 16px;
-  mask-image: url('/petly/assets/svg/close.svg');
-  -webkit-mask-image: url('/petly/assets/svg/close.svg');
+  mask-image: url('/assets/svg/close.svg');
+  -webkit-mask-image: url('/assets/svg/close.svg');
 }
 button.fullscreen.close:hover {
   transform: rotate(90deg);
@@ -172,13 +172,13 @@ button.fullscreen.close:hover {
 }
 button.fullscreen.prev {
   left: 0;
-  mask-image: url('/petly/assets/svg/prev.svg');
-  -webkit-mask-image: url('/petly/assets/svg/prev.svg');
+  mask-image: url('/assets/svg/prev.svg');
+  -webkit-mask-image: url('/assets/svg/prev.svg');
 }
 button.fullscreen.next {
   right: 0;
-  mask-image: url('/petly/assets/svg/next.svg');
-  -webkit-mask-image: url('/petly/assets/svg/next.svg');
+  mask-image: url('/assets/svg/next.svg');
+  -webkit-mask-image: url('/assets/svg/next.svg');
 }
 button.fullscreen.prev:hover,
 button.fullscreen.next:hover {
@@ -199,8 +199,8 @@ button.share {
   -webkit-mask-position: center;
   mask-size: contain;
   -webkit-mask-size: contain;
-  mask-image: url('/petly/assets/svg/share.svg');
-  -webkit-mask-image: url('/petly/assets/svg/share.svg');
+  mask-image: url('/assets/svg/share.svg');
+  -webkit-mask-image: url('/assets/svg/share.svg');
 }
 button.share:hover {
   transform: scale(1.15);
@@ -562,8 +562,8 @@ p.withColor {
   -webkit-mask-position: center;
   mask-size: contain;
   -webkit-mask-size: contain;
-  mask-image: url('/petly/assets/svg/reset.svg');
-  -webkit-mask-image: url('/petly/assets/svg/reset.svg');
+  mask-image: url('/assets/svg/reset.svg');
+  -webkit-mask-image: url('/assets/svg/reset.svg');
 }
 .filters-compact .reset:hover {
   color: #ef5350;
@@ -615,48 +615,48 @@ p.withColor {
   background-color: var(--vp-c-brand);
 }
 .filter-chips .chip.woman {
-  mask-image: url('/petly/assets/svg/filter_gender_girl.svg');
-  -webkit-mask-image: url('/petly/assets/svg/filter_gender_girl.svg');
+  mask-image: url('/assets/svg/filter_gender_girl.svg');
+  -webkit-mask-image: url('/assets/svg/filter_gender_girl.svg');
 }
 .filter-chips .chip.man {
-  mask-image: url('/petly/assets/svg/filter_gender_boy.svg');
-  -webkit-mask-image: url('/petly/assets/svg/filter_gender_boy.svg');
+  mask-image: url('/assets/svg/filter_gender_boy.svg');
+  -webkit-mask-image: url('/assets/svg/filter_gender_boy.svg');
 }
 .filter-chips .chip.young {
-  mask-image: url('/petly/assets/svg/filter_age_young.svg');
-  -webkit-mask-image: url('/petly/assets/svg/filter_age_young.svg');
+  mask-image: url('/assets/svg/filter_age_young.svg');
+  -webkit-mask-image: url('/assets/svg/filter_age_young.svg');
 }
 .filter-chips .chip.middle {
-  mask-image: url('/petly/assets/svg/filter_age_middle.svg');
-  -webkit-mask-image: url('/petly/assets/svg/filter_age_middle.svg');
+  mask-image: url('/assets/svg/filter_age_middle.svg');
+  -webkit-mask-image: url('/assets/svg/filter_age_middle.svg');
 }
 .filter-chips .chip.old {
-  mask-image: url('/petly/assets/svg/filter_age_old.svg');
-  -webkit-mask-image: url('/petly/assets/svg/filter_age_old.svg');
+  mask-image: url('/assets/svg/filter_age_old.svg');
+  -webkit-mask-image: url('/assets/svg/filter_age_old.svg');
 }
 .filter-chips .chip.small {
-  mask-image: url('/petly/assets/svg/filter_size_small.svg');
-  -webkit-mask-image: url('/petly/assets/svg/filter_size_small.svg');
+  mask-image: url('/assets/svg/filter_size_small.svg');
+  -webkit-mask-image: url('/assets/svg/filter_size_small.svg');
 }
 .filter-chips .chip.medium {
-  mask-image: url('/petly/assets/svg/filter_size_medium.svg');
-  -webkit-mask-image: url('/petly/assets/svg/filter_size_medium.svg');
+  mask-image: url('/assets/svg/filter_size_medium.svg');
+  -webkit-mask-image: url('/assets/svg/filter_size_medium.svg');
 }
 .filter-chips .chip.large {
-  mask-image: url('/petly/assets/svg/filter_size_large.svg');
-  -webkit-mask-image: url('/petly/assets/svg/filter_size_large.svg');
+  mask-image: url('/assets/svg/filter_size_large.svg');
+  -webkit-mask-image: url('/assets/svg/filter_size_large.svg');
 }
 .filter-chips .chip.begin {
-  mask-image: url('/petly/assets/svg/filter_experience_begin.svg');
-  -webkit-mask-image: url('/petly/assets/svg/filter_experience_begin.svg');
+  mask-image: url('/assets/svg/filter_experience_begin.svg');
+  -webkit-mask-image: url('/assets/svg/filter_experience_begin.svg');
 }
 .filter-chips .chip.versed {
-  mask-image: url('/petly/assets/svg/filter_experience_versed.svg');
-  -webkit-mask-image: url('/petly/assets/svg/filter_experience_versed.svg');
+  mask-image: url('/assets/svg/filter_experience_versed.svg');
+  -webkit-mask-image: url('/assets/svg/filter_experience_versed.svg');
 }
 .filter-chips .chip.expert {
-  mask-image: url('/petly/assets/svg/filter_experience_expert.svg');
-  -webkit-mask-image: url('/petly/assets/svg/filter_experience_expert.svg');
+  mask-image: url('/assets/svg/filter_experience_expert.svg');
+  -webkit-mask-image: url('/assets/svg/filter_experience_expert.svg');
 }
 
 /* ============================================
@@ -766,8 +766,8 @@ p.withColor {
   -webkit-mask-position: center;
   mask-size: contain;
   -webkit-mask-size: contain;
-  mask-image: url('/petly/assets/svg/goto.svg');
-  -webkit-mask-image: url('/petly/assets/svg/goto.svg');
+  mask-image: url('/assets/svg/goto.svg');
+  -webkit-mask-image: url('/assets/svg/goto.svg');
   transition: transform 0.3s, opacity 0.3s;
   opacity: 0;
 }
@@ -806,7 +806,7 @@ p.withColor {
   flex: 0 0 50%;
   flex-shrink: 0;
   background: var(--vp-c-bg-alt);
-  background-image: url('/petly/assets/svg/skeleton.svg');
+  background-image: url('/assets/svg/skeleton.svg');
   background-repeat: no-repeat;
   background-position: 100% 50%;
   background-size: contain;
@@ -899,8 +899,8 @@ p.withColor {
   -webkit-mask-position: center;
   mask-size: contain;
   -webkit-mask-size: contain;
-  mask-image: url('/petly/assets/svg/more.svg');
-  -webkit-mask-image: url('/petly/assets/svg/more.svg');
+  mask-image: url('/assets/svg/more.svg');
+  -webkit-mask-image: url('/assets/svg/more.svg');
   transition: all 0.3s ease;
 }
 .load-more .content .text {
@@ -1079,8 +1079,8 @@ p.withColor {
   -webkit-mask-position: center;
   mask-size: contain;
   -webkit-mask-size: contain;
-  mask-image: url('/petly/assets/svg/info.svg');
-  -webkit-mask-image: url('/petly/assets/svg/info.svg');
+  mask-image: url('/assets/svg/info.svg');
+  -webkit-mask-image: url('/assets/svg/info.svg');
   transition: all 0.3s ease;
 }
 .block-type-cubes .content .info:hover {
@@ -1126,8 +1126,8 @@ p.withColor {
   transition: all 0.3s ease;
   mask-repeat: repeat-x;
   -webkit-mask-repeat: repeat-x;
-  mask-image: url('/petly/assets/svg/paper.svg');
-  -webkit-mask-image: url('/petly/assets/svg/paper.svg');
+  mask-image: url('/assets/svg/paper.svg');
+  -webkit-mask-image: url('/assets/svg/paper.svg');
   mask-size: auto 100%;
   -webkit-mask-size: auto 100%;
 }
@@ -1282,8 +1282,8 @@ p.withColor {
   -webkit-mask-position: center;
   mask-size: contain;
   -webkit-mask-size: contain;
-  mask-image: url('/petly/assets/svg/paws.svg');
-  -webkit-mask-image: url('/petly/assets/svg/paws.svg');
+  mask-image: url('/assets/svg/paws.svg');
+  -webkit-mask-image: url('/assets/svg/paws.svg');
   opacity: 0.4;
 }
 .block-type-steps .number {
