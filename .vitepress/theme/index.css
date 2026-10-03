@@ -832,7 +832,6 @@ p.withColor {
 .carousel-slide:not(.center) {
   pointer-events: none;
   opacity: 0.5;
-  transition: opacity 0.5s ease;
 }
 .carousel-slide.center .load-more {
   border-color: var(--vp-c-brand-light);
