@@ -46,6 +46,7 @@ const performRedirect = async () => {
   const cleanBase = base.replace(/^\/|\/$/g, '')
   const url = new URL(window.location.href)
   const path = window.location.pathname
+  const savedLang = localStorage.getItem('vitepress-lang') || 'ru'
   const langMatch = (() => {
     if (cleanBase) {
       return path.match(new RegExp(`^/${cleanBase}/([a-z]{2})(?:/|$)`))
@@ -55,7 +56,6 @@ const performRedirect = async () => {
   })()
   if (langMatch) {
     await updateStatus('status-success', 100)
-    const savedLang = localStorage.getItem('vitepress-lang') || 'ru'
     window.location.href = `${base}${savedLang}/`
     return
   }
@@ -81,27 +81,23 @@ const performRedirect = async () => {
       await updateStatus('status-loading', 90)
       const item = allItems.find(p => p.short === shortCode)
       if (item) {
-        const savedLang = localStorage.getItem('vitepress-lang') || 'ru'
-        let redirectPath = `${base}${savedLang}/${item._type}/${item._subtype}/${item.uuid}`
+        await updateStatus('status-success', 100)
+        let redirectPath = `${savedLang}/${item._type}/${item._subtype}/${item.uuid}`
         if (item.covenantID) {
-          redirectPath = `${base}${savedLang}/${item._type}/${item.covenantID}/${item._subtype}/${item.uuid}`
+          redirectPath = `${savedLang}/${item._type}/${item.covenantID}/${item._subtype}/${item.uuid}`
         }
         redirectUrl.value = `${base}${redirectPath}`
-        await updateStatus('status-success', 100)
         window.location.href = redirectUrl.value
       } else {
         await updateStatus('status-error', 100)
-        const savedLang = localStorage.getItem('vitepress-lang') || 'ru'
         window.location.href = `${base}${savedLang}/`
       }
     } catch (error) {
       await updateStatus('status-error', 100)
-      const savedLang = localStorage.getItem('vitepress-lang') || 'ru'
       window.location.href = `${base}${savedLang}/`
     }
   } else {
     await updateStatus('status-loading', 100)
-    const savedLang = localStorage.getItem('vitepress-lang') || 'ru'
     window.location.href = `${base}${savedLang}/`
   }
 }
