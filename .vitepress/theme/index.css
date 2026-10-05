@@ -521,14 +521,18 @@ p.withColor {
    КОМПАКТНЫЕ ФИЛЬТРЫ
    ============================================================ */
 .filters-compact {
+  position: sticky;
   display: flex;
   flex-flow: row;
   align-items: center;
   gap: 14px;
-  height: 48px;
-  margin: 1em -24px 0;
-  padding: 0 24px;
+  height: 80px;
+  top: 64px;
+  margin: 0 -24px;
+  padding: 16px 24px;
+  background-color: var(--vp-c-bg);
   overflow-y: hidden;
+  z-index: 10;
 }
 .filters-compact .reset {
   display: inline-flex;
@@ -666,7 +670,7 @@ p.withColor {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 16px;
-  margin: 2rem 0 0;
+  margin: 0;
 }
 .cards-grid .card:hover img {
   transform: scale(1.06);
@@ -677,7 +681,7 @@ p.withColor {
 }
 .cards-carousel {
   width: 100%;
-  margin: 2em 0 0;
+  margin: 0 0;
 }
 .cards-carousel .carousel-wrapper .center .card img {
   transform: scale(1.06);
@@ -1676,6 +1680,9 @@ p.withColor {
 @media (max-width: 735px) {
   button.carousel {
     background-color: transparent !important;
+  }
+  .filters-compact {
+    top: 48px
   }
   .random-hero .container {
     grid-template-columns: 1fr;
