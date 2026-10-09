@@ -20,13 +20,13 @@ blocks:
     title: '... Наши цели'
     list:
       - name: 'Помогать животным'
-        image: '/assets/webp/mission-help.webp'
+        image: '/assets/webp/mission_help.webp'
         info: 'Мы верим, что каждый питомец заслуживает любящую семью и заботу'
       - name: 'Объединять людей'
-        image: '/assets/webp/mission-unite.webp'
+        image: '/assets/webp/mission_combine.webp'
         info: 'Создаём сообщество волонтёров, которым не всё равно'
       - name: 'Творить добро'
-        image: '/assets/webp/mission-kindness.webp'
+        image: '/assets/webp/mission_goodness.webp'
         info: 'Показываем, что помогать — просто, важно и нужно'
 ---
 
