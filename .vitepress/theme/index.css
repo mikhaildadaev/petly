@@ -1054,10 +1054,11 @@ p.withColor {
 }
 .block-type-cubes .image {
   flex-shrink: 0;
-  width: 80px;
-  height: 80px;
+  width: 100%;
+  height: auto;
   border-radius: 10px;
   overflow: hidden;
+  aspect-ratio: 1/1;
 }
 .block-type-cubes .image img {
   width: 100%;
