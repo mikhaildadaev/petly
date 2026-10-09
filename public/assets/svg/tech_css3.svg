@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="80px" height="80px" viewBox="0 0 80 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>css3</title>
+    <title>tech_css3</title>
     <defs>
         <linearGradient x1="50%" y1="100.001238%" x2="50%" y2="0.00123760845%" id="linearGradient-1">
             <stop stop-color="#D1D3D4" stop-opacity="0" offset="38.7%"></stop>
@@ -19,9 +19,9 @@
             <stop stop-color="#FFFFFF" offset="100%"></stop>
         </linearGradient>
     </defs>
-    <g id="Logo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="CSS3">
-            <path d="M80,64 L80,16 C80,7.163444 72.836556,-3.55271368e-15 64,0 L16,0 C7.163444,1.77635684e-15 0,7.163444 0,16 L0,64 C1.77635684e-15,72.836556 7.163444,80 16,80 L64,80 C72.836556,80 80,72.836556 80,64 Z" id="Oval" fill="#FFFFFF" fill-rule="nonzero"></path>
+    <g id="Imgs_80x80" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Tech_CSS3">
+            <polygon id="background" fill="#FFFFFF" fill-rule="nonzero" points="80 80 80 0 0 0 0 80"></polygon>
             <g id="Group" transform="translate(7.000000, 7.000000)">
                 <polygon id="Path" points="0 0 67 0 67 67 0 67"></polygon>
                 <polygon id="Path" fill="#2062AF" fill-rule="nonzero" points="50.062179 58.430097 32.9998747 63 15.9373199 58.430097 12 16 54 16"></polygon>
