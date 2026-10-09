@@ -6,7 +6,7 @@ blocks:
     title: '... Кто может'
     list:
       - name: 'Новички без опыта'
-        image: '/assets/webp/join_anyone.webp'
+        image: '/assets/webp/join_recruit.webp'
         info: 'Если вам меньше 14 лет — приходите с родителями. Если 14–18 лет приходите с письменным согласием родителей и в присутствии взрослого волонтера'
       - name: 'Зооволонтёры с опытом'
         image: '/assets/webp/join_volunteer.webp'
