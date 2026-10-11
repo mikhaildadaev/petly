@@ -53,7 +53,7 @@ export const useConfigItem = {
       connect: []
     },
     filters: {
-      format: { keys: ['Частный', 'Государственный'], label: 'Формат' }
+      format: { keys: ['Государственный', 'Частный'], label: 'Формат' }
     },
     icons: {
       format: { 'Государственный': 'state', 'Частный': 'private' }
