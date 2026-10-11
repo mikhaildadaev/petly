@@ -1579,7 +1579,7 @@ p.withColor {
   z-index: 2;
   transform: scale(1.05);
   border-color: var(--vp-c-brand);
-  box-shadow: 0 8px 24px rgba(230, 126, 34, 0.2);
+  box-shadow: 0 8px 24px var(--vp-c-brand);
 }
 .gallery-media .item:active {
   transform: scale(0.95);
