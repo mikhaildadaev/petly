@@ -3,7 +3,7 @@
     <div v-if="hasFilters && config.filters" class="filters-compact hide-scrollbar">
       <div v-for="(filterConfig, filterName) in config.filters" :key="filterName" class="filter-group">
         <div class="filter-chips">
-          <button v-for="option in getFilterOptions(filterName)" :key="option.value" class="chip" :class="[{ active: filters[filterName]?.[option.value] }, option.icon]" @click="toggleFilter(filterName, option.value)" :title="option.label"/>
+          <button v-for="option in getFilterOptions(filterName)" :key="option.value" class="chip" :class="[{ active: filters[filterName]?.[option.value] }, `${filterName}_${option.icon}`]" @click="toggleFilter(filterName, option.value)" :title="option.label"/>
         </div>
         <label class="filter-label">{{ translate('filter', filterConfig.label) }}</label>
       </div>
