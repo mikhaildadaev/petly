@@ -1,6 +1,6 @@
 import DefaultTheme from 'vitepress/theme'
 import './index.css'
-import { watch, onMounted, nextTick, provide } from 'vue'
+import { h, watch, onMounted, nextTick } from 'vue'
 import { useData, useRoute, useRouter } from 'vitepress'
 import BlockStyle from '../components/BlockStyle.vue'
 import HeroSelect from '../components/HeroSelect.vue'
@@ -11,12 +11,18 @@ import ItemsList from '../components/ItemsList.vue'
 import ItemsRandom from '../components/ItemsRandom.vue'
 import ItemsSelect from '../components/ItemsSelect.vue'
 import PageRedirect from '../components/PageRedirect.vue'
+import PagePreloader from '../components/PagePreloader.vue'
 import PageStyle from '../components/PageStyle.vue'
 
 const base = import.meta.env.BASE_URL || ''
 
 export default {
   extends: DefaultTheme,
+  Layout() {
+    return h(DefaultTheme.Layout, null, {
+      'layout-top': () => h(PagePreloader)
+    })
+  },
   setup() {
     const { localeIndex } = useData()
     const route = useRoute()
