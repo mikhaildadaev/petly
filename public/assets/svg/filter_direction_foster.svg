@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>filter_direction_foster</title>
+    <g id="Icons_32x32" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Filter_direction_foster" transform="translate(0.000000, 0.000000)" stroke="#FFFFFF" stroke-width="2">
+            <g id="Group">
+                <circle id="Oval" cx="16" cy="16" r="15"></circle>
+                <path d="M8.5,16.152925 C8.5,14.4366175 8.5,13.57846 8.8894,12.867055 C9.2788,12.1556575 9.9902125,11.7141325 11.4130225,10.8310975 L12.9130225,9.9001525 C14.4170425,8.9667175 15.169075,8.5 16,8.5 C16.830925,8.5 17.58295,8.9667175 19.087,9.9001525 L20.587,10.83109 C22.009825,11.7141325 22.7212,12.1556575 23.1106,12.867055 C23.5,13.57846 23.5,14.4366175 23.5,16.152925 L23.5,17.29375 C23.5,20.21935 23.5,21.682225 22.6213,22.591075 C21.742675,23.5 20.3284,23.5 17.5,23.5 L14.5,23.5 C11.67157,23.5 10.2573625,23.5 9.3786775,22.591075 C8.5,21.682225 8.5,20.21935 8.5,17.29375 L8.5,16.152925 Z" id="Path"></path>
+                <line x1="18.55" y1="20.1" x2="13.45" y2="20.1" id="Path" stroke-linecap="round"></line>
+            </g>
+        </g>
+        <g id="Filter_size_large" transform="translate(-32.000000, 0.000000)" stroke="#FFFFFF" stroke-width="2">
+            <g id="Group">
+                <circle id="Oval" cx="16" cy="16" r="15"></circle>
+            </g>
+        </g>
+    </g>
+</svg>
