@@ -689,13 +689,29 @@ p.withColor {
   mask-image: url('/assets/svg/filter_age_old.svg');
   -webkit-mask-image: url('/assets/svg/filter_age_old.svg');
 }
+.filter-chips .chip.direction_creative {
+  mask-image: url('/assets/svg/filter_direction_creative.svg');
+  -webkit-mask-image: url('/assets/svg/filter_direction_creative.svg');
+}
 .filter-chips .chip.direction_foster {
   mask-image: url('/assets/svg/filter_direction_foster.svg');
   -webkit-mask-image: url('/assets/svg/filter_direction_foster.svg');
 }
+.filter-chips .chip.direction_fundraising {
+  mask-image: url('/assets/svg/filter_direction_fundraising.svg');
+  -webkit-mask-image: url('/assets/svg/filter_direction_fundraising.svg');
+}
+.filter-chips .chip.direction_social {
+  mask-image: url('/assets/svg/filter_direction_social.svg');
+  -webkit-mask-image: url('/assets/svg/filter_direction_social.svg');
+}
 .filter-chips .chip.direction_treatment {
   mask-image: url('/assets/svg/filter_direction_treatment.svg');
   -webkit-mask-image: url('/assets/svg/filter_direction_treatment.svg');
+}
+.filter-chips .chip.direction_walk {
+  mask-image: url('/assets/svg/filter_direction_walk.svg');
+  -webkit-mask-image: url('/assets/svg/filter_direction_walk.svg');
 }
 .filter-chips .chip.experience_begin {
   mask-image: url('/assets/svg/filter_experience_begin.svg');
