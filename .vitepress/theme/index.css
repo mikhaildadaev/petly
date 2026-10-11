@@ -725,6 +725,14 @@ p.withColor {
   mask-image: url('/assets/svg/filter_experience_expert.svg');
   -webkit-mask-image: url('/assets/svg/filter_experience_expert.svg');
 }
+.filter-chips .chip.format_private {
+  mask-image: url('/assets/svg/filter_format_private.svg');
+  -webkit-mask-image: url('/assets/svg/filter_format_private.svg');
+}
+.filter-chips .chip.format_state {
+  mask-image: url('/assets/svg/filter_format_state.svg');
+  -webkit-mask-image: url('/assets/svg/filter_format_state.svg');
+}
 .filter-chips .chip.gender_woman {
   mask-image: url('/assets/svg/filter_gender_woman.svg');
   -webkit-mask-image: url('/assets/svg/filter_gender_woman.svg');
