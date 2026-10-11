@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>filter_direction_walk</title>
+    <g id="Icons_32x32" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Filter_experience_begin" transform="translate(32.000000, 0.000000)" stroke="#FFFFFF" stroke-width="2">
+            <g id="Group">
+                <circle id="Oval" cx="16" cy="16" r="15"></circle>
+            </g>
+        </g>
+        <g id="Group" transform="translate(0.000000, 0.000000)" stroke="#FFFFFF">
+            <circle id="Oval" stroke-width="2" cx="16" cy="16" r="15"></circle>
+            <ellipse id="Oval" stroke-width="1.5" cx="9.5" cy="20" rx="2.75" ry="1.25"></ellipse>
+            <path d="M9.51784521,18.8455416 C9.35656337,13.6151805 10.2885087,11 12.3136813,11 C15.3514402,11 16.7507785,23 18.7041639,23 C20.0064208,23 20.9383661,20.215858 21.5,14.6475739" id="Path-5" stroke-width="1.5"></path>
+            <circle id="Oval" stroke-width="2" cx="21.5" cy="12.5" r="2.5"></circle>
+        </g>
+        <g id="Filter_direction_treatment" transform="translate(-32.000000, 0.000000)" stroke="#FFFFFF" stroke-width="2">
+            <g id="Group">
+                <circle id="Oval" cx="16" cy="16" r="15"></circle>
+            </g>
+        </g>
+    </g>
+</svg>
