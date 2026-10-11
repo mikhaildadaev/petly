@@ -325,6 +325,65 @@ p.withColor {
 }
 
 /* ============================================
+   ПРЕЛОАДЕР
+   ============================================ */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--vp-c-bg);
+  transition:
+    opacity .6s ease,
+    visibility .6s ease,
+    transform .6s cubic-bezier(.7, 0, .3, 1);
+}
+.preloader .loader {
+  width: 80px;
+  height: 80px;
+  transform: rotate(-90deg);
+  animation: preloader-spin 1.4s linear infinite;
+}
+.preloader .loader .bg {
+  fill: none;
+  stroke: var(--vp-c-border);
+  stroke-width: 3;
+}
+.preloader .loader .progress-ring {
+  fill: none;
+  stroke: var(--vp-c-brand);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 125.6;
+  stroke-dashoffset: 125.6;
+  transition: stroke .5s ease, stroke-dashoffset .3s ease;
+}
+.preloader.status-error .progress-ring   { stroke: #f87171; }
+.preloader.status-success .progress-ring { stroke: #4ade80; }
+.preloader.is-closing .progress-ring {
+  stroke-dashoffset: -125.6 !important;
+  transition: stroke-dashoffset .6s cubic-bezier(.4, 0, .2, 1) !important;
+}
+.preloader.is-indeterminate .loader {
+  animation: preloader-spin 1.4s linear infinite;
+}
+.preloader.is-indeterminate .progress-ring {
+  animation: preloader-dash 1.8s ease-in-out infinite;
+}
+.preloader:not(.is-indeterminate) .loader {
+  animation: none;
+}
+.preloader-leave-active {
+  opacity: 0;
+  transform: scale(1.03);
+}
+.preloader-enter-active {
+  transition: none;
+}
+
+/* ============================================
    СООТНОШЕНИЕ
    ============================================ */
 .aspect-card {
@@ -1598,60 +1657,6 @@ p.withColor {
 }
 
 /* ============================================
-   РЕДИРЕКТ
-   ============================================ */
-.redirect {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--vp-c-bg);
-}
-.redirect .container {
-  width: 90%;
-  max-width: 380px;
-  padding: 48px 32px 40px;
-  text-align: center;
-  animation: fadeIn 0.3s ease;
-}
-.redirect .container .wrapper {
-  position: relative;
-  width: 80px;
-  height: 80px;
-  margin: 0 auto;
-}
-.redirect .container .wrapper .loader {
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg);
-}
-.redirect .container .wrapper .loader .bg {
-  fill: none;
-  stroke: var(--vp-c-border);
-  stroke-width: 3;
-}
-.redirect .container .wrapper .loader .progress-ring {
-  fill: none;
-  stroke: var(--vp-c-brand);
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-dasharray: 125.6;
-  stroke-dashoffset: 125.6;
-  transition: stroke 0.5s ease, stroke-dashoffset 0.3s ease;
-}
-.redirect .container.status-error .wrapper .loader .progress-ring {
-  stroke: #f87171;
-}
-.redirect .container.status-success .wrapper .loader .progress-ring {
-  stroke: #4ade80;
-}
-
-/* ============================================
    VitePress
    ============================================ */
 .VPLastUpdated {
@@ -1744,6 +1749,14 @@ p.withColor {
   0% { transform: translate(0, 0) rotate(0deg); }
   50% { transform: translate(4px, 4px) rotate(20deg); }
   100% { transform: translate(0, 0) rotate(0deg); }
+}
+@keyframes preloader-spin {
+  to { transform: rotate(270deg); }
+}
+@keyframes preloader-dash {
+  0%   { stroke-dashoffset: 125.6; }
+  50%  { stroke-dashoffset: 31.4;  }
+  100% { stroke-dashoffset: 125.6; }
 }
 @keyframes shimmerText {
   0% { background-position: 200% center; }
