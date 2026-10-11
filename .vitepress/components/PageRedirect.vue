@@ -1,14 +1,14 @@
 <template>
-  <section class="redirect">
-    <div class="container" :class="statusClass">
-      <div class="wrapper">
-        <svg class="loader" viewBox="0 0 50 50">
-          <circle class="bg" cx="25" cy="25" r="20" />
-          <circle class="progress-ring" cx="25" cy="25"  r="20" :style="{ strokeDashoffset: 125.6 - (125.6 * progress) / 100 }" />
-        </svg>
-      </div>
-    </div>
-  </section>
+  <div class="preloader" :class="statusClass">
+    <svg class="loader" viewBox="0 0 50 50">
+      <circle class="bg" cx="25" cy="25" r="20" />
+      <circle
+        class="progress-ring"
+        cx="25" cy="25" r="20"
+        :style="{ strokeDashoffset: 125.6 - (125.6 * progress) / 100 }"
+      />
+    </svg>
+  </div>
 </template>
 
 <script setup>
@@ -47,6 +47,11 @@ const performRedirect = async () => {
   const url = new URL(window.location.href)
   const path = window.location.pathname
   const savedLang = localStorage.getItem('vitepress-lang') || 'ru'
+  const close = () =>
+    new Promise((resolve) => {
+    statusClass.value = statusClass.value + ' is-closing'
+    setTimeout(resolve, 550)
+  })
   const langMatch = (() => {
     if (cleanBase) {
       return path.match(new RegExp(`^/${cleanBase}/([a-z]{2})(?:/|$)`))
@@ -56,6 +61,7 @@ const performRedirect = async () => {
   })()
   if (langMatch) {
     await updateStatus('status-success', 100)
+    await close()
     window.location.href = `${base}${savedLang}/`
     return
   }
@@ -87,17 +93,21 @@ const performRedirect = async () => {
           redirectPath = `${savedLang}/${item._type}/${item.covenantID}/${item._subtype}/${item.uuid}`
         }
         redirectUrl.value = `${base}${redirectPath}`
+        await close()
         window.location.href = redirectUrl.value
       } else {
         await updateStatus('status-error', 100)
+        await close()
         window.location.href = `${base}${savedLang}/`
       }
     } catch (error) {
       await updateStatus('status-error', 100)
+      await close()
       window.location.href = `${base}${savedLang}/`
     }
   } else {
     await updateStatus('status-loading', 100)
+    await close()
     window.location.href = `${base}${savedLang}/`
   }
 }
