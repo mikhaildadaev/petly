@@ -677,49 +677,57 @@ p.withColor {
 .filter-chips .chip.active {
   background-color: var(--vp-c-brand);
 }
-.filter-chips .chip.woman {
-  mask-image: url('/assets/svg/filter_gender_girl.svg');
-  -webkit-mask-image: url('/assets/svg/filter_gender_girl.svg');
-}
-.filter-chips .chip.man {
-  mask-image: url('/assets/svg/filter_gender_boy.svg');
-  -webkit-mask-image: url('/assets/svg/filter_gender_boy.svg');
-}
-.filter-chips .chip.young {
+.filter-chips .chip.age_young {
   mask-image: url('/assets/svg/filter_age_young.svg');
   -webkit-mask-image: url('/assets/svg/filter_age_young.svg');
 }
-.filter-chips .chip.middle {
+.filter-chips .chip.age_middle {
   mask-image: url('/assets/svg/filter_age_middle.svg');
   -webkit-mask-image: url('/assets/svg/filter_age_middle.svg');
 }
-.filter-chips .chip.old {
+.filter-chips .chip.age_old {
   mask-image: url('/assets/svg/filter_age_old.svg');
   -webkit-mask-image: url('/assets/svg/filter_age_old.svg');
 }
-.filter-chips .chip.small {
-  mask-image: url('/assets/svg/filter_size_small.svg');
-  -webkit-mask-image: url('/assets/svg/filter_size_small.svg');
+.filter-chips .chip.direction_foster {
+  mask-image: url('/assets/svg/filter_direction_foster.svg');
+  -webkit-mask-image: url('/assets/svg/filter_direction_foster.svg');
 }
-.filter-chips .chip.medium {
-  mask-image: url('/assets/svg/filter_size_medium.svg');
-  -webkit-mask-image: url('/assets/svg/filter_size_medium.svg');
+.filter-chips .chip.direction_treatment {
+  mask-image: url('/assets/svg/filter_direction_treatment.svg');
+  -webkit-mask-image: url('/assets/svg/filter_direction_treatment.svg');
 }
-.filter-chips .chip.large {
-  mask-image: url('/assets/svg/filter_size_large.svg');
-  -webkit-mask-image: url('/assets/svg/filter_size_large.svg');
-}
-.filter-chips .chip.begin {
+.filter-chips .chip.experience_begin {
   mask-image: url('/assets/svg/filter_experience_begin.svg');
   -webkit-mask-image: url('/assets/svg/filter_experience_begin.svg');
 }
-.filter-chips .chip.versed {
+.filter-chips .chip.experience_versed {
   mask-image: url('/assets/svg/filter_experience_versed.svg');
   -webkit-mask-image: url('/assets/svg/filter_experience_versed.svg');
 }
-.filter-chips .chip.expert {
+.filter-chips .chip.experience_expert {
   mask-image: url('/assets/svg/filter_experience_expert.svg');
   -webkit-mask-image: url('/assets/svg/filter_experience_expert.svg');
+}
+.filter-chips .chip.gender_woman {
+  mask-image: url('/assets/svg/filter_gender_woman.svg');
+  -webkit-mask-image: url('/assets/svg/filter_gender_woman.svg');
+}
+.filter-chips .chip.gender_man {
+  mask-image: url('/assets/svg/filter_gender_man.svg');
+  -webkit-mask-image: url('/assets/svg/filter_gender_man.svg');
+}
+.filter-chips .chip.size_small {
+  mask-image: url('/assets/svg/filter_size_small.svg');
+  -webkit-mask-image: url('/assets/svg/filter_size_small.svg');
+}
+.filter-chips .chip.size_medium {
+  mask-image: url('/assets/svg/filter_size_medium.svg');
+  -webkit-mask-image: url('/assets/svg/filter_size_medium.svg');
+}
+.filter-chips .chip.size_large {
+  mask-image: url('/assets/svg/filter_size_large.svg');
+  -webkit-mask-image: url('/assets/svg/filter_size_large.svg');
 }
 
 /* ============================================
