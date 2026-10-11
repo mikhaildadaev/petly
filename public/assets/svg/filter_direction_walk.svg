@@ -9,8 +9,8 @@
         </g>
         <g id="Group" transform="translate(0.000000, 0.000000)" stroke="#FFFFFF">
             <circle id="Oval" stroke-width="2" cx="16" cy="16" r="15"></circle>
-            <ellipse id="Oval" stroke-width="1.5" cx="9.5" cy="20" rx="2.75" ry="1.25"></ellipse>
-            <path d="M9.51784521,18.8455416 C9.35656337,13.6151805 10.2885087,11 12.3136813,11 C15.3514402,11 16.7507785,23 18.7041639,23 C20.0064208,23 20.9383661,20.215858 21.5,14.6475739" id="Path-5" stroke-width="1.5"></path>
+            <rect id="Rectangle" stroke-width="1.5" x="7.75" y="18.75" width="5.5" height="2.5" rx="1.25"></rect>
+            <path d="M10.5163581,18.8455416 C10.3685164,13.6151805 11.2227997,11 13.0792079,11 C15.8638202,11 17.146547,23 18.9371502,23 C20.1308857,23 20.985169,20.215858 21.5,14.6475739" id="Path-5" stroke-width="1.5"></path>
             <circle id="Oval" stroke-width="2" cx="21.5" cy="12.5" r="2.5"></circle>
         </g>
         <g id="Filter_direction_treatment" transform="translate(-32.000000, 0.000000)" stroke="#FFFFFF" stroke-width="2">
