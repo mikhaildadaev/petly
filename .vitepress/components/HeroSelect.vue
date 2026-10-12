@@ -5,7 +5,7 @@
         <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`" :data-gender="displayField === 'genderDisplay' ? item.gender : null">{{ item[displayField] }}</label>
       </template>
     </div>
-    <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': isFavorite }" @click.stop="toggle" :title="translate('ui', 'Добавить в избранное')"></button>
+    <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': isFavorite(item.uuid) }" @click.stop="toggleFavorite(item.uuid)" :title="translate('ui', 'Добавить в избранное')"></button>
     <picture>
       <source :srcset="item.imageVertical" media="(max-width: 735px)" />
       <source :srcset="item.imageHorizontal" media="(min-width: 736px)" />
@@ -21,9 +21,9 @@
 
 <script>
 import { computed, onMounted, onUnmounted } from 'vue'
-import { useData, useRoute } from 'vitepress'
+import { useData } from 'vitepress'
 import { useConfigItem } from '../utils/useConfigItem'
-import { useFavorite } from '../utils/useFavorites'
+import { useFavoritesList } from '../utils/useFavorites'
 import { usePageUUID } from '../utils/usePageUUID'
 import { useRandomColor } from '../utils/useRandomColor'
 import { useTranslate } from '../utils/useTranslate'
@@ -38,17 +38,11 @@ export default {
   setup(props) {
     const { lang, frontmatter } = useData()
     const { site } = useData()
-    const route = useRoute()
     const translate = (category, key) => useTranslate(lang.value, category, key)
     const config = useConfigItem[props.type]
     const { useRandomClass } = useRandomColor()
     const fm = computed(() => frontmatter.value || {})
-    const currentUuid = computed(() => {
-      if (fm.value?.uuid) return fm.value.uuid
-      const parts = (route.path || '').split('/').filter(Boolean)
-      return parts[parts.length - 1] || ''
-    })
-    const { isFavorite, toggle } = useFavorite(currentUuid)
+    const { isFavorite, toggleFavorite } = useFavoritesList()
     const transformItem = (data) => {
       const base = {
         uuid: data.uuid,
@@ -108,8 +102,8 @@ export default {
       config,
       item,
       isFavorite,
+      toggleFavorite,
       useRandomClass,
-      toggle,
       translate,
       handleShare
     }
