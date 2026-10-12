@@ -849,7 +849,7 @@ p.withColor {
   content: '';
   position: absolute;
   top: 4px;
-  right: 0;
+  right: 4px;
   z-index: 1;
   width: 32px;
   height: 32px;
