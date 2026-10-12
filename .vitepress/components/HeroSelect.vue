@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import { computed, ref, onMounted, onUnmounted } from 'vue'
-import { useData } from 'vitepress'
+import { computed, onMounted, onUnmounted } from 'vue'
+import { useData, useRoute } from 'vitepress'
 import { useConfigItem } from '../utils/useConfigItem'
 import { useFavorite } from '../utils/useFavorites'
 import { usePageUUID } from '../utils/usePageUUID'
@@ -38,11 +38,16 @@ export default {
   setup(props) {
     const { lang, frontmatter } = useData()
     const { site } = useData()
+    const route = useRoute()
     const translate = (category, key) => useTranslate(lang.value, category, key)
     const config = useConfigItem[props.type]
     const { useRandomClass } = useRandomColor()
     const fm = computed(() => frontmatter.value || {})
-    const currentUuid = computed(() => fm.value?.uuid || '')
+    const currentUuid = computed(() => {
+      if (fm.value?.uuid) return fm.value.uuid
+      const parts = (route.path || '').split('/').filter(Boolean)
+      return parts[parts.length - 1] || ''
+    })
     const { isFavorite, toggle } = useFavorite(currentUuid)
     const transformItem = (data) => {
       const base = {
