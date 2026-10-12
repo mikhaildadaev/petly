@@ -831,8 +831,9 @@ p.withColor {
   transition: transform 0.4s;
 }
 .card .content {
-  position: relative;
+  position: absolute;
   bottom: 0;
+  width: 100%;
   z-index: 1;
   display: grid;
   margin-top: auto;
