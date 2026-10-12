@@ -94,7 +94,7 @@ function generatePet(index) {
       '/assets/webp/gallery_horizontal_dog.webp',
       '/assets/webp/gallery_vertical_dog.webp'
     ],
-    videos: ['https://yastatic.net/s3/promohr/cdn/promo-young-con/2026/yc26_v01.mp4'],
+    videos: ['https://cloud.vk.ru/docs/_docs/ru/dbs/dbaas/instructions/create/video-instructions/assets/PostgreSQL.mp4'],
   };
 }
 
