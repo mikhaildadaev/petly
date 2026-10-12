@@ -12,18 +12,23 @@
       </button>
     </div>
     <div v-if="!isMobile" class="cards-grid">
-      <a v-for="item in paginatedItems" :key="item.uuid" :href="getItemLink(item)" target="_blank" rel="noopener noreferrer" class="aspect-card card">
+      <div v-for="item in paginatedItems" :key="item.uuid" class="aspect-card card">
         <div class="meta">
           <template v-for="displayField in config.fields.display" :key="displayField">
             <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`">{{ item[displayField] }}</label>
           </template>
         </div>
-        <img :src="item.imageVertical" loading="lazy" />
-        <div :class="['content', useRandomClass(item.uuid)]">
-          <h1 class="title">{{ item.nameDisplay }}</h1>
-          <p class="description">{{ item.descriptionDisplay }}</p>
-        </div>
-      </a>
+        <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': isFavorite(item.uuid) }" @click.stop="toggleFavorite(item.uuid)" :title="translate('ui', 'Добавить в избранное')"></button>
+        <a :href="getItemLink(item)" target="_blank" rel="noopener noreferrer" class="card-link">
+          <picture>
+            <img :src="item.imageVertical" loading="lazy" />
+          </picture>
+          <div :class="['content', useRandomClass(item.uuid)]">
+            <h1 class="title">{{ item.nameDisplay }}</h1>
+            <p class="description">{{ item.descriptionDisplay }}</p>
+          </div>
+        </a>
+      </div>
       <div v-if="hasMoreItems" class="aspect-card load-more" @click="loadMore">
         <div class="content">
           <div class="icon"></div>
@@ -40,18 +45,23 @@
         <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(item, index) in paginatedItems" :key="item.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="getItemLink(item)" target="_blank" rel="noopener noreferrer" class="aspect-card card">
+            <div class="aspect-card card">
               <div class="meta">
                 <template v-for="displayField in config.fields.display" :key="displayField">
                   <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`">{{ item[displayField] }}</label>
                 </template>
               </div>
-              <img :src="item.imageVertical" loading="lazy" />
-              <div :class="['content', useRandomClass(item.uuid)]">
-                <h1 class="title">{{ item.nameDisplay }}</h1>
-                <p class="description">{{ item.descriptionDisplay }}</p>
-              </div>
-            </a>
+              <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': isFavorite(item.uuid) }" @click.stop="toggleFavorite(item.uuid)" :title="translate('ui', 'Добавить в избранное')"></button>
+              <a :href="getItemLink(item)" target="_blank" rel="noopener noreferrer" class="card-link">
+                <picture>
+                  <img :src="item.imageVertical" loading="lazy" />
+                </picture>
+                <div :class="['content', useRandomClass(item.uuid)]">
+                  <h1 class="title">{{ item.nameDisplay }}</h1>
+                  <p class="description">{{ item.descriptionDisplay }}</p>
+                </div>
+              </a>
+            </div>
           </div>
           <div v-if="hasMoreItems" class="carousel-slide" :class="{ center: currentIndex === paginatedItems.length }">
             <div class="aspect-card load-more" @click="loadMore">
@@ -79,6 +89,7 @@
 import { computed, ref, reactive, onMounted, onUnmounted, watch } from 'vue'
 import { useData } from 'vitepress'
 import { useConfigItem } from '../utils/useConfigItem'
+import { useFavoritesList } from '../utils/useFavorites'
 import { usePagination } from '../utils/usePagination'
 import { useRandomColor } from '../utils/useRandomColor'
 import { useScrollCarusel } from '../utils/useScrollCarusel'
@@ -101,6 +112,7 @@ export default {
     const isLoading = ref(true)
     const isClient = ref(false)
     const filters = reactive({})
+    const { isFavorite, toggleFavorite } = useFavoritesList()
     if (config.filters) {
       Object.keys(config.filters).forEach(filterName => {
         filters[filterName] = {}
@@ -280,6 +292,8 @@ export default {
     return {
       config,
       filters,
+      isFavorite,
+      toggleFavorite,
       hasFilters,
       filteredItems,
       paginatedItems,

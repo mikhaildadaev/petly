@@ -5,18 +5,23 @@
         <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(item, index) in allItems" :key="item.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
-            <a :href="getItemLink(item)" target="_blank" rel="noopener noreferrer" class="aspect-card card">
+            <div class="aspect-card card">
               <div class="meta">
                 <template v-for="displayField in config.fields.display" :key="displayField">
                   <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`">{{ item[displayField] }}</label>
                 </template>
               </div>
-              <img :src="item.imageVertical" loading="lazy" />
-              <div :class="['content', useRandomClass(item.uuid)]">
-                <h1 class="title">{{ item.nameDisplay }}</h1>
-                <p class="description">{{ item.descriptionDisplay }}</p>
-              </div>
-            </a>
+              <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': isFavorite(item.uuid) }" @click.stop="toggleFavorite(item.uuid)" :title="translate('ui', 'Добавить в избранное')"></button>
+              <a :href="getItemLink(item)" target="_blank" rel="noopener noreferrer" class="card-link">
+                <picture>
+                  <img :src="item.imageVertical" loading="lazy" />
+                </picture>
+                <div :class="['content', useRandomClass(item.uuid)]">
+                  <h1 class="title">{{ item.nameDisplay }}</h1>
+                  <p class="description">{{ item.descriptionDisplay }}</p>
+                </div>
+              </a>
+            </div>
           </div>
           <div class="carousel-slide" :class="{ center: currentIndex === allItems.length }">
             <div class="aspect-card load-more" @click="goToLink">
@@ -37,6 +42,7 @@
 import { computed, ref, onMounted, onUnmounted, watch } from 'vue'
 import { useData } from 'vitepress'
 import { useConfigItem } from '../utils/useConfigItem'
+import { useFavoritesList } from '../utils/useFavorites'
 import { useRandomArray } from '../utils/useRandomArray'
 import { useRandomColor } from '../utils/useRandomColor'
 import { useScrollCarusel } from '../utils/useScrollCarusel'
@@ -59,6 +65,7 @@ export default {
     const allItems = ref([])
     const isLoading = ref(true)
     const isClient = ref(false)
+    const { isFavorite, toggleFavorite } = useFavoritesList()
     const transformItem = (item) => {
       const base = {
         uuid: item.uuid,
@@ -169,6 +176,8 @@ export default {
     return {
       config,
       allItems,
+      isFavorite,
+      toggleFavorite,
       isLoading,
       isMobile,
       carouselRef,

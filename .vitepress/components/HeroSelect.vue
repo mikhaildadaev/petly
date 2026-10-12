@@ -5,7 +5,7 @@
         <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`" :data-gender="displayField === 'genderDisplay' ? item.gender : null">{{ item[displayField] }}</label>
       </template>
     </div>
-    <button class="share" :data-url="`${item.baseURL}/?s=${item.shortID}`" @click="handleShare"></button>
+    <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': isFavorite }" @click.stop="toggle" :title="translate('ui', 'Добавить в избранное')"></button>
     <picture>
       <source :srcset="item.imageVertical" media="(max-width: 735px)" />
       <source :srcset="item.imageHorizontal" media="(min-width: 736px)" />
@@ -13,17 +13,17 @@
     </picture>
     <div :class="['hero-overlay', useRandomClass(item.uuid || '')]">
       <h1 class="title">{{ item.nameDisplay || '' }}</h1>
-      <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': isFavorite }" @click.stop="toggleFavorite(item.uuid)" :title="translate('ui', 'Добавить в избранное')"></button>
+      <button class="share" :data-url="`${item.baseURL}/?s=${item.shortID}`" @click="handleShare"></button>
       <p class="description">{{ item.descriptionDisplay || '' }}</p>
     </div>
   </section>
 </template>
 
 <script>
-import { computed, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { useData } from 'vitepress'
 import { useConfigItem } from '../utils/useConfigItem'
-import { useFavorites } from '../utils/useFavorites'
+import { useFavorite } from '../utils/useFavorites'
 import { usePageUUID } from '../utils/usePageUUID'
 import { useRandomColor } from '../utils/useRandomColor'
 import { useTranslate } from '../utils/useTranslate'
@@ -43,11 +43,7 @@ export default {
     const { useRandomClass } = useRandomColor()
     const fm = computed(() => frontmatter.value || {})
     const currentUuid = computed(() => fm.value?.uuid || '')
-    const { 
-      isFavorite, 
-      toggleFavorite,
-      checkIsFavorite
-    } = useFavorites(currentUuid)
+    const { isFavorite, toggle } = useFavorite(currentUuid)
     const transformItem = (data) => {
       const base = {
         uuid: data.uuid,
@@ -68,14 +64,6 @@ export default {
       const result = transformItem(data)
       return result
     })
-    const checkFavoriteStatus = (uuid) => {
-      if (uuid) {
-        isFavorite.value = checkIsFavorite(uuid)
-      }
-    }
-    const handleToggleFavorite = (uuid) => {
-      toggleFavorite(uuid)
-    }
     const handleShare = (event) => {
       const button = event.currentTarget
       const shortPath = button.dataset.url
@@ -95,7 +83,6 @@ export default {
         button.classList.remove('clicked')
       }, 500)
     }
-    let notificationTimeout = null
     let resizeTimeout = null
     const handleResize = () => {
       if (resizeTimeout) clearTimeout(resizeTimeout)
@@ -105,15 +92,11 @@ export default {
       if (typeof window !== 'undefined') {
         window.addEventListener('resize', handleResize)
       }
-      nextTick(() => checkFavoriteStatus(item.value.uuid))
     })
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)
         if (resizeTimeout) clearTimeout(resizeTimeout)
-      }
-      if (notificationTimeout) {
-        clearTimeout(notificationTimeout)
       }
     })
     return {
@@ -121,7 +104,7 @@ export default {
       item,
       isFavorite,
       useRandomClass,
-      toggleFavorite: handleToggleFavorite,
+      toggle,
       translate,
       handleShare
     }
