@@ -454,7 +454,7 @@ p.withColor {
 .hero-random {
   position: relative;
   margin: 24px -24px 0;
-  background-color: var(--vp-c-img);
+  background-color: var(--vp-c-bg-img);
   border-radius: var(--radius);
   overflow: hidden;
 }
