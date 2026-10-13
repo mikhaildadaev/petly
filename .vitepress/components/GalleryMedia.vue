@@ -4,7 +4,7 @@
       <div v-for="(item, index) in mediaItems" :key="index" class="item" :style="{ '--delay': index * 0.05 + 's' }" @click="openFullScreen(index)">
         <img v-if="item.type === 'image'" :src="item.src" loading="lazy" />
         <div v-else-if="item.type === 'video'" class="video-preview">
-          <video :src="item.src" muted playsinline @mouseenter="playVideo" @mouseleave="pauseVideo" ref="videoPreviewRefs" />
+          <video :src="item.src" muted playsinline @mouseenter="playVideo" @mouseleave="pauseVideo" ref="videoPreviewRefs" preload="none"/>
         </div>
         <div v-else-if="item.type === 'audio'" class="audio-preview">
           <div class="audio-icon">
@@ -21,9 +21,9 @@
         <span v-for="(_, index) in mediaItems" :key="index" class="dot" :class="{ active: index === currentIndex }" @click.stop="goToMedia(index)" />
       </div>
       <div class="content">
-        <img v-if="currentMedia.type === 'image'" :src="currentMedia.src" />
-        <video v-else-if="currentMedia.type === 'video'" :src="currentMedia.src" controls autoplay muted playsinline class="video" ref="fullScreenVideoRef"/>
-        <audio v-else-if="currentMedia.type === 'audio'" :src="currentMedia.src" controls class="audio" ref="fullScreenAudioRef"/>
+        <img v-if="currentMedia.type === 'image'" :src="currentMedia.src" loading="lazy"/>
+        <video v-else-if="currentMedia.type === 'video'" :src="currentMedia.src" controls autoplay muted playsinline class="video" ref="fullScreenVideoRef" preload="none"/>
+        <audio v-else-if="currentMedia.type === 'audio'" :src="currentMedia.src" controls class="audio" ref="fullScreenAudioRef" preload="none"/>
       </div>
       <button class="fullscreen close" @click.stop="closeFullScreen"></button>
       <button v-if="mediaItems.length > 1" class="fullscreen prev" @click.stop="prevMedia"></button>
@@ -34,7 +34,6 @@
 
 <script>
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
-import { useData } from 'vitepress'
 import { useScrollGallery } from '../utils/useScrollGallery'
 import { useUrlMedia } from '../utils/useUrlMedia'
 

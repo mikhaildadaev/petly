@@ -21,9 +21,16 @@ const hide = () => {
   setTimeout(() => { isLoading.value = false }, wait)
 }
 onMounted(() => {
-  if (document.readyState === 'complete') hide()
-  else window.addEventListener('load', hide, { once: true })
-
+  const fallback = setTimeout(hide, 3000)
+  if (document.readyState === 'complete') {
+    clearTimeout(fallback)
+    hide()
+  } else {
+    window.addEventListener('load', () => {
+      clearTimeout(fallback)
+      hide()
+    }, { once: true })
+  }
   const origBefore = router.onBeforeRouteChange
   router.onBeforeRouteChange = (to) => {
     isLoading.value = true
