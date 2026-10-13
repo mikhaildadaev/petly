@@ -18,7 +18,7 @@
             <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`">{{ item[displayField] }}</label>
           </template>
         </div>
-        <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': isFavorite(item.uuid) }" @click.stop="toggleFavorite(item.uuid)" :title="translate('ui', 'Добавить в избранное')"></button>
+        <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': mounted && isFavorite(item.uuid) }" @click.stop="toggleFavorite(item.uuid)" :title="translate('ui', 'Добавить в избранное')"></button>
         <a :href="getItemLink(item)" target="_blank" rel="noopener noreferrer" class="card-link">
           <picture>
             <img :src="item.imageVertical" loading="lazy" />
@@ -110,7 +110,6 @@ export default {
     const config = useConfigItem[props.type]
     const allItems = ref([])
     const isLoading = ref(true)
-    const isClient = ref(false)
     const filters = reactive({})
     const { isFavorite, toggleFavorite } = useFavoritesList()
     if (config.filters) {
@@ -122,6 +121,7 @@ export default {
       })
     }
     const hasFilters = computed(() => config.filters && Object.keys(config.filters).length > 0)
+    const mounted = ref(false) 
     const transformItem = (item) => {
       const base = {
         uuid: item.uuid,
@@ -257,7 +257,7 @@ export default {
       resizeTimeout = setTimeout(() => { resizeTimeout = null }, 100)
     }
     onMounted(async () => {
-      isClient.value = true
+      mounted.value = true 
       if (typeof window !== 'undefined') {
         window.addEventListener('resize', handleResize)
       }
@@ -279,7 +279,7 @@ export default {
       { deep: true }
     )
     watch(isMobile, (newVal) => {
-      if (isClient.value && newVal && paginatedItems.value.length) {
+      if (mounted.value && newVal && paginatedItems.value.length) {
         resetToFirstSlide()
       }
     })

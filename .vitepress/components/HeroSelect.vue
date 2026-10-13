@@ -5,7 +5,7 @@
         <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`" :data-gender="displayField === 'genderDisplay' ? item.gender : null">{{ item[displayField] }}</label>
       </template>
     </div>
-    <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': mounted && isFavorite(item.uuid) }" @click.stop="toggleFavorite(item.uuid)" :title="translate('ui', 'Добавить в избранное')"></button>
+    <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': isFavorite(item.uuid) }" @click.stop="toggleFavorite(item.uuid)" :title="translate('ui', 'Добавить в избранное')"></button>
     <picture>
       <source :srcset="item.imageVertical" media="(max-width: 735px)" />
       <source :srcset="item.imageHorizontal" media="(min-width: 736px)" />
@@ -17,12 +17,6 @@
       <p class="description">{{ item.descriptionDisplay || '' }}</p>
     </div>
   </section>
-  <div style="position:fixed;top:0;left:0;z-index:99999;background:#000;color:#0f0;padding:12px;font-family:monospace;font-size:12px;line-height:1.6">
-    <b>window.pathname:</b> (см.консоль)<br>
-    <b>item.uuid:</b> {{ item?.uuid }}<br>
-    <b>item.nameDisplay:</b> {{ item?.nameDisplay }}<br>
-    <b>isFavorite(item.uuid):</b> {{ isFavorite(item?.uuid) }}<br>
-  </div>
 </template>
 
 <script>

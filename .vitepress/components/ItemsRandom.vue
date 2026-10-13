@@ -64,8 +64,8 @@ export default {
     const config = useConfigItem[props.type]
     const allItems = ref([])
     const isLoading = ref(true)
-    const isClient = ref(false)
     const { isFavorite, toggleFavorite } = useFavoritesList()
+    const mounted = ref(false) 
     const transformItem = (item) => {
       const base = {
         uuid: item.uuid,
@@ -142,7 +142,7 @@ export default {
       resizeTimeout = setTimeout(() => { resizeTimeout = null }, 100)
     }
     onMounted(async () => {
-      isClient.value = true
+      mounted.value = true 
       if (typeof window !== 'undefined') {
         window.addEventListener('resize', handleResize)
       }
@@ -163,7 +163,7 @@ export default {
       { deep: true }
     )
     watch(isMobile, (newVal) => {
-      if (isClient.value && newVal && allItems.value.length) {
+      if (mounted.value && newVal && allItems.value.length) {
         resetToFirstSlide()
       }
     })
