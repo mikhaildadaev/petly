@@ -407,7 +407,7 @@ p.withColor {
    HERO
    ============================================================ */
 .random-hero {
-  margin: 0 -24px;
+  margin: 24px -24px 0;
   background-color: var(--vp-c-bg);
 }
 .random-hero .container {
@@ -1721,6 +1721,9 @@ p.withColor {
   }
   .filters-compact {
     top: 48px
+  }
+  .random-hero {
+    margin: 0 -24px;
   }
   .random-hero .container {
     grid-template-columns: 1fr;
