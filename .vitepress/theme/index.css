@@ -413,7 +413,7 @@ p.withColor {
   width: calc(100% + 48px);
   margin: 0 -24px;
   margin-bottom: 2rem;
-  background-color: rgba(26, 26, 46, 1);
+  background-color: var(--vp-c-bg-img);
   border-radius: var(--radius);
   overflow: hidden;
 }
@@ -451,7 +451,7 @@ p.withColor {
 .hero-random {
   position: relative;
   margin: 24px -24px 0;
-  background-color: var(--vp-c-bg);
+  background-color: var(--vp-c-img);
   border-radius: var(--radius);
   overflow: hidden;
 }
