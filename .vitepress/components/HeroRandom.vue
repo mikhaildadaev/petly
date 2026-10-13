@@ -1,5 +1,5 @@
 <template>
-  <section v-if="item" class="aspect-hero hero-random">
+  <section v-if="item" class="aspect-full hero-random">
     <div class="meta">
       <template v-for="displayField in config.fields.display" :key="displayField">
         <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`">{{ item[displayField] }}</label>
