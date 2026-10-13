@@ -406,11 +406,51 @@ p.withColor {
 /* ============================================================
    HERO
    ============================================================ */
-.random-hero {
+.hero-card {
+  position: relative;
+  width: calc(100% + 48px);
+  margin: 0 -24px;
+  margin-bottom: 2rem;
+  background-color: rgba(26, 26, 46, 1);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.hero-card .hero-meta {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 14px;
+  margin-bottom: 0.8rem;
+}
+.hero-card .hero-image {
+  position: absolute;
+  top: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hero-card .hero-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem;
+  border-radius: var(--radius);
+}
+.hero-card .hero-overlay p {
+  margin-top: 0;
+  margin-bottom: 1.2rem;
+  line-height: 1.6;
+}
+.hero-random {
   margin: 24px -24px 0;
   background-color: var(--vp-c-bg);
 }
-.random-hero .container {
+.hero-random .container {
   display: grid;
   grid-template-columns: auto minmax(312px, 1fr);
   margin: 0 auto;
@@ -419,7 +459,7 @@ p.withColor {
   overflow: hidden;
   transition: border-color 0.3s ease;
 }
-.random-hero .container .meta {
+.hero-random .container .meta {
   position: absolute;
   z-index: 1;
   display: flex;
@@ -429,23 +469,23 @@ p.withColor {
   margin: 14px;
   margin-bottom: 0.8rem;
 }
-.random-hero .container .media {
+.hero-random .container .media {
   position: relative;
   overflow: hidden;
   height: 100%;
 }
-.random-hero .container .media picture {
+.hero-random .container .media picture {
   display: block;
   width: 100%;
   height: 100%;
 }
-.random-hero .container .media .img {
+.hero-random .container .media .img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.5s ease;
 }
-.random-hero .container .content {
+.hero-random .container .content {
   margin: 0 0 0 -24px;
   padding: 32px;
   display: flex;
@@ -455,23 +495,23 @@ p.withColor {
   border-radius: var(--radius);
   z-index: 1;
 }
-.random-hero .container .content .actions {
+.hero-random .container .content .actions {
   margin-top: auto;
 }
-.random-hero .container .content .name {
+.hero-random .container .content .name {
   font-size: 32px;
   font-weight: 700;
   color: var(--vp-c-text-1);
   margin: 0 0 8px;
   font-family: var(--vp-font-family-print);
 }
-.random-hero .container .content .description {
+.hero-random .container .content .description {
   font-size: 16px;
   line-height: 1.6;
   color: var(--vp-c-text-2);
   margin: 0 0 20px;
 }
-.random-hero .container .content .hero-button {
+.hero-random .container .content .hero-button {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -484,18 +524,18 @@ p.withColor {
   text-decoration: none;
   transition: all 0.3s ease;
 }
-.random-hero .container .content .hero-button.primary {
+.hero-random .container .content .hero-button.primary {
   background-color: var(--vp-c-brand-1);
   color: var(--vp-c-white);
 }
-.random-hero .container .content .hero-button.primary:hover {
+.hero-random .container .content .hero-button.primary:hover {
   background-color: var(--vp-c-brand-2);
 }
-.random-hero .container .content .hero-button .button-arrow {
+.hero-random .container .content .hero-button .button-arrow {
   font-size: 18px;
   transition: transform 0.3s ease;
 }
-.random-hero .container .content .hero-button.primary:hover .button-arrow {
+.hero-random .container .content .hero-button.primary:hover .button-arrow {
   transform: translateX(4px);
 }
 
@@ -1465,50 +1505,6 @@ p.withColor {
 }
 
 /* ============================================
-   HERO КАРТОЧКИ
-   ============================================ */
-.hero-card {
-  position: relative;
-  width: calc(100% + 48px);
-  margin: 0 -24px;
-  margin-bottom: 2rem;
-  background-color: rgba(26, 26, 46, 1);
-  border-radius: var(--radius);
-  overflow: hidden;
-}
-.hero-meta {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin: 14px;
-  margin-bottom: 0.8rem;
-}
-.hero-image {
-  position: absolute;
-  top: 0;
-  z-index: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.hero-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 1.5rem;
-  border-radius: var(--radius);
-}
-.hero-overlay p {
-  margin-top: 0;
-  margin-bottom: 1.2rem;
-  line-height: 1.6;
-}
-
-/* ============================================
    СТЕКЛО
    ============================================ */
 .glass {
@@ -1699,7 +1695,7 @@ p.withColor {
    АДАПТИВНОСТЬ
    ============================================ */
 @media (min-width: 736px) and (max-width: 1280px) {
-  .hero-name {
+  .hero-card .hero-name {
     font-size: 2rem;
   }
 }
@@ -1719,20 +1715,26 @@ p.withColor {
   button.carousel {
     background-color: transparent !important;
   }
+  .aspect-hero {
+    aspect-ratio: 9/15;
+  }
   .filters-compact {
     top: 48px
   }
-  .random-hero {
+  .hero-card .hero-name {
+    font-size: 1.5rem;
+  }
+  .hero-random {
     margin: 0 -24px;
   }
-  .random-hero .container {
+  .hero-random .container {
     grid-template-columns: 1fr;
     gap: 0;
   }
-  .random-hero .container .media {
+  .hero-random .container .media {
     min-height: 240px;
   }
-  .random-hero .container .content {
+  .hero-random .container .content {
     margin: -24px 0 0;
     padding: 24px;
   }
@@ -1748,12 +1750,6 @@ p.withColor {
   }
   .carousel-slide:not(.center) {
     transform: scale(0.95);
-  }
-  .aspect-hero {
-    aspect-ratio: 9/15;
-  }
-  .hero-name {
-    font-size: 1.5rem;
   }
 }
 
