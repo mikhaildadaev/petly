@@ -17,6 +17,15 @@
       <p class="description">{{ item.descriptionDisplay || '' }}</p>
     </div>
   </section>
+  <div style="position:fixed;top:0;left:0;z-index:99999;background:#000;color:#0f0;padding:12px;font-family:monospace;font-size:12px;line-height:1.6">
+    <b>route.path:</b> {{ route?.path }}<br>
+    <b>window.pathname:</b> (см.консоль)<br>
+    <b>currentUuid:</b> {{ currentUuid }}<br>
+    <b>item.uuid:</b> {{ item?.uuid }}<br>
+    <b>item.nameDisplay:</b> {{ item?.nameDisplay }}<br>
+    <b>isFavorite(item.uuid):</b> {{ isFavorite(item?.uuid) }}<br>
+    <b>fm.uuid:</b> {{ fm?.uuid || '—' }}
+  </div>
 </template>
 
 <script>
@@ -107,6 +116,8 @@ export default {
     return {
       config,
       item,
+      route,
+      fm, 
       isFavorite,
       toggleFavorite,
       useRandomClass,
