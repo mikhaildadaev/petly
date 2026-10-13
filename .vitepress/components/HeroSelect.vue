@@ -18,19 +18,16 @@
     </div>
   </section>
   <div style="position:fixed;top:0;left:0;z-index:99999;background:#000;color:#0f0;padding:12px;font-family:monospace;font-size:12px;line-height:1.6">
-    <b>route.path:</b> {{ route?.path }}<br>
     <b>window.pathname:</b> (см.консоль)<br>
-    <b>currentUuid:</b> {{ currentUuid }}<br>
     <b>item.uuid:</b> {{ item?.uuid }}<br>
     <b>item.nameDisplay:</b> {{ item?.nameDisplay }}<br>
     <b>isFavorite(item.uuid):</b> {{ isFavorite(item?.uuid) }}<br>
-    <b>fm.uuid:</b> {{ fm?.uuid || '—' }}
   </div>
 </template>
 
 <script>
 import { computed, ref, onMounted, onUnmounted } from 'vue'
-import { useData, useRoute } from 'vitepress'
+import { useData } from 'vitepress'
 import { useConfigItem } from '../utils/useConfigItem'
 import { useFavoritesList } from '../utils/useFavorites'
 import { usePageUUID } from '../utils/usePageUUID'
@@ -47,16 +44,11 @@ export default {
   setup(props) {
     const { lang, frontmatter } = useData()
     const { site } = useData()
-    const route = useRoute()
     const translate = (category, key) => useTranslate(lang.value, category, key)
     const config = useConfigItem[props.type]
     const { useRandomClass } = useRandomColor()
     const fm = computed(() => frontmatter.value || {})
     const { isFavorite, toggleFavorite } = useFavoritesList()
-    const currentUuid = computed(() => {
-      const parts = (route.path || '').split('/').filter(Boolean)
-      return parts[parts.length - 1] || ''
-    })
     const transformItem = (data) => {
       const base = {
         uuid: data.uuid,
@@ -75,7 +67,6 @@ export default {
     const item = computed(() => {
       const data = fm.value || {}
       const result = transformItem(data)
-      result.uuid = currentUuid.value
       return result
     })
     const handleShare = (event) => {
@@ -116,8 +107,6 @@ export default {
     return {
       config,
       item,
-      route,
-      fm, 
       isFavorite,
       toggleFavorite,
       useRandomClass,
