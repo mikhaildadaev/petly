@@ -1,24 +1,22 @@
 <template>
   <section v-if="item" class="aspect-hero hero-random">
-    <div class="container">
-      <div class="meta">
-        <template v-for="displayField in config.fields.display" :key="displayField">
-          <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`">{{ item[displayField] }}</label>
-        </template>
-      </div>
-      <div class="media">
-        <picture>
-          <source :srcset="item.imageVertical" media="(max-width: 735px)" />
-          <source :srcset="item.imageHorizontal" media="(min-width: 736px)" />
-          <img :src="item.imageHorizontal" class="img" :alt="item.title" loading="lazy" />
-        </picture>
-      </div>
-      <div class="content">
-        <h1 class="title">{{ item.title || '' }}</h1>
-        <div class="description">{{ item.description || '' }}</div>
-        <div class="actions">
-          <a :href="getItemLink(item)" class="hero-button primary">Узнать историю<span class="button-arrow">→</span></a>
-        </div>
+    <div class="meta">
+      <template v-for="displayField in config.fields.display" :key="displayField">
+        <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`">{{ item[displayField] }}</label>
+      </template>
+    </div>
+    <div class="media">
+      <picture>
+        <source :srcset="item.imageVertical" media="(max-width: 735px)" />
+        <source :srcset="item.imageHorizontal" media="(min-width: 736px)" />
+        <img :src="item.imageHorizontal" class="img" :alt="item.title" loading="lazy" />
+      </picture>
+    </div>
+    <div class="content">
+      <h1 class="title">{{ item.title || '' }}</h1>
+      <div class="description">{{ item.description || '' }}</div>
+      <div class="actions">
+        <a :href="getItemLink(item)" class="hero-button primary">Узнать историю<span class="button-arrow">→</span></a>
       </div>
     </div>
   </section>
