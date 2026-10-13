@@ -7,6 +7,7 @@
   --vp-c-bg: #fdfaf6;
   --vp-c-bg-soft: #f5efe6;
   --vp-c-bg-alt: #ede4d8;
+  --vp-c-bg-img: #d8d8d8;
   --vp-c-text: #3e3232;
   --vp-c-text-light: #6b5b5b;
   --vp-c-border: #e0d5c5;
@@ -32,6 +33,7 @@
   --vp-c-bg: #1a1a1a;
   --vp-c-bg-soft: #252525;
   --vp-c-bg-alt: #2a2a2a;
+  --vp-c-bg-img: #d8d8d8;
   --vp-c-text: #e0d5c1;
   --vp-c-text-light: #a89b8b;
   --vp-c-border: #3a3530;
@@ -860,7 +862,10 @@ p.withColor {
   gap: 8px;
   margin: 16px;
 }
-.card img {
+.card .card-link {
+  background-color: var(--vp-c-bg-img);
+}
+.card .card-link img {
   position: absolute;
   top: 0;
   z-index: 0;
@@ -869,7 +874,7 @@ p.withColor {
   object-fit: cover;
   transition: transform 0.4s;
 }
-.card .content {
+.card .card-link .content {
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -881,10 +886,10 @@ p.withColor {
   border: 0px;
   border-radius: var(--radius);
 }
-.card .content .title {
+.card .card-link .content .title {
   padding-right: 32px;
 }
-.card .content .title::after {
+.card .card-link .content .title::after {
   content: '';
   position: absolute;
   top: 4px;
