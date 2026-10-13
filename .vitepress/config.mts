@@ -50,7 +50,7 @@ export default defineConfig({
     ['meta', { name: 'mobile-web-app-capable', content: 'yes' }],
     ['meta', { name: 'theme-color', content: '#e67e22' }],
     ['meta', { name: 'viewport', content: 'width=device-width, initial-scale=1.0, viewport-fit=cover' }],
-    ['script', { defer: '', src: 'https://static.cloudflareinsights.com/beacon.min.js', 'data-cf-beacon': JSON.stringify({"token": "c723467560bf4cdda2612ec1fdaf97b6"})}]
+    ['script', { async: '', src: 'https://static.cloudflareinsights.com/beacon.min.js', 'data-cf-beacon': JSON.stringify({"token": "c723467560bf4cdda2612ec1fdaf97b6"})}]
   ],
   cleanUrls: true,
   lastUpdated: true,
