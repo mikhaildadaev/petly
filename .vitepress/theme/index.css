@@ -432,7 +432,7 @@ p.withColor {
 .random-hero .container .media {
   position: relative;
   overflow: hidden;
-  min-height: 380px;
+  height: 100%;
 }
 .random-hero .container .media picture {
   display: block;
