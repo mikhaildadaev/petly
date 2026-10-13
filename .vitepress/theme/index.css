@@ -208,7 +208,6 @@ button.share:hover {
   transform: scale(1.15);
 }
 button.share.clicked {
-  background-color: rgba(34, 197, 94, 0.9);
   animation: popSuccess 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
 }
