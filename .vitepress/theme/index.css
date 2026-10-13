@@ -1428,8 +1428,8 @@ p.withColor {
    ============================================================ */
 .tooltip {
   position: absolute;
-  top: 40px;
   right: -8px;
+  bottom: calc(100% - 14px);
   z-index: 1;
   min-width: 160px;
   width: calc(100% + 16px);
@@ -1449,19 +1449,19 @@ p.withColor {
 .tooltip::after {
   content: '';
   position: absolute;
-  top: -12px;
-  right: 21px;
+  right: 33px;
+  bottom: -12px;
   border: 6px solid transparent;
-  border-bottom-color: var(--vp-c-border);
+  border-top-color: var(--vp-c-border);
 }
 .tooltip::before {
   content: '';
   position: absolute;
-  top: -11px;
-  right: 21px;
+  right: 33px;
+  bottom: -11px;
   z-index: 1;
   border: 6px solid transparent;
-  border-bottom-color: var(--vp-c-bg);
+  border-top-color: var(--vp-c-bg);
 }
 
 /* ============================================
@@ -1799,7 +1799,7 @@ p.withColor {
   50% { transform: translateX(-32px); }
 }
 @keyframes tooltipFade {
-  from { transform: translateX(0) translateY(-8px); opacity: 0; }
+  from { transform: translateX(0) translateY(8px); opacity: 0; }
   to { transform: translateX(0) translateY(0); opacity: 1; }
 }
 @keyframes zoomIn {
