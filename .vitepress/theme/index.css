@@ -392,6 +392,9 @@ p.withColor {
   aspect-ratio: 9/15;
 }
 .aspect-hero {
+  aspect-ratio: 15/9;
+}
+.aspect-full {
   aspect-ratio: 21/9;
 }
 
@@ -1718,6 +1721,9 @@ p.withColor {
 @media (max-width: 735px) {
   button.carousel {
     background-color: transparent !important;
+  }
+  .aspect-full {
+    aspect-ratio: 9/15;
   }
   .aspect-hero {
     aspect-ratio: 9/15;
