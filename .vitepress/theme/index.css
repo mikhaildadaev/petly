@@ -447,46 +447,45 @@ p.withColor {
   line-height: 1.6;
 }
 .hero-random {
+  position: relative;
   margin: 24px -24px 0;
   background-color: var(--vp-c-bg);
-}
-.hero-random .container {
-  display: grid;
-  grid-template-columns: auto minmax(312px, 1fr);
-  margin: 0 auto;
-  background-color: var(--vp-c-bg-soft);
   border-radius: var(--radius);
   overflow: hidden;
-  transition: border-color 0.3s ease;
 }
-.hero-random .container .meta {
+.hero-random .meta {
   position: absolute;
-  z-index: 1;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   gap: 0.4rem;
   margin: 14px;
   margin-bottom: 0.8rem;
+  z-index: 2;
 }
-.hero-random .container .media {
+.hero-random .media {
   position: relative;
   overflow: hidden;
   height: 100%;
+  margin-right: 296px;
 }
-.hero-random .container .media picture {
+.hero-random .media picture {
   display: block;
   width: 100%;
   height: 100%;
 }
-.hero-random .container .media .img {
+.hero-random .media .img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.5s ease;
 }
-.hero-random .container .content {
-  margin: 0 0 0 -24px;
+.hero-random .content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 320px;
   padding: 32px;
   display: flex;
   flex-direction: column;
@@ -495,23 +494,23 @@ p.withColor {
   border-radius: var(--radius);
   z-index: 1;
 }
-.hero-random .container .content .actions {
+.hero-random .content .actions {
   margin-top: auto;
 }
-.hero-random .container .content .name {
+.hero-random .content .name {
   font-size: 32px;
   font-weight: 700;
   color: var(--vp-c-text-1);
   margin: 0 0 8px;
   font-family: var(--vp-font-family-print);
 }
-.hero-random .container .content .description {
+.hero-random .content .description {
   font-size: 16px;
   line-height: 1.6;
   color: var(--vp-c-text-2);
   margin: 0 0 20px;
 }
-.hero-random .container .content .hero-button {
+.hero-random .content .hero-button {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -524,18 +523,18 @@ p.withColor {
   text-decoration: none;
   transition: all 0.3s ease;
 }
-.hero-random .container .content .hero-button.primary {
+.hero-random .content .hero-button.primary {
   background-color: var(--vp-c-brand-1);
   color: var(--vp-c-white);
 }
-.hero-random .container .content .hero-button.primary:hover {
+.hero-random .content .hero-button.primary:hover {
   background-color: var(--vp-c-brand-2);
 }
-.hero-random .container .content .hero-button .button-arrow {
+.hero-random .content .hero-button .button-arrow {
   font-size: 18px;
   transition: transform 0.3s ease;
 }
-.hero-random .container .content .hero-button.primary:hover .button-arrow {
+.hero-random .content .hero-button.primary:hover .button-arrow {
   transform: translateX(4px);
 }
 
@@ -1727,15 +1726,14 @@ p.withColor {
   .hero-random {
     margin: 0 -24px;
   }
-  .hero-random .container {
-    grid-template-columns: 1fr;
-    gap: 0;
+  .hero-random .media {
+    margin: 0;
   }
-  .hero-random .container .media {
-    min-height: 240px;
-  }
-  .hero-random .container .content {
-    margin: -24px 0 0;
+  .hero-random .content {
+    left: 0;
+    top: auto;
+    bottom: 0;
+    width: 100%;
     padding: 24px;
   }
   .carousel-track {
