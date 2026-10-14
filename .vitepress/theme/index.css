@@ -413,6 +413,7 @@ p.withColor {
 .main-data {
   position: relative;
   width: 100dvw;
+  min-width: 340px;
   max-width: 100dvw;
   margin: 0 calc(50% - 50dvw);
   padding: 0 max(24px, calc(50vw - 640px));
@@ -1722,6 +1723,9 @@ p.withColor {
 @media (max-width: 735px) {
   button.carousel {
     background-color: transparent !important;
+  }
+  .main-data {
+    margin: 0 -24px;
   }
   .main-data .media {
     margin: 0;
