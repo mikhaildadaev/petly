@@ -412,7 +412,7 @@ p.withColor {
    ============================================================ */
 .main-data {
   position: relative;
-  margin: 24px calc((1280px - 100%) / 2) 0;
+  margin: 24px calc((50% - 640px - 64px)) 0;
   background-color: var(--vp-c-bg-img);
   border-radius: var(--radius);
   overflow: hidden;
