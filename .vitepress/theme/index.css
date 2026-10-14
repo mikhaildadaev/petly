@@ -1723,9 +1723,6 @@ p.withColor {
   button.carousel {
     background-color: transparent !important;
   }
-  .main-data {
-    margin: 0 -24px;
-  }
   .main-data .media {
     margin: 0;
   }
