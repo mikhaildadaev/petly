@@ -7,11 +7,11 @@ home:
 
 <HeroRandom :type="'pets'"/>
 
-## Кошки
-<ItemsRandom :type="'pets'" :item-type="'cats'"/>
-
 ## Собаки
 <ItemsRandom :type="'pets'" :item-type="'dogs'"/>
+
+## Кошки
+<ItemsRandom :type="'pets'" :item-type="'cats'"/>
 
 ## Волонтеры
 <ItemsRandom :type="'humans'" :item-type="'volunteers'"/>
