@@ -408,6 +408,101 @@ p.withColor {
 }
 
 /* ============================================================
+   MAIN
+   ============================================================ */
+.main-data {
+  position: relative;
+  margin: 24px -192px 0;
+  background-color: var(--vp-c-bg-img);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.main-data .meta {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 14px;
+  margin-bottom: 0.8rem;
+  z-index: 2;
+}
+.main-data .media {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  margin-right: 296px;
+}
+.main-data .media picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.main-data .media .img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.main-data .content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 320px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--vp-c-bg-soft);
+  border-radius: var(--radius);
+  z-index: 1;
+}
+.main-data .content .actions {
+  margin-top: auto;
+}
+.main-data .content .name {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--vp-c-text-1);
+  margin: 0 0 8px;
+  font-family: var(--vp-font-family-print);
+}
+.main-data .content .description {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--vp-c-text-2);
+  margin: 0 0 20px;
+}
+.main-data .content .button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+.main-data .content .button.primary {
+  background-color: var(--vp-c-brand-1);
+  color: var(--vp-c-white);
+}
+.main-data .content .button.primary:hover {
+  background-color: var(--vp-c-brand-2);
+}
+.main-data .content .button .button-arrow {
+  font-size: 18px;
+  transition: transform 0.3s ease;
+}
+.main-data .content .button.primary:hover .button-arrow {
+  transform: translateX(4px);
+}
+
+/* ============================================================
    HERO
    ============================================================ */
 .hero-card {
@@ -449,97 +544,6 @@ p.withColor {
   margin-top: 0;
   margin-bottom: 1.2rem;
   line-height: 1.6;
-}
-.hero-random {
-  position: relative;
-  margin: 24px -24px 0;
-  background-color: var(--vp-c-bg-img);
-  border-radius: var(--radius);
-  overflow: hidden;
-}
-.hero-random .meta {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin: 14px;
-  margin-bottom: 0.8rem;
-  z-index: 2;
-}
-.hero-random .media {
-  position: relative;
-  overflow: hidden;
-  height: 100%;
-  margin-right: 296px;
-}
-.hero-random .media picture {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-.hero-random .media .img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
-}
-.hero-random .content {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 320px;
-  padding: 32px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background-color: var(--vp-c-bg-soft);
-  border-radius: var(--radius);
-  z-index: 1;
-}
-.hero-random .content .actions {
-  margin-top: auto;
-}
-.hero-random .content .name {
-  font-size: 32px;
-  font-weight: 700;
-  color: var(--vp-c-text-1);
-  margin: 0 0 8px;
-  font-family: var(--vp-font-family-print);
-}
-.hero-random .content .description {
-  font-size: 16px;
-  line-height: 1.6;
-  color: var(--vp-c-text-2);
-  margin: 0 0 20px;
-}
-.hero-random .content .hero-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  font-size: 15px;
-  font-weight: 600;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
-.hero-random .content .hero-button.primary {
-  background-color: var(--vp-c-brand-1);
-  color: var(--vp-c-white);
-}
-.hero-random .content .hero-button.primary:hover {
-  background-color: var(--vp-c-brand-2);
-}
-.hero-random .content .hero-button .button-arrow {
-  font-size: 18px;
-  transition: transform 0.3s ease;
-}
-.hero-random .content .hero-button.primary:hover .button-arrow {
-  transform: translateX(4px);
 }
 
 /* ============================================================
@@ -1716,6 +1720,19 @@ p.withColor {
   button.carousel {
     background-color: transparent !important;
   }
+  .main-data {
+    margin: 0 -24px;
+  }
+  .main-data .media {
+    margin: 0;
+  }
+  .main-data .content {
+    left: 0;
+    top: auto;
+    bottom: 0;
+    width: 100%;
+    padding: 24px;
+  }
   .aspect-full {
     aspect-ratio: 9/15;
   }
@@ -1727,19 +1744,6 @@ p.withColor {
   }
   .hero-card .hero-name {
     font-size: 1.5rem;
-  }
-  .hero-random {
-    margin: 0 -24px;
-  }
-  .hero-random .media {
-    margin: 0;
-  }
-  .hero-random .content {
-    left: 0;
-    top: auto;
-    bottom: 0;
-    width: 100%;
-    padding: 24px;
   }
   .carousel-track {
     gap: 0;
