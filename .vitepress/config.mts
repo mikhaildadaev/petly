@@ -95,8 +95,8 @@ export default defineConfig({
           { 
             text: 'Tiere', 
             items: [
-              { text: 'Katzen', link: '/de/pets/cats' },
-              { text: 'Hunde', link: '/de/pets/dogs' }
+              { text: 'Hunde', link: '/de/pets/dogs' },
+              { text: 'Katzen', link: '/de/pets/cats' }
             ]
           },
           { 
@@ -134,8 +134,8 @@ export default defineConfig({
           {
             text: 'Tiere',
             items: [
-              { text: 'Katzen', link: '/de/pets/cats' },
-              { text: 'Hunde', link: '/de/pets/dogs' }
+              { text: 'Hunde', link: '/de/pets/dogs' },
+              { text: 'Katzen', link: '/de/pets/cats' }
             ]
           },
           {
@@ -234,8 +234,8 @@ export default defineConfig({
           { 
             text: 'Pets', 
             items: [
-              { text: 'Cats', link: '/en/pets/cats' },
-              { text: 'Dogs', link: '/en/pets/dogs' }
+              { text: 'Dogs', link: '/en/pets/dogs' },
+              { text: 'Cats', link: '/en/pets/cats' }
             ]
           },
           { 
@@ -273,8 +273,8 @@ export default defineConfig({
           {
             text: 'Pets',
             items: [
-              { text: 'Cats', link: '/en/pets/cats' },
-              { text: 'Dogs', link: '/en/pets/dogs' }
+              { text: 'Dogs', link: '/en/pets/dogs' },
+              { text: 'Cats', link: '/en/pets/cats' }
             ]
           },
           {
@@ -373,8 +373,9 @@ export default defineConfig({
           { 
             text: 'Питомцы', 
             items: [
-              { text: 'Кошки', link: '/ru/pets/cats' },
-              { text: 'Собаки', link: '/ru/pets/dogs' }
+
+              { text: 'Собаки', link: '/ru/pets/dogs' },
+              { text: 'Кошки', link: '/ru/pets/cats' }
             ]
           },
           { 
@@ -412,8 +413,8 @@ export default defineConfig({
           {
             text: 'Питомцы',
             items: [
-              { text: 'Кошки', link: '/ru/pets/cats' },
-              { text: 'Собаки', link: '/ru/pets/dogs' }
+              { text: 'Собаки', link: '/ru/pets/dogs' },
+              { text: 'Кошки', link: '/ru/pets/cats' }
             ]
           },
           {
