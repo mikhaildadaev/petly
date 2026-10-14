@@ -5,11 +5,11 @@ import { useData, useRoute, useRouter } from 'vitepress'
 import BlockStyle from '../components/BlockStyle.vue'
 import HeroSelect from '../components/HeroSelect.vue'
 import GalleryMedia from '../components/GalleryMedia.vue'
-import HeroRandom from '../components/HeroRandom.vue'
 import ItemsGroup from '../components/ItemsGroup.vue'
 import ItemsList from '../components/ItemsList.vue'
 import ItemsRandom from '../components/ItemsRandom.vue'
 import ItemsSelect from '../components/ItemsSelect.vue'
+import MainData from '../components/MainData.vue'
 import PageRedirect from '../components/PageRedirect.vue'
 import PagePreloader from '../components/PagePreloader.vue'
 import PageStyle from '../components/PageStyle.vue'
@@ -222,11 +222,11 @@ export default {
     app.component('BlockStyle', BlockStyle)
     app.component('HeroSelect', HeroSelect)
     app.component('GalleryMedia', GalleryMedia)
-    app.component('HeroRandom', HeroRandom)
     app.component('ItemsGroup', ItemsGroup)
     app.component('ItemsList', ItemsList)
     app.component('ItemsRandom', ItemsRandom)
     app.component('ItemsSelect', ItemsSelect)
+    app.component('MainData', MainData)
     app.component('PageRedirect', PageRedirect)
     app.component('PageStyle', PageStyle)
   },
