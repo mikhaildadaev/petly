@@ -42,7 +42,7 @@ export const pageImages = {
   '/humans/volunteers': {
     src: '/assets/webp/page_volunteers.webp',
     width: 320,
-    float: 'center'
+    float: 'left'
   },
 
   '/organizations/shelters': {
