@@ -19,7 +19,7 @@ export const pageImages = {
   '/about/tech': {
     src: '/assets/webp/page_tech.webp',
     width: 320,
-    float: 'right'
+    float: 'left'
   },
 
   '/chance/favorites': {
@@ -48,7 +48,7 @@ export const pageImages = {
   '/organizations/shelters': {
     src: '/assets/webp/page_shelters.webp',
     width: 320,
-    float: 'right'
+    float: 'left'
   },
 
   '/pets/cats': {
@@ -59,7 +59,7 @@ export const pageImages = {
   '/pets/dogs': {
     src: '/assets/webp/page_dogs.webp',
     width: 320,
-    float: 'right'
+    float: 'left'
   },
   
   '/recommendations/go': {
@@ -75,7 +75,7 @@ export const pageImages = {
   '/recommendations/trouble': {
     src: '/assets/webp/page_trouble.webp',
     width: 320,
-    float: 'right'
+    float: 'left'
   },
   '/recommendations/welfare': {
     src: '/assets/webp/page_welfare.webp',
