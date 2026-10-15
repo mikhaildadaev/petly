@@ -13,8 +13,8 @@ hero:
 ## Hunde
 <ItemsRandom :type="'pets'" :item-type="'dogs'"/>
 
-## Freiwillige
-<ItemsRandom :type="'humans'" :item-type="'volunteers'"/>
-
 ## Tierheime
 <ItemsRandom :type="'organizations'" :item-type="'shelters'"/>
+
+## Freiwillige
+<ItemsRandom :type="'humans'" :item-type="'volunteers'"/>
