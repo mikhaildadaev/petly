@@ -569,6 +569,7 @@ p.withColor {
 .page-image {
   position: relative;
   width: 100%;
+  margin-top: 24px;
   margin-bottom: -50px;
   line-height: 0;
   border-bottom: 1px solid var(--vp-c-divider);
