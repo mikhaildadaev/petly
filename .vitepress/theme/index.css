@@ -1455,9 +1455,6 @@ p.withColor {
   transition: all 0.3s ease;
   overflow: hidden;
 }
-.block-type-steps .item:hover .number {
-  transform: scale(1.1);
-}
 .block-type-steps .content {
   flex: 1;
   min-width: 0;
