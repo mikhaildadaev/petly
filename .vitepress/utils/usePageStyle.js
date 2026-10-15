@@ -19,7 +19,7 @@ export const pageImages = {
   '/about/tech': {
     src: '/assets/webp/page_tech.webp',
     width: 320,
-    float: 'center'
+    float: 'right'
   },
 
   '/chance/favorites': {
