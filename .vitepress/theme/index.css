@@ -415,7 +415,7 @@ p.withColor {
   width: 100dvw;
   min-width: 340px;
   max-width: 100dvw;
-  margin: 0 calc(50% - 50dvw);
+  margin: 24px calc(50% - 50dvw) 0;
   padding: 0 max(24px, calc(50vw - 640px));
   background-color: var(--vp-c-bg-img);
   border-radius: var(--radius);
@@ -1486,7 +1486,7 @@ p.withColor {
   font-size: 0.9em;
   font-weight: 500;
   line-height: 1.5;
-  color: var(--vp-c-text);
+  color: var(--vp-c-brand);
   text-align: left;
   pointer-events: auto;
   background-color: var(--vp-c-bg);
