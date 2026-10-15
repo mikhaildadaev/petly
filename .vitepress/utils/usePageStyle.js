@@ -14,7 +14,7 @@ export const pageImages = {
   '/about/mission': {
     src: '/assets/webp/page_mission.webp',
     width: 320,
-    float: 'right'
+    float: 'left'
   },
   '/about/tech': {
     src: '/assets/webp/page_tech.webp',
@@ -36,7 +36,7 @@ export const pageImages = {
   '/dobrology/support': {
     src: '/assets/webp/page_support.webp',
     width: 320,
-    float: 'right'
+    float: 'left'
   },
 
   '/humans/volunteers': {
