@@ -80,7 +80,7 @@ export const pageImages = {
   '/recommendations/welfare': {
     src: '/assets/webp/page_welfare.webp',
     width: 320,
-    float: 'center'
+    float: 'left'
   },
   
   default: {
