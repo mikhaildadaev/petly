@@ -65,7 +65,7 @@ export const pageImages = {
   '/recommendations/go': {
     src: '/assets/webp/page_go.webp',
     width: 320,
-    float: 'center'
+    float: 'left'
   },
   '/recommendations/health': {
     src: '/assets/webp/page_health.webp',
