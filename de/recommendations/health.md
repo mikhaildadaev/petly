@@ -8,13 +8,10 @@ blocks:
     title: '... Die ersten Schritte'
     list:
       - name: 'Den Tierarzt aufsuchen'
-        image: '/assets/webp/health_vet.webp'
         description: 'Zeigen Sie Ihr Haustier direkt nach dem Einzug einem Tierarzt. Auch wenn das Tier gesund aussieht, ist eine Untersuchung nötig, um versteckte Krankheiten auszuschließen und Empfehlungen zu erhalten.'
       - name: 'Impfungen durchführen'
-        image: '/assets/webp/health_vaccine.webp'
         description: 'Impfungen schützen vor gefährlichen Infektionen (Tollwut, Staupe, Enteritis). Der Tierarzt erstellt einen Impfplan basierend auf Alter und Gesundheitszustand. Vergessen Sie die jährlichen Auffrischungsimpfungen nicht.'
       - name: 'Parasiten behandeln'
-        image: '/assets/webp/health_parasites.webp'
         description: 'Behandeln Sie regelmäßig gegen Flöhe, Zecken und Würmer (normalerweise alle 1–3 Monate). Das ist wichtig nicht nur für das Haustier, sondern auch für die Sicherheit Ihrer Familie.'
   - type: 'cubes'
     title: '... Tägliche Pflege'

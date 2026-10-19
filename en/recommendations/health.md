@@ -8,13 +8,10 @@ blocks:
     title: '... First steps'
     list:
       - name: 'Visit the vet'
-        image: '/assets/webp/health_vet.webp'
         description: 'Show your pet to a vet right after moving in. Even if the animal looks healthy, it needs a check-up to rule out hidden diseases and get recommendations.'
       - name: 'Get vaccinated'
-        image: '/assets/webp/health_vaccine.webp'
         description: 'Vaccination protects against dangerous infections (rabies, distemper, enteritis). The vet will create a vaccination schedule based on age and health. Don’t forget annual boosters.'
       - name: 'Treat for parasites'
-        image: '/assets/webp/health_parasites.webp'
         description: 'Regularly treat for fleas, ticks, and worms (usually every 1–3 months). This is important not only for the pet but also for your family’s safety.'
   - type: 'cubes'
     title: '... Daily care'
