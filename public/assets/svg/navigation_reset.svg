@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>reset</title>
-    <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+    <title>navigation_reset</title>
+    <g id="Icons_32x32" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
         <g id="Group" stroke="#FFFFFF" transform="translate(9.000000, 6.500000)">
             <line x1="0" y1="4.1" x2="15" y2="4.1" id="Path"></line>
             <path d="M4,4 L4,2 C4,0.8954305 4.78350169,0 5.75,0 L9.25,0 C10.2164983,0 11,0.8954305 11,2 L11,4" id="Path"></path>
