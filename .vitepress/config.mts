@@ -115,10 +115,10 @@ export default defineConfig({
           { 
             text: 'Tipps', 
             items: [
-              { text: 'Tier aufnehmen', link: '/de/recommendations/go' },
+              { text: 'Vermittlung', link: '/de/recommendations/go' },
               { text: 'Gesundheit', link: '/de/recommendations/health' },
-              { text: 'Probleme', link: '/de/recommendations/trouble' },
-              { text: 'Rechte & Schutz', link: '/de/recommendations/welfare' }
+              { text: 'Schutz', link: '/de/recommendations/protection' },
+              { text: 'Probleme', link: '/de/recommendations/trouble' }
             ]
           },
           {
@@ -154,10 +154,10 @@ export default defineConfig({
           {
             text: 'Tipps',
             items: [
-              { text: 'Tier aufnehmen', link: '/de/recommendations/go' },
+              { text: 'Vermittlung', link: '/de/recommendations/go' },
               { text: 'Gesundheit', link: '/de/recommendations/health' },
-              { text: 'Probleme', link: '/de/recommendations/trouble' },
-              { text: 'Rechte & Schutz', link: '/de/recommendations/welfare' }
+              { text: 'Schutz', link: '/de/recommendations/protection' },
+              { text: 'Probleme', link: '/de/recommendations/trouble' }
             ]
           },
           {
@@ -254,10 +254,10 @@ export default defineConfig({
           { 
             text: 'Tips', 
             items: [
-              { text: 'Take a pet', link: '/en/recommendations/go' },
+              { text: 'Placement', link: '/en/recommendations/go' },
               { text: 'Health', link: '/en/recommendations/health' },
-              { text: 'Troubles', link: '/en/recommendations/trouble' },
-              { text: 'Rights & Protection', link: '/en/recommendations/welfare' }
+              { text: 'Protection', link: '/en/recommendations/protection' },
+              { text: 'Troubles', link: '/en/recommendations/trouble' }
             ]
           },
           {
@@ -293,10 +293,10 @@ export default defineConfig({
           {
             text: 'Tips',
             items: [
-              { text: 'Take a pet', link: '/en/recommendations/go' },
+              { text: 'Placement', link: '/en/recommendations/go' },
               { text: 'Health', link: '/en/recommendations/health' },
-              { text: 'Troubles', link: '/en/recommendations/trouble' },
-              { text: 'Welfare', link: '/en/recommendations/welfare' }
+              { text: 'Protection', link: '/en/recommendations/protection' },
+              { text: 'Troubles', link: '/en/recommendations/trouble' }
             ]
           },
           {
@@ -394,10 +394,10 @@ export default defineConfig({
           { 
             text: 'Советы', 
             items: [
-              { text: 'Взять питомца', link: '/ru/recommendations/go' },
+              { text: 'Пристройство', link: '/ru/recommendations/go' },
               { text: 'Здоровье', link: '/ru/recommendations/health' },
-              { text: 'Неприятности', link: '/ru/recommendations/trouble' },
-              { text: 'Права и защита', link: '/ru/recommendations/welfare' }
+              { text: 'Защита', link: '/ru/recommendations/protection' },
+              { text: 'Неприятности', link: '/ru/recommendations/trouble' }
             ]
           },
           {
@@ -433,10 +433,10 @@ export default defineConfig({
           {
             text: 'Советы',
             items: [
-              { text: 'Взять питомца', link: '/ru/recommendations/go' },
+              { text: 'Пристройство', link: '/ru/recommendations/go' },
               { text: 'Здоровье', link: '/ru/recommendations/health' },
-              { text: 'Неприятности', link: '/ru/recommendations/trouble' },
-              { text: 'Права и защита', link: '/ru/recommendations/welfare' }
+              { text: 'Защита', link: '/ru/recommendations/protection' },
+              { text: 'Неприятности', link: '/ru/recommendations/trouble' }
             ]
           },
           {
