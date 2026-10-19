@@ -5,7 +5,8 @@ export const translations = {
       'Размер': 'Größe',
       'Возраст': 'Alter',
       'Опыт': 'Erfahrung',
-      'Направление': 'Richtung'
+      'Направление': 'Richtung',
+      'Формат': 'Format'
     },
     gender: {
       'Девочка': 'Weiblich',
@@ -70,7 +71,8 @@ export const translations = {
       'Размер': 'Size',
       'Возраст': 'Age',
       'Опыт': 'Experience',
-      'Направление': 'Direction'
+      'Направление': 'Direction',
+      'Формат': 'Format'
     },
     gender: {
       'Девочка': 'Female',
@@ -135,7 +137,8 @@ export const translations = {
       'Размер': 'Размер',
       'Возраст': 'Возраст',
       'Опыт': 'Опыт',
-      'Направление': 'Направление'
+      'Направление': 'Направление',
+      'Формат': 'Формат'
     },
     gender: {
       'Девочка': 'Девочка',
