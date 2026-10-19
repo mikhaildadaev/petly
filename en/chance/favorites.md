@@ -1,9 +1,13 @@
 ---
 title: Favorites
 description: Pets that have won your heart.
+blocks:
+  - type: 'intro'
+    title: '«The heart is an amazing thing. It doesn’t ask who you are, where you are, or why. It just starts beating faster when it sees those very eyes, that very smile, that very look that makes you feel warm inside.»'
 ---
 
-# Favorites ❤️
+# Favorites
+<BlockStyle :type="'intro'"/>
 
 The heart is an amazing thing. It doesn't ask who you are, where you are or why. It just starts beating faster when it sees those eyes, that smile, that look that makes you feel so warm inside.
 

@@ -1,9 +1,13 @@
 ---
 title: Favoriten
 description: Tiere, die Ihr Herz erobert haben.
+blocks:
+  - type: 'intro'
+    title: '«Das Herz ist ein erstaunliches Ding. Es fragt nicht, wer du bist, wo du bist oder warum. Es beginnt einfach schneller zu schlagen, wenn es genau diese Augen sieht, genau dieses Lächeln, genau diesen Blick, bei dem einem warm ums Herz wird.»'
 ---
 
-# Favoriten ❤️
+# Favoriten
+<BlockStyle :type="'intro'"/>
 
 Das Herz ist ein erstaunliches Ding. Es fragt nicht, wer du bist, wo du bist und warum. Es schlägt einfach schneller, wenn es jene Augen sieht, jenes Lächeln, jenen Blick, der einem so warm ums Herz werden lässt.
 

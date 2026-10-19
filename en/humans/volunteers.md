@@ -4,7 +4,6 @@ description: People who help with action.
 ---
 
 # Volunteers
-
-<ListHumans :type="'volunteers'"/>
+<ItemsList :type="'humans'" :item-type="'volunteers'"/>
 
 <PageStyle/>

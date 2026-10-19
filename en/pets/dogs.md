@@ -4,7 +4,6 @@ description: A dog is man's best friend.
 ---
 
 # Dogs
-
-<ListPets :type="'dogs'"/>
+<ItemsList :type="'pets'" :item-type="'dogs'"/>
 
 <PageStyle/>

@@ -4,7 +4,6 @@ description: A list of shelters where pets live while waiting for their new home
 ---
 
 # Shelters
-
-<ListOrganizations :type="'shelters'"/>
+<ItemsList :type="'organizations'" :item-type="'shelters'"/>
 
 <PageStyle/>

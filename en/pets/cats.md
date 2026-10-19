@@ -4,7 +4,6 @@ description: Fluffy, affectionate and independent.
 ---
 
 # Cats
-
-<ListPets :type="'cats'"/>
+<ItemsList :type="'pets'" :item-type="'cats'"/>
 
 <PageStyle/>
