@@ -7,11 +7,11 @@ hero:
 
 <HomeStyle :type="'pets'"/>
 
-## Cats
-<ItemsRandom :type="'pets'" :item-type="'cats'"/>
-
 ## Dogs
 <ItemsRandom :type="'pets'" :item-type="'dogs'"/>
+
+## Cats
+<ItemsRandom :type="'pets'" :item-type="'cats'"/>
 
 ## Shelters
 <ItemsRandom :type="'organizations'" :item-type="'shelters'"/>
