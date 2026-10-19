@@ -1281,8 +1281,8 @@ p.withColor {
   transition: all 0.3s ease;
   mask-repeat: repeat-x;
   -webkit-mask-repeat: repeat-x;
-  mask-image: url('/assets/svg/paper.svg');
-  -webkit-mask-image: url('/assets/svg/paper.svg');
+  mask-image: url('/assets/svg/background_paper.svg');
+  -webkit-mask-image: url('/assets/svg/background_paper.svg');
   mask-size: auto 100%;
   -webkit-mask-size: auto 100%;
 }
@@ -1437,8 +1437,8 @@ p.withColor {
   -webkit-mask-position: center;
   mask-size: contain;
   -webkit-mask-size: contain;
-  mask-image: url('/assets/svg/paws.svg');
-  -webkit-mask-image: url('/assets/svg/paws.svg');
+  mask-image: url('/assets/svg/background_paws.svg');
+  -webkit-mask-image: url('/assets/svg/background_paws.svg');
   opacity: 0.4;
 }
 .block-type-steps .number {
