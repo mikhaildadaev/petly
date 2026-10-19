@@ -4,7 +4,6 @@ description: Der Hund ist der beste Freund des Menschen.
 ---
 
 # Hunde
-
-<ListPets :type="'dogs'"/>
+<ItemsList :type="'pets'" :item-type="'dogs'"/>
 
 <PageStyle/>

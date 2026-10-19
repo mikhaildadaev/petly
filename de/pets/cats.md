@@ -4,7 +4,6 @@ description: Flauschig, zärtlich und unabhängig.
 ---
 
 # Katzen
-
-<ListPets :type="'cats'"/>
+<ItemsList :type="'pets'" :item-type="'cats'"/>
 
 <PageStyle/>

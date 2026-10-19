@@ -4,7 +4,6 @@ description: Eine Liste von Tierheimen, in denen Haustiere leben, die auf ihr ne
 ---
 
 # Tierheime
-
-<ListOrganizations :type="'shelters'"/>
+<ItemsList :type="'organizations'" :item-type="'shelters'"/>
 
 <PageStyle/>

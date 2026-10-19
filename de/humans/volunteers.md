@@ -4,7 +4,6 @@ description: Menschen, die mit Taten helfen.
 ---
 
 # Freiwillige
-
-<ListHumans :type="'volunteers'"/>
+<ItemsList :type="'humans'" :item-type="'volunteers'"/>
 
 <PageStyle/>
