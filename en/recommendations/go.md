@@ -1,5 +1,5 @@
 ---
-title: Take a pet
+title: Placement
 description: What you need to know before bringing home a new friend.
 blocks:
   - type: 'intro'
@@ -24,7 +24,7 @@ blocks:
         description: 'Be sure to buy an ID tag and put the pet’s name and your phone number on it. It is a small thing that can save a life if your pet gets lost.'
 ---
 
-# Take a pet
+# Placement
 <BlockStyle :type="'intro'"/>
 <BlockStyle :type="'steps'"/>
 

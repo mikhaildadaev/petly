@@ -1,8 +1,8 @@
 ---
-title: Rechte & Schutz
+title: Schutz
 description: Wie Sie Ihr Tier schützen und was das Gesetz über Tiere sagt.
 ---
 
-# Rechte & Schutz
+# Schutz
 
 <PageStyle/>

@@ -1,5 +1,5 @@
 ---
-title: Tier aufnehmen
+title: Vermittlung
 description: Was Sie wissen sollten, bevor Sie einen neuen Freund nach Hause holen.
 blocks:
   - type: 'intro'
@@ -24,7 +24,7 @@ blocks:
         description: 'Kaufen Sie unbedingt einen Adressanhänger und schreiben Sie den Namen des Tieres und Ihre Telefonnummer darauf. Es ist eine kleine Sache, die ein Leben retten kann, wenn Ihr Liebling verloren geht.'
 ---
 
-# Tier aufnehmen
+# Vermittlung
 <BlockStyle :type="'intro'"/>
 <BlockStyle :type="'steps'"/>
 
