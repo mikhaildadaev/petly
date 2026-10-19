@@ -22,7 +22,7 @@ blocks:
   - type: 'cubes'
     title: '... What is prohibited'
     list:
-      - name: 'Animal cruelty'
+      - name: 'Cruelty to animals'
         image: '/assets/webp/rights_no_cruelty.webp'
         info: 'Beatings, torture, baiting, and refusal of veterinary care are prohibited. This entails administrative and criminal liability.'
       - name: 'Leave to fend for itself'

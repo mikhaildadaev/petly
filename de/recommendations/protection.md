@@ -22,7 +22,7 @@ blocks:
   - type: 'cubes'
     title: '... Was verboten ist'
     list:
-      - name: 'Tierquälerei'
+      - name: 'Misshandlung von Tieren'
         image: '/assets/webp/rights_no_cruelty.webp'
         info: 'Schläge, Folter, Hetze und die Verweigerung tierärztlicher Hilfe sind verboten. Dies zieht verwaltungsrechtliche und strafrechtliche Konsequenzen nach sich.'
       - name: 'Sich selbst überlassen'
