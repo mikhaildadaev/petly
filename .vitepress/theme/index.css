@@ -105,13 +105,13 @@ button.carousel {
 }
 button.carousel.prev {
   left: 0;
-  mask-image: url('/assets/svg/prev.svg');
-  -webkit-mask-image: url('/assets/svg/prev.svg');
+  mask-image: url('/assets/svg/navigation_prev.svg');
+  -webkit-mask-image: url('/assets/svg/navigation_prev.svg');
 }
 button.carousel.next {
   right: 0;
-  mask-image: url('/assets/svg/next.svg');
-  -webkit-mask-image: url('/assets/svg/next.svg');
+  mask-image: url('/assets/svg/navigation_next.svg');
+  -webkit-mask-image: url('/assets/svg/navigation_next.svg');
 }
 button.favorite {
   position: absolute;
@@ -128,8 +128,8 @@ button.favorite {
   -webkit-mask-position: center;
   mask-size: contain;
   -webkit-mask-size: contain;
-  mask-image: url('/assets/svg/like.svg');
-  -webkit-mask-image: url('/assets/svg/like.svg');
+  mask-image: url('/assets/svg/navigation_like.svg');
+  -webkit-mask-image: url('/assets/svg/navigation_like.svg');
 }
 button.favorite:hover {
   transform: scale(1.15);
@@ -165,8 +165,8 @@ button.fullscreen {
 button.fullscreen.close {
   right: calc(50% - 16px);
   bottom: 16px;
-  mask-image: url('/assets/svg/close.svg');
-  -webkit-mask-image: url('/assets/svg/close.svg');
+  mask-image: url('/assets/svg/navigation_close.svg');
+  -webkit-mask-image: url('/assets/svg/navigation_close.svg');
 }
 button.fullscreen.close:hover {
   transform: rotate(90deg);
@@ -174,13 +174,13 @@ button.fullscreen.close:hover {
 }
 button.fullscreen.prev {
   left: 0;
-  mask-image: url('/assets/svg/prev.svg');
-  -webkit-mask-image: url('/assets/svg/prev.svg');
+  mask-image: url('/assets/svg/navigation_prev.svg');
+  -webkit-mask-image: url('/assets/svg/navigation_prev.svg');
 }
 button.fullscreen.next {
   right: 0;
-  mask-image: url('/assets/svg/next.svg');
-  -webkit-mask-image: url('/assets/svg/next.svg');
+  mask-image: url('/assets/svg/navigation_next.svg');
+  -webkit-mask-image: url('/assets/svg/navigation_next.svg');
 }
 button.fullscreen.prev:hover,
 button.fullscreen.next:hover {
@@ -201,8 +201,8 @@ button.share {
   -webkit-mask-position: center;
   mask-size: contain;
   -webkit-mask-size: contain;
-  mask-image: url('/assets/svg/share.svg');
-  -webkit-mask-image: url('/assets/svg/share.svg');
+  mask-image: url('/assets/svg/navigation_share.svg');
+  -webkit-mask-image: url('/assets/svg/navigation_share.svg');
 }
 button.share:hover {
   transform: scale(1.15);
@@ -677,8 +677,8 @@ p.withColor {
   -webkit-mask-position: center;
   mask-size: contain;
   -webkit-mask-size: contain;
-  mask-image: url('/assets/svg/reset.svg');
-  -webkit-mask-image: url('/assets/svg/reset.svg');
+  mask-image: url('/assets/svg/navigation_reset.svg');
+  -webkit-mask-image: url('/assets/svg/navigation_reset.svg');
 }
 .filters-compact .reset:hover {
   color: #ef5350;
@@ -917,8 +917,8 @@ p.withColor {
   -webkit-mask-position: center;
   mask-size: contain;
   -webkit-mask-size: contain;
-  mask-image: url('/assets/svg/goto.svg');
-  -webkit-mask-image: url('/assets/svg/goto.svg');
+  mask-image: url('/assets/svg/navigation_goto.svg');
+  -webkit-mask-image: url('/assets/svg/navigation_goto.svg');
   transition: transform 0.3s, opacity 0.3s;
   opacity: 0;
 }
@@ -1053,8 +1053,8 @@ p.withColor {
   -webkit-mask-position: center;
   mask-size: contain;
   -webkit-mask-size: contain;
-  mask-image: url('/assets/svg/more.svg');
-  -webkit-mask-image: url('/assets/svg/more.svg');
+  mask-image: url('/assets/svg/navigation_more.svg');
+  -webkit-mask-image: url('/assets/svg/navigation_more.svg');
   transition: all 0.3s ease;
 }
 .load-more .content .text {
@@ -1234,8 +1234,8 @@ p.withColor {
   -webkit-mask-position: center;
   mask-size: contain;
   -webkit-mask-size: contain;
-  mask-image: url('/assets/svg/info.svg');
-  -webkit-mask-image: url('/assets/svg/info.svg');
+  mask-image: url('/assets/svg/navigation_info.svg');
+  -webkit-mask-image: url('/assets/svg/navigation_info.svg');
   transition: all 0.3s ease;
 }
 .block-type-cubes .content .info:hover {
