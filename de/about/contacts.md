@@ -7,5 +7,6 @@ blocks:
 ---
 
 # Kontakte
+<BlockStyle :type="'intro'"/>
 
 <PageStyle/>
