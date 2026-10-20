@@ -1714,6 +1714,9 @@ p.withColor {
 .VPContent {
   padding-top: 0!important;
 }
+.VPLocalNav {
+  top: 0!important;
+}
 .VPLastUpdated {
   padding-left: 16px;
 }
