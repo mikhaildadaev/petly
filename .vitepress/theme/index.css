@@ -1606,16 +1606,13 @@ p.withColor {
   height: 100%;
   gap: 8px;
   color: white;
-  background-image: linear-gradient(135deg, #2d1b69, #1a1a2e);
-}
-.gallery-media .item:hover .audio-preview {
-  background-image: linear-gradient(135deg, #3d2b79, #2a1a3e);
+  background-color: var(--vp-c-bg-soft);
 }
 .gallery-media .item .video-preview {
   position: relative;
   width: 100%;
   height: 100%;
-  background-color: var(--vp-c-black);
+  background-color: var(--vp-c-bg-soft);
 }
 .gallery-media .video-preview video {
   width: 100%;
