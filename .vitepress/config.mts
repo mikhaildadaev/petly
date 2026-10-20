@@ -4,7 +4,6 @@ export default defineConfig({
   base: '/',
   head: [
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
-    ['link', { rel: 'manifest', href: '/assets/json/manifest.json' }],
     ['link', { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/assets/favicon/16x16.png' }],
     ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/assets/favicon/32x32.png' }],
     ['link', { rel: 'icon', type: 'image/png', sizes: '48x48', href: '/assets/favicon/48x48.png' }],
@@ -57,6 +56,9 @@ export default defineConfig({
   locales: {
     de: {
       description: 'Jedes Tier verdient ein Zuhause',
+      head: [
+        ['link', { rel: 'manifest', href: '/assets/json/manifest_de.json' }],
+      ],
       label: 'Deutsch',
       lang: 'de',
       link: '/de/',
@@ -196,6 +198,9 @@ export default defineConfig({
     },
     en: {
       description: 'Every pet deserves a home',
+      head: [
+        ['link', { rel: 'manifest', href: '/assets/json/manifest_en.json' }],
+      ],
       label: 'English',
       lang: 'en',
       link: '/en/',
@@ -335,6 +340,9 @@ export default defineConfig({
     },
     ru: {
       description: 'Каждый питомец заслуживает дом',
+      head: [
+        ['link', { rel: 'manifest', href: '/assets/json/manifest_ru.json' }],
+      ],
       label: 'Русский',
       lang: 'ru',
       link: '/ru/',
