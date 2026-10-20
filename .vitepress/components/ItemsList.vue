@@ -7,8 +7,8 @@
         </div>
         <label class="filter-label">{{ translate('filter', filterConfig.label) }}</label>
       </div>
-      <button v-if="!areAllActive" class="reset" @click="resetFilters" :title="translate('ui', 'Сбросить')">
-        {{ translate('ui', 'Сбросить') }}
+      <button v-if="!areAllActive" class="reset" @click="resetFilters" :title="translate('ui', 'Сбросить фильтры')">
+        {{ translate('ui', 'Сбросить фильтры') }}
       </button>
     </div>
     <div v-if="!isMobile" class="cards-grid">
