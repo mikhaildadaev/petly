@@ -56,7 +56,7 @@ export const translations = {
       site: 'Webseite'
     },
     ui: {
-      'Сбросить': 'Zurücksetzen',
+      'Сбросить фильтры': 'Filter zurücksetzen',
       'Загрузить ещё': 'Mehr laden',
       'осталось': 'übrig',
       'Перейти в раздел': 'Zum Bereich',
@@ -122,7 +122,7 @@ export const translations = {
       site: 'Website'
     },
     ui: {
-      'Сбросить': 'Reset',
+      'Сбросить фильтры': 'Reset the filters',
       'Загрузить ещё': 'Load more',
       'осталось': 'left',
       'Перейти в раздел': 'Go to section',
@@ -188,7 +188,7 @@ export const translations = {
       site: 'Сайт'
     },
     ui: {
-      'Сбросить': 'Сбросить',
+      'Сбросить фильтры': 'Сбросить фильтры',
       'Загрузить ещё': 'Загрузить ещё',
       'осталось': 'осталось',
       'Перейти в раздел': 'Перейти в раздел',
