@@ -5,13 +5,11 @@ const randomClassCache = new Map()
 
 export function useRandomColor() {
   const previousColor = ref(0)
-  const useRandomClass = (uuid, maxColors = 30) => {
+  const useRandomClass = (uuid, maxColors = 27) => {
     if (!uuid) return 'rand-01'
-    
     if (randomClassCache.has(uuid)) {
       return randomClassCache.get(uuid)
     }
-    
     let num
     let attempts = 0
     do {
@@ -19,12 +17,9 @@ export function useRandomColor() {
       attempts++
       if (attempts > 50) break
     } while (num === previousColor.value)
-    
     previousColor.value = num
-    
     const formattedNum = num.toString().padStart(2, '0')
     const className = `rand-${formattedNum}`
-    
     randomClassCache.set(uuid, className)
     return className
   }
@@ -36,7 +31,6 @@ export function useRandomColor() {
     randomClassCache.clear()
     previousColor.value = 0
   }
-
   return {
     useRandomClass,
     clearColorCache,
