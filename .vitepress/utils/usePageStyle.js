@@ -72,13 +72,13 @@ export const pageImages = {
     width: 320,
     float: 'left'
   },
-  '/recommendations/trouble': {
-    src: '/assets/webp/page_trouble.webp',
+  '/recommendations/protection': {
+    src: '/assets/webp/page_protection.webp',
     width: 320,
     float: 'left'
   },
-  '/recommendations/welfare': {
-    src: '/assets/webp/page_welfare.webp',
+  '/recommendations/trouble': {
+    src: '/assets/webp/page_trouble.webp',
     width: 320,
     float: 'left'
   },
