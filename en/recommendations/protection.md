@@ -12,7 +12,7 @@ blocks:
       - name: 'Provide care'
         description: 'Keep the animal in accordance with its biological needs, treat it humanely, provide food, water, and timely veterinary care.'
       - name: 'Respect quiet hours'
-        description: 'Ensure peace and quiet for your neighbors from 11:00 PM to 7:00 AM. Noisy animals should not disturb others.'
+        description: 'Ensure peace and quiet for your neighbors. Noisy animals should not disturb others.'
       - name: 'Clean up after your pet'
         description: 'Always clean up your pet’s waste in public areas, on streets, and in building hallways.'
       - name: 'Control walking'
