@@ -1,7 +1,7 @@
 {
-  "name": "PETLY — Волонтёрский проект помощи животным",
-  "short_name": "PETLY",
-  "description": "Помогаем питомцам найти дом",
+  "name": "#NeedHome — Ehrenamtliches Tierhilfsprojekt",
+  "short_name": "#NeedHome",
+  "description": "Helfen Sie ihren Haustieren, ein Zuhause zu finden",
   "start_url": "/",
   "scope": "/",
   "display": "fullscreen",
