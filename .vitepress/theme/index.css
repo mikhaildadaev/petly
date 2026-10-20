@@ -638,7 +638,7 @@ p.withColor {
   align-items: center;
   gap: 14px;
   height: 80px;
-  top: 64px;
+  top: 0;
   margin: 0 -24px;
   padding: 16px 24px;
   background-color: var(--vp-c-bg);
@@ -1694,8 +1694,30 @@ p.withColor {
 /* ============================================
    VitePress
    ============================================ */
+.VPNav {
+  position: fixed!important;
+  top: calc(100% - var(--vp-nav-height))!important;
+  background-color: var(--vp-c-bg)!important;
+}
+.VPNavBar .menu {
+  top: auto!important;
+  bottom: calc(var(--vp-nav-height) / 2 + 20px)!important;
+}
+.VPNavBar .vpi-chevron-down {
+  transform: rotate(-90deg)!important;
+}
+.VPNavScreen {
+  top: 0!important;
+  bottom: calc(var(--vp-nav-height) + var(--vp-layout-top-height, 0px))!important;
+}
+.VPContent {
+  padding-top: 0!important;
+}
 .VPLastUpdated {
   padding-left: 16px;
+}
+.VPFooter {
+  margin-bottom: var(--vp-nav-height)!important;
 }
 
 /* ============================================
