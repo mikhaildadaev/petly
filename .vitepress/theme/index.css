@@ -664,22 +664,6 @@ p.withColor {
   border-radius: 30px;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
 }
-.filters-compact .reset::before {
-  content: '';
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  cursor: pointer;
-  background-color: var(--vp-c-text-1);
-  mask-repeat: no-repeat;
-  -webkit-mask-repeat: no-repeat;
-  mask-position: center;
-  -webkit-mask-position: center;
-  mask-size: contain;
-  -webkit-mask-size: contain;
-  mask-image: url('/assets/svg/navigation_reset.svg');
-  -webkit-mask-image: url('/assets/svg/navigation_reset.svg');
-}
 .filters-compact .reset:hover {
   color: #ef5350;
   border-color: #ef5350;
