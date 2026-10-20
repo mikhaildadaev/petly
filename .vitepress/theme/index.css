@@ -1696,7 +1696,8 @@ p.withColor {
    ============================================ */
 .VPNav {
   position: fixed!important;
-  top: calc(100dvh - var(--vp-nav-height))!important;
+  top: auto!important;
+  bottom: var(--vp-nav-height)!important;
   background-color: var(--vp-c-bg)!important;
 }
 .VPNavBar .menu {
