@@ -1543,19 +1543,18 @@ p.withColor {
 .rand-15 { background-color: #8d6e63 !important; color: var(--vp-c-light) !important; }
 .rand-16 { background-color: #bdbdbd !important; color: var(--vp-c-dark) !important; }
 .rand-17 { background-color: #78909c !important; color: var(--vp-c-light) !important; }
-.rand-18 { background-color: #1a1a2e !important; color: var(--vp-c-light) !important; }
-.rand-19 { background-color: #16213e !important; color: var(--vp-c-light) !important; }
-.rand-20 { background-color: #2d1b69 !important; color: var(--vp-c-light) !important; }
-.rand-21 { background-color: #f5e6d3 !important; color: var(--vp-c-dark) !important; }
-.rand-22 { background-color: #e8f0fe !important; color: var(--vp-c-dark) !important; }
-.rand-23 { background-color: #ff6b6b !important; color: var(--vp-c-light) !important; }
-.rand-24 { background-color: #70c1b3 !important; color: var(--vp-c-dark) !important; }
-.rand-25 { background-color: #b39ddb !important; color: var(--vp-c-dark) !important; }
-.rand-26 { background-color: #ffd8b1 !important; color: var(--vp-c-dark) !important; }
-.rand-27 { background-color: #87ceeb !important; color: var(--vp-c-dark) !important; }
-.rand-28 { background-color: #ffb7c5 !important; color: var(--vp-c-dark) !important; }
-.rand-29 { background-color: #ffd700 !important; color: var(--vp-c-dark) !important; }
-.rand-30 { background-color: #cd7f32 !important; color: var(--vp-c-light) !important; }
+.rand-18 { background-color: #16213e !important; color: var(--vp-c-light) !important; }
+.rand-19 { background-color: #2d1b69 !important; color: var(--vp-c-light) !important; }
+.rand-20 { background-color: #f5e6d3 !important; color: var(--vp-c-dark) !important; }
+.rand-21 { background-color: #e8f0fe !important; color: var(--vp-c-dark) !important; }
+.rand-22 { background-color: #ff6b6b !important; color: var(--vp-c-light) !important; }
+.rand-23 { background-color: #70c1b3 !important; color: var(--vp-c-dark) !important; }
+.rand-24 { background-color: #b39ddb !important; color: var(--vp-c-dark) !important; }
+.rand-25 { background-color: #ffd8b1 !important; color: var(--vp-c-dark) !important; }
+.rand-26 { background-color: #87ceeb !important; color: var(--vp-c-dark) !important; }
+.rand-27 { background-color: #ffb7c5 !important; color: var(--vp-c-dark) !important; }
+.rand-28 { background-color: #ffd700 !important; color: var(--vp-c-dark) !important; }
+.rand-29 { background-color: #cd7f32 !important; color: var(--vp-c-light) !important; }
 
 /* ============================================================
    ГАЛЕРЕЯ МЕДИА
