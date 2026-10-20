@@ -18,7 +18,7 @@ blocks:
   - type: 'cubes'
     title: '... Frontend'
     list:
-      - name: 'Vue 3 & VitePress'
+      - name: 'Vue & VitePress'
         image: '/assets/svg/tech_vue.svg'
         info: 'A framework for interfaces and a static site engine — an ecosystem by the Vue team'
       - name: 'JavaScript & TypeScript'

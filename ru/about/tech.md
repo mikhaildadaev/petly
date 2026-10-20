@@ -18,7 +18,7 @@ blocks:
   - type: 'cubes'
     title: '... Фронтенд'
     list:
-      - name: 'Vue 3 & VitePress'
+      - name: 'Vue & VitePress'
         image: '/assets/svg/tech_vue.svg'
         info: 'Фреймворк для интерфейсов и движок для статических сайтов — экосистема от команды Vue'
       - name: 'JavaScript & TypeScript'
