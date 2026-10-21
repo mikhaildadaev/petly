@@ -1723,6 +1723,9 @@ p.withColor {
   top: 0!important;
   bottom: calc(var(--vp-nav-height) + var(--vp-layout-top-height, 0px))!important;
 }
+.VPHome .vp-doc :is(h1, h2, h3, h4, h5, h6) {
+  border: none!important
+}
 .VPContent {
   padding-top: 0!important;
 }
