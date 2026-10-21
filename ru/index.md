@@ -16,13 +16,13 @@ main:
       - name: 'Заголовок'
         description: 'Описание'
         img: 'Изображение'
-        link: 'Ссылка'
+        link: '/dobrology/join'
   - type: 'support'
     list:
       - name: 'Заголовок'
         description: 'Описание'
         img: 'Изображение'
-        link: 'Ссылка'
+        link: '/dobrology/support'
 ---
 
 <MainSlider :type="'general'"/>
