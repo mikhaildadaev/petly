@@ -412,11 +412,10 @@ p.withColor {
    ============================================================ */
 .main-block {
   position: relative;
-  min-width: 340px;
-  max-width: 100dvw;
+  min-height: 240px;
   margin: 0 -24px;
   padding: 24px;
-  background-color: var(--vp-badge-tip-bg);
+  background-color: var(--vp-c-bg-img);
   border-radius: var(--radius);
   overflow: hidden;
 }
