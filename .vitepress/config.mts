@@ -95,12 +95,9 @@ export default defineConfig({
             text: 'Tiere', 
             items: [
               { text: 'Hunde', link: '/de/pets/dogs' },
-              { text: 'Katzen', link: '/de/pets/cats' }
+              { text: 'Katzen', link: '/de/pets/cats' },
+              { text: 'Favoriten', link: '/de/pets/favorites' }
             ]
-          },
-          { 
-            text: 'Favoriten', 
-            link: '/de/chance/favorites' 
           },
           { 
             text: 'Dobrologie', 
@@ -134,12 +131,9 @@ export default defineConfig({
             text: 'Tiere',
             items: [
               { text: 'Hunde', link: '/de/pets/dogs' },
-              { text: 'Katzen', link: '/de/pets/cats' }
+              { text: 'Katzen', link: '/de/pets/cats' },
+              { text: 'Favoriten', link: '/de/pets/favorites' }
             ]
-          },
-          { 
-            text: 'Favoriten', 
-            link: '/de/chance/favorites' 
           },
           {
             text: 'Dobrologie',
@@ -233,12 +227,9 @@ export default defineConfig({
             text: 'Pets', 
             items: [
               { text: 'Dogs', link: '/en/pets/dogs' },
-              { text: 'Cats', link: '/en/pets/cats' }
+              { text: 'Cats', link: '/en/pets/cats' },
+              { text: 'Favorites', link: '/en/pets/favorites' }
             ]
-          },
-          { 
-            text: 'Favorites', 
-            link: '/en/chance/favorites' 
           },
           { 
             text: 'Dobrology', 
@@ -272,12 +263,9 @@ export default defineConfig({
             text: 'Pets',
             items: [
               { text: 'Dogs', link: '/en/pets/dogs' },
-              { text: 'Cats', link: '/en/pets/cats' }
+              { text: 'Cats', link: '/en/pets/cats' },
+              { text: 'Favorites', link: '/en/pets/favorites' }
             ]
-          },
-          { 
-            text: 'Favorites', 
-            link: '/en/chance/favorites' 
           },
           {
             text: 'Dobrology',
@@ -370,14 +358,10 @@ export default defineConfig({
           { 
             text: 'Питомцы', 
             items: [
-
               { text: 'Собаки', link: '/ru/pets/dogs' },
-              { text: 'Кошки', link: '/ru/pets/cats' }
+              { text: 'Кошки', link: '/ru/pets/cats' },
+              { text: 'Любимцы', link: '/ru/pets/favorites' }
             ]
-          },
-          { 
-            text: 'Любимцы', 
-            link: '/ru/chance/favorites' 
           },
           { 
             text: 'Добрология', 
@@ -411,12 +395,9 @@ export default defineConfig({
             text: 'Питомцы',
             items: [
               { text: 'Собаки', link: '/ru/pets/dogs' },
-              { text: 'Кошки', link: '/ru/pets/cats' }
+              { text: 'Кошки', link: '/ru/pets/cats' },
+              { text: 'Любимцы', link: '/ru/pets/favorites' }
             ]
-          },
-          { 
-            text: 'Любимцы', 
-            link: '/ru/chance/favorites' 
           },
           {
             text: 'Добрология',
