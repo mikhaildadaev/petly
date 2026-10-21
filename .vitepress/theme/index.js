@@ -9,6 +9,7 @@ import ItemsGroup from '../components/ItemsGroup.vue'
 import ItemsList from '../components/ItemsList.vue'
 import ItemsRandom from '../components/ItemsRandom.vue'
 import ItemsSelect from '../components/ItemsSelect.vue'
+import MainBlock from '../components/MainBlock.vue'
 import MainSlider from '../components/MainSlider.vue'
 import PageRedirect from '../components/PageRedirect.vue'
 import PagePreloader from '../components/PagePreloader.vue'
@@ -226,6 +227,7 @@ export default {
     app.component('ItemsList', ItemsList)
     app.component('ItemsRandom', ItemsRandom)
     app.component('ItemsSelect', ItemsSelect)
+    app.component('MainBlock', MainBlock)
     app.component('MainSlider', MainSlider)
     app.component('PageRedirect', PageRedirect)
     app.component('PageStyle', PageStyle)
