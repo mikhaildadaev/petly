@@ -5,19 +5,23 @@ main:
     list:
       - name: 'Заголовок 1'
         description: 'Описание 1'
+        img: 'Изображение 1'
         link: 'Ссылка 1'
       - name: 'Заголовок 2'
         description: 'Описание 2'
-        link: 'Ссылка 1'
+        img: 'Изображение 2'
+        link: 'Ссылка 2'
   - type: 'join'
     list:
       - name: 'Заголовок'
         description: 'Описание'
+        img: 'Изображение'
         link: 'Ссылка'
   - type: 'support'
     list:
       - name: 'Заголовок'
         description: 'Описание'
+        img: 'Изображение'
         link: 'Ссылка'
 ---
 

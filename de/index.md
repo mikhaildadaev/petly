@@ -5,19 +5,23 @@ main:
     list:
       - name: 'Überschrift 1'
         description: 'Die Beschreibung 1'
+        img: 'Bild 1'
         link: 'Der Link 1'
       - name: 'Überschrift 2'
         description: 'Die Beschreibung 2'
-        link: 'Der Link 1'
+        img: 'Bild 2'
+        link: 'Der Link 2'
   - type: 'join'
     list:
       - name: 'Überschrift'
         description: 'Die Beschreibung'
+        img: 'Bild'
         link: 'Der Link'
   - type: 'support'
     list:
       - name: 'Überschrift'
         description: 'Die Beschreibung'
+        img: 'Bild'
         link: 'Der Link'
 ---
 

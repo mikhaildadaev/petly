@@ -5,19 +5,23 @@ main:
     list:
       - name: 'Title 1'
         description: 'Description 1'
+        img: 'Image 1'
         link: 'Link 1'
       - name: 'Title 2'
         description: 'Description 2'
-        link: 'Link 1'
+        img: 'Image 2'
+        link: 'Link 2'
   - type: 'join'
     list:
       - name: 'Title'
         description: 'Description'
+        img: 'Image'
         link: 'Link'
   - type: 'support'
     list:
       - name: 'Title'
         description: 'Description'
+        img: 'Image'
         link: 'Link'
 ---
 
