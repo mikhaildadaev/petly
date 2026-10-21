@@ -313,6 +313,13 @@ label {
 }
 
 /* ============================================
+   СЕКЦИИ
+   ============================================ */
+section {
+  margin: 2em 0 
+}
+
+/* ============================================
    АБЗАЦ
    ============================================ */
 p {
@@ -413,7 +420,7 @@ p.withColor {
 .main-block {
   position: relative;
   min-height: 240px;
-  margin: 2em -24px 0;
+  margin: 0 -24px;
   background-color: var(--vp-c-bg-img);
   border-radius: var(--radius);
   overflow: hidden;
