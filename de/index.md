@@ -2,7 +2,7 @@
 layout: home
 ---
 
-<MainSlider/>
+<MainSlider :type="'general'"/>
 
 ## Hunde
 <ItemsRandom :type="'pets'" :item-type="'dogs'"/>
@@ -13,5 +13,11 @@ layout: home
 ## Tierheime
 <ItemsRandom :type="'organizations'" :item-type="'shelters'"/>
 
+## Unterstützen
+<MainBlock :type="'support'"/>
+
 ## Freiwillige
 <ItemsRandom :type="'humans'" :item-type="'volunteers'"/>
+
+## Mitmachen
+<MainBlock :type="'join'"/>
