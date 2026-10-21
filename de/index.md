@@ -26,19 +26,9 @@ main:
 ---
 
 <MainSlider :type="'general'"/>
-
-## Hunde
 <ItemsRandom :type="'pets'" :item-type="'dogs'"/>
-
-## Katzen
 <ItemsRandom :type="'pets'" :item-type="'cats'"/>
-
-## Tierheime
 <ItemsRandom :type="'organizations'" :item-type="'shelters'"/>
-
 <MainBlock :type="'support'"/>
-
-## Freiwillige
 <ItemsRandom :type="'humans'" :item-type="'volunteers'"/>
-
 <MainBlock :type="'join'"/>
