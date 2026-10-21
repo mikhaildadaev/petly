@@ -483,6 +483,9 @@ export default defineConfig({
       }
     }
   },
+  sitemap: {
+    hostname: 'https://needhome.pro'
+  },
   themeConfig: {
     search: {
       provider: 'local'
