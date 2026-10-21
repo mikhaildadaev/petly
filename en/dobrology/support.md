@@ -45,10 +45,10 @@ blocks:
     image: '/assets/webp/words_post.webp'
     list: 
       - link: 'VKontakte'
-        url: 'https://vk.com/share.php?url=https://needhome.pro/en/'
+        url: 'https://vk.com/share.php?url=https://needhome.pro/'
       
       - link: 'Telegram'
-        url: 'https://t.me/share/url?url=https://needhome.pro/en/'
+        url: 'https://t.me/share/url?url=https://needhome.pro/'
 ---
 
 # Support

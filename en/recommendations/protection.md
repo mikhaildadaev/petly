@@ -25,12 +25,12 @@ blocks:
       - name: 'Cruelty to animals'
         image: '/assets/webp/rights_no_cruelty.webp'
         info: 'Beatings, torture, baiting, and refusal of veterinary care are prohibited. This entails administrative and criminal liability.'
-      - name: 'Leave to fend for itself'
-        image: '/assets/webp/rights_no_abandon.webp'
-        info: 'If you can no longer keep the pet, you must hand it over to a new owner or a shelter.'
       - name: 'Using for business'
         image: '/assets/webp/rights_no_business.webp'
         info: 'Animals may only be used for commercial purposes in cases expressly permitted by law.'
+      - name: 'Leave to fend for itself'
+        image: '/assets/webp/rights_no_abandon.webp'
+        info: 'If you can no longer keep the pet, you must hand it over to a new owner or a shelter.'
 ---
 
 # Protection

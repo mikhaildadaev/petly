@@ -45,10 +45,10 @@ blocks:
     image: '/assets/webp/words_post.webp'
     list: 
       - link: '«ВКонтакте»'
-        url: 'https://vk.com/share.php?url=https://mikhaildadaev.github.io/petly'
+        url: 'https://vk.com/share.php?url=https://needhome.pro/'
       
       - link: '«Telegram»'
-        url: 'https://t.me/share/url?url=https://mikhaildadaev.github.io/petly'
+        url: 'https://t.me/share/url?url=https://needhome.pro/'
 ---
 
 # Поддержать

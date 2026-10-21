@@ -25,12 +25,12 @@ blocks:
       - name: 'Misshandlung von Tieren'
         image: '/assets/webp/rights_no_cruelty.webp'
         info: 'Schläge, Folter, Hetze und die Verweigerung tierärztlicher Hilfe sind verboten. Dies zieht verwaltungsrechtliche und strafrechtliche Konsequenzen nach sich.'
-      - name: 'Sich selbst überlassen'
-        image: '/assets/webp/rights_no_abandon.webp'
-        info: 'Wenn Sie das Tier nicht mehr halten können, sind Sie verpflichtet, es an einen neuen Besitzer oder in ein Tierheim zu übergeben.'
       - name: 'Für Geschäftszwecke nutzen'
         image: '/assets/webp/rights_no_business.webp'
         info: 'Tiere dürfen nur in gesetzlich ausdrücklich erlaubten Fällen für kommerzielle Zwecke genutzt werden.'
+      - name: 'Sich selbst überlassen'
+        image: '/assets/webp/rights_no_abandon.webp'
+        info: 'Wenn Sie das Tier nicht mehr halten können, sind Sie verpflichtet, es an einen neuen Besitzer oder in ein Tierheim zu übergeben.'
 ---
 
 # Schutz
