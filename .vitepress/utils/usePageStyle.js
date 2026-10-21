@@ -22,12 +22,6 @@ export const pageImages = {
     float: 'left'
   },
 
-  '/chance/favorites': {
-    src: '/assets/webp/page_favorites.webp',
-    width: 320,
-    float: 'center'
-  },
-
   '/dobrology/join': {
     src: '/assets/webp/page_join.webp',
     width: 320,
@@ -60,6 +54,11 @@ export const pageImages = {
     src: '/assets/webp/page_dogs.webp',
     width: 320,
     float: 'left'
+  },
+  '/pets/favorites': {
+    src: '/assets/webp/page_favorites.webp',
+    width: 320,
+    float: 'center'
   },
   
   '/recommendations/go': {
