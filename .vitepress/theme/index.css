@@ -433,23 +433,27 @@ p.withColor {
 }
 .main-block .list .item {
   display: flex;
-  flex-direction: column;
-  margin: 0 120px 0 240px;
+  flex-direction: row;
+  gap: 24px;
   color: var(--vp-c-dark);
 }
-.main-block .list .item .description{
+.main-block .list .item .text {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  padding: 0 24px 0 0;
+}
+.main-block .list .item .text .description{
   margin-bottom: 16px;
 }
-.main-block .list .item .link {
+.main-block .list .item .text .link {
   display: inline-block;
   margin-top: auto;
   align-self: flex-start;
 }
 .main-block .list .item .image {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 240px;
+  width: 240px;
+  margin: auto 0 -24px 0
 }
 .main-slider {
   position: relative;
@@ -1774,7 +1778,7 @@ p.withColor {
     background-color: transparent !important;
   }
   .main-block .list .item {
-    margin: 0 0 240px 0;
+    flex-direction: column-reverse;
   }
   .main-slider {
     margin: 0 -24px;
