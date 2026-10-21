@@ -1730,6 +1730,9 @@ p.withColor {
 .VPNavBar .vpi-chevron-down {
   transform: rotate(-90deg)!important;
 }
+.VPSidebar .nav section {
+  margin: 0!important;
+}
 .VPNavScreen {
   top: 0!important;
   bottom: calc(var(--vp-nav-height) + var(--vp-layout-top-height, 0px))!important;
