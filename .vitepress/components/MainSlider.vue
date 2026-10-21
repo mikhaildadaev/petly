@@ -1,122 +1,128 @@
 <template>
-  <section v-if="item" class="aspect-full main-slider">
-    <div class="meta">
-      <template v-for="displayField in config.fields.display" :key="displayField">
-        <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`">{{ item[displayField] }}</label>
-      </template>
-    </div>
-    <div class="media">
-      <picture>
-        <source :srcset="item.imageVertical" media="(max-width: 735px)" />
-        <source :srcset="item.imageHorizontal" media="(min-width: 736px)" />
-        <img :src="item.imageHorizontal" class="img" :alt="item.title" loading="lazy" />
-      </picture>
-    </div>
-    <div class="content">
-      <h1 class="title">{{ item.title || '' }}</h1>
-      <div class="description">{{ item.description || '' }}</div>
-      <div class="actions">
-        <a :href="getItemLink(item)" class="button primary">Узнать историю<span class="button-arrow">→</span></a>
+  <section v-if="items && items.length" class="main-slider-container">
+    <div class="slider-track">
+      <div v-for="(item, index) in items" :key="index" class="slider-slide" :class="{ 'active': index === currentIndex }">
+        <div class="main-block">
+          <img v-if="item.img" :src="item.img" :alt="item.name" class="image" loading="lazy"/>
+          <div class="text">
+            <h1 class="name">{{ item.name }}</h1>
+            <p class="description">{{ item.description }}</p>
+            <a v-if="item.link" :href="item.link" class="link">{{ translate('ui', 'Подробнее') }} →</a>
+          </div>
+        </div>
       </div>
+    </div>
+    <div v-if="items.length > 1" class="slider-dots">
+      <button v-for="(item, index) in items" :key="index" class="dot" :class="{ active: index === currentIndex }" @click="goToSlide(index)"/>
     </div>
   </section>
 </template>
 
 <script>
-import { computed, ref, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useData } from 'vitepress'
-import { useConfigItem } from '../utils/useConfigItem'
-import { useRandomArray } from '../utils/useRandomArray'
-import { useUrlMedia } from '../utils/useUrlMedia'
+import { useTranslate } from '../utils/useTranslate'
 
 export default {
-  name: 'MainData',
+  name: 'MainSlider',
   props: {
     type: { type: String, required: true },
+    interval: { type: Number, default: 5000 }
   },
   setup(props) {
-    const { lang } = useData()
-    const config = useConfigItem[props.type] || useConfigItem['pets']
-    const baseUrl = import.meta.env.BASE_URL
-    const translate = (category, key) => key
-    const item = ref(null)
-    const isLoading = ref(true)
-    const error = ref(null)
-    const transformItem = (data, subtype = '') => {
-      const transformed = config.transform ? config.transform(data, lang.value, translate) : {}
-      const base = {
-        uuid: data.uuid,
-        title: data.title || '',
-        description: data.description || '',
-        covenantID: data.covenantID || '',
-        type: props.type,
-        subtype: subtype,
-        imageHorizontal: useUrlMedia(data.imageHorizontal, 'image'),
-        imageVertical: useUrlMedia(data.imageVertical, 'image'),
-        filter: data.filter || [],
-        ...transformed
-      }
-      return base
+    const { lang, frontmatter } = useData()
+    const translate = (category, key) => useTranslate(lang.value, category, key)
+    const currentIndex = ref(0)
+    let timer = null
+    const items = computed(() => {
+      const mainArray = frontmatter.value?.main || []
+      const block = mainArray.find(item => item.type === props.type)
+      return block ? block.list : []
+    })
+    const nextSlide = () => {
+      if (items.value.length <= 1) return
+      currentIndex.value = (currentIndex.value + 1) % items.value.length
     }
-    const loadRandomPet = async () => {
-      try {
-        isLoading.value = true
-        error.value = null
-        const indexRes = await fetch(`${baseUrl}data/index.json`)
-        if (!indexRes.ok) throw new Error('Failed to load index.json')
-        const index = await indexRes.json()
-        const files = index.filter(item => 
-          item.type === props.type && item.lang === lang.value
-        )
-        if (files.length === 0) {
-          item.value = null
-          return
-        }
-        const results = await Promise.allSettled(
-          files.map(async ({ path, subtype }) => {
-            const res = await fetch(`${baseUrl}${path}`)
-            if (!res.ok) throw new Error(`Failed to load ${path}`)
-            const data = await res.json()
-            return data.map(item => transformItem(item, subtype))
-          })
-        )
-        const allItems = results
-          .filter(r => r.status === 'fulfilled')
-          .flatMap(r => r.value)
-        if (allItems.length === 0) {
-          item.value = null
-          return
-        }
-        const shuffled = useRandomArray(allItems)
-        item.value = shuffled[0]
-      } catch (err) {
-        console.error('❌ Ошибка:', err)
-        error.value = err.message
-        item.value = null
-      } finally {
-        isLoading.value = false
+    const goToSlide = (index) => {
+      currentIndex.value = index
+      resetTimer()
+    }
+    const startTimer = () => {
+      stopTimer()
+      if (items.value.length > 1) {
+        timer = setInterval(nextSlide, props.interval)
       }
     }
-    const getItemLink = (item) => {
-      const subtype = item.subtype || 'pets'
-      if (item.covenantID) {
-        return `${baseUrl}${lang.value}/${props.type}/${item.covenantID}/${subtype}/${item.uuid}`
+    const stopTimer = () => {
+      if (timer) {
+        clearInterval(timer)
+        timer = null
       }
-      return `${baseUrl}${lang.value}/${props.type}/${subtype}/${item.uuid}`
+    }
+    const resetTimer = () => {
+      stopTimer()
+      startTimer()
     }
     onMounted(() => {
-      loadRandomPet()
+      startTimer()
     })
-    watch(lang, () => {
-      loadRandomPet()
+    onUnmounted(() => {
+      stopTimer()
     })
     return {
-      config,
-      item,
-      isLoading,
-      error,
-      getItemLink
+      items,
+      currentIndex,
+      goToSlide,
+      translate
     }
   }
 }
 </script>
+
+<style scoped>
+.main-slider-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+.slider-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  transform: translateX(calc(-100% * v-bind(currentIndex)));
+}
+.slider-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  opacity: 0.7;
+  transition: opacity 0.5s ease;
+}
+.slider-slide.active {
+  opacity: 1;
+}
+.slider-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.dot.active {
+  background: var(--vp-c-brand-1, #e67e22);
+  width: 24px;
+  border-radius: 5px;
+}
+.dot:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+</style>
