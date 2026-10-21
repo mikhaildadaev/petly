@@ -34,6 +34,7 @@ main:
 <MainSlider :type="'general'"/>
 <ItemsRandom :type="'pets'" :item-type="'dogs'"/>
 <ItemsRandom :type="'pets'" :item-type="'cats'"/>
+<MainBlock :type="'favorites'"/>
 <ItemsRandom :type="'organizations'" :item-type="'shelters'"/>
 <MainBlock :type="'support'"/>
 <ItemsRandom :type="'humans'" :item-type="'volunteers'"/>
