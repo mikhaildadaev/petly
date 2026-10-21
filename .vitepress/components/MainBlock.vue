@@ -1,103 +1,33 @@
 <template>
-  <section v-if="item" class="aspect-full main-block">
-    
+  <section v-if="items && items.length" class="main-block">
+    <div class="main-block-list">
+      <div v-for="(item, index) in items" :key="index" class="main-block-item">
+        <h3 class="title">{{ item.name }}</h3>
+        <p class="description">{{ item.description }}</p>
+        <a v-if="item.link" :href="item.link" class="link">Подробнее →</a>
+      </div>
+    </div>
   </section>
 </template>
 
 <script>
-import { computed, ref, onMounted, watch } from 'vue'
+import { computed } from 'vue'
 import { useData } from 'vitepress'
-import { useConfigItem } from '../utils/useConfigItem'
-import { useRandomArray } from '../utils/useRandomArray'
-import { useUrlMedia } from '../utils/useUrlMedia'
 
 export default {
-  name: 'MainData',
+  name: 'MainBlock',
   props: {
-    type: { type: String, required: true },
+    type: { type: String, required: true }
   },
   setup(props) {
-    const { lang } = useData()
-    const config = useConfigItem[props.type] || useConfigItem['pets']
-    const baseUrl = import.meta.env.BASE_URL
-    const translate = (category, key) => key
-    const item = ref(null)
-    const isLoading = ref(true)
-    const error = ref(null)
-    const transformItem = (data, subtype = '') => {
-      const transformed = config.transform ? config.transform(data, lang.value, translate) : {}
-      const base = {
-        uuid: data.uuid,
-        title: data.title || '',
-        description: data.description || '',
-        covenantID: data.covenantID || '',
-        type: props.type,
-        subtype: subtype,
-        imageHorizontal: useUrlMedia(data.imageHorizontal, 'image'),
-        imageVertical: useUrlMedia(data.imageVertical, 'image'),
-        filter: data.filter || [],
-        ...transformed
-      }
-      return base
-    }
-    const loadRandomPet = async () => {
-      try {
-        isLoading.value = true
-        error.value = null
-        const indexRes = await fetch(`${baseUrl}data/index.json`)
-        if (!indexRes.ok) throw new Error('Failed to load index.json')
-        const index = await indexRes.json()
-        const files = index.filter(item => 
-          item.type === props.type && item.lang === lang.value
-        )
-        if (files.length === 0) {
-          item.value = null
-          return
-        }
-        const results = await Promise.allSettled(
-          files.map(async ({ path, subtype }) => {
-            const res = await fetch(`${baseUrl}${path}`)
-            if (!res.ok) throw new Error(`Failed to load ${path}`)
-            const data = await res.json()
-            return data.map(item => transformItem(item, subtype))
-          })
-        )
-        const allItems = results
-          .filter(r => r.status === 'fulfilled')
-          .flatMap(r => r.value)
-        if (allItems.length === 0) {
-          item.value = null
-          return
-        }
-        const shuffled = useRandomArray(allItems)
-        item.value = shuffled[0]
-      } catch (err) {
-        console.error('❌ Ошибка:', err)
-        error.value = err.message
-        item.value = null
-      } finally {
-        isLoading.value = false
-      }
-    }
-    const getItemLink = (item) => {
-      const subtype = item.subtype || 'pets'
-      if (item.covenantID) {
-        return `${baseUrl}${lang.value}/${props.type}/${item.covenantID}/${subtype}/${item.uuid}`
-      }
-      return `${baseUrl}${lang.value}/${props.type}/${subtype}/${item.uuid}`
-    }
-    onMounted(() => {
-      loadRandomPet()
-    })
-    watch(lang, () => {
-      loadRandomPet()
+    const { frontmatter } = useData()
+    const items = computed(() => {
+      const mainArray = frontmatter.value?.main || []
+      const block = mainArray.find(item => item.type === props.type)
+      return block ? block.list : []
     })
     return {
-      config,
-      item,
-      isLoading,
-      error,
-      getItemLink
+      items
     }
   }
 }
