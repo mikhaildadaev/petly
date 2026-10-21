@@ -3,9 +3,11 @@
     <div class="list">
       <div v-for="(item, index) in items" :key="index" class="item">
         <img v-if="item.img" :src="item.img" :alt="item.name" class="image" loading="lazy"/>
-        <h1 class="name">{{ item.name }}</h1>
-        <p class="description">{{ item.description }}</p>
-        <a v-if="item.link" :href="item.link" class="link">Подробнее →</a>
+        <div class="text">
+          <h1 class="name">{{ item.name }}</h1>
+          <p class="description">{{ item.description }}</p>
+          <a v-if="item.link" :href="item.link" class="link">Подробнее →</a>
+        </div>
       </div>
     </div>
   </section>
