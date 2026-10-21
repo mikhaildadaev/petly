@@ -1,6 +1,6 @@
 ---
 title: Mitmachen
-description: Schenke deine Fürsorge denen, die warten – werde Teil unserer Freiwilligenbewegung.
+description: Schenke deine Fürsorge denen, die warten – werde Teil unserer Freiwilligenbewegung
 blocks:
   - type: 'cubes'
     title: '... Wer kann helfen'

@@ -13,15 +13,15 @@ main:
         link: 'Link 2'
   - type: 'join'
     list:
-      - name: 'Title'
-        description: 'Description'
-        img: 'Image'
+      - name: 'Join us'
+        description: 'Share your care with those who are waiting — become part of our volunteer movement'
+        img: '/assets/webp/page_join.webp'
         link: '/dobrology/join'
   - type: 'support'
     list:
-      - name: 'Title'
-        description: 'Description'
-        img: 'Image'
+      - name: 'Support'
+        description: 'Food, medicine, beds and toys — every item helps animals live better'
+        img: '/assets/webp/page_support.webp'
         link: '/dobrology/support'
 ---
 
@@ -36,11 +36,9 @@ main:
 ## Shelters
 <ItemsRandom :type="'organizations'" :item-type="'shelters'"/>
 
-## Support
 <MainBlock :type="'support'"/>
 
 ## Volunteers
 <ItemsRandom :type="'humans'" :item-type="'volunteers'"/>
 
-## Join us
 <MainBlock :type="'join'"/>

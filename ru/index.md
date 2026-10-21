@@ -13,15 +13,15 @@ main:
         link: 'Ссылка 2'
   - type: 'join'
     list:
-      - name: 'Заголовок'
-        description: 'Описание'
-        img: 'Изображение'
+      - name: 'Присоединиться'
+        description: 'Подари свою заботу тем, кто ждёт — стань частью нашего волонтерского движения'
+        img: '/assets/webp/page_join.webp'
         link: '/dobrology/join'
   - type: 'support'
     list:
-      - name: 'Заголовок'
-        description: 'Описание'
-        img: 'Изображение'
+      - name: 'Поддержать'
+        description: 'Корм, лекарства, лежанки и игрушки — каждая вещь помогает животным жить лучше'
+        img: '/assets/webp/page_support.webp'
         link: '/dobrology/support'
 ---
 
@@ -36,11 +36,9 @@ main:
 ## Приюты
 <ItemsRandom :type="'organizations'" :item-type="'shelters'"/>
 
-## Поддержать
 <MainBlock :type="'support'"/>
 
 ## Волонтеры
 <ItemsRandom :type="'humans'" :item-type="'volunteers'"/>
 
-## Присоединиться
 <MainBlock :type="'join'"/>

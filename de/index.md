@@ -13,15 +13,15 @@ main:
         link: 'Der Link 2'
   - type: 'join'
     list:
-      - name: 'Überschrift'
-        description: 'Die Beschreibung'
-        img: 'Bild'
+      - name: 'Mitmachen'
+        description: 'Schenke deine Fürsorge denen, die warten – werde Teil unserer Freiwilligenbewegung.'
+        img: '/assets/webp/page_join.webp'
         link: '/dobrology/join'
   - type: 'support'
     list:
-      - name: 'Überschrift'
-        description: 'Die Beschreibung'
-        img: 'Bild'
+      - name: 'Unterstützen'
+        description: 'Futter, Medikamente, Körbchen und Spielzeug – jeder Gegenstand hilft den Tieren, ein besseres Leben zu führen'
+        img: '/assets/webp/page_support.webp'
         link: '/dobrology/support'
 ---
 
@@ -36,11 +36,9 @@ main:
 ## Tierheime
 <ItemsRandom :type="'organizations'" :item-type="'shelters'"/>
 
-## Unterstützen
 <MainBlock :type="'support'"/>
 
 ## Freiwillige
 <ItemsRandom :type="'humans'" :item-type="'volunteers'"/>
 
-## Mitmachen
 <MainBlock :type="'join'"/>
