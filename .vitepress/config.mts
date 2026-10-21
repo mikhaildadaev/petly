@@ -92,15 +92,15 @@ export default defineConfig({
         },
         nav: [
           { 
-            text: 'Startseite', 
-            link: '/de/' 
-          },
-          { 
             text: 'Tiere', 
             items: [
               { text: 'Hunde', link: '/de/pets/dogs' },
               { text: 'Katzen', link: '/de/pets/cats' }
             ]
+          },
+          { 
+            text: 'Favoriten', 
+            link: '/de/chance/favorites' 
           },
           { 
             text: 'Dobrologie', 
@@ -110,10 +110,6 @@ export default defineConfig({
               { text: 'Freiwillige', link: '/de/humans/volunteers' },
               { text: 'Mitmachen', link: '/de/dobrology/join' }
             ]
-          },
-          { 
-            text: 'Favoriten', 
-            link: '/de/chance/favorites' 
           },
           { 
             text: 'Tipps', 
@@ -141,6 +137,10 @@ export default defineConfig({
               { text: 'Katzen', link: '/de/pets/cats' }
             ]
           },
+          { 
+            text: 'Favoriten', 
+            link: '/de/chance/favorites' 
+          },
           {
             text: 'Dobrologie',
             items: [
@@ -149,10 +149,6 @@ export default defineConfig({
               { text: 'Freiwillige', link: '/de/humans/volunteers' },
               { text: 'Mitmachen', link: '/de/dobrology/join' }
             ]
-          },
-          { 
-            text: 'Favoriten', 
-            link: '/de/chance/favorites' 
           },
           {
             text: 'Tipps',
@@ -234,15 +230,15 @@ export default defineConfig({
         },
         nav: [
           { 
-            text: 'Home', 
-            link: '/en/' 
-          },
-          { 
             text: 'Pets', 
             items: [
               { text: 'Dogs', link: '/en/pets/dogs' },
               { text: 'Cats', link: '/en/pets/cats' }
             ]
+          },
+          { 
+            text: 'Favorites', 
+            link: '/en/chance/favorites' 
           },
           { 
             text: 'Dobrology', 
@@ -252,10 +248,6 @@ export default defineConfig({
               { text: 'Volunteers', link: '/en/humans/volunteers' },
               { text: 'Join us', link: '/en/dobrology/join' }
             ]
-          },
-          { 
-            text: 'Favorites', 
-            link: '/en/chance/favorites' 
           },
           { 
             text: 'Tips', 
@@ -283,6 +275,10 @@ export default defineConfig({
               { text: 'Cats', link: '/en/pets/cats' }
             ]
           },
+          { 
+            text: 'Favorites', 
+            link: '/en/chance/favorites' 
+          },
           {
             text: 'Dobrology',
             items: [
@@ -291,10 +287,6 @@ export default defineConfig({
               { text: 'Volunteers', link: '/en/humans/volunteers' },
               { text: 'Join us', link: '/en/dobrology/join' }
             ]
-          },
-          { 
-            text: 'Favorites', 
-            link: '/en/chance/favorites' 
           },
           {
             text: 'Tips',
@@ -376,16 +368,16 @@ export default defineConfig({
         },
         nav: [
           { 
-            text: 'Главная', 
-            link: '/ru/' 
-          },
-          { 
             text: 'Питомцы', 
             items: [
 
               { text: 'Собаки', link: '/ru/pets/dogs' },
               { text: 'Кошки', link: '/ru/pets/cats' }
             ]
+          },
+          { 
+            text: 'Любимцы', 
+            link: '/ru/chance/favorites' 
           },
           { 
             text: 'Добрология', 
@@ -395,10 +387,6 @@ export default defineConfig({
               { text: 'Волонтёры', link: '/ru/humans/volunteers' },
               { text: 'Присоединиться', link: '/ru/dobrology/join' }
             ]
-          },
-          { 
-            text: 'Любимцы', 
-            link: '/ru/chance/favorites' 
           },
           { 
             text: 'Советы', 
@@ -426,6 +414,10 @@ export default defineConfig({
               { text: 'Кошки', link: '/ru/pets/cats' }
             ]
           },
+          { 
+            text: 'Любимцы', 
+            link: '/ru/chance/favorites' 
+          },
           {
             text: 'Добрология',
             items: [
@@ -434,10 +426,6 @@ export default defineConfig({
               { text: 'Волонтёры', link: '/ru/humans/volunteers' },
               { text: 'Присоединиться', link: '/ru/dobrology/join' }
             ]
-          },
-          { 
-            text: 'Любимцы', 
-            link: '/ru/chance/favorites' 
           },
           {
             text: 'Советы',
