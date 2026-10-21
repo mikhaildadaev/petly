@@ -11,6 +11,12 @@ main:
         description: 'Description 2'
         img: 'Image 2'
         link: 'Link 2'
+  - type: 'favorites'
+    list:
+      - name: 'Favorites'
+        description: 'Pets that have won your heart, whose photos you rewatch several times. Those whom you have already mentally named as your own'
+        img: '/assets/webp/page_favorites.webp'
+        link: '/en/pets/favorites'
   - type: 'join'
     list:
       - name: 'Join us'

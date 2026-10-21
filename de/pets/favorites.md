@@ -1,6 +1,6 @@
 ---
 title: Favoriten
-description: Tiere, die Ihr Herz erobert haben.
+description: Haustiere, die Ihr Herz erobert haben, deren Fotos Sie mehrmals überprüfen. Diejenigen, die du bereits mental als deine bezeichnet hast
 blocks:
   - type: 'intro'
     title: '«Das Herz ist ein erstaunliches Ding. Es fragt nicht, wer du bist, wo du bist oder warum. Es beginnt einfach schneller zu schlagen, wenn es genau diese Augen sieht, genau dieses Lächeln, genau diesen Blick, bei dem einem warm ums Herz wird.»'

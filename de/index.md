@@ -11,6 +11,12 @@ main:
         description: 'Die Beschreibung 2'
         img: 'Bild 2'
         link: 'Der Link 2'
+  - type: 'favorites'
+    list:
+      - name: 'Favoriten'
+        description: 'Haustiere, die Ihr Herz erobert haben, deren Fotos Sie mehrmals überprüfen. Diejenigen, die du bereits mental als deine bezeichnet hast'
+        img: '/assets/webp/page_favorites.webp'
+        link: '/de/pets/favorites'
   - type: 'join'
     list:
       - name: 'Mitmachen'

@@ -1,6 +1,6 @@
 ---
 title: Favorites
-description: Pets that have won your heart.
+description: Pets that have won your heart, whose photos you rewatch several times. Those whom you have already mentally named as your own
 blocks:
   - type: 'intro'
     title: '«The heart is an amazing thing. It doesn’t ask who you are, where you are, or why. It just starts beating faster when it sees those very eyes, that very smile, that very look that makes you feel warm inside.»'
