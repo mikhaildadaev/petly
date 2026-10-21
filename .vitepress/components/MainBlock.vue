@@ -6,7 +6,7 @@
         <div class="text">
           <h1 class="name">{{ item.name }}</h1>
           <p class="description">{{ item.description }}</p>
-          <a v-if="item.link" :href="item.link" class="link">Подробнее →</a>
+          <a v-if="item.link" :href="item.link" class="link">{{ translate('ui', 'Подробнее')}} →</a>
         </div>
       </div>
     </div>
@@ -16,6 +16,7 @@
 <script>
 import { computed } from 'vue'
 import { useData } from 'vitepress'
+import { useTranslate, useAge, useAgePetCategory, useDirection, useExperience } from '../utils/useTranslate'
 
 export default {
   name: 'MainBlock',
@@ -23,14 +24,16 @@ export default {
     type: { type: String, required: true }
   },
   setup(props) {
-    const { frontmatter } = useData()
+    const { lang, frontmatter } = useData()
+    const translate = (category, key) => useTranslate(lang.value, category, key)
     const items = computed(() => {
       const mainArray = frontmatter.value?.main || []
       const block = mainArray.find(item => item.type === props.type)
       return block ? block.list : []
     })
     return {
-      items
+      items,
+      translate
     }
   }
 }
