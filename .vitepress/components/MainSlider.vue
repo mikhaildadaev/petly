@@ -1,5 +1,5 @@
 <template>
-  <section v-if="item" class="aspect-full main-data">
+  <section v-if="item" class="aspect-full main-slider">
     <div class="meta">
       <template v-for="displayField in config.fields.display" :key="displayField">
         <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`">{{ item[displayField] }}</label>
