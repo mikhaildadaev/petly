@@ -430,6 +430,9 @@ p.withColor {
   margin: 0 120px 0 240px;
   color: var(--vp-c-dark);
 }
+.main-block .list .item .description{
+  margin-bottom: 16px;
+}
 .main-block .list .item .link {
   display: inline-block;
   margin-top: auto;
