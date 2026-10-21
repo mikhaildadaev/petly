@@ -428,6 +428,7 @@ p.withColor {
   display: flex;
   flex-direction: column;
   margin: 0 120px 0 240px;
+  color: var(--vp-c-dark);
 }
 .main-block .list .item .link {
   display: inline-block;
