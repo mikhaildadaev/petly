@@ -410,7 +410,16 @@ p.withColor {
 /* ============================================================
    MAIN
    ============================================================ */
-.main-data {
+.main-block {
+  position: relative;
+  min-width: 340px;
+  max-width: 100dvw;
+  padding: 0 24px;
+  background-color: var(--vp-c-bg-img);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.main-slider {
   position: relative;
   width: 100dvw;
   min-width: 340px;
@@ -421,7 +430,7 @@ p.withColor {
   border-radius: var(--radius);
   overflow: hidden;
 }
-.main-data .meta {
+.main-slider .meta {
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -431,24 +440,24 @@ p.withColor {
   margin-bottom: 0.8rem;
   z-index: 2;
 }
-.main-data .media {
+.main-slider .media {
   position: relative;
   overflow: hidden;
   height: 100%;
   margin-right: 296px;
 }
-.main-data .media picture {
+.main-slider .media picture {
   display: block;
   width: 100%;
   height: 100%;
 }
-.main-data .media .img {
+.main-slider .media .img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.5s ease;
 }
-.main-data .content {
+.main-slider .content {
   position: absolute;
   top: 0;
   right: 0;
@@ -462,23 +471,23 @@ p.withColor {
   border-radius: var(--radius);
   z-index: 1;
 }
-.main-data .content .actions {
+.main-slider .content .actions {
   margin-top: auto;
 }
-.main-data .content .name {
+.main-slider .content .name {
   font-size: 32px;
   font-weight: 700;
   color: var(--vp-c-text-1);
   margin: 0 0 8px;
   font-family: var(--vp-font-family-print);
 }
-.main-data .content .description {
+.main-slider .content .description {
   font-size: 16px;
   line-height: 1.6;
   color: var(--vp-c-text-2);
   margin: 0 0 20px;
 }
-.main-data .content .button {
+.main-slider .content .button {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -491,18 +500,18 @@ p.withColor {
   text-decoration: none;
   transition: all 0.3s ease;
 }
-.main-data .content .button.primary {
+.main-slider .content .button.primary {
   background-color: var(--vp-c-brand-1);
   color: var(--vp-c-white);
 }
-.main-data .content .button.primary:hover {
+.main-slider .content .button.primary:hover {
   background-color: var(--vp-c-brand-2);
 }
-.main-data .content .button .button-arrow {
+.main-slider .content .button .button-arrow {
   font-size: 18px;
   transition: transform 0.3s ease;
 }
-.main-data .content .button.primary:hover .button-arrow {
+.main-slider .content .button.primary:hover .button-arrow {
   transform: translateX(4px);
 }
 
@@ -1729,13 +1738,13 @@ p.withColor {
   button.carousel {
     background-color: transparent !important;
   }
-  .main-data {
+  .main-slider {
     margin: 0 -24px;
   }
-  .main-data .media {
+  .main-slider .media {
     margin: 0;
   }
-  .main-data .content {
+  .main-slider .content {
     left: 0;
     top: auto;
     bottom: 0;
