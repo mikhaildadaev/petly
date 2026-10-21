@@ -1,10 +1,11 @@
 <template>
   <section v-if="items && items.length" class="main-block">
-    <div class="main-block-list">
-      <div v-for="(item, index) in items" :key="index" class="main-block-item">
-        <h3 class="title">{{ item.name }}</h3>
+    <div class="list">
+      <div v-for="(item, index) in items" :key="index" class="item">
+        <h1 class="title">{{ item.name }}</h1>
         <p class="description">{{ item.description }}</p>
         <a v-if="item.link" :href="item.link" class="link">Подробнее →</a>
+        <img v-if="item.img" :src="item.img" :alt="item.name" class="image" loading="lazy"/>
       </div>
     </div>
   </section>
