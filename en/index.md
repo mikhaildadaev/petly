@@ -1,11 +1,8 @@
 ---
 layout: home
-hero:
-  name: 'IN GOODOLOGY'
-  highlight: '- you'
 ---
 
-<HomeStyle :type="'pets'"/>
+<MainData :type="'pets'"/>
 
 ## Dogs
 <ItemsRandom :type="'pets'" :item-type="'dogs'"/>

@@ -1,8 +1,5 @@
 ---
 layout: home
-home: 
-  name: 'В ДОБРОЛОГИЯХ'
-  highlight: '- ты'
 ---
 
 <MainData :type="'pets'"/>

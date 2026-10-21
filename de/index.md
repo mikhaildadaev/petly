@@ -1,11 +1,8 @@
 ---
 layout: home
-hero:
-  name: 'IN GUTER WISSENSCHAFT'
-  highlight: '- du'
 ---
 
-<HomeStyle :type="'pets'"/>
+<MainData :type="'pets'"/>
 
 ## Hunde
 <ItemsRandom :type="'pets'" :item-type="'dogs'"/>
