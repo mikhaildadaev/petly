@@ -2,7 +2,7 @@
 layout: home
 ---
 
-<MainData :type="'pets'"/>
+<MainSlider/>
 
 ## Dogs
 <ItemsRandom :type="'pets'" :item-type="'dogs'"/>
