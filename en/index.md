@@ -16,13 +16,13 @@ main:
       - name: 'Join us'
         description: 'Share your care with those who are waiting — become part of our volunteer movement'
         img: '/assets/webp/page_join.webp'
-        link: '/dobrology/join'
+        link: '/en/dobrology/join'
   - type: 'support'
     list:
       - name: 'Support'
         description: 'Food, medicine, beds and toys — every item helps animals live better'
         img: '/assets/webp/page_support.webp'
-        link: '/dobrology/support'
+        link: '/en/dobrology/support'
 ---
 
 <MainSlider :type="'general'"/>

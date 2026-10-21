@@ -16,13 +16,13 @@ main:
       - name: 'Присоединиться'
         description: 'Подари свою заботу тем, кто ждёт — стань частью нашего волонтерского движения'
         img: '/assets/webp/page_join.webp'
-        link: '/dobrology/join'
+        link: '/ru/dobrology/join'
   - type: 'support'
     list:
       - name: 'Поддержать'
         description: 'Корм, лекарства, лежанки и игрушки — каждая вещь помогает животным жить лучше'
         img: '/assets/webp/page_support.webp'
-        link: '/dobrology/support'
+        link: '/ru/dobrology/support'
 ---
 
 <MainSlider :type="'general'"/>

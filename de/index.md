@@ -16,13 +16,13 @@ main:
       - name: 'Mitmachen'
         description: 'Schenke deine Fürsorge denen, die warten – werde Teil unserer Freiwilligenbewegung.'
         img: '/assets/webp/page_join.webp'
-        link: '/dobrology/join'
+        link: '/de/dobrology/join'
   - type: 'support'
     list:
       - name: 'Unterstützen'
         description: 'Futter, Medikamente, Körbchen und Spielzeug – jeder Gegenstand hilft den Tieren, ein besseres Leben zu führen'
         img: '/assets/webp/page_support.webp'
-        link: '/dobrology/support'
+        link: '/de/dobrology/support'
 ---
 
 <MainSlider :type="'general'"/>
