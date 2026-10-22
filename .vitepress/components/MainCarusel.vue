@@ -1,8 +1,8 @@
 <template>
-  <section v-if="items && items.length" class="main-slider-container">
+  <section v-if="items && items.length" class="main-carusel">
     <div class="slider-track">
       <div v-for="(item, index) in items" :key="index" class="slider-slide" :class="{ 'active': index === currentIndex }">
-        <div class="main-block">
+        <div class="main-item">
           <img v-if="item.img" :src="item.img" :alt="item.name" class="image" loading="lazy"/>
           <div class="text">
             <h1 class="name">{{ item.name }}</h1>
@@ -24,7 +24,7 @@ import { useData } from 'vitepress'
 import { useTranslate } from '../utils/useTranslate'
 
 export default {
-  name: 'MainSlider',
+  name: 'MainCarusel',
   props: {
     type: { type: String, required: true },
     interval: { type: Number, default: 5000 }
