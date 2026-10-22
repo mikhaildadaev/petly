@@ -1,6 +1,6 @@
 ---
 title: 'Технологии'
-description: 'Мы строим мосты из простого тепла, чтоб каждая лапа свой дом обрела'
+description: 'Мы строим мосты из простого тепла, чтоб каждая лапа свой дом обрела.'
 blocks:
   - type: 'intro'
     title: '«Мы строим мосты из простого тепла, чтоб каждая лапа свой дом обрела.»'
@@ -9,11 +9,11 @@ blocks:
     list:
       - name: 'GitHub'
         image: '/assets/svg/tech_github.svg'
-        description: 'Хранение кода, CI/CD через GitHub Actions и бесплатный хостинг на GitHub Pages'
+        description: 'Хранение кода, CI/CD через GitHub Actions и бесплатный хостинг на GitHub Pages.'
         link: 'https://github.com/'
       - name: 'Cloudinary'
         image: '/assets/svg/tech_cloudinary.svg'
-        description: 'Облачное хранилище для аудио/видео записей и изображений с доставкой контента'
+        description: 'Облачное хранилище для аудио/видео записей и изображений с доставкой контента.'
         link: 'https://cloudinary.com/'
   - type: 'cubes'
     title: '... Фронтенд'
@@ -37,7 +37,7 @@ blocks:
     title: '... Лицензия'
     list:
       - name: 'Apache License 2.0'
-        description: 'Проект распространяется под лицензией Apache License 2.0. Код открыт и вы можете использовать его в своих проектах'
+        description: 'Проект распространяется под лицензией Apache License 2.0. Код открыт и вы можете использовать его в своих проектах.'
         link: 'https://www.apache.org/licenses/LICENSE-2.0'
 ---
 

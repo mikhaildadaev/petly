@@ -3,18 +3,18 @@ layout: home
 main:
   - type: 'general'
     list:
-      - name: 'Überschrift 1'
-        description: 'Die Beschreibung 1'
-        img: 'Bild 1'
-        link: 'Der Link 1'
-      - name: 'Überschrift 2'
-        description: 'Die Beschreibung 2'
-        img: 'Bild 2'
-        link: 'Der Link 2'
+      - name: 'Mission'
+        description: 'Wir glauben, dass jedes Tier ein Zuhause verdient.'
+        img: '/assets/webp/page_mission.webp'
+        link: '/ru/about/mission'
+      - name: 'Kontakte'
+        description: 'Nehmen Sie Kontakt mit uns auf – wenn Sie helfen, mitmachen oder einfach eine Frage stellen möchten.'
+        img: '/assets/webp/page_contacts.webp'
+        link: '/ru/about/contacts'
   - type: 'favorites'
     list:
       - name: 'Favoriten'
-        description: 'Haustiere, die Ihr Herz erobert haben, deren Fotos Sie mehrmals überprüfen. Diejenigen, die du bereits mental als deine bezeichnet hast'
+        description: 'Haustiere, die Ihr Herz erobert haben, deren Fotos Sie mehrmals überprüfen. Diejenigen, die du bereits mental als deine bezeichnet hast.'
         img: '/assets/webp/page_favorites.webp'
         link: '/de/pets/favorites'
   - type: 'join'
@@ -26,12 +26,12 @@ main:
   - type: 'support'
     list:
       - name: 'Unterstützen'
-        description: 'Futter, Medikamente, Körbchen und Spielzeug – jeder Gegenstand hilft den Tieren, ein besseres Leben zu führen'
+        description: 'Futter, Medikamente, Körbchen und Spielzeug – jeder Gegenstand hilft den Tieren, ein besseres Leben zu führen.'
         img: '/assets/webp/page_support.webp'
         link: '/de/dobrology/support'
 ---
 
-<MainSlider :type="'general'"/>
+<MainCarusel :type="'general'"/>
 <ItemsRandom :type="'pets'" :item-type="'dogs'"/>
 <ItemsRandom :type="'pets'" :item-type="'cats'"/>
 <MainBlock :type="'favorites'"/>

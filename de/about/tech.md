@@ -9,11 +9,11 @@ blocks:
     list:
       - name: 'GitHub'
         image: '/assets/svg/tech_github.svg'
-        description: 'Code-Hosting, CI/CD über GitHub Actions und kostenloses Hosting auf GitHub Pages'
+        description: 'Code-Hosting, CI/CD über GitHub Actions und kostenloses Hosting auf GitHub Pages.'
         link: 'https://github.com/'
       - name: 'Cloudinary'
         image: '/assets/svg/tech_cloudinary.svg'
-        description: 'Cloud-Speicher für Audio-/Videoaufnahmen und Bilder mit Content-Delivery'
+        description: 'Cloud-Speicher für Audio-/Videoaufnahmen und Bilder mit Content-Delivery.'
         link: 'https://cloudinary.com/'
   - type: 'cubes'
     title: '... Frontend'
@@ -37,7 +37,7 @@ blocks:
     title: '... Lizenz'
     list:
       - name: 'Apache License 2.0'
-        description: 'Das Projekt wird unter der Apache License 2.0 vertrieben. Der Code ist Open Source und kann in eigenen Projekten verwendet werden'
+        description: 'Das Projekt wird unter der Apache License 2.0 vertrieben. Der Code ist Open Source und kann in eigenen Projekten verwendet werden.'
         link: 'https://www.apache.org/licenses/LICENSE-2.0'
 ---
 

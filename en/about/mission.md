@@ -9,13 +9,13 @@ blocks:
     list:
       - name: 'Kindness'
         image: '/assets/webp/value-kindness.webp'
-        description: 'Everything is based on love for animals and the desire to help'
+        description: 'Everything is based on love for animals and the desire to help.'
       - name: 'Unity'
         image: '/assets/webp/value-unity.webp'
-        description: 'Together we are stronger. Every volunteer is part of a big team'
+        description: 'Together we are stronger. Every volunteer is part of a big team.'
       - name: 'Openness'
         image: '/assets/webp/value-openness.webp'
-        description: 'We are honest with volunteers and transparent in our actions'
+        description: 'We are honest with volunteers and transparent in our actions.'
   - type: 'cubes'
     title: '... Our goals'
     list:

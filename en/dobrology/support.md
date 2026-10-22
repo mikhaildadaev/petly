@@ -1,6 +1,6 @@
 ---
 title: Support
-description: Food, medicine, beds and toys — every item helps animals live better
+description: Food, medicine, beds and toys — every item helps animals live better.
 blocks:
   - type: 'cubes'
     title: '... With things'
@@ -41,7 +41,7 @@ blocks:
         info: 'Take photos/videos, write a story about the pet’s personality — this will help them find a loving family faster'
   - type: 'social'
     title: '... With words'
-    description: 'Share the link to the service on social media! One repost — and someone will find a home, while someone else will find a loyal friend'
+    description: 'Share the link to the service on social media! One repost — and someone will find a home, while someone else will find a loyal friend.'
     image: '/assets/webp/words_post.webp'
     list: 
       - link: 'VKontakte'

@@ -3,35 +3,35 @@ layout: home
 main:
   - type: 'general'
     list:
-      - name: 'Title 1'
-        description: 'Description 1'
-        img: 'Image 1'
-        link: 'Link 1'
-      - name: 'Title 2'
-        description: 'Description 2'
-        img: 'Image 2'
-        link: 'Link 2'
+      - name: 'Mission'
+        description: 'We believe that every pet deserves a home, and every person can become part of a good deed.'
+        img: '/assets/webp/page_mission.webp'
+        link: '/ru/about/mission'
+      - name: 'Contacts'
+        description: 'Contact us — if you want to help, join us, or just ask a question.'
+        img: '/assets/webp/page_contacts.webp'
+        link: '/ru/about/contacts'
   - type: 'favorites'
     list:
       - name: 'Favorites'
-        description: 'Pets that have won your heart, whose photos you rewatch several times. Those whom you have already mentally named as your own'
+        description: 'Pets that have won your heart, whose photos you rewatch several times. Those whom you have already mentally named as your own.'
         img: '/assets/webp/page_favorites.webp'
         link: '/en/pets/favorites'
   - type: 'join'
     list:
       - name: 'Join us'
-        description: 'Share your care with those who are waiting — become part of our volunteer movement'
+        description: 'Share your care with those who are waiting — become part of our volunteer movement.'
         img: '/assets/webp/page_join.webp'
         link: '/en/dobrology/join'
   - type: 'support'
     list:
       - name: 'Support'
-        description: 'Food, medicine, beds and toys — every item helps animals live better'
+        description: 'Food, medicine, beds and toys — every item helps animals live better.'
         img: '/assets/webp/page_support.webp'
         link: '/en/dobrology/support'
 ---
 
-<MainSlider :type="'general'"/>
+<MainCarusel :type="'general'"/>
 <ItemsRandom :type="'pets'" :item-type="'dogs'"/>
 <ItemsRandom :type="'pets'" :item-type="'cats'"/>
 <MainBlock :type="'favorites'"/>

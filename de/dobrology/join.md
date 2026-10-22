@@ -1,6 +1,6 @@
 ---
 title: Mitmachen
-description: Schenke deine Fürsorge denen, die warten – werde Teil unserer Freiwilligenbewegung
+description: Schenke deine Fürsorge denen, die warten – werde Teil unserer Freiwilligenbewegung.
 blocks:
   - type: 'cubes'
     title: '... Wer kann helfen'
@@ -27,9 +27,9 @@ blocks:
     title: '... Was zu tun ist'
     list:
       - name: 'Ein Tierheim auswählen'
-        description: 'Finde ein Tierheim mit günstiger Lage und Öffnungszeiten. Den Zeitplan und die Adresse findest du in der Tierheim-Karte oder auf der Karte'
+        description: 'Finde ein Tierheim mit günstiger Lage und Öffnungszeiten. Den Zeitplan und die Adresse findest du in der Tierheim-Karte oder auf der Karte.'
       - name: 'Kontakt mit dem Tierheim aufnehmen'
-        description: 'Melde deinen Besuch telefonisch an (Kontaktdaten im Tierheim-Profil). Kläre, was du mitbringen musst und ob es besondere Anforderungen gibt'
+        description: 'Melde deinen Besuch telefonisch an (Kontaktdaten im Tierheim-Profil). Kläre, was du mitbringen musst und ob es besondere Anforderungen gibt.'
       - name: 'Zu Besuch kommen'
         description: 'Nimm deinen Ausweis mit und komm am vereinbarten Tag und zur vereinbarten Zeit ins Tierheim. Wir warten auf dich!'
       - name: 'Emotionen tanken'

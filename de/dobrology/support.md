@@ -1,6 +1,6 @@
 ---
 title: Unterstützen
-description: Futter, Medikamente, Körbchen und Spielzeug – jeder Gegenstand hilft den Tieren, ein besseres Leben zu führen
+description: Futter, Medikamente, Körbchen und Spielzeug – jeder Gegenstand hilft den Tieren, ein besseres Leben zu führen.
 blocks:
   - type: 'cubes'
     title: '... Mit Sachspenden'
@@ -25,7 +25,7 @@ blocks:
         info: 'Müssen in der geschlossenen Originalverpackung sein und ein gültiges Mindesthaltbarkeitsdatum haben'
   - type: 'cubes'
     title: '... Mit Taten'
-    description: 'Sie können die benötigten Dinge persönlich übergeben oder eine Lieferung arrangieren. Die Öffnungszeiten der Tierheime und Telefonnummern für Rückfragen finden Sie in den Profilen der Betreuer oder Tierheime'
+    description: 'Sie können die benötigten Dinge persönlich übergeben oder eine Lieferung arrangieren. Die Öffnungszeiten der Tierheime und Telefonnummern für Rückfragen finden Sie in den Profilen der Betreuer oder Tierheime.'
     list: 
       - name: 'An Leine und Halsband gewöhnen'
         image: '/assets/webp/affairs_collar.webp'
@@ -41,7 +41,7 @@ blocks:
         info: 'Machen Sie Fotos/Videos und schreiben Sie eine Geschichte über den Charakter des Tieres – das hilft, schneller eine liebevolle Familie zu finden'
   - type: 'social'
     title: '... Mit Worten'
-    description: 'Teilen Sie den Link zum Service in sozialen Netzwerken! Ein einziger Repost – und jemand findet ein Zuhause, während ein anderer einen treuen Freund findet'
+    description: 'Teilen Sie den Link zum Service in sozialen Netzwerken! Ein einziger Repost – und jemand findet ein Zuhause, während ein anderer einen treuen Freund findet.'
     image: '/assets/webp/words_post.webp'
     list: 
       - link: 'VKontakte'

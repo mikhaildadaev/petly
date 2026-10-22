@@ -1,6 +1,6 @@
 ---
 title: Join us
-description: Share your care with those who are waiting — become part of our volunteer movement
+description: Share your care with those who are waiting — become part of our volunteer movement.
 blocks:
   - type: 'cubes'
     title: '... Who can help'
@@ -27,9 +27,9 @@ blocks:
     title: '... What to do'
     list:
       - name: 'Choose a shelter'
-        description: 'Find a shelter with a convenient location and opening hours. You can check the schedule and address in the shelter card or on the map'
+        description: 'Find a shelter with a convenient location and opening hours. You can check the schedule and address in the shelter card or on the map.'
       - name: 'Contact the shelter'
-        description: 'Notify them of your visit by phone using the contacts listed in the shelter card. Ask what to bring and if there are any special requirements'
+        description: 'Notify them of your visit by phone using the contacts listed in the shelter card. Ask what to bring and if there are any special requirements.'
       - name: 'Come for a visit'
         description: 'Bring your ID and come to the shelter on the appointed day and time. They are waiting for you!'
       - name: 'Get some emotions'

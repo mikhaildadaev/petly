@@ -9,13 +9,13 @@ blocks:
     list:
       - name: 'Freundlichkeit'
         image: '/assets/webp/value-kindness.webp'
-        description: 'Die Grundlage von allem ist die Liebe zu Tieren und der Wunsch zu helfen'
+        description: 'Die Grundlage von allem ist die Liebe zu Tieren und der Wunsch zu helfen.'
       - name: 'Einheit'
         image: '/assets/webp/value-unity.webp'
-        description: 'Gemeinsam sind wir stärker. Jeder Freiwillige ist Teil eines großen Teams'
+        description: 'Gemeinsam sind wir stärker. Jeder Freiwillige ist Teil eines großen Teams.'
       - name: 'Offenheit'
         image: '/assets/webp/value-openness.webp'
-        description: 'Wir sind ehrlich zu unseren Freiwilligen und transparent in unserem Handeln'
+        description: 'Wir sind ehrlich zu unseren Freiwilligen und transparent in unserem Handeln.'
   - type: 'cubes'
     title: '... Unsere Ziele'
     list:
