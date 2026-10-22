@@ -432,7 +432,7 @@ p.withColor {
   width: 100dvw;
   min-width: 340px;
   max-width: 100dvw;
-  margin: 24px calc(50% - 50dvw) 0;
+  margin: 2em calc(50% - 50dvw) 0;
   padding: 24px max(24px, calc(50dvw - 576px));
   background-color: var(--vp-c-bg-soft);
   border-radius: var(--radius);
@@ -1682,7 +1682,7 @@ p.withColor {
   bottom: calc(var(--vp-nav-height) + var(--vp-layout-top-height, 0px))!important;
 }
 .VPHome {
-  margin-bottom: 32px!important;
+  margin-bottom: 2em!important;
 }
 .VPHome .vp-doc :is(h1, h2, h3, h4, h5, h6) {
   border: none!important
