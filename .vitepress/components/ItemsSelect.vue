@@ -1,5 +1,5 @@
 <template>
-  <section v-if="config && config.fields" class="select-items">
+  <section v-if="config && config.fields && paginatedItems.length > 0" class="select-items">
     <div class="cards-carousel">
       <div class="carousel-wrapper">
         <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
