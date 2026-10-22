@@ -957,8 +957,8 @@ p.withColor {
   border-color: var(--vp-c-brand-light);
 }
 .carousel-slide.center .load-more .content .icon {
+  background-color: var(--vp-c-text);
   transform: rotate(90deg);
-  background-color: var(--vp-c-brand);
 }
 
 /* ============================================
@@ -999,8 +999,8 @@ p.withColor {
   border-color: var(--vp-c-brand-light);
 }
 .load-more:hover .content .icon {
+  background-color: var(--vp-c-text);
   transform: rotate(90deg);
-  background-color: var(--vp-c-brand);
 }
 .load-more .content {
   display: flex;
@@ -1015,7 +1015,7 @@ p.withColor {
   justify-content: center;
   width: 64px;
   height: 64px;
-  background-color: var(--vp-c-dark);
+  background-color: var(--vp-c-text-light);
   border-radius: 50%;
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
