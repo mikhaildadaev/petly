@@ -436,6 +436,46 @@ p.withColor {
   border-radius: var(--radius);
   overflow: hidden;
 }
+.main-carusel .track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  transform: translateX(calc(-100% * v-bind(currentIndex)));
+}
+.main-carusel .track .slide {
+  flex: 0 0 100%;
+  width: 100%;
+  opacity: 0.7;
+  transition: opacity 0.5s ease;
+}
+.main-carusel .track .slide.active {
+  opacity: 1;
+}
+.main-carusel .dots {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+.main-carusel .dots .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.main-carusel .dots .dot.active {
+  background: var(--vp-c-brand-1, #e67e22);
+  width: 24px;
+  border-radius: 5px;
+}
+.main-carusel .dots .dot:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
 .main-item {
   display: flex;
   flex-direction: row;
@@ -448,7 +488,7 @@ p.withColor {
   display: flex;
   flex-direction: column;
   width: auto;
-  padding: 0 24px 0 0;
+  padding: 16px 24px 0 0;
 }
 .main-item .text .description{
   margin-bottom: 16px;
