@@ -1671,6 +1671,9 @@ p.withColor {
 .VPNavBar .vpi-chevron-down {
   transform: rotate(-90deg)!important;
 }
+.VPSidebar {
+  direction: rtl;
+}
 .VPSidebar .curtain {
   display: none!important;
 }
