@@ -10,7 +10,7 @@ import ItemsList from '../components/ItemsList.vue'
 import ItemsRandom from '../components/ItemsRandom.vue'
 import ItemsSelect from '../components/ItemsSelect.vue'
 import MainBlock from '../components/MainBlock.vue'
-import MainSlider from '../components/MainSlider.vue'
+import MainCarusel from '../components/MainCarusel.vue'
 import PageRedirect from '../components/PageRedirect.vue'
 import PagePreloader from '../components/PagePreloader.vue'
 import PageStyle from '../components/PageStyle.vue'
@@ -228,7 +228,7 @@ export default {
     app.component('ItemsRandom', ItemsRandom)
     app.component('ItemsSelect', ItemsSelect)
     app.component('MainBlock', MainBlock)
-    app.component('MainSlider', MainSlider)
+    app.component('MainCarusel', MainCarusel)
     app.component('PageRedirect', PageRedirect)
     app.component('PageStyle', PageStyle)
   },
