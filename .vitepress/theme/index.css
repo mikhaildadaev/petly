@@ -421,6 +421,7 @@ p.withColor {
   position: relative;
   min-height: 240px;
   margin: 0 -24px;
+  padding: 24px;
   background-color: var(--vp-c-bg-img);
   border-radius: var(--radius);
   overflow: hidden;
@@ -431,7 +432,7 @@ p.withColor {
   min-width: 340px;
   max-width: 100dvw;
   margin: 24px calc(50% - 50dvw) 0;
-  padding: 0 max(24px, calc(50vw - 640px));
+  padding: 24px max(24px, calc(50vw - 640px));
   background-color: var(--vp-c-bg-img);
   border-radius: var(--radius);
   overflow: hidden;
@@ -469,19 +470,15 @@ p.withColor {
   transition: all 0.3s ease;
 }
 .main-carusel .dots .dot.active {
-  background: var(--vp-c-brand-1, #e67e22);
+  background: var(--vp-c-brand-1);
   width: 24px;
   border-radius: 5px;
-}
-.main-carusel .dots .dot:hover {
-  background: rgba(255, 255, 255, 0.8);
 }
 .main-item {
   display: flex;
   flex-direction: row;
   gap: 24px;
   min-height: 240px;
-  padding: 24px;
   color: var(--vp-c-dark);
 }
 .main-item .text {
@@ -652,21 +649,13 @@ p.withColor {
   font-size: 0.65em;
   font-weight: 600 !important;
   font-family: inherit;
-  color: var(--vp-c-text-1);
+  color: #ef5350;
   text-transform: uppercase;
   white-space: nowrap;
   cursor: pointer;
   background-color: transparent;
-  border: 1px solid var(--vp-c-border);
-  border-radius: 30px;
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-}
-.filters-compact .reset:hover {
-  color: #ef5350;
-  border-color: #ef5350;
-}
-.filters-compact .reset:hover::before {
-  background-color: #ef5350;
+  border: 1px solid #ef5350;
+  border-radius: var(--radius);
 }
 .filter-group {
   display: flex;
@@ -695,7 +684,7 @@ p.withColor {
   height: 32px;
   padding: 0;
   cursor: pointer;
-  background-color: var(--vp-c-text-1);
+  background-color: var(--vp-c-text-2);
   border-radius: var(--radius);
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
