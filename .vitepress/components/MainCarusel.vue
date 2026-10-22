@@ -1,7 +1,7 @@
 <template>
   <section v-if="items && items.length" class="main-carusel">
-    <div class="slider-track">
-      <div v-for="(item, index) in items" :key="index" class="slider-slide" :class="{ 'active': index === currentIndex }">
+    <div class="track">
+      <div v-for="(item, index) in items" :key="index" class="slide" :class="{ 'active': index === currentIndex }">
         <div class="main-item">
           <img v-if="item.img" :src="item.img" :alt="item.name" class="image" loading="lazy"/>
           <div class="text">
@@ -12,7 +12,7 @@
         </div>
       </div>
     </div>
-    <div v-if="items.length > 1" class="slider-dots">
+    <div v-if="items.length > 1" class="dots">
       <button v-for="(item, index) in items" :key="index" class="dot" :class="{ active: index === currentIndex }" @click="goToSlide(index)"/>
     </div>
   </section>
@@ -78,51 +78,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.main-slider-container {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-}
-.slider-track {
-  display: flex;
-  transition: transform 0.5s ease-in-out;
-  transform: translateX(calc(-100% * v-bind(currentIndex)));
-}
-.slider-slide {
-  flex: 0 0 100%;
-  width: 100%;
-  opacity: 0.7;
-  transition: opacity 0.5s ease;
-}
-.slider-slide.active {
-  opacity: 1;
-}
-.slider-dots {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 10px;
-  z-index: 10;
-}
-.dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.5);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-.dot.active {
-  background: var(--vp-c-brand-1, #e67e22);
-  width: 24px;
-  border-radius: 5px;
-}
-.dot:hover {
-  background: rgba(255, 255, 255, 0.8);
-}
-</style>
