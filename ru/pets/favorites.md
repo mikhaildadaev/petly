@@ -13,10 +13,7 @@ blocks:
 
 Вернитесь к ним. Полистайте карточки. Может быть, именно сегодня вы решите: **«Это мой питомец.»**
 
-## Собаки
 <ItemsSelect :type="'pets'" :item-type="'dogs'"/>
-
-## Кошки
 <ItemsSelect :type="'pets'" :item-type="'cats'"/>
 
 <PageStyle/>

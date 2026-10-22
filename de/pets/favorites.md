@@ -15,10 +15,6 @@ Dieser Bereich ist deine ganz persönliche Ecke. Hier leben nur diejenigen, die 
 
 Komm zurück zu ihnen. Blättere durch die Karten. Vielleicht entscheidest du genau heute: **«Das ist mein Tier.»**
 
-## Hunde
 <ItemsSelect :type="'pets'" :item-type="'dogs'"/>
-
-## Katzen
 <ItemsSelect :type="'pets'" :item-type="'cats'"/>
-
 <PageStyle/>
