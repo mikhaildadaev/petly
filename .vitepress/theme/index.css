@@ -1672,13 +1672,16 @@ p.withColor {
   transform: rotate(-90deg)!important;
 }
 .VPSidebar {
-  direction: rtl;
+  direction: rtl!important;
 }
 .VPSidebar .curtain {
   display: none!important;
 }
 .VPSidebar .nav section {
   margin: 0!important;
+}
+.VPNavBarTitle .title {
+  justify-content: end!important;
 }
 .VPNavScreen {
   top: 0!important;
