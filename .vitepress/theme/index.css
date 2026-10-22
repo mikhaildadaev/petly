@@ -121,7 +121,7 @@ button.favorite {
   width: 48px;
   height: 48px;
   cursor: pointer;
-  background-color: var(--vp-c-dark);
+  background-color: var(--vp-c-text-1);
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
   mask-position: center;
@@ -299,6 +299,7 @@ h6.title {
    БЛОК
    ============================================ */
 div.number {
+  font-family: var(--vp-font-family-print)!important;
   font-size: 2em !important;
   font-weight: 800 !important;
   color: var(--vp-c-brand) !important;
@@ -422,7 +423,7 @@ p.withColor {
   min-height: 240px;
   margin: 0 -24px;
   padding: 24px;
-  background-color: var(--vp-c-bg-img);
+  background-color: var(--vp-c-bg-soft);
   border-radius: var(--radius);
   overflow: hidden;
 }
@@ -432,8 +433,8 @@ p.withColor {
   min-width: 340px;
   max-width: 100dvw;
   margin: 24px calc(50% - 50dvw) 0;
-  padding: 24px max(24px, calc(50vw - 640px));
-  background-color: var(--vp-c-bg-img);
+  padding: 24px max(24px, calc(50dvw - 576px));
+  background-color: var(--vp-c-bg-soft);
   border-radius: var(--radius);
   overflow: hidden;
 }
@@ -474,12 +475,14 @@ p.withColor {
   width: 24px;
   border-radius: 5px;
 }
+.main-carusel .dots .dot:hover {
+  background: var(--vp-c-brand-2);
+}
 .main-item {
   display: flex;
   flex-direction: row;
   gap: 24px;
   min-height: 240px;
-  color: var(--vp-c-dark);
 }
 .main-item .text {
   display: flex;
@@ -508,7 +511,7 @@ p.withColor {
   width: calc(100% + 48px);
   margin: 0 -24px;
   margin-bottom: 2rem;
-  background-color: var(--vp-c-bg-img);
+  background-color: var(--vp-c-bg-soft);
   border-radius: var(--radius);
   overflow: hidden;
 }
@@ -842,9 +845,6 @@ p.withColor {
   flex-wrap: wrap;
   gap: 8px;
   margin: 16px;
-}
-.card .card-link {
-  background-color: var(--vp-c-bg-img);
 }
 .card .card-link img {
   position: absolute;
@@ -1671,12 +1671,18 @@ p.withColor {
 .VPNavBar .vpi-chevron-down {
   transform: rotate(-90deg)!important;
 }
+.VPSidebar .curtain {
+  display: none!important;
+}
 .VPSidebar .nav section {
   margin: 0!important;
 }
 .VPNavScreen {
   top: 0!important;
   bottom: calc(var(--vp-nav-height) + var(--vp-layout-top-height, 0px))!important;
+}
+.VPHome {
+  margin-bottom: 32px!important;
 }
 .VPHome .vp-doc :is(h1, h2, h3, h4, h5, h6) {
   border: none!important
