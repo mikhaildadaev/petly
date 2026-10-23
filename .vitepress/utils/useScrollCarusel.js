@@ -1,4 +1,4 @@
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 
 const MOBILE_BREAKPOINT = 735
 
@@ -6,30 +6,26 @@ export function useScrollCarusel(options = {}) {
   const {
     items = ref([]),
     containerRef = ref(null),
-    hasMoreItems = ref(false),
-    loadFn = null,
+    hasNextItems = ref(false),
+    loadNextFn = null,
+    hasPrevItems = ref(false),
+    loadPrevFn = null,
   } = options
-
-  // ============================================================
-  //  СОСТОЯНИЕ
-  // ============================================================
   const isMobile = ref(false)
+  const offsetPrev = computed(() => (hasPrevItems.value ? 1 : 0))
+  const totalSlides = computed(
+    () => items.value.length + offsetPrev.value + (hasNextItems.value ? 1 : 0)
+  )
   const currentIndex = ref(0)
   const isSwiping = ref(false)
   const touchStartX = ref(0)
   const touchStartY = ref(0)
-  const isLoadingMore = ref(false)
-
+  const isLoadingNext = ref(false)
   let resizeTimeout = null
   let isAnimating = false
   let rafId = null
   let isResetting = false
   const minSwipeDistance = 30
-
-  // ============================================================
-  //  ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ
-  // ============================================================
-
   const checkMobile = () => {
     if (typeof window !== 'undefined') {
       isMobile.value = window.innerWidth < MOBILE_BREAKPOINT
@@ -47,7 +43,6 @@ export function useScrollCarusel(options = {}) {
     const container = containerRef.value
     const slides = container.querySelectorAll('.carousel-slide')
     if (slides.length === 0) return 0
-    const containerCenter = container.scrollLeft + container.offsetWidth / 2
     let closestIndex = 0
     let closestDistance = Infinity
     slides.forEach((slide, index) => {
@@ -70,11 +65,6 @@ export function useScrollCarusel(options = {}) {
       updateCenterClass(closest)
     }
   }
-
-  // ============================================================
-  //  ОСНОВНЫЕ МЕТОДЫ
-  // ============================================================
-
   const scrollToSlide = (index) => {
     if (!containerRef.value) return
     const container = containerRef.value
@@ -102,13 +92,26 @@ export function useScrollCarusel(options = {}) {
       syncIndex()
     }, 400)
   }
+  const isOnNextCard = computed(
+    () => currentIndex.value === offsetPrev.value + items.value.length
+  )
+  const isOnPrevCard = computed(
+    () => offsetPrev.value === 1 && currentIndex.value === 0
+  )
   const nextSlide = () => {
-    const maxIndex = items.value.length + (hasMoreItems.value ? 1 : 0)
-    if (currentIndex.value < maxIndex - 1) {
+    if (isOnNextCard.value) {
+      loadNext()
+      return
+    }
+    if (currentIndex.value < totalSlides.value - 1) {
       scrollToSlide(currentIndex.value + 1)
     }
   }
   const prevSlide = () => {
+    if (isOnPrevCard.value) {
+      loadPrev()
+      return
+    }
     if (currentIndex.value > 0) {
       scrollToSlide(currentIndex.value - 1)
     }
@@ -116,49 +119,45 @@ export function useScrollCarusel(options = {}) {
   const goToSlide = (index) => {
     scrollToSlide(index)
   }
-
-  // ============================================================
-  //  СБРОС (правильный, без циклов)
-  // ============================================================
-
   const resetToFirstSlide = () => {
-    scrollToSlide(0)
+    scrollToSlide(offsetPrev.value)
   }
-
-  // ============================================================
-  //  LOAD MORE
-  // ============================================================
-
-  const loadMore = async () => {
-    if (isLoadingMore.value || !loadFn) return
-    isLoadingMore.value = true
-    const beforeIndex = currentIndex.value
-    const beforeLength = items.value.length
-    const wasOnMore = beforeIndex === beforeLength
-    await loadFn()
+  const loadNext = async () => {
+    if (isLoadingNext.value || !loadNextFn) return
+    isLoadingNext.value = true
+    const wasOnNextCard = isOnNextCard.value
+    await loadNextFn()
     await nextTick()
-    isLoadingMore.value = false
+    isLoadingNext.value = false
     if (items.value.length === 0) return
-    if (wasOnMore) {
-      const targetIndex = beforeLength
+    if (wasOnNextCard) {
+      const targetIndex = offsetPrev.value
       isResetting = true
-      currentIndex.value = targetIndex
       scrollToSlide(targetIndex)
-      setTimeout(() => {
-        isResetting = false
-      }, 100)
+      setTimeout(() => { isResetting = false }, 100)
     } else {
-      const safeIndex = Math.min(beforeIndex, items.value.length - 1)
-      if (safeIndex !== currentIndex.value) {
-        scrollToSlide(safeIndex)
-      }
+      const safeIndex = Math.min(currentIndex.value, totalSlides.value - 1)
+      if (safeIndex !== currentIndex.value) scrollToSlide(safeIndex)
     }
   }
-
-  // ============================================================
-  //  ОБРАБОТЧИКИ СОБЫТИЙ
-  // ============================================================
-
+  const loadPrev = async () => {
+    if (isLoadingNext.value || !loadPrevFn) return
+    isLoadingNext.value = true
+    const wasOnPrevCard = isOnPrevCard.value
+    await loadPrevFn()
+    await nextTick()
+    isLoadingNext.value = false
+    if (items.value.length === 0) return
+    if (wasOnPrevCard) {
+      const targetIndex = offsetPrev.value + items.value.length - 1
+      isResetting = true
+      scrollToSlide(targetIndex)
+      setTimeout(() => { isResetting = false }, 100)
+    } else {
+      const safeIndex = Math.min(currentIndex.value, totalSlides.value - 1)
+      if (safeIndex !== currentIndex.value) scrollToSlide(safeIndex)
+    }
+  }
   const handleTouchStart = (e) => {
     const touch = e.touches[0]
     touchStartX.value = touch.clientX
@@ -241,11 +240,6 @@ export function useScrollCarusel(options = {}) {
       containerRef.value.addEventListener('touchend', handleTouchEnd, { passive: true })
     }
   }
-
-  // ============================================================
-  //  ЖИЗНЕННЫЙ ЦИКЛ
-  // ============================================================
-
   onMounted(() => {
     checkMobile()
     if (typeof window !== 'undefined') {
@@ -276,20 +270,23 @@ export function useScrollCarusel(options = {}) {
       resizeTimeout = null
     }
   })
-
-  // ============================================================
-  //  ВОЗВРАТ
-  // ============================================================
   return {
     isMobile,
     currentIndex,
-    isLoadingMore,
+    isLoadingNext,
     scrollToSlide,
     nextSlide,
     prevSlide,
     goToSlide,
     resetToFirstSlide,
-    loadMore,
+    loadNext,
+    loadPrev,
+    totalSlides,
+    offsetPrev,
+    isOnNextCard,
+    isOnPrevCard,
+    hasNextItems,
+    hasPrevItems,
     syncIndex,
     updateCenterClass,
     handleTouchStart,

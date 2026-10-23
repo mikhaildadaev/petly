@@ -57,13 +57,15 @@ export const translations = {
     },
     ui: {
       'Сбросить фильтры': 'Filter zurücksetzen',
-      'Загрузить ещё': 'Mehr laden',
+      'Загрузить следующие': 'Nächste laden',
+      'Загрузить предыдущие': 'Vorherige laden',
       'осталось': 'übrig',
-      'Перейти в раздел': 'Zum Bereich',
+      'Перейти в раздел': 'Zum Bereich gehen',
       'Ничего не найдено': 'Nichts gefunden',
-      'Добавить в избранное': 'Zu Favoriten',
+      'Добавить в избранное': 'Zu Favoriten hinzufügen',
       'Перейти по ссылке': 'Zum Link',
-      'Подробнее': 'Genauer'
+      'Подробнее': 'Mehr erfahren',
+      'Нет данных': 'Keine Daten'
     }
   },
   en: {
@@ -124,13 +126,15 @@ export const translations = {
     },
     ui: {
       'Сбросить фильтры': 'Reset the filters',
-      'Загрузить ещё': 'Load more',
+      'Загрузить следующие': 'Load next',
+      'Загрузить предыдущие': 'Load previous',
       'осталось': 'left',
       'Перейти в раздел': 'Go to section',
       'Ничего не найдено': 'Nothing found',
       'Добавить в избранное': 'Add to favorites',
       'Перейти по ссылке': 'Go to link',
-      'Подробнее': 'More detailed'
+      'Подробнее': 'More detailed',
+      'Нет данных': 'No data'
     }
   },
   ru: {
@@ -191,13 +195,15 @@ export const translations = {
     },
     ui: {
       'Сбросить фильтры': 'Сбросить фильтры',
-      'Загрузить ещё': 'Загрузить ещё',
+      'Загрузить следующие': 'Загрузить следующие',
+      'Загрузить предыдущие': 'Загрузить предыдущие',
       'осталось': 'осталось',
       'Перейти в раздел': 'Перейти в раздел',
       'Ничего не найдено': 'Ничего не найдено',
       'Добавить в избранное': 'В любимцы',
       'Перейти по ссылке': 'Перейти по ссылке',
-      'Подробнее': 'Подробнее'
+      'Подробнее': 'Подробнее',
+      'Нет данных': 'Нет данных'
     }
   }
 }
@@ -214,23 +220,33 @@ export const useAge = (lang, startDate) => {
     years--
     months += 12
   }
-  if (years < 1 && months === 0) {
-    return useTranslate(lang, 'ui', 'Меньше месяца')
-  }
   const useUnit = (num, unit) => {
-    const lastDigit = num % 10
-    const lastTwoDigits = num % 100
+    if (lang === 'ru') {
+      const lastDigit = num % 10
+      const lastTwoDigits = num % 100
+      if (unit === 'год') {
+        if (lastTwoDigits >= 11 && lastTwoDigits <= 19) return useTranslate(lang, 'ageUnits', 'лет')
+        if (lastDigit === 1) return useTranslate(lang, 'ageUnits', 'год')
+        if (lastDigit >= 2 && lastDigit <= 4) return useTranslate(lang, 'ageUnits', 'года')
+        return useTranslate(lang, 'ageUnits', 'лет')
+      }
+      if (unit === 'месяц') {
+        if (lastTwoDigits >= 11 && lastTwoDigits <= 19) return useTranslate(lang, 'ageUnits', 'месяцев')
+        if (lastDigit === 1) return useTranslate(lang, 'ageUnits', 'месяц')
+        if (lastDigit >= 2 && lastDigit <= 4) return useTranslate(lang, 'ageUnits', 'месяца')
+        return useTranslate(lang, 'ageUnits', 'месяцев')
+      }
+      return useTranslate(lang, 'ageUnits', unit)
+    }
     if (unit === 'год') {
-      if (lastTwoDigits >= 11 && lastTwoDigits <= 19) return useTranslate(lang, 'ageUnits', 'лет')
-      if (lastDigit === 1) return useTranslate(lang, 'ageUnits', 'год')
-      if (lastDigit >= 2 && lastDigit <= 4) return useTranslate(lang, 'ageUnits', 'года')
-      return useTranslate(lang, 'ageUnits', 'лет')
+      return num === 1
+        ? useTranslate(lang, 'ageUnits', 'год')
+        : useTranslate(lang, 'ageUnits', 'лет')
     }
     if (unit === 'месяц') {
-      if (lastTwoDigits >= 11 && lastTwoDigits <= 19) return useTranslate(lang, 'ageUnits', 'месяцев')
-      if (lastDigit === 1) return useTranslate(lang, 'ageUnits', 'месяц')
-      if (lastDigit >= 2 && lastDigit <= 4) return useTranslate(lang, 'ageUnits', 'месяца')
-      return useTranslate(lang, 'ageUnits', 'месяцев')
+      return num === 1
+        ? useTranslate(lang, 'ageUnits', 'месяц')
+        : useTranslate(lang, 'ageUnits', 'месяцев')
     }
     return useTranslate(lang, 'ageUnits', unit)
   }
@@ -240,7 +256,6 @@ export const useAge = (lang, startDate) => {
   }
   const yearUnit = useUnit(years, 'год')
   let result = `${years} ${yearUnit}`
-  
   if (months > 0) {
     const monthUnit = useUnit(months, 'месяц')
     result += ` ${months} ${monthUnit}`
