@@ -1,10 +1,10 @@
 <template>
   <section v-if="config && config.fields && (isLoading || filteredItems.length > 0)" class="select-items">
     <div class="cards-carousel">
-      <div class="carousel-wrapper">
+      <div class="wrapper">
         <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="isFirstSlide"></button>
-        <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-          <div v-if="hasPrevItems" class="carousel-slide" :class="{ center: currentIndex === 0 }">
+        <div class="track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
+          <div v-if="hasPrevItems" class="slide" :class="{ center: currentIndex === 0 }">
             <div class="aspect-card load-more prev-load" @click="loadPrev">
               <div class="content">
                 <div class="icon prev-icon"></div>
@@ -16,7 +16,7 @@
               </div>
             </div>
           </div>
-          <div v-for="(item, index) in paginatedItems" :key="item.uuid" class="carousel-slide" :class="{ center: (index + offsetPrev) === currentIndex }">
+          <div v-for="(item, index) in paginatedItems" :key="item.uuid" class="slide" :class="{ center: (index + offsetPrev) === currentIndex }">
             <div class="aspect-card card">
               <div class="meta">
                 <template v-for="displayField in config.fields.display" :key="displayField">
@@ -35,7 +35,7 @@
               </a>
             </div>
           </div>
-          <div v-if="hasNextItems" class="carousel-slide" :class="{ center: currentIndex === (paginatedItems.length + offsetPrev) }">
+          <div v-if="hasNextItems" class="slide" :class="{ center: currentIndex === (paginatedItems.length + offsetPrev) }">
             <div class="aspect-card load-more" @click="loadNext">
               <div class="content">
                 <div class="icon"></div>

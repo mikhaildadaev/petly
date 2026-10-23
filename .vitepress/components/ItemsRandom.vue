@@ -1,10 +1,10 @@
 <template>
   <section v-if="config && config.fields && (isLoading || allItems.length > 0)" class="random-items">
   <div class="cards-carousel">
-      <div class="carousel-wrapper">
+      <div class="wrapper">
         <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="isFirstSlide"></button>
-        <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-          <div v-for="(item, index) in allItems" :key="item.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
+        <div class="track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
+          <div v-for="(item, index) in allItems" :key="item.uuid" class="slide" :class="{ center: index === currentIndex }">
             <div class="aspect-card card">
               <div class="meta">
                 <template v-for="displayField in config.fields.display" :key="displayField">
@@ -23,7 +23,7 @@
               </a>
             </div>
           </div>
-          <div class="carousel-slide" :class="{ center: currentIndex === allItems.length }">
+          <div class="slide" :class="{ center: currentIndex === allItems.length }">
             <div class="aspect-card load-more" @click="goToLink">
               <div class="content">
                 <div class="icon"></div>
