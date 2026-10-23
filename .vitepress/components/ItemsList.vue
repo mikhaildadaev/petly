@@ -198,6 +198,14 @@ export default {
       const top = gridRef.value.getBoundingClientRect().top + window.scrollY - headerOffset
       window.scrollTo({ top, behavior: 'smooth' })
     }
+    const scrollGridToBottom = async () => {
+      await nextTick()
+      if (!gridRef.value) return
+      const rect = gridRef.value.getBoundingClientRect()
+      const bottom = rect.bottom + window.scrollY
+      const top = bottom - window.innerHeight + 80
+      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' })
+    }
     const {
       isMobile,
       currentIndex,
@@ -227,7 +235,7 @@ export default {
     }
     const gridLoadPrev = async () => {
       await originalLoadPrev()
-      if (!isMobile.value) await scrollGridToTop()
+      if (!isMobile.value) await scrollGridToBottom()
     }
     const isFirstSlide = computed(
       () => currentIndex.value === 0 && !hasPrevItems.value
