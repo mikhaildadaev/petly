@@ -984,8 +984,74 @@ p.withColor {
 }
 
 /* ============================================
-   КАРТОЧКА ЗАГРУЗКИ
+   КАРТОЧКА УПРАВЛЕНИЯ
    ============================================ */
+.load-get {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 40px 20px;
+  cursor: pointer;
+  background-color: var(--vp-c-bg-soft);
+  border-radius: var(--radius);
+  transition: all 0.3s ease;
+}
+.load-get:hover {
+  border-color: var(--vp-c-brand-light);
+}
+.load-get:hover .content .icon {
+  background-color: var(--vp-c-text);
+  transform: rotate(90deg);
+}
+.load-get .content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+.load-get .content .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  background-color: var(--vp-c-text-light);
+  border-radius: 50%;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  mask-image: url('/assets/svg/navigation_get.svg');
+  -webkit-mask-image: url('/assets/svg/navigation_get.svg');
+  transition: all 0.3s ease;
+}
+.load-get .content .text {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--vp-c-text);
+}
+.load-get .content .count {
+  font-size: 14px;
+  color: var(--vp-c-text-light);
+}
+.load-get .content .progress {
+  width: 100%;
+  max-width: 200px;
+  height: 4px;
+  background-color: var(--vp-c-bg-alt);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.load-get .content .progress .bar {
+  height: 100%;
+  background-color: var(--vp-c-brand);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
 .load-more {
   display: flex;
   align-items: center;
@@ -1051,45 +1117,6 @@ p.withColor {
   background-color: var(--vp-c-brand);
   border-radius: 2px;
   transition: width 0.3s ease;
-}
-
-/* ============================================
-   КАРТОЧКА ССЫЛКИ
-   ============================================ */
-.link-card {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 280px;
-  text-decoration: none;
-  background-color: var(--vp-c-bg-soft);
-  border-radius: var(--radius);
-  transition: all 0.3s ease;
-  overflow: hidden;
-}
-.link-card:hover {
-  transform: scale(1.02);
-  background-color: var(--vp-c-bg);
-  border-color: var(--vp-c-brand);
-}
-.link-card-content {
-  padding: 20px;
-  text-align: center;
-}
-.link-icon {
-  font-size: 48px;
-  margin-bottom: 12px;
-}
-.link-text {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--vp-c-text);
-  margin-bottom: 8px;
-}
-.link-arrow {
-  font-size: 32px;
-  color: var(--vp-c-brand);
-  animation: arrowMove 1.5s ease-in-out infinite;
 }
 
 /* ============================================================
