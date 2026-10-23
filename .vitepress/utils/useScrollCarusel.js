@@ -33,7 +33,7 @@ export function useScrollCarusel(options = {}) {
   }
   const updateCenterClass = (index) => {
     if (!containerRef.value) return
-    const slides = containerRef.value.querySelectorAll('.carousel-slide')
+    const slides = containerRef.value.querySelectorAll('.slide')
     slides.forEach((s, i) => {
       s.classList.toggle('center', i === index)
     })
@@ -41,7 +41,7 @@ export function useScrollCarusel(options = {}) {
   const getClosestSlide = () => {
     if (!containerRef.value) return 0
     const container = containerRef.value
-    const slides = container.querySelectorAll('.carousel-slide')
+    const slides = container.querySelectorAll('.slide')
     if (slides.length === 0) return 0
     let closestIndex = 0
     let closestDistance = Infinity
@@ -68,7 +68,7 @@ export function useScrollCarusel(options = {}) {
   const scrollToSlide = (index) => {
     if (!containerRef.value) return
     const container = containerRef.value
-    const slides = container.querySelectorAll('.carousel-slide')
+    const slides = container.querySelectorAll('.slide')
     if (slides.length === 0 || index < 0 || index >= slides.length) return
     if (isAnimating) {
       container.scrollTo({ left: container.scrollLeft, behavior: 'auto' })
