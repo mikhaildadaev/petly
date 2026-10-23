@@ -8,6 +8,8 @@ blocks:
 
 # Favorites
 <BlockStyle :type="'intro'"/>
+<ItemsSelect :type="'pets'" :item-type="'dogs'"/>
+<ItemsSelect :type="'pets'" :item-type="'cats'"/>
 
 The heart is an amazing thing. It doesn't ask who you are, where you are or why. It just starts beating faster when it sees those eyes, that smile, that look that makes you feel so warm inside.
 
@@ -15,6 +17,4 @@ This section is your own personal space. Only those who have already touched som
 
 Come back to them. Browse through the cards. Maybe today you'll decide: **«This is my pet.»**
 
-<ItemsSelect :type="'pets'" :item-type="'dogs'"/>
-<ItemsSelect :type="'pets'" :item-type="'cats'"/>
 <PageStyle/>

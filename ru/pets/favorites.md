@@ -8,12 +8,11 @@ blocks:
 
 # Любимцы
 <BlockStyle :type="'intro'"/>
+<ItemsSelect :type="'pets'" :item-type="'dogs'"/>
+<ItemsSelect :type="'pets'" :item-type="'cats'"/>
 
 Данный раздел - ваш личный уголок. Здесь живут только те, кто уже успел задеть что-то внутри вас. Те, чьи фотографии вы пересматриваете по несколько раз. Те, кого вы уже мысленно назвали своим.
 
 Вернитесь к ним. Полистайте карточки. Может быть, именно сегодня вы решите: **«Это мой питомец.»**
-
-<ItemsSelect :type="'pets'" :item-type="'dogs'"/>
-<ItemsSelect :type="'pets'" :item-type="'cats'"/>
 
 <PageStyle/>

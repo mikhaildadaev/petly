@@ -8,6 +8,8 @@ blocks:
 
 # Favoriten
 <BlockStyle :type="'intro'"/>
+<ItemsSelect :type="'pets'" :item-type="'dogs'"/>
+<ItemsSelect :type="'pets'" :item-type="'cats'"/>
 
 Das Herz ist ein erstaunliches Ding. Es fragt nicht, wer du bist, wo du bist und warum. Es schlägt einfach schneller, wenn es jene Augen sieht, jenes Lächeln, jenen Blick, der einem so warm ums Herz werden lässt.
 
@@ -15,6 +17,4 @@ Dieser Bereich ist deine ganz persönliche Ecke. Hier leben nur diejenigen, die 
 
 Komm zurück zu ihnen. Blättere durch die Karten. Vielleicht entscheidest du genau heute: **«Das ist mein Tier.»**
 
-<ItemsSelect :type="'pets'" :item-type="'dogs'"/>
-<ItemsSelect :type="'pets'" :item-type="'cats'"/>
 <PageStyle/>
