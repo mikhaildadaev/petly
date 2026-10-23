@@ -24,6 +24,7 @@
   --radius: 24px;
   --shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
   --shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.12);
+  --width: 312px;
 }
 
 /* ============================================
@@ -95,7 +96,7 @@ button.carousel {
   width: 24px;
   height: 100%;
   cursor: pointer;
-  background-color: var(--vp-c-bg);
+  background-color: var(--vp-c-text-light);
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
   mask-position: center;
@@ -420,7 +421,6 @@ p.withColor {
    ============================================================ */
 .main-block {
   position: relative;
-  min-height: 240px;
   margin: 0 -24px;
   padding: 24px 24px 0;
   background-color: var(--vp-c-bg-soft);
@@ -433,7 +433,6 @@ p.withColor {
   height: 100%;
   max-width: 100dvw;
   margin: 2em calc(50% - 50dvw) 0;
-  padding: 24px max(24px, calc(50dvw - 576px)) 0;
   background-color: var(--vp-c-bg-soft);
   border-radius: var(--radius);
   overflow: hidden;
@@ -446,6 +445,8 @@ p.withColor {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
+  padding: 24px max(24px, calc(50dvw - 576px)) 0;
+  gap: max(24px, calc(50dvw - 576px));
 }
 .main-carousel .wrapper .track::-webkit-scrollbar {
   display: none;
@@ -487,7 +488,6 @@ p.withColor {
   display: flex;
   flex-direction: row;
   gap: 24px;
-  min-height: 240px;
 }
 .main-item .text {
   display: flex;
@@ -496,16 +496,16 @@ p.withColor {
   padding: 16px 24px 0 0;
 }
 .main-item .text .description{
-  margin-bottom: 16px;
+  margin-bottom: 24px!important;
 }
 .main-item .text .link {
   display: inline-block;
   margin-top: auto;
   align-self: flex-start;
-  margin-bottom: 24px;
+  margin-bottom: 24px!important;
 }
 .main-item .image {
-  width: 240px;
+  width: var(--width);
   margin: auto 0 0 0
 }
 
@@ -866,7 +866,7 @@ p.withColor {
 }
 .cards-carousel .wrapper .track .slide {
   flex: 0 0 calc(25% - 48px);
-  min-width: 312px;
+  min-width: var(--width);
   min-height: 420px;
   scroll-snap-align: center;
   scroll-snap-stop: always;
@@ -879,9 +879,11 @@ p.withColor {
   pointer-events: none;
   opacity: 0.5;
 }
+.cards-carousel .wrapper .track .slide.center .load-get,
 .cards-carousel .wrapper .track .slide.center .load-more {
   border-color: var(--vp-c-brand-light);
 }
+.cards-carousel .wrapper .track .slide.center .load-get .content .icon,
 .cards-carousel .wrapper .track .slide.center .load-more .content .icon {
   background-color: var(--vp-c-text);
   transform: rotate(90deg);
