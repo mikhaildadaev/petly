@@ -866,7 +866,7 @@ p.withColor {
 }
 .cards-carousel .wrapper .track .slide {
   flex: 0 0 calc(25% - 48px);
-  min-width: 292px;
+  min-width: 312px;
   min-height: 420px;
   scroll-snap-align: center;
   scroll-snap-stop: always;
