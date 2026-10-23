@@ -24,7 +24,7 @@
             </div>
           </div>
           <div class="slide" :class="{ center: currentIndex === allItems.length }">
-            <div class="aspect-card load-more" @click="goToLink">
+            <div class="aspect-card load-get" @click="goToLink">
               <div class="content">
                 <div class="icon"></div>
                 <div class="text">{{ translate('ui', 'Перейти в раздел') }}</div>
