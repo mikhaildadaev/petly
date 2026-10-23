@@ -11,7 +11,7 @@
         {{ translate('ui', 'Сбросить фильтры') }}
       </button>
     </div>
-    <div v-if="!isMobile" class="cards-grid">
+    <div v-if="!isMobile" ref="gridRef" class="cards-grid">
       <div v-if="hasPrevItems" class="aspect-card load-more prev-load" @click="loadPrev">
         <div class="content">
           <div class="icon prev-icon"></div>
@@ -192,6 +192,14 @@ export default {
       visibleCount,
     } = usePagination(filteredItems, { perPage: 8 })
     const carouselRef = ref(null)
+    const gridRef = ref(null)
+    const scrollGridToTop = async () => {
+      await nextTick()
+      if (!gridRef.value) return
+      const headerOffset = 80
+      const top = gridRef.value.getBoundingClientRect().top + window.scrollY - headerOffset
+      window.scrollTo({ top, behavior: 'smooth' })
+    }
     const {
       isMobile,
       currentIndex,
@@ -215,6 +223,14 @@ export default {
       hasPrevItems: hasPrevItems,
       loadPrevFn: originalLoadPrev,
     })
+    const gridLoadNext = async () => {
+      await originalLoadNext()
+      if (!isMobile.value) await scrollGridToTop()
+    }
+    const gridLoadPrev = async () => {
+      await originalLoadPrev()
+      if (!isMobile.value) await scrollGridToTop()
+    }
     const isFirstSlide = computed(
       () => currentIndex.value === 0 && !hasPrevItems.value
     )
@@ -328,6 +344,7 @@ export default {
       isLoading,
       isMobile,
       carouselRef,
+      gridRef,
       currentIndex,
       isFirstSlide,
       isLastSlide,
@@ -337,10 +354,8 @@ export default {
       prevCount,
       windowStart,
       windowSize,
-      // для сетки (десктоп):
-      loadNext: originalLoadNext,
-      loadPrev: originalLoadPrev,
-      // для карусели (мобилка):
+      loadNext: gridLoadNext,
+      loadPrev: gridLoadPrev,
       carouselLoadNext: loadNext,
       carouselLoadPrev: loadPrev,
       offsetPrev,
