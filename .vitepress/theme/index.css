@@ -502,6 +502,7 @@ p.withColor {
   display: inline-block;
   margin-top: auto;
   align-self: flex-start;
+  margin-bottom: 24px;
 }
 .main-item .image {
   width: 240px;
