@@ -12,6 +12,16 @@
       </button>
     </div>
     <div v-if="!isMobile" class="cards-grid">
+      <div v-if="hasPrevItems" class="aspect-card load-more prev-load" @click="loadPrev">
+        <div class="content">
+          <div class="icon prev-icon"></div>
+          <div class="text">{{ translate('ui', 'Загрузить предыдущие') }}</div>
+          <div class="count">{{ prevCount }} {{ translate('ui', 'осталось') }}</div>
+          <div class="progress">
+            <div class="bar" :style="{ width: `${(windowStart / filteredItems.length) * 100}%` }"></div>
+          </div>
+        </div>
+      </div>
       <div v-for="item in paginatedItems" :key="item.uuid" class="aspect-card card">
         <div class="meta">
           <template v-for="displayField in config.fields.display" :key="displayField">
@@ -29,22 +39,34 @@
           </div>
         </a>
       </div>
-      <div v-if="hasMoreItems" class="aspect-card load-more" @click="loadMore">
+      <div v-if="hasNextItems" class="aspect-card load-more" @click="loadNext">
         <div class="content">
           <div class="icon"></div>
           <div class="text">{{ translate('ui', 'Загрузить ещё') }}</div>
           <div class="count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
           <div class="progress">
-            <div class="bar" :style="{ width: `${(visibleCount / filteredItems.length) * 100}%` }"></div>
+            <div class="bar" :style="{ width: `${((windowStart + windowSize) / filteredItems.length) * 100}%` }"></div>
           </div>
         </div>
       </div>
     </div>
     <div v-else class="cards-carousel">
       <div class="carousel-wrapper">
-        <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
+        <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="isFirstSlide"></button>
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-          <div v-for="(item, index) in paginatedItems" :key="item.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
+          <div v-if="hasPrevItems" class="carousel-slide" :class="{ center: currentIndex === 0 }">
+            <div class="aspect-card load-more prev-load" @click="carouselLoadPrev">
+              <div class="content">
+                <div class="icon prev-icon"></div>
+                <div class="text">{{ translate('ui', 'Загрузить предыдущие') }}</div>
+                <div class="count">{{ prevCount }} {{ translate('ui', 'осталось') }}</div>
+                <div class="progress">
+                  <div class="bar" :style="{ width: `${(windowStart / filteredItems.length) * 100}%` }"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div v-for="(item, index) in paginatedItems" :key="item.uuid" class="carousel-slide" :class="{ center: (index + offsetPrev) === currentIndex }">
             <div class="aspect-card card">
               <div class="meta">
                 <template v-for="displayField in config.fields.display" :key="displayField">
@@ -63,20 +85,20 @@
               </a>
             </div>
           </div>
-          <div v-if="hasMoreItems" class="carousel-slide" :class="{ center: currentIndex === paginatedItems.length }">
-            <div class="aspect-card load-more" @click="loadMore">
+          <div v-if="hasNextItems" class="carousel-slide" :class="{ center: currentIndex === (paginatedItems.length + offsetPrev) }">
+            <div class="aspect-card load-more" @click="carouselLoadNext">
               <div class="content">
                 <div class="icon"></div>
                 <div class="text">{{ translate('ui', 'Загрузить ещё') }}</div>
                 <div class="count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
                 <div class="progress">
-                  <div class="bar" :style="{ width: `${(visibleCount / filteredItems.length) * 100}%` }"></div>
+                  <div class="bar" :style="{ width: `${((windowStart + windowSize) / filteredItems.length) * 100}%` }"></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <button class="carousel next" :class="{ none: isLastSlide }" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1"></button>
+        <button class="carousel next" :class="{ none: isLastSlide }" @click="nextSlide" :disabled="isLastSlide"></button>
       </div>
     </div>
     <div v-if="filteredItems.length === 0 && !isLoading" class="no-results">
@@ -86,7 +108,7 @@
 </template>
 
 <script>
-import { computed, ref, reactive, onMounted, onUnmounted, watch } from 'vue'
+import { computed, ref, reactive, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { useData } from 'vitepress'
 import { useConfigItem } from '../utils/useConfigItem'
 import { useFavoritesList } from '../utils/useFavorites'
@@ -158,9 +180,14 @@ export default {
     const {
       paginatedItems,
       remaining,
-      hasMoreItems,
-      loadMore: originalLoadMore,
-      isLoadingMore,
+      hasNextItems,
+      hasPrevItems,
+      prevCount,
+      windowStart,
+      windowSize,
+      loadNext: originalLoadNext,
+      loadPrev: originalLoadPrev,
+      isLoadingNext,
       resetPagination,
       visibleCount,
     } = usePagination(filteredItems, { perPage: 8 })
@@ -176,22 +203,24 @@ export default {
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
-      touchStartX,
-      touchStartY,
-      touchEndX,
-      touchEndY,
-      loadMore,
+      loadNext,
+      loadPrev,
+      totalSlides,
+      offsetPrev,
     } = useScrollCarusel({
       containerRef: carouselRef,
       items: paginatedItems,
-      hasMoreItems: hasMoreItems,
-      loadFn: originalLoadMore,
+      hasNextItems: hasNextItems,
+      loadNextFn: originalLoadNext,
+      hasPrevItems: hasPrevItems,
+      loadPrevFn: originalLoadPrev,
     })
-    const carouselTotalSlides = computed(() => {
-      return paginatedItems.value.length + (hasMoreItems.value ? 1 : 0)
-    })
-    const isFirstSlide = computed(() => currentIndex.value === 0)
-    const isLastSlide = computed(() => currentIndex.value >= carouselTotalSlides.value - 1)
+    const isFirstSlide = computed(
+      () => currentIndex.value === 0 && !hasPrevItems.value
+    )
+    const isLastSlide = computed(
+      () => currentIndex.value >= totalSlides.value - 1
+    )
     const { useRandomClass } = useRandomColor()
     const getItemLink = (item) => {
       const basePath = config.linkPath(item)
@@ -207,8 +236,6 @@ export default {
     }
     const toggleFilter = (group, value) => {
       filters[group][value] = !filters[group][value]
-      resetPagination()
-      resetToFirstSlide()
     }
     const resetFilters = () => {
       Object.keys(filters).forEach(group => {
@@ -216,8 +243,6 @@ export default {
           filters[group][key] = true
         })
       })
-      resetPagination()
-      resetToFirstSlide()
     }
     const areAllActive = computed(() => {
       if (!config.filters) return true
@@ -268,18 +293,20 @@ export default {
     })
     watch(lang, async () => {
       await loadItems()
+      await nextTick()
       resetToFirstSlide()
     })
     watch(
       () => filters,
-      () => {
-        resetPagination()
+      async () => {
+        await nextTick()
         resetToFirstSlide()
       },
       { deep: true }
     )
-    watch(isMobile, (newVal) => {
+    watch(isMobile, async (newVal) => {
       if (mounted.value && newVal && paginatedItems.value.length) {
+        await nextTick()
         resetToFirstSlide()
       }
     })
@@ -302,13 +329,23 @@ export default {
       isMobile,
       carouselRef,
       currentIndex,
-      carouselTotalSlides,
       isFirstSlide,
       isLastSlide,
       remaining,
-      hasMoreItems,
-      loadMore,
-      isLoadingMore,
+      hasNextItems,
+      hasPrevItems,
+      prevCount,
+      windowStart,
+      windowSize,
+      // для сетки (десктоп):
+      loadNext: originalLoadNext,
+      loadPrev: originalLoadPrev,
+      // для карусели (мобилка):
+      carouselLoadNext: loadNext,
+      carouselLoadPrev: loadPrev,
+      offsetPrev,
+      totalSlides,
+      isLoadingNext,
       resetPagination,
       visibleCount,
       getFilterOptions,
@@ -325,10 +362,6 @@ export default {
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
-      touchStartX,
-      touchStartY,
-      touchEndX,
-      touchEndY,
       useRandomClass,
       getItemLink,
     }

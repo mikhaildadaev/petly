@@ -1,8 +1,8 @@
 <template>
-  <section v-if="config && config.fields" class="random-items">
-    <div class="cards-carousel">
+  <section v-if="config && config.fields && (isLoading || allItems.length > 0)" class="random-items">
+  <div class="cards-carousel">
       <div class="carousel-wrapper">
-        <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="currentIndex === 0"></button>
+        <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="isFirstSlide"></button>
         <div class="carousel-track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-for="(item, index) in allItems" :key="item.uuid" class="carousel-slide" :class="{ center: index === currentIndex }">
             <div class="aspect-card card">
@@ -32,14 +32,14 @@
             </div>
           </div>
         </div>
-        <button class="carousel next" :class="{ none: isLastSlide }" @click="nextSlide" :disabled="currentIndex >= carouselTotalSlides - 1"></button>
+        <button class="carousel next" :class="{ none: isLastSlide }" @click="nextSlide" :disabled="isLastSlide"></button>
       </div>
     </div>
   </section>
 </template>
 
 <script>
-import { computed, ref, onMounted, onUnmounted, watch } from 'vue'
+import { computed, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { useData } from 'vitepress'
 import { useConfigItem } from '../utils/useConfigItem'
 import { useFavoritesList } from '../utils/useFavorites'
@@ -80,7 +80,7 @@ export default {
       return base
     }
     const carouselRef = ref(null)
-    const hasMoreItems = computed(() => true)
+    const hasNextItems = computed(() => true)
     const {
       isMobile,
       currentIndex,
@@ -92,23 +92,23 @@ export default {
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
-      touchStartX,
-      touchStartY,
-      touchEndX,
-      touchEndY,
+      totalSlides,
+      offsetPrev,
+      isOnNextCard,
     } = useScrollCarusel({
       containerRef: carouselRef,
       items: allItems,
-      hasMoreItems: hasMoreItems,
+      hasNextItems: hasNextItems,
+      hasPrevItems: ref(false),
     })
     const goToLink = () => {
       window.location.href = `${baseUrl}${lang.value}/${config.name}/${props.itemType}`
     }
-    const carouselTotalSlides = computed(() => {
-      return allItems.value.length + 1
-    })
+    const carouselTotalSlides = computed(() => totalSlides.value)
     const isFirstSlide = computed(() => currentIndex.value === 0)
-    const isLastSlide = computed(() => currentIndex.value >= carouselTotalSlides.value - 1)
+    const isLastSlide = computed(
+      () => currentIndex.value >= carouselTotalSlides.value - 1
+    )
     const { useRandomClass } = useRandomColor()
     const getItemLink = (item) => {
       const basePath = config.linkPath(item)
@@ -129,6 +129,7 @@ export default {
         const loaded = data.map(item => transformItem(item))
         const shuffled = useRandomArray(loaded)
         allItems.value = shuffled.slice(0, props.count)
+        await nextTick()
         resetToFirstSlide()
       } catch (error) {
         allItems.value = []
@@ -153,17 +154,17 @@ export default {
     })
     watch(lang, async () => {
       await loadItems()
-      resetToFirstSlide()
     })
     watch(
       () => allItems.value.length,
-      () => {
+      async () => {
+        await nextTick()
         resetToFirstSlide()
-      },
-      { deep: true }
+      }
     )
-    watch(isMobile, (newVal) => {
+    watch(isMobile, async (newVal) => {
       if (mounted.value && newVal && allItems.value.length) {
+        await nextTick()
         resetToFirstSlide()
       }
     })
@@ -196,10 +197,6 @@ export default {
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
-      touchStartX,
-      touchStartY,
-      touchEndX,
-      touchEndY,
       useRandomClass,
       getItemLink,
       goToLink,
