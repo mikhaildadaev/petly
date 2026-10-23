@@ -1,8 +1,8 @@
 <template>
   <section v-if="items && items.length" class="main-carousel">
     <div class="wrapper">
-      <button v-if="items.length > 1" class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="isFirstSlide"></button>
-      <div class="track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
+      <button v-if="items.length > 1" class="carousel prev" :class="{ none: isFirstSlide }" @click="onPrevClick" :disabled="isFirstSlide"></button>
+      <div class="track" ref="carouselRef" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
         <div v-for="(item, index) in items" :key="index" class="slide" :class="{ center: index === currentIndex }">
           <div class="main-item">
             <img v-if="item.img" :src="item.img" :alt="item.name" class="image" loading="lazy"/>
@@ -14,10 +14,10 @@
           </div>
         </div>
       </div>
-      <button v-if="items.length > 1" class="carousel next" :class="{ none: isLastSlide }" @click="nextSlide" :disabled="isLastSlide"></button>
+      <button v-if="items.length > 1" class="carousel next" :class="{ none: isLastSlide }" @click="onNextClick" :disabled="isLastSlide"></button>
     </div>
     <div v-if="items.length > 1" class="dots">
-      <button v-for="(item, index) in items" :key="index" class="dot" :class="{ active: index === currentIndex }" @click="goToSlide(index)"/>
+      <button v-for="(item, index) in items" :key="index" class="dot" :class="{ active: index === currentIndex }" @click="onDotClick(index)"/>
     </div>
   </section>
 </template>
@@ -43,10 +43,8 @@ export default {
       const block = mainArray.find(item => item.type === props.type)
       return block ? block.list : []
     })
-
     const carouselRef = ref(null)
     const {
-      isMobile,
       currentIndex,
       scrollToSlide,
       nextSlide,
@@ -61,23 +59,36 @@ export default {
     } = useScrollCarusel({
       containerRef: carouselRef,
       items: items,
-      // В MainCarusel нет «Загрузить ещё» / «Загрузить предыдущие»
       hasNextItems: ref(false),
       hasPrevItems: ref(false),
     })
-
     const isFirstSlide = computed(() => currentIndex.value === 0)
     const isLastSlide = computed(
       () => currentIndex.value >= totalSlides.value - 1
     )
-
-    // ---- Автопрокрутка (useScrollCarusel её не делает) ----
+    const goNextLooped = () => {
+      if (items.value.length <= 1) return
+      if (isLastSlide.value) {
+        scrollToSlide(0)
+      } else {
+        nextSlide()
+      }
+    }
+    const goPrevLooped = () => {
+      if (items.value.length <= 1) return
+      if (isFirstSlide.value) {
+        scrollToSlide(totalSlides.value - 1)
+      } else {
+        prevSlide()
+      }
+    }
     let timer = null
     const startTimer = () => {
       stopTimer()
-      if (items.value.length > 1) {
-        timer = setInterval(() => nextSlide(), props.interval)
-      }
+      if (items.value.length <= 1) return
+      timer = setInterval(() => {
+        goNextLooped()
+      }, props.interval)
     }
     const stopTimer = () => {
       if (timer) {
@@ -89,26 +100,38 @@ export default {
       stopTimer()
       startTimer()
     }
-
-    // Перезапуск таймера при ручном goToSlide
+    const onNextClick = () => {
+      goNextLooped()
+      resetTimer()
+    }
+    const onPrevClick = () => {
+      goPrevLooped()
+      resetTimer()
+    }
     const onDotClick = (index) => {
       goToSlide(index)
       resetTimer()
     }
-
+    const onTouchStart = (e) => {
+      resetTimer()
+      handleTouchStart(e)
+    }
+    const onTouchMove = (e) => {
+      handleTouchMove(e)
+    }
+    const onTouchEnd = (e) => {
+      handleTouchEnd(e)
+      resetTimer()
+    }
     onMounted(() => {
       startTimer()
+      requestAnimationFrame(() => {
+        if (items.value.length > 0) resetToFirstSlide()
+      })
     })
-
-    // При смене слайда (в т.ч. автопрокруткой) — сброс таймера
-    // (watch на currentIndex — чтобы не сбивался ритм)
-    // Если не нужно — можно убрать.
-    // watch(currentIndex, resetTimer)
-
     onUnmounted(() => {
       stopTimer()
     })
-
     return {
       items,
       carouselRef,
@@ -117,15 +140,17 @@ export default {
       isLastSlide,
       totalSlides,
       offsetPrev,
-      isMobile,
       scrollToSlide,
       nextSlide,
       prevSlide,
-      goToSlide: onDotClick,
+      goToSlide,
       resetToFirstSlide,
-      handleTouchStart,
-      handleTouchMove,
-      handleTouchEnd,
+      onTouchStart,
+      onTouchMove,
+      onTouchEnd,
+      onNextClick,
+      onPrevClick,
+      onDotClick,
       translate,
     }
   }

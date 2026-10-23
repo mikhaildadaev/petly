@@ -2,11 +2,7 @@
   <div class="preloader" :class="statusClass">
     <svg class="loader" viewBox="0 0 50 50">
       <circle class="bg" cx="25" cy="25" r="20" />
-      <circle
-        class="progress-ring"
-        cx="25" cy="25" r="20"
-        :style="{ strokeDashoffset: 125.6 - (125.6 * progress) / 100 }"
-      />
+      <circle class="progress-ring" cx="25" cy="25" r="20" :style="{ strokeDashoffset: 125.6 - (125.6 * progress) / 100 }"/>
     </svg>
   </div>
 </template>
