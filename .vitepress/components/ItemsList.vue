@@ -42,7 +42,7 @@
       <div v-if="hasNextItems" class="aspect-card load-more" @click="loadNext">
         <div class="content">
           <div class="icon"></div>
-          <div class="text">{{ translate('ui', 'Загрузить ещё') }}</div>
+          <div class="text">{{ translate('ui', 'Загрузить следующие') }}</div>
           <div class="count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
           <div class="progress">
             <div class="bar" :style="{ width: `${((windowStart + windowSize) / filteredItems.length) * 100}%` }"></div>
@@ -89,7 +89,7 @@
             <div class="aspect-card load-more" @click="carouselLoadNext">
               <div class="content">
                 <div class="icon"></div>
-                <div class="text">{{ translate('ui', 'Загрузить ещё') }}</div>
+                <div class="text">{{ translate('ui', 'Загрузить следующие') }}</div>
                 <div class="count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
                 <div class="progress">
                   <div class="bar" :style="{ width: `${((windowStart + windowSize) / filteredItems.length) * 100}%` }"></div>
