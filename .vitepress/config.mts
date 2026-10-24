@@ -121,8 +121,8 @@ export default defineConfig({
             text: 'Über das Projekt',
             items: [
               { text: 'Mission', link: '/de/about/mission' },
-              { text: 'Technologien', link: '/de/about/tech' },
-              { text: 'Kontakte', link: '/de/about/contacts' }
+              { text: 'Kontakte', link: '/de/about/contacts' },
+              { text: 'Technologien', link: '/de/about/tech' }
             ]
           }
         ],
@@ -157,8 +157,8 @@ export default defineConfig({
             text: 'Über das Projekt',
             items: [
               { text: 'Mission', link: '/de/about/mission' },
-              { text: 'Technologien', link: '/de/about/tech' },
-              { text: 'Kontakte', link: '/de/about/contacts' }
+              { text: 'Kontakte', link: '/de/about/contacts' },
+              { text: 'Technologien', link: '/de/about/tech' }
             ]
           }
         ],
@@ -253,8 +253,8 @@ export default defineConfig({
             text: 'About Project',
             items: [
               { text: 'Mission', link: '/en/about/mission' },
-              { text: 'Technologies', link: '/en/about/tech' },
-              { text: 'Contacts', link: '/en/about/contacts' }
+              { text: 'Contacts', link: '/en/about/contacts' },
+              { text: 'Technologies', link: '/en/about/tech' }
             ]
           }
         ],
@@ -289,8 +289,8 @@ export default defineConfig({
             text: 'About Project',
             items: [
               { text: 'Mission', link: '/en/about/mission' },
-              { text: 'Technologies', link: '/en/about/tech' },
-              { text: 'Contacts', link: '/en/about/contacts' }
+              { text: 'Contacts', link: '/en/about/contacts' },
+              { text: 'Technologies', link: '/en/about/tech' }
             ]
           }
         ],
@@ -385,8 +385,8 @@ export default defineConfig({
             text: 'О проекте',
             items: [
               { text: 'Миссия', link: '/ru/about/mission' },
-              { text: 'Технологии', link: '/ru/about/tech' },
-              { text: 'Контакты', link: '/ru/about/contacts' }
+              { text: 'Контакты', link: '/ru/about/contacts' },
+              { text: 'Технологии', link: '/ru/about/tech' }
             ]
           }
         ],
@@ -421,8 +421,8 @@ export default defineConfig({
             text: 'О проекте',
             items: [
               { text: 'Миссия', link: '/ru/about/mission' },
-              { text: 'Технологии', link: '/ru/about/tech' },
-              { text: 'Контакты', link: '/ru/about/contacts' }
+              { text: 'Контакты', link: '/ru/about/contacts' },
+              { text: 'Технологии', link: '/ru/about/tech' }
             ]
           }
         ],
