@@ -11,6 +11,10 @@ main:
         description: 'Свяжитесь с нами — если хотите помочь, присоединиться или просто задать вопрос.'
         img: '/assets/webp/page_contacts.webp'
         link: '/ru/about/contacts'
+      - name: 'Технологии'
+        description: 'Мы строим мосты из простого тепла, чтоб каждая лапа свой дом обрела.'
+        img: '/assets/webp/page_tech.webp'
+        link: '/ru/about/tech'
   - type: 'favorites'
     list:
       - name: 'Любимцы'
