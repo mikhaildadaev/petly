@@ -432,14 +432,25 @@ p.withColor {
 }
 .main-carousel .wrapper {
   position: relative;
+  display: flex;
+  align-items: center;
 }
 .main-carousel .wrapper .track {
   display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  padding: 24px max(24px, calc(50dvw - 576px)) 0;
+  flex: 1;
   gap: max(24px, calc(50dvw - 576px));
+  padding: 24px max(24px, calc(50dvw - 576px)) 0;
+  overflow-x: auto;
+  overflow-y: visible;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  touch-action: pan-y pinch-zoom;
+  overscroll-behavior-x: contain;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 .main-carousel .wrapper .track::-webkit-scrollbar {
   display: none;
