@@ -315,13 +315,6 @@ label {
 }
 
 /* ============================================
-   СЕКЦИИ
-   ============================================ */
-section {
-  margin: 2em 0 
-}
-
-/* ============================================
    АБЗАЦ
    ============================================ */
 p {
@@ -421,7 +414,7 @@ p.withColor {
    ============================================================ */
 .main-block {
   position: relative;
-  margin: 0 -24px;
+  margin: 2em -24px;
   padding: 24px 24px 0;
   background-color: var(--vp-c-bg-soft);
   border-radius: var(--radius);
@@ -432,7 +425,7 @@ p.withColor {
   width: 100dvw;
   height: 100%;
   max-width: 100dvw;
-  margin: 2em calc(50% - 50dvw) 0;
+  margin: 2em calc(50% - 50dvw);
   background-color: var(--vp-c-bg-soft);
   border-radius: var(--radius);
   overflow: hidden;
@@ -1719,6 +1712,7 @@ p.withColor {
   bottom: calc(var(--vp-nav-height) + var(--vp-layout-top-height, 0px))!important;
 }
 .VPHome {
+  margin-top: 2em!important;
   margin-bottom: 2em!important;
 }
 .VPHome .vp-doc :is(h1, h2, h3, h4, h5, h6) {
