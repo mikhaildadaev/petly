@@ -496,6 +496,7 @@ p.withColor {
   display: flex;
   flex-direction: row;
   gap: 24px;
+  height: 100%
 }
 .main-item .text {
   display: flex;
