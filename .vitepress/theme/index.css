@@ -458,7 +458,6 @@ p.withColor {
 .main-carousel .wrapper .track .slide {
   flex: 0 0 100%;
   min-width: var(--width);
-  min-height: 320px;
   scroll-snap-align: center;
   scroll-snap-stop: always;
   transition: all 0.5s ease;
@@ -497,7 +496,7 @@ p.withColor {
   flex-direction: row;
   gap: 24px;
   height: 100%;
-  min-height: 240px;
+  min-height: 320px;
 }
 .main-item .text {
   display: flex;
@@ -877,7 +876,6 @@ p.withColor {
 .cards-carousel .wrapper .track .slide {
   flex: 0 0 calc(25% - 48px);
   min-width: var(--width);
-  min-height: 420px;
   scroll-snap-align: center;
   scroll-snap-stop: always;
   transition: all 0.5s ease;
@@ -913,6 +911,7 @@ p.withColor {
   position: relative;
   display: grid;
   height: 100%;
+  min-height: 420px;
   color: inherit;
   text-decoration: none;
   background-color: var(--vp-c-bg-soft);
@@ -1756,19 +1755,9 @@ p.withColor {
     font-size: 2rem;
   }
 }
-@media (min-width: 961px) and (max-width: 1024px) {
-  .data-carousel .wrapper .track .slide {
-    flex: 0 0 calc(33.333% - 48px) !important;
-    min-width: 320px;
-  }
-}
 @media (min-width: 737px) and (max-width: 960px) {
   .filters-compact {
     top: 48px
-  }
-  .data-carousel .wrapper .track .slide {
-    flex: 0 0 calc(50% - 48px) !important;
-    min-width: 300px;
   }
 }
 @media (max-width: 736px) {
@@ -1802,19 +1791,6 @@ p.withColor {
   }
   .hero-card .hero-name {
     font-size: 1.5rem;
-  }
-  .data-carousel .wrapper .track {
-    gap: 0;
-  }
-  .data-carousel .wrapper .track::before {
-    margin: 0 24px 0 0;
-  }
-  .data-carousel .wrapper .track .slide {
-    flex: 0 0 calc(100% - 48px);
-    min-width: 280px;
-  } 
-  .data-carousel .wrapper .track .slide:not(.center) {
-    transform: scale(0.95);
   }
 }
 
