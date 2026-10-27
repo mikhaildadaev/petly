@@ -457,7 +457,11 @@ p.withColor {
 }
 .main-carousel .wrapper .track .slide {
   flex: 0 0 100%;
+  min-width: var(--width);
+  min-height: 320px;
   scroll-snap-align: center;
+  scroll-snap-stop: always;
+  transition: all 0.5s ease;
 }
 .main-carousel .wrapper .track .slide.active {
   opacity: 1;
