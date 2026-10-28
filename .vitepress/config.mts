@@ -91,6 +91,14 @@ export default defineConfig({
           }
         },
         nav: [
+          {
+            text: 'Über das Projekt',
+            items: [
+              { text: 'Mission', link: '/de/about/mission' },
+              { text: 'Kontakte', link: '/de/about/contacts' },
+              { text: 'Technologien', link: '/de/about/tech' }
+            ]
+          },
           { 
             text: 'Tiere', 
             items: [
@@ -116,7 +124,9 @@ export default defineConfig({
               { text: 'Schutz', link: '/de/recommendations/protection' },
               { text: 'Probleme', link: '/de/recommendations/trouble' }
             ]
-          },
+          }
+        ],
+        sidebar: [
           {
             text: 'Über das Projekt',
             items: [
@@ -124,9 +134,7 @@ export default defineConfig({
               { text: 'Kontakte', link: '/de/about/contacts' },
               { text: 'Technologien', link: '/de/about/tech' }
             ]
-          }
-        ],
-        sidebar: [
+          },
           {
             text: 'Tiere',
             items: [
@@ -151,14 +159,6 @@ export default defineConfig({
               { text: 'Gesundheit', link: '/de/recommendations/health' },
               { text: 'Schutz', link: '/de/recommendations/protection' },
               { text: 'Probleme', link: '/de/recommendations/trouble' }
-            ]
-          },
-          {
-            text: 'Über das Projekt',
-            items: [
-              { text: 'Mission', link: '/de/about/mission' },
-              { text: 'Kontakte', link: '/de/about/contacts' },
-              { text: 'Technologien', link: '/de/about/tech' }
             ]
           }
         ],
@@ -223,6 +223,14 @@ export default defineConfig({
           }
         },
         nav: [
+          {
+            text: 'About Project',
+            items: [
+              { text: 'Mission', link: '/en/about/mission' },
+              { text: 'Contacts', link: '/en/about/contacts' },
+              { text: 'Technologies', link: '/en/about/tech' }
+            ]
+          },
           { 
             text: 'Pets', 
             items: [
@@ -248,7 +256,9 @@ export default defineConfig({
               { text: 'Protection', link: '/en/recommendations/protection' },
               { text: 'Troubles', link: '/en/recommendations/trouble' }
             ]
-          },
+          }
+        ],
+        sidebar: [
           {
             text: 'About Project',
             items: [
@@ -256,9 +266,7 @@ export default defineConfig({
               { text: 'Contacts', link: '/en/about/contacts' },
               { text: 'Technologies', link: '/en/about/tech' }
             ]
-          }
-        ],
-        sidebar: [
+          },
           {
             text: 'Pets',
             items: [
@@ -283,14 +291,6 @@ export default defineConfig({
               { text: 'Health', link: '/en/recommendations/health' },
               { text: 'Protection', link: '/en/recommendations/protection' },
               { text: 'Troubles', link: '/en/recommendations/trouble' }
-            ]
-          },
-          {
-            text: 'About Project',
-            items: [
-              { text: 'Mission', link: '/en/about/mission' },
-              { text: 'Contacts', link: '/en/about/contacts' },
-              { text: 'Technologies', link: '/en/about/tech' }
             ]
           }
         ],
@@ -355,6 +355,14 @@ export default defineConfig({
           }
         },
         nav: [
+          {
+            text: 'О проекте',
+            items: [
+              { text: 'Миссия', link: '/ru/about/mission' },
+              { text: 'Контакты', link: '/ru/about/contacts' },
+              { text: 'Технологии', link: '/ru/about/tech' }
+            ]
+          },
           { 
             text: 'Питомцы', 
             items: [
@@ -380,7 +388,9 @@ export default defineConfig({
               { text: 'Защита', link: '/ru/recommendations/protection' },
               { text: 'Неприятности', link: '/ru/recommendations/trouble' }
             ]
-          },
+          }
+        ],
+        sidebar: [
           {
             text: 'О проекте',
             items: [
@@ -388,9 +398,7 @@ export default defineConfig({
               { text: 'Контакты', link: '/ru/about/contacts' },
               { text: 'Технологии', link: '/ru/about/tech' }
             ]
-          }
-        ],
-        sidebar: [
+          },
           {
             text: 'Питомцы',
             items: [
@@ -415,14 +423,6 @@ export default defineConfig({
               { text: 'Здоровье', link: '/ru/recommendations/health' },
               { text: 'Защита', link: '/ru/recommendations/protection' },
               { text: 'Неприятности', link: '/ru/recommendations/trouble' }
-            ]
-          },
-          {
-            text: 'О проекте',
-            items: [
-              { text: 'Миссия', link: '/ru/about/mission' },
-              { text: 'Контакты', link: '/ru/about/contacts' },
-              { text: 'Технологии', link: '/ru/about/tech' }
             ]
           }
         ],
