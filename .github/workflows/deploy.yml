@@ -30,6 +30,16 @@ jobs:
           cache-dependency-path: './package-lock.json'
       - name: Install dependencies
         run: npm ci
+      - name: Cache VitePress
+        uses: actions/cache@v4
+        with:
+          path: |
+            .vitepress/cache
+            node_modules/.vite
+          key: ${{ runner.os }}-vitepress-${{ hashFiles('package-lock.json') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-vitepress-${{ hashFiles('package-lock.json') }}-
+            ${{ runner.os }}-vitepress-
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Generate JSON data
