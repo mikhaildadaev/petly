@@ -99,3 +99,4 @@ go.work.sum
 
 # Platform specific
 public/data/
+**/pets/[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F]-*/
