@@ -8,12 +8,13 @@
     "dev": "npm run generate && vitepress dev",
     "build": "npm run generate && vitepress build",
     "preview": "vitepress preview",
+    "sync": "node tools/sync-md-data.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "devDependencies": {
     "gray-matter": "^4.0.3",
     "vitepress": "^1.6.4"
