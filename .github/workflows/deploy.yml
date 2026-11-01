@@ -6,7 +6,8 @@ on:
       - '**'
       - '.github/workflows/deploy.yml'
   schedule:
-    - cron: '0 */24 * * *'
+    - cron: '0 13 * * *'
+      timezone: 'Europe/Moscow'
   workflow_dispatch:
 permissions:
   contents: read
