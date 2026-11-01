@@ -9,51 +9,51 @@ export const pageImages = {
   '/about/contacts': {
     src: '/assets/webp/page_contacts.webp',
     width: 312,
-    float: 'left'
+    float: 'center'
   },
   '/about/mission': {
     src: '/assets/webp/page_mission.webp',
     width: 312,
-    float: 'left'
+    float: 'center'
   },
   '/about/tech': {
     src: '/assets/webp/page_tech.webp',
     width: 312,
-    float: 'left'
+    float: 'center'
   },
 
   '/dobrology/join': {
     src: '/assets/webp/page_join.webp',
     width: 312,
-    float: 'left'
+    float: 'center'
   },
   '/dobrology/support': {
     src: '/assets/webp/page_support.webp',
     width: 312,
-    float: 'left'
+    float: 'center'
   },
 
   '/humans/volunteers': {
     src: '/assets/webp/page_volunteers.webp',
     width: 312,
-    float: 'left'
+    float: 'center'
   },
 
   '/organizations/shelters': {
     src: '/assets/webp/page_shelters.webp',
     width: 312,
-    float: 'left'
+    float: 'center'
   },
 
   '/pets/cats': {
     src: '/assets/webp/page_cats.webp',
     width: 312,
-    float: 'left'
+    float: 'center'
   },
   '/pets/dogs': {
     src: '/assets/webp/page_dogs.webp',
     width: 312,
-    float: 'left'
+    float: 'center'
   },
   '/pets/favorites': {
     src: '/assets/webp/page_favorites.webp',
@@ -64,22 +64,22 @@ export const pageImages = {
   '/recommendations/go': {
     src: '/assets/webp/page_go.webp',
     width: 312,
-    float: 'left'
+    float: 'center'
   },
   '/recommendations/health': {
     src: '/assets/webp/page_health.webp',
     width: 312,
-    float: 'left'
+    float: 'center'
   },
   '/recommendations/protection': {
     src: '/assets/webp/page_protection.webp',
     width: 312,
-    float: 'left'
+    float: 'center'
   },
   '/recommendations/trouble': {
     src: '/assets/webp/page_trouble.webp',
     width: 312,
-    float: 'left'
+    float: 'center'
   },
   
   default: {
