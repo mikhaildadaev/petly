@@ -1720,7 +1720,11 @@ p.withColor {
   transform: rotate(-90deg)!important;
 }
 .VPSidebar {
+  bottom: var(--vp-nav-height)!important;
+  border-top-right-radius: var(--radius)!important;
+  border-bottom-right-radius: var(--radius)!important;
   direction: rtl!important;
+  padding: 32px!important;
 }
 .VPSidebar .curtain {
   display: none!important;
