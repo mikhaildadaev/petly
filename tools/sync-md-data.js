@@ -79,6 +79,9 @@ async function cloneOrUpdate(repoUrl, absTarget, label) {
         await new Promise(r => setTimeout(r, 1000 * i))
       }
     }
+    await fs.rm(path.join(absTarget, '.git'), { recursive: true, force: true })
+    await fs.rm(path.join(absTarget, '.gitignore'), { force: true }).catch(() => {})
+    console.log(`  🧹 Очищено: .git, .gitignore`)
   }
 }
 async function processFile(filePath) {
