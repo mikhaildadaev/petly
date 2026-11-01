@@ -1720,6 +1720,7 @@ p.withColor {
   transform: rotate(-90deg)!important;
 }
 .VPSidebar {
+  display: flex!important;
   bottom: var(--vp-nav-height)!important;
   border-top-right-radius: var(--radius)!important;
   border-bottom-right-radius: var(--radius)!important;
@@ -1728,6 +1729,9 @@ p.withColor {
 }
 .VPSidebar .curtain {
   display: none!important;
+}
+.VPSidebar .nav {
+  margin: auto 0!important;
 }
 .VPSidebar .nav section {
   margin: 0!important;
