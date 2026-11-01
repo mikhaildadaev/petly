@@ -110,7 +110,7 @@ jobs:
             ${{ runner.os }}-vitepress-${{ hashFiles('package-lock.json') }}-
             ${{ runner.os }}-vitepress-
       - name: Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
       - name: Generate JSON data
         run: npm run generate
         env:
