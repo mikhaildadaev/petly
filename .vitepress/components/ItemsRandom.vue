@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { computed, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import { computed, ref, reactive, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { useData } from 'vitepress'
 import { useConfigItem } from '../utils/useConfigItem'
 import { useFavoritesList } from '../utils/useFavorites'

@@ -5,7 +5,7 @@
         <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="isFirstSlide"></button>
         <div class="track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           <div v-if="hasPrevItems" class="slide" :class="{ center: currentIndex === 0 }">
-            <div class="aspect-card load-more prev-load" @click="loadPrev">
+            <div class="aspect-card load-more prev-load" @click="carouselLoadPrev">
               <div class="content">
                 <div class="icon prev-icon"></div>
                 <div class="text">{{ translate('ui', 'Загрузить предыдущие') }}</div>
@@ -16,7 +16,7 @@
               </div>
             </div>
           </div>
-          <div v-for="(item, index) in paginatedItems" :key="item.uuid" class="slide" :class="{ center: (index + offsetPrev) === currentIndex }">
+          <div v-for="(item, index) in paginatedItems" :key="item.uuid" :id="item.uuid" class="slide" :class="{ center: (index + offsetPrev) === currentIndex }">
             <div class="aspect-card card">
               <div class="meta">
                 <template v-for="displayField in config.fields.display" :key="displayField">
@@ -24,7 +24,7 @@
                 </template>
               </div>
               <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': mounted && isFavorite(item.uuid) }" @click.stop="toggleFavorite(item.uuid)" :title="translate('ui', 'Добавить в избранное')"></button>
-              <a :href="getItemLink(item)" rel="noopener noreferrer" class="card-link">
+              <a :href="getItemLink(item)" @click="handleNavigate($event, item, 'carousel')" rel="noopener noreferrer" class="card-link">
                 <picture>
                   <img :src="item.imageVertical" loading="lazy" />
                 </picture>
@@ -36,7 +36,7 @@
             </div>
           </div>
           <div v-if="hasNextItems" class="slide" :class="{ center: currentIndex === (paginatedItems.length + offsetPrev) }">
-            <div class="aspect-card load-more" @click="loadNext">
+            <div class="aspect-card load-more" @click="carouselLoadNext">
               <div class="content">
                 <div class="icon"></div>
                 <div class="text">{{ translate('ui', 'Загрузить следующие') }}</div>
@@ -58,10 +58,11 @@
 </template>
 
 <script>
-import { computed, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import { computed, ref, reactive, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { useData } from 'vitepress'
 import { useConfigItem } from '../utils/useConfigItem'
 import { useFavoritesList } from '../utils/useFavorites'
+import { saveContext, useRestore, scrollToElement } from '../utils/useNavigation'
 import { usePagination } from '../utils/usePagination'
 import { useRandomColor } from '../utils/useRandomColor'
 import { useScrollCarusel } from '../utils/useScrollCarusel'
@@ -120,6 +121,7 @@ export default {
       isLoadingNext,
       resetPagination,
       visibleCount,
+      setWindowByID,
     } = usePagination(filteredItems, { perPage: 8 })
     const carouselRef = ref(null)
     const {
@@ -156,6 +158,9 @@ export default {
       const basePath = config.linkPath(item)
       return `${baseUrl}${lang.value}${basePath}${props.itemType}/${item.uuid}`
     }
+    const handleNavigate = (event, item, type) => {
+      saveContext(item.uuid, type)
+    }
     const loadItems = async () => {
       try {
         isLoading.value = true
@@ -181,6 +186,23 @@ export default {
       if (resizeTimeout) clearTimeout(resizeTimeout)
       resizeTimeout = setTimeout(() => { resizeTimeout = null }, 100)
     }
+    const { restore } = useRestore({
+      onRestore: async (ctx) => {
+        if (ctx.type === 'carousel') {
+          const found = setWindowByID(ctx.id, filteredItems.value)
+          if (found) {
+            await nextTick()
+            const index = paginatedItems.value.findIndex(i => i.uuid === ctx.id)
+            if (index !== -1) {
+              const realIndex = index + offsetPrev.value
+              scrollToSlide(realIndex)
+            }
+          }
+          return
+        }
+        scrollToElement(ctx.id)
+      }
+    })
     onMounted(async () => {
       mounted.value = true 
       if (typeof window !== 'undefined') {
@@ -190,6 +212,8 @@ export default {
       if (paginatedItems.value.length > 0) {
         resetToFirstSlide()
       }
+      await nextTick()
+      restore()
     })
     watch(lang, async () => {
       await loadItems()
@@ -235,8 +259,8 @@ export default {
       prevCount,
       windowStart,
       windowSize,
-      loadNext,
-      loadPrev,
+      carouselLoadNext: loadNext,
+      carouselLoadPrev: loadPrev,
       offsetPrev,
       totalSlides,
       isLoadingNext,
@@ -251,6 +275,7 @@ export default {
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
+      handleNavigate,
       useRandomClass,
       getItemLink,
     }

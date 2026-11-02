@@ -20,14 +20,14 @@
           </div>
         </div>
       </div>
-      <div v-for="item in paginatedItems" :key="item.uuid" class="aspect-card card">
+      <div v-for="item in paginatedItems" :key="item.uuid" :id="item.uuid" class="aspect-card card">
         <div class="meta">
           <template v-for="displayField in config.fields.display" :key="displayField">
             <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`">{{ item[displayField] }}</label>
           </template>
         </div>
         <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': mounted && isFavorite(item.uuid) }" @click.stop="toggleFavorite(item.uuid)" :title="translate('ui', 'Добавить в избранное')"></button>
-        <a :href="getItemLink(item)" rel="noopener noreferrer" class="card-link">
+        <a :href="getItemLink(item)" @click="handleNavigate($event, item, 'grid')" rel="noopener noreferrer" class="card-link">
           <picture>
             <img :src="item.imageVertical" loading="lazy" />
           </picture>
@@ -64,7 +64,7 @@
               </div>
             </div>
           </div>
-          <div v-for="(item, index) in paginatedItems" :key="item.uuid" class="slide" :class="{ center: (index + offsetPrev) === currentIndex }">
+          <div v-for="(item, index) in paginatedItems" :key="item.uuid" :id="item.uuid" class="slide" :class="{ center: (index + offsetPrev) === currentIndex }">
             <div class="aspect-card card">
               <div class="meta">
                 <template v-for="displayField in config.fields.display" :key="displayField">
@@ -72,7 +72,7 @@
                 </template>
               </div>
               <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': mounted && isFavorite(item.uuid) }" @click.stop="toggleFavorite(item.uuid)" :title="translate('ui', 'Добавить в избранное')"></button>
-              <a :href="getItemLink(item)" rel="noopener noreferrer" class="card-link">
+              <a :href="getItemLink(item)" @click="handleNavigate($event, item, 'carousel')" rel="noopener noreferrer" class="card-link">
                 <picture>
                   <img :src="item.imageVertical" loading="lazy" />
                 </picture>
@@ -110,10 +110,11 @@ import { computed, ref, reactive, onMounted, onUnmounted, watch, nextTick } from
 import { useData } from 'vitepress'
 import { useConfigItem } from '../utils/useConfigItem'
 import { useFavoritesList } from '../utils/useFavorites'
+import { saveContext, useRestore, scrollToElement } from '../utils/useNavigation'
 import { usePagination } from '../utils/usePagination'
 import { useRandomColor } from '../utils/useRandomColor'
 import { useScrollCarusel } from '../utils/useScrollCarusel'
-import { useTranslate, useAge, useAgePetCategory, useDirection, useExperience } from '../utils/useTranslate'
+import { useTranslate } from '../utils/useTranslate'
 import { useUrlMedia } from '../utils/useUrlMedia'
 
 const baseUrl = import.meta.env.BASE_URL
@@ -188,6 +189,7 @@ export default {
       isLoadingNext,
       resetPagination,
       visibleCount,
+      setWindowByID,
     } = usePagination(filteredItems, { perPage: 8 })
     const carouselRef = ref(null)
     const gridRef = ref(null)
@@ -248,6 +250,9 @@ export default {
       const basePath = config.linkPath(item)
       return `${baseUrl}${lang.value}${basePath}${props.itemType}/${item.uuid}`
     }
+    const handleNavigate = (event, item, type) => {
+      saveContext(item.uuid, type)
+    }
     const getFilterOptions = (filterName) => {
       const filterConfig = config.filters[filterName]
       return filterConfig.keys.map(key => ({
@@ -303,6 +308,31 @@ export default {
       if (resizeTimeout) clearTimeout(resizeTimeout)
       resizeTimeout = setTimeout(() => { resizeTimeout = null }, 100)
     }
+    const { restore } = useRestore({
+      onRestore: async (ctx) => {
+        if (ctx.type === 'carousel') {
+          const found = setWindowByID(ctx.id, filteredItems.value)
+          if (found) {
+            await nextTick()
+            const index = paginatedItems.value.findIndex(i => i.uuid === ctx.id)
+            if (index !== -1) {
+              const realIndex = index + offsetPrev.value
+              scrollToSlide(realIndex)
+            }
+          }
+          return
+        }
+        if (ctx.type === 'grid') {
+          const found = setWindowByID(ctx.id, filteredItems.value)
+          if (found) {
+            await nextTick()
+            scrollToElement(ctx.id)
+          }
+          return
+        }
+        scrollToElement(ctx.id)
+      }
+    })
     onMounted(async () => {
       mounted.value = true 
       if (typeof window !== 'undefined') {
@@ -312,6 +342,8 @@ export default {
       if (paginatedItems.value.length > 0) {
         resetToFirstSlide()
       }
+      await nextTick()
+      restore()
     })
     watch(lang, async () => {
       await loadItems()
@@ -383,6 +415,7 @@ export default {
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
+      handleNavigate,
       useRandomClass,
       getItemLink,
     }
