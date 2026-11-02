@@ -84,6 +84,7 @@ export default {
     const config = useConfigItem[props.type]
     const allItems = ref([])
     const isLoading = ref(true)
+    const isRestoring = ref(false)
     const { isFavorite, toggleFavorite } = useFavoritesList()
     const filteredItems = computed(() => {
       if (isLoading.value) return []
@@ -158,8 +159,15 @@ export default {
       const basePath = config.linkPath(item)
       return `${baseUrl}${lang.value}${basePath}${props.itemType}/${item.uuid}`
     }
-    const handleNavigate = (event, item, type) => {
-      saveContext(item.uuid, type)
+    function handleNavigate (event, item, format) {
+      saveContext(item.uuid, format, {
+        visibleCount: visibleCount.value,
+        lang: lang.value,
+        type: props.type,
+        itemType: props.itemType,
+        isMobile: true,
+        groupUuid: props.uuid,
+      })
     }
     const loadItems = async () => {
       try {
@@ -188,19 +196,33 @@ export default {
     }
     const { restore } = useNavigation({
       onRestore: async (ctx) => {
-        if (ctx.type === 'carousel') {
+        try {
+          isRestoring.value = true
+          await nextTick()
+          if (!filteredItems.value || filteredItems.value.length === 0) {
+            return
+          }
           const found = setWindowByID(ctx.id, filteredItems.value)
-          if (found) {
-            await nextTick()
+          if (!found) {
+            return
+          }
+          await nextTick()
+          if (ctx.type === 'carousel') {
             const index = paginatedItems.value.findIndex(i => i.uuid === ctx.id)
             if (index !== -1) {
               const realIndex = index + offsetPrev.value
               scrollToSlide(realIndex)
             }
+          } else if (ctx.type === 'grid') {
+            scrollToElement(ctx.id)
+          } else {
+            scrollToElement(ctx.id)
           }
-          return
+        } catch (error) {
+          console.error('❌ Ошибка:', error)
+        } finally {
+          isRestoring.value = false
         }
-        scrollToElement(ctx.id)
       }
     })
     onMounted(async () => {
@@ -217,12 +239,12 @@ export default {
     })
     watch(lang, async () => {
       await loadItems()
+      resetPagination()
       await nextTick()
       resetToFirstSlide()
     })
-    watch(
-      () => filteredItems.value.length,
-      async () => {
+    watch(() => filteredItems.value.length, async () => {
+        if (isRestoring.value) return
         await nextTick()
         resetToFirstSlide()
       },
