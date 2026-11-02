@@ -13,8 +13,6 @@ export function usePagination(items, options = {}) {
     () => items.value,
     (newItems) => {
       totalItems.value = newItems || []
-      windowStart.value = 0
-      windowSize.value = perPage
     },
     { immediate: true, deep: true }
   )

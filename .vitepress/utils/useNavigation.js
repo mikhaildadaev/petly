@@ -31,13 +31,24 @@ export function getContext() {
   } catch {}
   return null
 }
-export function saveContext(id, type = 'block') {
+export function getHashId() {
+  if (typeof window === 'undefined') return null
+  const hash = window.location.hash.replace('#', '')
+  return hash || null
+}
+export function saveContext(id, format = 'block', extra = {}) {
   if (typeof window === 'undefined' || !id) return
   const currentUrl = window.location.pathname + window.location.search
   const urlWithHash = `${currentUrl}#${id}`
-  window.history.replaceState({ id, type, scrollPosition: window.scrollY }, '', urlWithHash)
+  const state = {
+    id,
+    format,
+    scrollPosition: window.scrollY,
+    ...extra
+  }
+  window.history.replaceState(state, '', urlWithHash)
   try {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ id, type }))
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state))
   } catch {}
 }
 export function scrollToElement(id, maxAttempts = 15) {
