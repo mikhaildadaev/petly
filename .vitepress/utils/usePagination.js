@@ -58,6 +58,15 @@ export function usePagination(items, options = {}) {
     windowSize.value = perPage
     isLoadingNext.value = false
   }
+  const setWindowByID = (uuid, allItems) => {
+    if (!uuid || !allItems || !allItems.length) return false
+    const index = allItems.findIndex(item => item.uuid === uuid)
+    if (index === -1) return false
+    const page = Math.floor(index / perPage)
+    windowStart.value = page * perPage
+    windowSize.value = perPage
+    return true
+  }
   return {
     windowStart,
     windowSize,
@@ -71,5 +80,6 @@ export function usePagination(items, options = {}) {
     loadPrev,
     resetPagination,
     isLoadingNext,
+    setWindowByID,
   }
 }
