@@ -1,27 +1,7 @@
 import { onMounted, onUnmounted } from 'vue'
 
 const STORAGE_KEY = 'petly-history'
-export function saveContext(id, type = 'block') {
-  if (typeof window === 'undefined' || !id) return
-  const currentUrl = window.location.pathname + window.location.search
-  const urlWithHash = `${currentUrl}#${id}`
-  window.history.replaceState({ id, type, scrollPosition: window.scrollY }, '', urlWithHash)
-  try {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ id, type }))
-  } catch {}
-}
-export function getContext() {
-  if (typeof window === 'undefined') return null
-  if (window.history.state?.id) {
-    return window.history.state
-  }
-  try {
-    const stored = sessionStorage.getItem(STORAGE_KEY)
-    if (stored) return JSON.parse(stored)
-  } catch {}
-  return null
-}
-export function useRestore(options = {}) {
+export function useNavigation(options = {}) {
   const { onRestore } = options
   const restore = () => {
     const ctx = getContext()
@@ -39,6 +19,26 @@ export function useRestore(options = {}) {
     window.removeEventListener('popstate', restore)
   })
   return { restore }
+}
+export function getContext() {
+  if (typeof window === 'undefined') return null
+  if (window.history.state?.id) {
+    return window.history.state
+  }
+  try {
+    const stored = sessionStorage.getItem(STORAGE_KEY)
+    if (stored) return JSON.parse(stored)
+  } catch {}
+  return null
+}
+export function saveContext(id, type = 'block') {
+  if (typeof window === 'undefined' || !id) return
+  const currentUrl = window.location.pathname + window.location.search
+  const urlWithHash = `${currentUrl}#${id}`
+  window.history.replaceState({ id, type, scrollPosition: window.scrollY }, '', urlWithHash)
+  try {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ id, type }))
+  } catch {}
 }
 export function scrollToElement(id, maxAttempts = 15) {
   if (typeof window === 'undefined' || !id) return
