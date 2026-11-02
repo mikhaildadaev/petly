@@ -59,7 +59,7 @@ import { computed, ref, reactive, onMounted, onUnmounted, watch, nextTick } from
 import { useData } from 'vitepress'
 import { useConfigItem } from '../utils/useConfigItem'
 import { useFavoritesList } from '../utils/useFavorites'
-import { saveContext, useRestore, scrollToElement } from '../utils/useNavigation'
+import { useNavigation, saveContext, scrollToElement } from '../utils/useNavigation'
 import { usePagination } from '../utils/usePagination'
 import { useRandomColor } from '../utils/useRandomColor'
 import { useScrollCarusel } from '../utils/useScrollCarusel'
@@ -187,7 +187,7 @@ export default {
       if (resizeTimeout) clearTimeout(resizeTimeout)
       resizeTimeout = setTimeout(() => { resizeTimeout = null }, 100)
     }
-    const { restore } = useRestore({
+    const { restore } = useNavigation({
       onRestore: async (ctx) => {
         if (ctx.type === 'carousel') {
           const found = setWindowByID(ctx.id, filteredItems.value)
