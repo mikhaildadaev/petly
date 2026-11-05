@@ -1,4 +1,10 @@
-export const usePageUUID = (uuid) => {
+export const useStandartUUID = (uuid) => {
+  if (!uuid || typeof uuid !== 'string') return null
+  const hex = uuid.replace(/-/g, '')
+  if (!/^[0-9a-fA-F]{32}$/.test(hex)) return null
+  return hex
+}
+export const useShortUUID = (uuid) => {
   if (!uuid) return null
   try {
     const hex = uuid.replace(/-/g, '')
