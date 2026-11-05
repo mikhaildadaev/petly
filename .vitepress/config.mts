@@ -70,26 +70,6 @@ export default defineConfig({
           quote: 'Sieht so aus, als wäre diese Seite spazieren gegangen. Aber wir helfen dir, den Weg nach Hause zu finden!',
           linkText: 'Zurück zur Startseite',
         },
-        search: {
-          provider: 'local',
-          options: {
-            translations: {
-              button: {
-                buttonText: 'Suche',
-                buttonAriaLabel: 'Suche'
-              },
-              modal: {
-                noResultsText: 'Nichts gefunden',
-                resetButtonTitle: 'Suche löschen',
-                footer: {
-                  selectText: 'auswählen',
-                  navigateText: 'gehe zu',
-                  closeText: 'schließen'
-                }
-              }
-            }
-          }
-        },
         nav: [
           {
             text: 'Über das Projekt',
@@ -201,26 +181,6 @@ export default defineConfig({
           title: 'Oops! Page not found 🐾',
           quote: 'Looks like this page went for a walk. But we\'ll help you find your way home!',
           linkText: 'Return to home',
-        },
-        search: {
-          provider: 'local',
-          options: {
-            translations: {
-              button: {
-                buttonText: 'Search',
-                buttonAriaLabel: 'Search'
-              },
-              modal: {
-                noResultsText: 'No results found',
-                resetButtonTitle: 'Clear search',
-                footer: {
-                  selectText: 'to select',
-                  navigateText: 'to navigate',
-                  closeText: 'to close'
-                }
-              }
-            }
-          }
         },
         nav: [
           {
@@ -334,26 +294,6 @@ export default defineConfig({
           quote: 'Похоже, эта страница ушла гулять. Но мы поможем найти дорогу домой!',
           linkText: 'Вернуться на главную',
         },
-        search: {
-          provider: 'local',
-          options: {
-            translations: {
-              button: {
-                buttonText: 'Поиск',
-                buttonAriaLabel: 'Поиск'
-              },
-              modal: {
-                noResultsText: 'Ничего не найдено',
-                resetButtonTitle: 'Очистить поиск',
-                footer: {
-                  selectText: 'выбрать',
-                  navigateText: 'перейти',
-                  closeText: 'закрыть'
-                }
-              }
-            }
-          }
-        },
         nav: [
           {
             text: 'О проекте',
@@ -456,9 +396,6 @@ export default defineConfig({
     hostname: 'https://needhome.pro'
   },
   themeConfig: {
-    search: {
-      provider: 'local'
-    },
     socialLinks: [
       { 
         icon: 'github', 
