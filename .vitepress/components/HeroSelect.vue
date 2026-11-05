@@ -1,5 +1,5 @@
 <template>
-  <section v-if="config && config.fields" class="aspect-hero hero-card">
+  <section v-if="config && config.fields" :id="`${item.standartID}`" class="aspect-hero hero-card">
     <div class="hero-meta">
       <template v-for="displayField in config.fields.display" :key="displayField">
         <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`" :data-gender="displayField === 'genderDisplay' ? item.gender : null">{{ item[displayField] }}</label>
@@ -24,7 +24,7 @@ import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { useData } from 'vitepress'
 import { useConfigItem } from '../utils/useConfigItem'
 import { useFavoritesList } from '../utils/useFavorites'
-import { usePageUUID } from '../utils/usePageUUID'
+import { useStandartUUID, useShortUUID } from '../utils/useStandartUUID'
 import { useRandomColor } from '../utils/useRandomColor'
 import { useTranslate } from '../utils/useTranslate'
 import { useUrlMedia } from '../utils/useUrlMedia'
@@ -48,7 +48,8 @@ export default {
       const base = {
         uuid: data.uuid,
         baseURL: (site.value?.base || '').replace(/\/+$/, ''),
-        shortID: usePageUUID(data.uuid),
+        standartID: useStandartUUID(data.uuid),
+        shortID: useShortUUID(data.uuid),
         nameDisplay: data.title || '',
         descriptionDisplay: data.description || '',
         covenantID: data.covenantID || '',
