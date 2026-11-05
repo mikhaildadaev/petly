@@ -872,7 +872,7 @@ p.withColor {
   flex-shrink: 0;
 }
 .cards-carousel .wrapper .track .slide {
-  flex: 0 0 calc(25% - 48px);
+  flex: 0 0 calc(25% - 64px);
   min-height: var(--height);
   min-width: var(--width);
   scroll-snap-align: center;
@@ -1758,6 +1758,9 @@ p.withColor {
    АДАПТИВНОСТЬ
    ============================================ */
 @media (min-width: 737px) and (max-width: 1280px) {
+  .cards-carousel .wrapper .track .slide {
+    flex: 0 0 calc(50% - 64px);
+  }
   .hero-card .hero-name {
     font-size: 2rem;
   }
@@ -1786,6 +1789,9 @@ p.withColor {
     bottom: 0;
     width: 100%;
     padding: 24px;
+  }
+  .cards-carousel .wrapper .track .slide {
+    flex: 0 0 calc(100% - 64px);
   }
   .aspect-full {
     aspect-ratio: 9/15;
