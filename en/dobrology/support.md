@@ -44,8 +44,8 @@ blocks:
     description: 'Share the link to the service on social media! One repost — and someone will find a home, while someone else will find a loyal friend.'
     image: '/assets/webp/words_post.webp'
     list: 
-      - link: 'VKontakte'
-        url: 'https://vk.com/share.php?url=https://needhome.pro/'
+      - link: 'Facebook'
+        url: 'https://facebook.com/sharer/sharer.php?u=https://needhome.pro/'
       
       - link: 'Telegram'
         url: 'https://t.me/share/url?url=https://needhome.pro/'
