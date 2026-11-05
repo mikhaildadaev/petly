@@ -1,5 +1,5 @@
 <template>
-  <section v-if="items && items.length" class="main-carousel">
+  <section v-if="items && items.length" :id="`${type}`" class="main-carousel">
     <div class="wrapper">
       <button v-if="items.length > 1" class="carousel prev" :class="{ none: isFirstSlide }" @click="onPrevClick" :disabled="isFirstSlide"></button>
       <div class="track" ref="carouselRef" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">

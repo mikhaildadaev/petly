@@ -1,5 +1,5 @@
 <template>
-  <section v-if="config && config.fields" class="group-items">
+  <section v-if="config && config.fields" :id="`${itemType}`" class="group-items">
     <div class="cards-carousel">
       <div class="wrapper">
         <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="isFirstSlide"></button>

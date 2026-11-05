@@ -1,5 +1,5 @@
 <template>
-  <section v-if="items && items.length" class="main-block">
+  <section v-if="items && items.length" :id="`${type}`" class="main-block">
     <div v-for="(item, index) in items" :key="index" class="main-item">
       <img v-if="item.img" :src="item.img" :alt="item.name" class="image" loading="lazy"/>
       <div class="text">

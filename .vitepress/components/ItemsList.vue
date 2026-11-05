@@ -1,5 +1,5 @@
 <template>
-  <section v-if="config && config.fields" class="list-items">
+  <section v-if="config && config.fields" :id="`${itemType}`" class="list-items">
     <div v-if="hasFilters && config.filters" class="filters-compact hide-scrollbar">
       <div v-for="(filterConfig, filterName) in config.filters" :key="filterName" class="filter-group">
         <div class="filter-chips">
