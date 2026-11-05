@@ -423,10 +423,7 @@ p.withColor {
 }
 .main-carousel {
   position: relative;
-  width: 100dvw;
-  height: 100%;
-  max-width: 100dvw;
-  margin: 2em calc(50% - 50dvw);
+  margin: 2em -24px;
   background-color: var(--vp-c-bg-soft);
   border-radius: var(--radius);
   overflow: hidden;
