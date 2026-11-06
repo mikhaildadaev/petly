@@ -246,23 +246,11 @@ h1.name {
   font-weight: 700 !important;
   font-family: var(--vp-font-family-print) !important;
 }
-h1.title {
-  margin: 0 0 0.45em !important;
-  font-size: 2em !important;
-  font-weight: 700 !important;
-  font-family: var(--vp-font-family-write) !important;
-}
 h2.name {
   margin: 0 0 0.40em !important;
   font-size: 1.6em !important;
   font-weight: 700 !important;
   font-family: var(--vp-font-family-print) !important;
-}
-h2.title {
-  margin: 0 0 0.40em !important;
-  font-size: 1.85em !important;
-  font-weight: 700 !important;
-  font-family: var(--vp-font-family-write) !important;
 }
 h3.name {
   margin: 0 0 0.35em !important;
@@ -270,23 +258,11 @@ h3.name {
   font-weight: 600 !important;
   font-family: var(--vp-font-family-print) !important;
 }
-h3.title {
-  margin: 0 0 0.35em !important;
-  font-size: 2em !important;
-  font-weight: 600 !important;
-  font-family: var(--vp-font-family-write) !important;
-}
 h4.name {
   margin: 0 0 0.30em !important;
   font-size: 1.0em !important;
   font-weight: 600 !important;
   font-family: var(--vp-font-family-print) !important;
-}
-h4.title {
-  margin: 0 0 0.30em !important;
-  font-size: 1.45em !important;
-  font-weight: 600 !important;
-  font-family: var(--vp-font-family-write) !important;
 }
 h5.name {
   margin: 0 0 0.25em !important;
@@ -294,17 +270,41 @@ h5.name {
   font-weight: 500 !important;
   font-family: var(--vp-font-family-print) !important;
 }
-h5.title {
-  margin: 0 0 0.25em !important;
-  font-size: 1.30em !important;
-  font-weight: 500 !important;
-  font-family: var(--vp-font-family-write) !important;
-}
 h6.name {
   margin: 0 0 0.20em !important;
   font-size: 0.70em !important;
   font-weight: 500 !important;
   font-family: var(--vp-font-family-print) !important;
+}
+h1.title {
+  margin: 0 0 0.45em !important;
+  font-size: 2.40em !important;
+  font-weight: 700 !important;
+  font-family: var(--vp-font-family-write) !important;
+}
+h2.title {
+  margin: 0 0 0.40em !important;
+  font-size: 2.15em !important;
+  font-weight: 700 !important;
+  font-family: var(--vp-font-family-write) !important;
+}
+h3.title {
+  margin: 0 0 0.35em !important;
+  font-size: 1.90em !important;
+  font-weight: 600 !important;
+  font-family: var(--vp-font-family-write) !important;
+}
+h4.title {
+  margin: 0 0 0.30em !important;
+  font-size: 1.45em !important;
+  font-weight: 600 !important;
+  font-family: var(--vp-font-family-write) !important;
+}
+h5.title {
+  margin: 0 0 0.25em !important;
+  font-size: 1.30em !important;
+  font-weight: 500 !important;
+  font-family: var(--vp-font-family-write) !important;
 }
 h6.title {
   margin: 0 0 0.20em !important;
