@@ -266,13 +266,13 @@ h2.title {
 }
 h3.name {
   margin: 0 0 0.35em !important;
-  font-size: 1.15em !important;
+  font-size: 1.45em !important;
   font-weight: 600 !important;
   font-family: var(--vp-font-family-print) !important;
 }
 h3.title {
   margin: 0 0 0.35em !important;
-  font-size: 1.60em !important;
+  font-size: 2em !important;
   font-weight: 600 !important;
   font-family: var(--vp-font-family-write) !important;
 }
