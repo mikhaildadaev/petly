@@ -89,18 +89,21 @@ button.none {
 }
 button.carousel {
   position: absolute;
-  top: calc(50% - 24px);
+  top: calc(50% - 32px);
   height: 64px;
-  width: 48px;
+  width: 24px;
   background-color: var(--vp-c-bg);
-  border-radius: var(--radius);
   z-index: 5;
 }
 button.carousel.prev {
-  left: -24px;
+  left: 0;
+  border-top-right-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
 }
 button.carousel.next {
-  right:-24px;
+  right: 0;
+  border-top-left-radius: var(--radius);
+  border-bottom-left-radius: var(--radius);
 }
 button.carousel::before {
   content: '';
@@ -113,18 +116,18 @@ button.carousel::before {
   background-color: var(--vp-c-text-light);
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
-  mask-position: center;
-  -webkit-mask-position: center;
   mask-size: contain;
   -webkit-mask-size: contain;
 }
 button.carousel.prev::before {
-  margin: 0 8px 0 16px;
+  mask-position: -8px center;
+  -webkit-mask-position: -8px center;
   mask-image: url('/assets/svg/navigation_prev.svg');
   -webkit-mask-image: url('/assets/svg/navigation_prev.svg');
 }
 button.carousel.next::before {
-  margin: 0 16px 0 8px;
+  mask-position: 8px center;
+  -webkit-mask-position: 8px center;
   mask-image: url('/assets/svg/navigation_next.svg');
   -webkit-mask-image: url('/assets/svg/navigation_next.svg');
 }
