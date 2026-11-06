@@ -24,8 +24,8 @@
   --radius: 24px;
   --shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
   --shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.12);
-  --height: 520px;
-  --width: 312px;
+  --height: 348px;
+  --width: 216px;
 }
 
 /* ============================================
@@ -421,7 +421,7 @@ p.withColor {
    ============================================================ */
 .main-block {
   position: relative;
-  margin: 2em -24px;
+  margin: 24px -24px;
   padding: 24px 24px 0;
   background-color: var(--vp-c-bg-soft);
   border-radius: var(--radius);
@@ -429,7 +429,7 @@ p.withColor {
 }
 .main-carousel {
   position: relative;
-  margin: 2em -24px;
+  margin: 24px -24px;
   background-color: var(--vp-c-bg-soft);
   border-radius: var(--radius);
   overflow: hidden;
@@ -501,7 +501,7 @@ p.withColor {
   flex-direction: row;
   gap: 24px;
   height: 100%;
-  min-height: 320px;
+  min-height: calc(var(--height) / 1.625);
 }
 .main-item .text {
   display: flex;
@@ -611,7 +611,7 @@ p.withColor {
    ============================================================ */
 
 .page-margin-block {
-  height: 2em
+  height: 16px
 }
 
 /* ============================================
@@ -1278,7 +1278,7 @@ p.withColor {
 .block-type-info .container .item {
   display: grid;
   grid-template-columns: 1fr;
-  padding: 1rem 2em;
+  padding: 16px 24px;
   background-color: var(--vp-c-bg-soft);
   border-radius: var(--radius);
 }
@@ -1396,7 +1396,7 @@ p.withColor {
   border-radius: var(--radius);
 }
 .block-type-social .background .title {
-  margin-top: -2em !important;
+  margin-top: -24px !important;
 }
 .block-type-social .block-grid {
   display: grid;
@@ -1840,7 +1840,7 @@ p.withColor {
    ============================================ */
 @media (min-width: 737px) and (max-width: 1280px) {
   .cards-carousel .wrapper .track .slide {
-    flex: 0 0 calc(50% - 64px);
+    flex: 0 0 calc(35% - 64px);
   }
   .hero-card .hero-name {
     font-size: 2rem;
