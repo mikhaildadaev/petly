@@ -242,7 +242,7 @@ h3 {
 }
 h1.name {
   margin: 0 0 0.45em !important;
-  font-size: 1.45em !important;
+  font-size: 1.85em !important;
   font-weight: 700 !important;
   font-family: var(--vp-font-family-print) !important;
 }
@@ -254,7 +254,7 @@ h1.title {
 }
 h2.name {
   margin: 0 0 0.40em !important;
-  font-size: 1.3em !important;
+  font-size: 1.6em !important;
   font-weight: 700 !important;
   font-family: var(--vp-font-family-print) !important;
 }
