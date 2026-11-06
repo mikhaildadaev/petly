@@ -89,8 +89,21 @@ button.none {
 }
 button.carousel {
   position: absolute;
-  top: 0;
+  top: calc(50% - 24px);
+  height: 64px;
+  width: 48px;
+  background-color: var(--vp-c-bg);
+  border-radius: var(--radius);
   z-index: 5;
+}
+button.carousel.prev {
+  left: -24px;
+}
+button.carousel.next {
+  right:-24px;
+}
+button.carousel::before {
+  content: '';
   display: flex;
   align-items: center;
   justify-content: center;
@@ -105,13 +118,13 @@ button.carousel {
   mask-size: contain;
   -webkit-mask-size: contain;
 }
-button.carousel.prev {
-  left: 0;
+button.carousel.prev::before {
+  margin: 0 8px 0 16px;
   mask-image: url('/assets/svg/navigation_prev.svg');
   -webkit-mask-image: url('/assets/svg/navigation_prev.svg');
 }
-button.carousel.next {
-  right: 0;
+button.carousel.next::before {
+  margin: 0 16px 0 8px;
   mask-image: url('/assets/svg/navigation_next.svg');
   -webkit-mask-image: url('/assets/svg/navigation_next.svg');
 }
@@ -1837,7 +1850,7 @@ p.withColor {
   }
 }
 @media (max-width: 736px) {
-  button.carousel {
+  button.carousel, button.carousel::before {
     background-color: transparent !important;
   }
   .main-item {
