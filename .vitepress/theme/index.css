@@ -561,6 +561,9 @@ p.withColor {
   padding: 1.5rem;
   border-radius: var(--radius);
 }
+.hero-card .hero-overlay .title {
+  padding-right: 32px;
+}
 .hero-card .hero-overlay p {
   margin-top: 0;
   margin-bottom: 1.2rem;
@@ -969,7 +972,7 @@ p.withColor {
   content: '';
   position: absolute;
   top: -4px;
-  right: -4px;
+  right: 0;
   z-index: 1;
   width: 32px;
   height: 32px;
