@@ -1738,6 +1738,7 @@ p.withColor {
   display: none!important;
 }
 .VPSidebar .nav {
+  display: grid!important;
   height: 100%!important;
   margin: auto 0!important;
   padding: 32px!important;
