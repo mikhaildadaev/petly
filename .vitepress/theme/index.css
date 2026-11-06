@@ -242,7 +242,7 @@ h3 {
 }
 h1.name {
   margin: 0 0 0.45em !important;
-  font-size: 1.45 !important;
+  font-size: 1.45em !important;
   font-weight: 700 !important;
   font-family: var(--vp-font-family-print) !important;
 }
@@ -1754,7 +1754,7 @@ p.withColor {
   top: 0!important;
   bottom: 0!important;
   width: 64px!important;
-  margin: 0 60%!important;
+  margin: 0 60% 0 40%!important;
   background-color: var(--vp-c-text-light)!important;
   mask-repeat: repeat-y!important;
   -webkit-mask-repeat: repeat-y!important;
