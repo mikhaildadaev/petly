@@ -24,8 +24,8 @@
   --radius: 24px;
   --shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
   --shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.12);
-  --height: 348px;
-  --width: 216px;
+  --height: 520px;
+  --width: 312px;
 }
 
 /* ============================================
@@ -55,7 +55,6 @@ body {
   font-family: var(--vp-font-family-base);
   line-height: 1.7;
   min-width: 360px;
-  font-size: 14px;
 }
 
 /* ============================================
@@ -243,73 +242,73 @@ h3 {
 }
 h1.name {
   margin: 0 0 0.45em !important;
-  font-size: clamp(20px, 2.5vw, 28px) !important;
+  font-size: 1.45em !important;
   font-weight: 700 !important;
   font-family: var(--vp-font-family-print) !important;
 }
 h1.title {
   margin: 0 0 0.45em !important;
-  font-size: clamp(28px, 3.5vw, 42px) !important;
+  font-size: 2em !important;
   font-weight: 700 !important;
   font-family: var(--vp-font-family-write) !important;
 }
 h2.name {
   margin: 0 0 0.40em !important;
-  font-size: clamp(18px, 2.2vw, 25px) !important;
+  font-size: 1.3em !important;
   font-weight: 700 !important;
   font-family: var(--vp-font-family-print) !important;
 }
 h2.title {
   margin: 0 0 0.40em !important;
-  font-size: clamp(24px, 3vw, 36px) !important;
+  font-size: 1.85em !important;
   font-weight: 700 !important;
   font-family: var(--vp-font-family-write) !important;
 }
 h3.name {
   margin: 0 0 0.35em !important;
-  font-size: clamp(16px, 1.8vw, 20px) !important;
+  font-size: 1.15em !important;
   font-weight: 600 !important;
   font-family: var(--vp-font-family-print) !important;
 }
 h3.title {
   margin: 0 0 0.35em !important;
-  font-size: clamp(20px, 2.5vw, 28px) !important;
+  font-size: 1.60em !important;
   font-weight: 600 !important;
   font-family: var(--vp-font-family-write) !important;
 }
 h4.name {
   margin: 0 0 0.30em !important;
-  font-size: clamp(14px, 1.5vw, 18px) !important;
+  font-size: 1.0em !important;
   font-weight: 600 !important;
   font-family: var(--vp-font-family-print) !important;
 }
 h4.title {
   margin: 0 0 0.30em !important;
-  font-size: clamp(18px, 2.2vw, 24px) !important;
+  font-size: 1.45em !important;
   font-weight: 600 !important;
   font-family: var(--vp-font-family-write) !important;
 }
 h5.name {
   margin: 0 0 0.25em !important;
-  font-size: clamp(12px, 1.3vw, 16px) !important;
+  font-size: 0.85em !important;
   font-weight: 500 !important;
   font-family: var(--vp-font-family-print) !important;
 }
 h5.title {
   margin: 0 0 0.25em !important;
-  font-size: clamp(16px, 2vw, 22px) !important;
+  font-size: 1.30em !important;
   font-weight: 500 !important;
   font-family: var(--vp-font-family-write) !important;
 }
 h6.name {
   margin: 0 0 0.20em !important;
-  font-size: clamp(11px, 1.2vw, 14px) !important;
+  font-size: 0.70em !important;
   font-weight: 500 !important;
   font-family: var(--vp-font-family-print) !important;
 }
 h6.title {
   margin: 0 0 0.20em !important;
-  font-size: clamp(14px, 1.8vw, 20px) !important;
+  font-size: 1.15em !important;
   font-weight: 500 !important;
   font-family: var(--vp-font-family-write) !important;
 }
@@ -336,7 +335,7 @@ label {
    АБЗАЦ
    ============================================ */
 p {
-  line-height: 1.5em !important;
+  line-height: 1.5 !important;
 }
 p.description {
   margin: 0 !important;
@@ -502,7 +501,7 @@ p.withColor {
   flex-direction: row;
   gap: 24px;
   height: 100%;
-  min-height: calc(var(--height) / 1.625);
+  min-height: 320px;
 }
 .main-item .text {
   display: flex;
@@ -520,8 +519,7 @@ p.withColor {
 }
 .main-item .image {
   height: auto;
-  min-width: var(--width);
-  max-width: calc(var(--width) * 1.625);
+  width: var(--width);
   margin: auto 0 0 0
 }
 
@@ -560,7 +558,7 @@ p.withColor {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 16px;
+  padding: 1.5rem;
   border-radius: var(--radius);
 }
 .hero-card .hero-overlay p {
@@ -613,7 +611,7 @@ p.withColor {
    ============================================================ */
 
 .page-margin-block {
-  height: 16px
+  height: 24px
 }
 
 /* ============================================
@@ -622,10 +620,10 @@ p.withColor {
 .tag {
   display: inline-block;
   width: fit-content;
-  padding: clamp(4px, 0.5vw, 8px) clamp(10px, 1vw, 16px);
-  font-size: clamp(0.7rem, 1vw, 0.9rem);
+  padding: 0.25rem 0.75rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  border-radius: clamp(16px, 1vw, 24px);
+  border-radius: 20px;
 }
 
 /* ============================================
@@ -889,7 +887,7 @@ p.withColor {
   flex-shrink: 0;
 }
 .cards-carousel .wrapper .track .slide {
-  flex: 0 0 calc(30% - 64px);
+  flex: 0 0 calc(25% - 64px);
   min-height: var(--height);
   min-width: var(--width);
   scroll-snap-align: center;
@@ -959,7 +957,7 @@ p.withColor {
   z-index: 1;
   display: grid;
   margin-top: auto;
-  padding: clamp(16px, 2vw, 24px);
+  padding: 1.5rem;
   background-color: var(--vp-c-bg);
   border: 0px;
   border-radius: var(--radius);
@@ -970,11 +968,11 @@ p.withColor {
 .card .card-link .content .title::after {
   content: '';
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 4px;
+  right: 4px;
   z-index: 1;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   pointer-events: none;
   background-color: currentColor;
   border-radius: var(--radius);
@@ -1280,7 +1278,7 @@ p.withColor {
 .block-type-info .container .item {
   display: grid;
   grid-template-columns: 1fr;
-  padding: 16px 24px;
+  padding: 12px 24px;
   background-color: var(--vp-c-bg-soft);
   border-radius: var(--radius);
 }
@@ -1587,7 +1585,7 @@ p.withColor {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
-  margin: 16px 0;
+  margin: 1.5rem 0;
 }
 .gallery-media .item {
   position: relative;
@@ -1842,7 +1840,7 @@ p.withColor {
    ============================================ */
 @media (min-width: 737px) and (max-width: 1280px) {
   .cards-carousel .wrapper .track .slide {
-    flex: 0 0 calc(35% - 64px);
+    flex: 0 0 calc(50% - 64px);
   }
   .hero-card .hero-name {
     font-size: 2rem;
@@ -1886,7 +1884,7 @@ p.withColor {
     top: 48px
   }
   .hero-card .hero-name {
-    font-size: 16px;
+    font-size: 1.5rem;
   }
 }
 
