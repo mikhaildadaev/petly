@@ -1716,15 +1716,30 @@ p.withColor {
   border-top-right-radius: var(--radius)!important;
   border-bottom-right-radius: var(--radius)!important;
   direction: rtl!important;
+  padding: 0!important;
+  overflow: hidden!important;
+}
+.VPSidebar .curtain {
+  display: none!important;
+}
+.VPSidebar .nav {
+  height: 100%!important;
+  margin: auto 0!important;
   padding: 32px!important;
+  overflow-x: hidden!important;
+  overflow-y: auto!important;
+  overscroll-behavior: contain!important;
+}
+.VPSidebar .nav section {
+  margin: 0!important;
 }
 .VPSidebar:before {
   content: ''!important;
-  position: absolute!important;
+  position: fixed!important;
   top: 0!important;
   bottom: 0!important;
   width: 64px!important;
-  margin: 0 calc(50% - 32px)!important;
+  margin: 0 60%!important;
   background-color: var(--vp-c-text-light)!important;
   mask-repeat: repeat-y!important;
   -webkit-mask-repeat: repeat-y!important;
@@ -1737,15 +1752,6 @@ p.withColor {
   opacity: 0.4!important;
   z-index: -1!important;
 }
-.VPSidebar .curtain {
-  display: none!important;
-}
-.VPSidebar .nav {
-  margin: auto 0!important;
-}
-.VPSidebar .nav section {
-  margin: 0!important;
-}
 .VPNavBarTitle .title {
   justify-content: end!important;
 }
@@ -1756,7 +1762,7 @@ p.withColor {
 }
 .VPNavScreen:before {
   content: ''!important;
-  position: absolute!important;
+  position: fixed!important;
   top: 0!important;
   bottom: 0!important;
   width: 64px!important;
