@@ -32,7 +32,7 @@
             <img :src="item.imageVertical" loading="lazy" />
           </picture>
           <div :class="['content', useRandomClass(item.uuid)]">
-            <h1 class="title">{{ item.nameDisplay }}</h1>
+            <h3 class="title">{{ item.nameDisplay }}</h3>
             <p class="description">{{ item.descriptionDisplay }}</p>
           </div>
         </a>
@@ -77,7 +77,7 @@
                   <img :src="item.imageVertical" loading="lazy" />
                 </picture>
                 <div :class="['content', useRandomClass(item.uuid)]">
-                  <h1 class="title">{{ item.nameDisplay }}</h1>
+                  <h3 class="title">{{ item.nameDisplay }}</h3>
                   <p class="description">{{ item.descriptionDisplay }}</p>
                 </div>
               </a>
