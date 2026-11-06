@@ -394,13 +394,5 @@ export default defineConfig({
   },
   sitemap: {
     hostname: 'https://needhome.pro'
-  },
-  themeConfig: {
-    socialLinks: [
-      { 
-        icon: 'github', 
-        link: 'https://github.com/mikhaildadaev/petly' 
-      }
-    ],
   }
 })
