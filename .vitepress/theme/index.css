@@ -1396,7 +1396,7 @@ p.withColor {
   border-radius: var(--radius);
 }
 .block-type-social .background .title {
-  margin-top: -24px !important;
+  margin-top: -1.6em !important;
 }
 .block-type-social .block-grid {
   display: grid;
