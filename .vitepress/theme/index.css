@@ -514,7 +514,6 @@ p.withColor {
 }
 .main-item .text .link {
   display: inline-block;
-  margin-top: auto;
   align-self: flex-start;
   margin-bottom: 24px!important;
 }
