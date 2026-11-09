@@ -1,7 +1,5 @@
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 
-const MOBILE_BREAKPOINT = 735
-
 export function useScrollCarusel(options = {}) {
   const {
     items = ref([]),
@@ -11,7 +9,6 @@ export function useScrollCarusel(options = {}) {
     hasPrevItems = ref(false),
     loadPrevFn = null,
   } = options
-  const isMobile = ref(false)
   const offsetPrev = computed(() => (hasPrevItems.value ? 1 : 0))
   const totalSlides = computed(
     () => items.value.length + offsetPrev.value + (hasNextItems.value ? 1 : 0)
@@ -26,11 +23,6 @@ export function useScrollCarusel(options = {}) {
   let rafId = null
   let isResetting = false
   const minSwipeDistance = 30
-  const checkMobile = () => {
-    if (typeof window !== 'undefined') {
-      isMobile.value = window.innerWidth < MOBILE_BREAKPOINT
-    }
-  }
   const updateCenterClass = (index) => {
     if (!containerRef.value) return
     const slides = containerRef.value.querySelectorAll('.slide')
@@ -226,7 +218,6 @@ export function useScrollCarusel(options = {}) {
       clearTimeout(resizeTimeout)
     }
     resizeTimeout = setTimeout(() => {
-      checkMobile()
       if (!isResetting) {
         syncIndex()
       }
@@ -241,7 +232,6 @@ export function useScrollCarusel(options = {}) {
     }
   }
   onMounted(() => {
-    checkMobile()
     if (typeof window !== 'undefined') {
       window.addEventListener('resize', handleResize)
     }
@@ -271,7 +261,6 @@ export function useScrollCarusel(options = {}) {
     }
   })
   return {
-    isMobile,
     currentIndex,
     isLoadingNext,
     scrollToSlide,
@@ -293,6 +282,5 @@ export function useScrollCarusel(options = {}) {
     handleTouchMove,
     handleTouchEnd,
     handleResize,
-    checkMobile,
   }
 }
