@@ -196,21 +196,16 @@ export default {
       onRestore: async (ctx) => {
         try {
           isRestoring.value = true
-          await nextTick()
           if (!filteredItems.value || filteredItems.value.length === 0) {
             return
           }
-          const found = setWindowByID(ctx.id, filteredItems.value)
-          if (!found) {
+          const indexInWindow = setWindowByID(ctx.id, filteredItems.value)
+          if (indexInWindow === null) {
             return
           }
           await nextTick()
           if (ctx.type === 'carousel') {
-            const index = paginatedItems.value.findIndex(i => i.uuid === ctx.id)
-            if (index !== -1) {
-              const realIndex = index + offsetPrev.value
-              scrollToSlide(realIndex)
-            }
+            scrollToSlide(indexInWindow + offsetPrev.value)
           } else {
             scrollToElement(ctx.id)
           }
