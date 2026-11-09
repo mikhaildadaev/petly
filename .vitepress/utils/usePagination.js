@@ -24,10 +24,7 @@ export function usePagination(items, options = {}) {
   const prevCount = computed(() => windowStart.value)
   const hasPrevItems = computed(() => windowStart.value > 0)
   const remaining = computed(() => {
-    return Math.max(
-      0,
-      totalItems.value.length - windowStart.value - windowSize.value
-    )
+    return Math.max(0, items.value.length - windowStart.value - windowSize.value)
   })
   const hasNextItems = computed(() => remaining.value > 0)
   const visibleCount = computed(() => windowSize.value)
@@ -57,13 +54,13 @@ export function usePagination(items, options = {}) {
     isLoadingNext.value = false
   }
   const setWindowByID = (uuid, allItems) => {
-    if (!uuid || !allItems || !allItems.length) return false
+    if (!uuid || !allItems || !allItems.length) return null
     const index = allItems.findIndex(item => item.uuid === uuid)
-    if (index === -1) return false
+    if (index === -1) return null
     const page = Math.floor(index / perPage)
     windowStart.value = page * perPage
     windowSize.value = perPage
-    return true
+    return index - windowStart.value  
   }
   return {
     windowStart,
