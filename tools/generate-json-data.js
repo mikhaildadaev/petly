@@ -33,13 +33,13 @@ const contentTypes = [
     name: 'pets',
     subdir: 'pets',
     types: ['cats', 'dogs'],
-    fields: ['uuid', 'title', 'description', 'age', 'gender', 'size', 'imageVertical', 'imageHorizontal', 'covenantID', 'shelters', 'volunteers'],
     transform: (data) => {
       const filter = []
       if (data.age) filter.push({ age: data.age })
       if (data.gender) filter.push({ gender: data.gender })
       if (data.size) filter.push({ size: data.size })
       return {
+        alid: data.alid || '',
         uuid: data.uuid,
         short: data.uuid ? uuidToBase64(data.uuid) : '',
         title: data.title || '',
@@ -57,7 +57,6 @@ const contentTypes = [
     name: 'humans',
     subdir: 'humans',
     types: ['volunteers'],
-    fields: ['uuid', 'title', 'description', 'direction', 'experience', 'imageVertical', 'imageHorizontal', 'covenantID', 'shelters'],
     transform: (data) => {
       const filter = []
       if (data.direction) filter.push({ direction: data.direction })
@@ -79,7 +78,6 @@ const contentTypes = [
     name: 'organizations',
     subdir: 'organizations',
     types: ['shelters'],
-    fields: ['uuid', 'title', 'description', 'format', 'imageVertical', 'imageHorizontal', 'covenantID'],
     transform: (data) => {
       const filter = []
       if (data.format) filter.push({ format: data.format })
@@ -113,6 +111,7 @@ function extractData(frontmatter) {
   const verticalImg = images.find(img => img.vertical)
   const horizontalImg = images.find(img => img.horizontal)
   return {
+    alid: frontmatter.alid || '',
     uuid: frontmatter.uuid,
     title: frontmatter.title || '',
     description: frontmatter.description || '',
