@@ -126,7 +126,6 @@ export default {
     } = usePagination(filteredItems, { perPage: 8 })
     const carouselRef = ref(null)
     const {
-      isMobile,
       currentIndex,
       scrollToSlide,
       nextSlide,
@@ -165,7 +164,6 @@ export default {
         lang: lang.value,
         type: props.type,
         itemType: props.itemType,
-        isMobile: true,
         groupUuid: props.uuid,
       })
     }
@@ -213,8 +211,6 @@ export default {
               const realIndex = index + offsetPrev.value
               scrollToSlide(realIndex)
             }
-          } else if (ctx.type === 'grid') {
-            scrollToElement(ctx.id)
           } else {
             scrollToElement(ctx.id)
           }
@@ -250,12 +246,6 @@ export default {
       },
       { deep: true }
     )
-    watch(isMobile, async (newVal) => {
-      if (mounted.value && newVal && paginatedItems.value.length) {
-        await nextTick()
-        resetToFirstSlide()
-      }
-    })
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)
@@ -270,7 +260,6 @@ export default {
       filteredItems,
       paginatedItems,
       isLoading,
-      isMobile,
       carouselRef,
       currentIndex,
       isFirstSlide,

@@ -9,46 +9,7 @@
       </div>
       <button v-if="!areAllActive" class="reset" @click="resetFilters" :title="translate('ui', 'Сбросить фильтры')">{{ translate('ui', 'Сбросить фильтры') }}</button>
     </div>
-    <div v-if="!isMobile" ref="gridRef" class="cards-grid">
-      <div v-if="hasPrevItems" class="aspect-card load-more prev-load" @click="loadPrev">
-        <div class="content">
-          <div class="icon prev-icon"></div>
-          <div class="text">{{ translate('ui', 'Загрузить предыдущие') }}</div>
-          <div class="count">{{ prevCount }} {{ translate('ui', 'осталось') }}</div>
-          <div class="progress">
-            <div class="bar" :style="{ width: `${(windowStart / filteredItems.length) * 100}%` }"></div>
-          </div>
-        </div>
-      </div>
-      <div v-for="item in paginatedItems" :key="item.uuid" :id="item.uuid" class="aspect-card card">
-        <div class="meta">
-          <template v-for="displayField in config.fields.display" :key="displayField">
-            <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`">{{ item[displayField] }}</label>
-          </template>
-        </div>
-        <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': mounted && isFavorite(item.uuid) }" @click.stop="toggleFavorite(item.uuid)" :title="translate('ui', 'Добавить в избранное')"></button>
-        <a :href="getItemLink(item)" @click="handleNavigate($event, item, 'grid')" rel="noopener noreferrer" class="card-link">
-          <picture>
-            <img :src="item.imageVertical" loading="lazy" />
-          </picture>
-          <div :class="['content', useRandomClass(item.uuid)]">
-            <h3 class="title">{{ item.nameDisplay }}</h3>
-            <p class="description">{{ item.descriptionDisplay }}</p>
-          </div>
-        </a>
-      </div>
-      <div v-if="hasNextItems" class="aspect-card load-more" @click="loadNext">
-        <div class="content">
-          <div class="icon"></div>
-          <div class="text">{{ translate('ui', 'Загрузить следующие') }}</div>
-          <div class="count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
-          <div class="progress">
-            <div class="bar" :style="{ width: `${((windowStart + windowSize) / filteredItems.length) * 100}%` }"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div v-else class="cards-carousel">
+    <div class="cards-carousel">
       <div class="wrapper">
         <button class="carousel prev" :class="{ none: isFirstSlide }" @click="prevSlide" :disabled="isFirstSlide"></button>
         <div class="track" ref="carouselRef" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
@@ -193,24 +154,7 @@ export default {
       setWindowByID,
     } = usePagination(filteredItems, { perPage: 8 })
     const carouselRef = ref(null)
-    const gridRef = ref(null)
-    const scrollGridToTop = async () => {
-      await nextTick()
-      if (!gridRef.value) return
-      const headerOffset = 80
-      const top = gridRef.value.getBoundingClientRect().top + window.scrollY - headerOffset
-      window.scrollTo({ top, behavior: 'smooth' })
-    }
-    const scrollGridToBottom = async () => {
-      await nextTick()
-      if (!gridRef.value) return
-      const rect = gridRef.value.getBoundingClientRect()
-      const bottom = rect.bottom + window.scrollY
-      const top = bottom - window.innerHeight + 80
-      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' })
-    }
     const {
-      isMobile,
       currentIndex,
       scrollToSlide,
       nextSlide,
@@ -232,14 +176,6 @@ export default {
       hasPrevItems: hasPrevItems,
       loadPrevFn: originalLoadPrev,
     })
-    const gridLoadNext = async () => {
-      await originalLoadNext()
-      if (!isMobile.value) await scrollGridToTop()
-    }
-    const gridLoadPrev = async () => {
-      await originalLoadPrev()
-      if (!isMobile.value) await scrollGridToBottom()
-    }
     const isFirstSlide = computed(
       () => currentIndex.value === 0 && !hasPrevItems.value
     )
@@ -258,7 +194,6 @@ export default {
         lang: lang.value,
         type: props.type,
         itemType: props.itemType,
-        isMobile: isMobile.value,
       })
     }
     const getFilterOptions = (filterName) => {
@@ -343,8 +278,6 @@ export default {
               const realIndex = index + offsetPrev.value
               scrollToSlide(realIndex)
             }
-          } else if (ctx.type === 'grid') {
-            scrollToElement(ctx.id)
           } else {
             scrollToElement(ctx.id)
           }
@@ -381,12 +314,6 @@ export default {
       },
       { deep: true }
     )
-    watch(isMobile, async (newVal) => {
-      if (mounted.value && newVal && paginatedItems.value.length) {
-        await nextTick()
-        resetToFirstSlide()
-      }
-    })
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)
@@ -403,9 +330,7 @@ export default {
       filteredItems,
       paginatedItems,
       isLoading,
-      isMobile,
       carouselRef,
-      gridRef,
       currentIndex,
       isFirstSlide,
       isLastSlide,
@@ -415,8 +340,6 @@ export default {
       prevCount,
       windowStart,
       windowSize,
-      loadNext: gridLoadNext,
-      loadPrev: gridLoadPrev,
       carouselLoadNext: loadNext,
       carouselLoadPrev: loadPrev,
       offsetPrev,

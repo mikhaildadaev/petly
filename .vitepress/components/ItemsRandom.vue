@@ -82,7 +82,6 @@ export default {
     const carouselRef = ref(null)
     const hasNextItems = computed(() => true)
     const {
-      isMobile,
       currentIndex,
       scrollToSlide,
       nextSlide,
@@ -162,12 +161,6 @@ export default {
         resetToFirstSlide()
       }
     )
-    watch(isMobile, async (newVal) => {
-      if (mounted.value && newVal && allItems.value.length) {
-        await nextTick()
-        resetToFirstSlide()
-      }
-    })
     onUnmounted(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize)
@@ -181,7 +174,6 @@ export default {
       isFavorite,
       toggleFavorite,
       isLoading,
-      isMobile,
       carouselRef,
       currentIndex,
       carouselTotalSlides,
