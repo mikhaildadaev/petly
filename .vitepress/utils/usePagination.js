@@ -17,10 +17,10 @@ export function usePagination(items, options = {}) {
     { immediate: true, deep: true }
   )
   const paginatedItems = computed(() => {
-    const start = windowStart.value
-    const end = start + windowSize.value
-    return totalItems.value.slice(start, end)
-  })
+  const start = windowStart.value
+  const end = start + windowSize.value
+  return items.value.slice(start, end)
+})
   const prevCount = computed(() => windowStart.value)
   const hasPrevItems = computed(() => windowStart.value > 0)
   const remaining = computed(() => {
