@@ -62,7 +62,7 @@ import { computed, ref, reactive, onMounted, onUnmounted, watch, nextTick } from
 import { useData } from 'vitepress'
 import { useConfigItem } from '../utils/useConfigItem'
 import { useFavoritesList } from '../utils/useFavorites'
-import { useNavigation, saveContext, scrollToElement } from '../utils/useNavigation'
+import { useNavigation, getContext, saveContext, scrollToElement } from '../utils/useNavigation'
 import { usePagination } from '../utils/usePagination'
 import { useRandomColor } from '../utils/useRandomColor'
 import { useScrollCarusel } from '../utils/useScrollCarusel'
@@ -130,7 +130,6 @@ export default {
       scrollToSlide,
       nextSlide,
       prevSlide,
-      goToSlide,
       resetToFirstSlide,
       handleTouchStart,
       handleTouchMove,
@@ -204,29 +203,44 @@ export default {
             return
           }
           await nextTick()
-          if (ctx.type === 'carousel') {
-            scrollToSlide(indexInWindow + offsetPrev.value)
-          } else {
-            scrollToElement(ctx.id)
-          }
+          const container = carouselRef.value
+          const targetHasPrev = windowStart.value > 0
+          await new Promise((resolve) => {
+            const tryScroll = (attempt = 0) => {
+              const slides = container ? Array.from(container.querySelectorAll('.slide')) : []
+              const domHasPrev = slides.length > 0 && !slides[0].id
+              if (targetHasPrev !== domHasPrev && attempt < 10) {
+                requestAnimationFrame(() => tryScroll(attempt + 1))
+                return
+              }
+              const realIndex = slides.findIndex(s => s.id === ctx.id)
+              if (realIndex !== -1) {
+                scrollToSlide(realIndex)
+              }
+              resolve()
+            }
+            tryScroll()
+          })
         } catch (error) {
           console.error('❌ Ошибка:', error)
         } finally {
+          await nextTick()
           isRestoring.value = false
         }
       }
     })
     onMounted(async () => {
-      mounted.value = true 
+      mounted.value = true
       if (typeof window !== 'undefined') {
         window.addEventListener('resize', handleResize)
       }
       await loadItems()
-      if (paginatedItems.value.length > 0) {
+      await nextTick()
+      if (getContext()) {
+        restore()
+      } else if (paginatedItems.value.length > 0) {
         resetToFirstSlide()
       }
-      await nextTick()
-      restore()
     })
     watch(lang, async () => {
       await loadItems()
@@ -273,10 +287,8 @@ export default {
       resetPagination,
       translate,
       lang,
-      scrollToSlide,
       nextSlide,
       prevSlide,
-      goToSlide,
       resetToFirstSlide,
       handleTouchStart,
       handleTouchMove,
