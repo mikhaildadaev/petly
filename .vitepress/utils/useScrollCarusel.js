@@ -108,9 +108,6 @@ export function useScrollCarusel(options = {}) {
       scrollToSlide(currentIndex.value - 1)
     }
   }
-  const goToSlide = (index) => {
-    scrollToSlide(index)
-  }
   const resetToFirstSlide = () => {
     scrollToSlide(offsetPrev.value)
   }
@@ -266,7 +263,6 @@ export function useScrollCarusel(options = {}) {
     scrollToSlide,
     nextSlide,
     prevSlide,
-    goToSlide,
     resetToFirstSlide,
     loadNext,
     loadPrev,

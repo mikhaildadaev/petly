@@ -1,4 +1,4 @@
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 
 export function usePagination(items, options = {}) {
   const {
@@ -8,19 +8,11 @@ export function usePagination(items, options = {}) {
   const windowStart = ref(0)
   const windowSize = ref(perPage)
   const isLoadingNext = ref(false)
-  const totalItems = ref([])
-  watch(
-    () => items.value,
-    (newItems) => {
-      totalItems.value = newItems || []
-    },
-    { immediate: true, deep: true }
-  )
   const paginatedItems = computed(() => {
-  const start = windowStart.value
-  const end = start + windowSize.value
-  return items.value.slice(start, end)
-})
+    const start = windowStart.value
+    const end = start + windowSize.value
+    return items.value.slice(start, end)
+  })
   const prevCount = computed(() => windowStart.value)
   const hasPrevItems = computed(() => windowStart.value > 0)
   const remaining = computed(() => {
@@ -31,21 +23,27 @@ export function usePagination(items, options = {}) {
   const loadNext = async (count = null) => {
     if (isLoadingNext.value || !hasNextItems.value) return
     isLoadingNext.value = true
-    const step = typeof count === 'number' && count > 0 ? count : perPage
-    windowStart.value += step
-    isLoadingNext.value = false
-    if (onLoadNext && typeof onLoadNext === 'function') {
-      await onLoadNext()
+    try {
+      const step = typeof count === 'number' && count > 0 ? count : perPage
+      windowStart.value += step
+      if (onLoadNext && typeof onLoadNext === 'function') {
+        await onLoadNext()
+      }
+    } finally {
+      isLoadingNext.value = false
     }
   }
   const loadPrev = async (count = null) => {
     if (isLoadingNext.value || !hasPrevItems.value) return
     isLoadingNext.value = true
-    const step = typeof count === 'number' && count > 0 ? count : perPage
-    windowStart.value = Math.max(0, windowStart.value - step)
-    isLoadingNext.value = false
-    if (onLoadNext && typeof onLoadNext === 'function') {
-      await onLoadNext()
+    try {
+      const step = typeof count === 'number' && count > 0 ? count : perPage
+      windowStart.value = Math.max(0, windowStart.value - step)
+      if (onLoadNext && typeof onLoadNext === 'function') {
+        await onLoadNext()
+      }
+    } finally {
+      isLoadingNext.value = false
     }
   }
   const resetPagination = () => {
