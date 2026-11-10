@@ -447,6 +447,7 @@ p.withColor {
   overflow-x: auto;
   overflow-y: visible;
   scroll-behavior: smooth;
+  scroll-padding: 0;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
@@ -861,6 +862,7 @@ p.withColor {
   overflow-x: auto;
   overflow-y: visible;
   scroll-behavior: smooth;
+  scroll-padding: 0;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
