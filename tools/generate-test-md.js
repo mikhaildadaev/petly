@@ -43,8 +43,8 @@ const NAMES = {
   female: ['Жужа', 'Лада', 'Альма', 'Герда', 'Дина', 'Милка', 'Нора', 'Соня', 'Белка', 'Стрелка', 'Лайма', 'Дейзи']
 };
 
-const GENDERS = ['Мальчик', 'Девочка'];
-const SIZES = ['Маленькая', 'Средняя', 'Крупная'];
+const GENDERS = ['Male', 'Female'];
+const SIZES = ['Small', 'Medium', 'Large'];
 
 const DESCRIPTIONS = [
   'Душа компании. Очень дружелюбный и активный питомец.',
@@ -73,7 +73,7 @@ const VOLUNTEERS = [
 
 function generatePet(index) {
   const gender = randomPick(GENDERS);
-  const name = randomPick(gender === 'Мальчик' ? NAMES.male : NAMES.female);
+  const name = randomPick(gender === 'Male' ? NAMES.male : NAMES.female);
   const uuid = generateUUIDv7();
   
   // Чтобы имена не повторялись
