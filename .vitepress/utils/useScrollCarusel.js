@@ -23,7 +23,6 @@ export function useScrollCarusel(options = {}) {
   let rafId = null
   let isResetting = false
   const minSwipeDistance = 30
-
   const getClosestSlide = () => {
     if (!containerRef.value) return 0
     const container = containerRef.value
@@ -43,7 +42,6 @@ export function useScrollCarusel(options = {}) {
     })
     return closestIndex
   }
-
   const syncIndex = () => {
     if (isResetting || isAnimating) return
     const closest = getClosestSlide()
@@ -51,7 +49,6 @@ export function useScrollCarusel(options = {}) {
       currentIndex.value = closest
     }
   }
-
   const scrollToSlide = (index) => {
     if (!containerRef.value) return
     const container = containerRef.value
@@ -63,13 +60,11 @@ export function useScrollCarusel(options = {}) {
     }
     isAnimating = true
     currentIndex.value = index
-
     const slide = slides[index]
     const containerWidth = container.offsetWidth
     const slideWidth = slide.offsetWidth
     const slideLeft = slide.offsetLeft
     const scrollPosition = slideLeft - (containerWidth - slideWidth) / 2
-    
     container.scrollTo({
       left: Math.max(0, scrollPosition),
       behavior: 'smooth'
@@ -80,14 +75,12 @@ export function useScrollCarusel(options = {}) {
       syncIndex()
     }, 400)
   }
-
   const isOnNextCard = computed(
     () => currentIndex.value === offsetPrev.value + items.value.length
   )
   const isOnPrevCard = computed(
     () => offsetPrev.value === 1 && currentIndex.value === 0
   )
-
   const nextSlide = () => {
     if (isOnNextCard.value) {
       loadNext()
@@ -96,11 +89,9 @@ export function useScrollCarusel(options = {}) {
     if (currentIndex.value < totalSlides.value - 1) {
       scrollToSlide(currentIndex.value + 1)
     } else if (!loadNextFn && currentIndex.value >= totalSlides.value - 1) {
-      // Циклический свайп вперед (если нет пагинации)
       scrollToSlide(0)
     }
   }
-
   const prevSlide = () => {
     if (isOnPrevCard.value) {
       loadPrev()
@@ -109,15 +100,12 @@ export function useScrollCarusel(options = {}) {
     if (currentIndex.value > 0) {
       scrollToSlide(currentIndex.value - 1)
     } else if (!loadPrevFn && currentIndex.value === 0) {
-      // Циклический свайп назад (если нет пагинации)
       scrollToSlide(totalSlides.value - 1)
     }
   }
-
   const resetToFirstSlide = () => {
     scrollToSlide(offsetPrev.value)
   }
-
   const loadNext = async () => {
     if (isLoadingNext.value || !loadNextFn) return
     isLoadingNext.value = true
@@ -136,7 +124,6 @@ export function useScrollCarusel(options = {}) {
       if (safeIndex !== currentIndex.value) scrollToSlide(safeIndex)
     }
   }
-
   const loadPrev = async () => {
     if (isLoadingNext.value || !loadPrevFn) return
     isLoadingNext.value = true
@@ -155,14 +142,12 @@ export function useScrollCarusel(options = {}) {
       if (safeIndex !== currentIndex.value) scrollToSlide(safeIndex)
     }
   }
-
   const handleTouchStart = (e) => {
     const touch = e.touches[0]
     touchStartX.value = touch.clientX
     touchStartY.value = touch.clientY
     isSwiping.value = true
   }
-
   const handleTouchMove = (e) => {
     if (!isSwiping.value) return
     const touch = e.touches[0]
@@ -180,7 +165,6 @@ export function useScrollCarusel(options = {}) {
       }
     }
   }
-
   const handleTouchEnd = (e) => {
     if (!isSwiping.value) return
     isSwiping.value = false
@@ -201,7 +185,6 @@ export function useScrollCarusel(options = {}) {
     touchStartX.value = 0
     touchStartY.value = 0
   }
-
   const handleScroll = () => {
     if (isResetting || isAnimating) return
     if (rafId) {
@@ -220,7 +203,6 @@ export function useScrollCarusel(options = {}) {
       rafId = null
     })
   }
-
   const handleResize = () => {
     if (resizeTimeout) {
       clearTimeout(resizeTimeout)
@@ -232,7 +214,6 @@ export function useScrollCarusel(options = {}) {
       resizeTimeout = null
     }, 200)
   }
-
   const attachTouchEvents = () => {
     if (containerRef.value) {
       containerRef.value.addEventListener('touchstart', handleTouchStart, { passive: true })
@@ -240,7 +221,6 @@ export function useScrollCarusel(options = {}) {
       containerRef.value.addEventListener('touchend', handleTouchEnd, { passive: true })
     }
   }
-
   onMounted(() => {
     if (typeof window !== 'undefined') {
       window.addEventListener('resize', handleResize)
@@ -253,7 +233,6 @@ export function useScrollCarusel(options = {}) {
       syncIndex()
     })
   })
-
   onUnmounted(() => {
     if (typeof window !== 'undefined') {
       window.removeEventListener('resize', handleResize)
@@ -271,7 +250,6 @@ export function useScrollCarusel(options = {}) {
       resizeTimeout = null
     }
   })
-
   return {
     currentIndex,
     isLoadingNext,
