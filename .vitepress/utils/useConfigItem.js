@@ -19,12 +19,12 @@ export const useConfigItem = {
       connect: ['shelters']
     },
     filters: {
-      experience: { keys: ['Начинающий', 'Опытный', 'Эксперт'], label: 'Опыт' },
-      direction: { keys: ['Выгул', 'Социализация', 'Лечение', 'Передержка', 'Креатив', 'Фандрайзинг'], label: 'Направление' }
+      experience: { keys: ['Beginner', 'Experienced', 'Expert'], label: 'Experience' },
+      direction: { keys: ['Walking', 'Socialization', 'Treatment', 'Fostering', 'Creative', 'Fundraising'], label: 'Direction' }
     },
     icons: {
-      experience: { 'Начинающий': 'begin', 'Опытный': 'versed', 'Эксперт': 'expert' },
-      direction: { 'Выгул': 'walk', 'Социализация': 'social', 'Лечение': 'treatment', 'Передержка': 'foster', 'Креатив': 'creative', 'Фандрайзинг': 'fundraising' }
+      experience: { 'Beginner': 'begin', 'Experienced': 'versed', 'Expert': 'expert' },
+      direction: { 'Walking': 'walk', 'Socialization': 'social', 'Treatment': 'treatment', 'Fostering': 'foster', 'Creative': 'creative', 'Fundraising': 'fundraising' }
     },
     transform: (item, lang, translate) => {
       const filter = item.filter || []
@@ -33,9 +33,9 @@ export const useConfigItem = {
       return {
         nameDisplay: item.title || '',
         descriptionDisplay: item.description || '',
-        direction: useDirection('ru', direction),
+        direction: useDirection('en', direction),
         directionDisplay: useDirection(lang, direction),
-        experience: useExperience('ru', experience),
+        experience: useExperience('en', experience),
         experienceDisplay: useExperience(lang, experience),
         shelters: item.shelters || [],
       }
@@ -53,10 +53,10 @@ export const useConfigItem = {
       connect: []
     },
     filters: {
-      format: { keys: ['Государственный', 'Частный'], label: 'Формат' }
+      format: { keys: ['State', 'Private'], label: 'Format' }
     },
     icons: {
-      format: { 'Государственный': 'state', 'Частный': 'private' }
+      format: { 'State': 'state', 'Private': 'private' }
     },
     transform: (item, lang, translate) => {
       const filter = item.filter || []
@@ -64,7 +64,7 @@ export const useConfigItem = {
       return {
         nameDisplay: item.title || '',
         descriptionDisplay: item.description || '',
-        format: useTranslate('ru', 'format', format),
+        format: useTranslate('en', 'format', format),
         formatDisplay: useTranslate(lang, 'format', format),
       }
     }
@@ -81,14 +81,14 @@ export const useConfigItem = {
       connect: ['shelters', 'volunteers']
     },
     filters: {
-      gender: { keys: ['Девочка', 'Мальчик'], label: 'Пол' },
-      age: { keys: ['Детеныш', 'Молодая', 'Взрослая'], label: 'Возраст' },
-      size: { keys: ['Маленькая', 'Средняя', 'Крупная'], label: 'Размер' }
+      gender: { keys: ['Female', 'Male'], label: 'Gender' },
+      age: { keys: ['Baby', 'Young', 'Adult'], label: 'Age' },
+      size: { keys: ['Small', 'Medium', 'Large'], label: 'Size' }
     },
     icons: {
-      gender: { 'Девочка': 'woman', 'Мальчик': 'man' },
-      age: { 'Детеныш': 'young', 'Молодая': 'middle', 'Взрослая': 'old' },
-      size: { 'Маленькая': 'small', 'Средняя': 'medium', 'Крупная': 'large' }
+      gender: { 'Female': 'woman', 'Male': 'man' },
+      age: { 'Baby': 'young', 'Young': 'middle', 'Adult': 'old' },
+      size: { 'Small': 'small', 'Medium': 'medium', 'Large': 'large' }
     },
     transform: (item, lang, translate) => {
       const filter = item.filter || []

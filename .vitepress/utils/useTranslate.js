@@ -1,51 +1,51 @@
 export const translations = {
   de: {
     filter: {
-      'Пол': 'Geschlecht',
-      'Размер': 'Größe',
-      'Возраст': 'Alter',
-      'Опыт': 'Erfahrung',
-      'Направление': 'Richtung',
-      'Формат': 'Format'
+      'Gender': 'Geschlecht',
+      'Size': 'Größe',
+      'Age': 'Alter',
+      'Experience': 'Erfahrung',
+      'Direction': 'Richtung',
+      'Format': 'Format'
     },
     gender: {
-      'Девочка': 'Weiblich',
-      'Мальчик': 'Männlich'
+      'Female': 'Weiblich',
+      'Male': 'Männlich'
     },
     age: {
-      'Детеныш': 'Baby',
-      'Молодая': 'Jung',
-      'Взрослая': 'Erwachsen'
+      'Baby': 'Baby',
+      'Young': 'Jung',
+      'Adult': 'Erwachsen'
     },
     ageUnits: {
-      'год': 'Jahr',
-      'года': 'Jahre',
-      'лет': 'Jahre',
-      'месяц': 'Monat',
-      'месяца': 'Monate',
-      'месяцев': 'Monate'
+      'year': 'Jahr',
+      'year_dec': 'Jahre',
+      'years': 'Jahre',
+      'month': 'Monat',
+      'month_dec': 'Monate',
+      'months': 'Monate'
     },
     size: {
-      'Маленькая': 'Klein',
-      'Средняя': 'Mittel',
-      'Крупная': 'Groß'
+      'Small': 'Klein',
+      'Medium': 'Mittel',
+      'Large': 'Groß'
     },
     direction: {
-      'Выгул': 'Gassi gehen',
-      'Социализация': 'Sozialisierung',
-      'Лечение': 'Behandlung',
-      'Передержка': 'Pflegestelle',
-      'Креатив': 'Kreativ',
-      'Фандрайзинг': 'Fundraising'
+      'Walking': 'Gassi gehen',
+      'Socialization': 'Sozialisierung',
+      'Treatment': 'Behandlung',
+      'Fostering': 'Pflegestelle',
+      'Creative': 'Kreativ',
+      'Fundraising': 'Fundraising'
     },
     experience: {
-      'Начинающий': 'Anfänger',
-      'Опытный': 'Erfahren',
-      'Эксперт': 'Experte'
+      'Beginner': 'Anfänger',
+      'Experienced': 'Erfahren',
+      'Expert': 'Experte'
     },
     format: {
-      'Государственный': 'Staatlich',
-      'Частный': 'Privat'
+      'State': 'Staatlich',
+      'Private': 'Privat'
     },
     info: {
       address: 'Adresse',
@@ -56,65 +56,64 @@ export const translations = {
       site: 'Webseite'
     },
     ui: {
-      'Сбросить фильтры': 'Filter zurücksetzen',
-      'Загрузить следующие': 'Nächste laden',
-      'Загрузить предыдущие': 'Vorherige laden',
-      'осталось': 'übrig',
-      'Перейти в раздел': 'Zum Bereich gehen',
-      'Ничего не найдено': 'Nichts gefunden',
-      'Добавить в избранное': 'Zu Favoriten hinzufügen',
-      'Перейти по ссылке': 'Zum Link',
-      'Подробнее': 'Mehr erfahren',
-      'Нет данных': 'Keine Daten'
+      'Reset the filters': 'Filter zurücksetzen',
+      'Load next': 'Nächste laden',
+      'Load previous': 'Vorherige laden',
+      'left': 'übrig',
+      'Go to section': 'Zum Bereich gehen',
+      'Add to favorites': 'Zu Favoriten hinzufügen',
+      'Go to link': 'Zum Link',
+      'More detailed': 'Mehr erfahren',
+      'No data': 'Keine Daten'
     }
   },
   en: {
     filter: {
-      'Пол': 'Gender',
-      'Размер': 'Size',
-      'Возраст': 'Age',
-      'Опыт': 'Experience',
-      'Направление': 'Direction',
-      'Формат': 'Format'
+      'Gender': 'Gender',
+      'Size': 'Size',
+      'Age': 'Age',
+      'Experience': 'Experience',
+      'Direction': 'Direction',
+      'Format': 'Format'
     },
     gender: {
-      'Девочка': 'Female',
-      'Мальчик': 'Male'
+      'Female': 'Female',
+      'Male': 'Male'
     },
     age: {
-      'Детеныш': 'Baby',
-      'Молодая': 'Young',
-      'Взрослая': 'Adult'
+      'Baby': 'Baby',
+      'Young': 'Young',
+      'Adult': 'Adult'
     },
     ageUnits: {
-      'год': 'year',
-      'года': 'years',
-      'лет': 'years',
-      'месяц': 'month',
-      'месяца': 'months',
-      'месяцев': 'months'
+      'year': 'year',
+      'year_dec': 'years',
+      'years': 'years',
+      'month': 'month',
+      'month_dec': 'months',
+      'months': 'months'
     },
     size: {
-      'Маленькая': 'Small',
-      'Средняя': 'Medium',
-      'Крупная': 'Large'
+      'Small': 'Small',
+      'Medium': 'Medium',
+      'Large': 'Large'
     },
     direction: {
-      'Выгул': 'Walking',
-      'Социализация': 'Socialization',
-      'Лечение': 'Treatment',
-      'Передержка': 'Fostering',
-      'Креатив': 'Creative',
-      'Фандрайзинг': 'Fundraising'
+      'Walking': 'Walking',
+      'Socialization': 'Socialization',
+      'Treatment': 'Treatment',
+      'Fostering': 'Fostering',
+      'Creative': 'Creative',
+      'Fundraising': 'Fundraising'
     },
     experience: {
-      'Начинающий': 'Beginner',
-      'Опытный': 'Experienced',
-      'Эксперт': 'Expert'
+      'Beginner': 'Beginner',
+      'Experienced': 'Experienced',
+      'Expert': 'Expert'
     },
     format: {
-      'Государственный': 'State',
-      'Частный': 'Private'
+      'State': 'State',
+      'Private': 'Private'
     },
     info: {
       address: 'Address',
@@ -125,65 +124,64 @@ export const translations = {
       site: 'Website'
     },
     ui: {
-      'Сбросить фильтры': 'Reset the filters',
-      'Загрузить следующие': 'Load next',
-      'Загрузить предыдущие': 'Load previous',
-      'осталось': 'left',
-      'Перейти в раздел': 'Go to section',
-      'Ничего не найдено': 'Nothing found',
-      'Добавить в избранное': 'Add to favorites',
-      'Перейти по ссылке': 'Go to link',
-      'Подробнее': 'More detailed',
-      'Нет данных': 'No data'
+      'Reset the filters': 'Reset the filters',
+      'Load next': 'Load next',
+      'Load previous': 'Load previous',
+      'left': 'left',
+      'Go to section': 'Go to section',
+      'Add to favorites': 'Add to favorites',
+      'Go to link': 'Go to link',
+      'More detailed': 'More detailed',
+      'No data': 'No data'
     }
   },
   ru: {
     filter: {
-      'Пол': 'Пол',
-      'Размер': 'Размер',
-      'Возраст': 'Возраст',
-      'Опыт': 'Опыт',
-      'Направление': 'Направление',
-      'Формат': 'Формат'
+      'Gender': 'Пол',
+      'Size': 'Размер',
+      'Age': 'Возраст',
+      'Experience': 'Опыт',
+      'Direction': 'Направление',
+      'Format': 'Формат'
     },
     gender: {
-      'Девочка': 'Девочка',
-      'Мальчик': 'Мальчик'
+      'Female': 'Девочка',
+      'Male': 'Мальчик'
     },
     age: {
-      'Детеныш': 'Детеныш',
-      'Молодая': 'Молодая',
-      'Взрослая': 'Взрослая'
+      'Baby': 'Детеныш',
+      'Young': 'Молодая',
+      'Adult': 'Взрослая'
     },
     ageUnits: {
-      'год': 'год',
-      'года': 'года',
-      'лет': 'лет',
-      'месяц': 'месяц',
-      'месяца': 'месяца',
-      'месяцев': 'месяцев'
+      'year': 'год',
+      'year_dec': 'года',
+      'years': 'лет',
+      'month': 'месяц',
+      'month_dec': 'месяца',
+      'months': 'месяцев'
     },
     size: {
-      'Маленькая': 'Маленькая',
-      'Средняя': 'Средняя',
-      'Крупная': 'Крупная'
+      'Small': 'Маленькая',
+      'Medium': 'Средняя',
+      'Large': 'Крупная'
     },
     direction: {
-      'Выгул': 'Выгул',
-      'Социализация': 'Социализация',
-      'Лечение': 'Лечение',
-      'Передержка': 'Передержка',
-      'Креатив': 'Креатив',
-      'Фандрайзинг': 'Фандрайзинг'
+      'Walking': 'Выгул',
+      'Socialization': 'Социализация',
+      'Treatment': 'Лечение',
+      'Fostering': 'Передержка',
+      'Creative': 'Креатив',
+      'Fundraising': 'Фандрайзинг'
     },
     experience: {
-      'Начинающий': 'Начинающий',
-      'Опытный': 'Опытный',
-      'Эксперт': 'Эксперт'
+      'Beginner': 'Начинающий',
+      'Experienced': 'Опытный',
+      'Expert': 'Эксперт'
     },
     format: {
-      'Государственный': 'Государственный',
-      'Частный': 'Частный'
+      'State': 'Государственный',
+      'Private': 'Частный'
     },
     info: {
       address: 'Адрес',
@@ -194,16 +192,15 @@ export const translations = {
       site: 'Сайт'
     },
     ui: {
-      'Сбросить фильтры': 'Сбросить фильтры',
-      'Загрузить следующие': 'Загрузить следующие',
-      'Загрузить предыдущие': 'Загрузить предыдущие',
-      'осталось': 'осталось',
-      'Перейти в раздел': 'Перейти в раздел',
-      'Ничего не найдено': 'Ничего не найдено',
-      'Добавить в избранное': 'В любимцы',
-      'Перейти по ссылке': 'Перейти по ссылке',
-      'Подробнее': 'Подробнее',
-      'Нет данных': 'Нет данных'
+      'Reset the filters': 'Сбросить фильтры',
+      'Load next': 'Загрузить следующие',
+      'Load previous': 'Загрузить предыдущие',
+      'left': 'осталось',
+      'Go to section': 'Перейти в раздел',
+      'Add to favorites': 'Добавить в избранное',
+      'Go to link': 'Перейти по ссылке',
+      'More detailed': 'Подробнее',
+      'No data': 'Нет данных'
     }
   }
 }
@@ -211,7 +208,7 @@ export const useTranslate = (lang, category, key) => {
   return translations[lang]?.[category]?.[key] || key
 }
 export const useAge = (lang, startDate) => {
-  if (!startDate) return useTranslate(lang, 'ui', 'Нет данных')
+  if (!startDate) return useTranslate(lang, 'ui', 'No data')
   const start = new Date(startDate)
   const now = new Date()
   let years = now.getFullYear() - start.getFullYear()
@@ -224,40 +221,40 @@ export const useAge = (lang, startDate) => {
     if (lang === 'ru') {
       const lastDigit = num % 10
       const lastTwoDigits = num % 100
-      if (unit === 'год') {
-        if (lastTwoDigits >= 11 && lastTwoDigits <= 19) return useTranslate(lang, 'ageUnits', 'лет')
-        if (lastDigit === 1) return useTranslate(lang, 'ageUnits', 'год')
-        if (lastDigit >= 2 && lastDigit <= 4) return useTranslate(lang, 'ageUnits', 'года')
-        return useTranslate(lang, 'ageUnits', 'лет')
+      if (unit === 'year') {
+        if (lastTwoDigits >= 11 && lastTwoDigits <= 19) return useTranslate(lang, 'ageUnits', 'years')
+        if (lastDigit === 1) return useTranslate(lang, 'ageUnits', 'year')
+        if (lastDigit >= 2 && lastDigit <= 4) return useTranslate(lang, 'ageUnits', 'year_dec')
+        return useTranslate(lang, 'ageUnits', 'years')
       }
-      if (unit === 'месяц') {
-        if (lastTwoDigits >= 11 && lastTwoDigits <= 19) return useTranslate(lang, 'ageUnits', 'месяцев')
-        if (lastDigit === 1) return useTranslate(lang, 'ageUnits', 'месяц')
-        if (lastDigit >= 2 && lastDigit <= 4) return useTranslate(lang, 'ageUnits', 'месяца')
-        return useTranslate(lang, 'ageUnits', 'месяцев')
+      if (unit === 'month') {
+        if (lastTwoDigits >= 11 && lastTwoDigits <= 19) return useTranslate(lang, 'ageUnits', 'months')
+        if (lastDigit === 1) return useTranslate(lang, 'ageUnits', 'month')
+        if (lastDigit >= 2 && lastDigit <= 4) return useTranslate(lang, 'ageUnits', 'month_dec')
+        return useTranslate(lang, 'ageUnits', 'months')
       }
       return useTranslate(lang, 'ageUnits', unit)
     }
-    if (unit === 'год') {
+    if (unit === 'year') {
       return num === 1
-        ? useTranslate(lang, 'ageUnits', 'год')
-        : useTranslate(lang, 'ageUnits', 'лет')
+        ? useTranslate(lang, 'ageUnits', 'year')
+        : useTranslate(lang, 'ageUnits', 'years')
     }
-    if (unit === 'месяц') {
+    if (unit === 'month') {
       return num === 1
-        ? useTranslate(lang, 'ageUnits', 'месяц')
-        : useTranslate(lang, 'ageUnits', 'месяцев')
+        ? useTranslate(lang, 'ageUnits', 'month')
+        : useTranslate(lang, 'ageUnits', 'months')
     }
     return useTranslate(lang, 'ageUnits', unit)
   }
   if (years < 1) {
-    const monthUnit = useUnit(months, 'месяц')
+    const monthUnit = useUnit(months, 'month')
     return `${months} ${monthUnit}`
   }
-  const yearUnit = useUnit(years, 'год')
+  const yearUnit = useUnit(years, 'year')
   let result = `${years} ${yearUnit}`
   if (months > 0) {
-    const monthUnit = useUnit(months, 'месяц')
+    const monthUnit = useUnit(months, 'month')
     result += ` ${months} ${monthUnit}`
   }
   return result
@@ -271,9 +268,9 @@ export const useAgePetCategory = (birthday) => {
   if (now.getDate() < birthDate.getDate()) {
     months--
   }
-  if (months <= 12) return 'Детеныш'
-  if (months <= 60) return 'Молодая'
-  return 'Взрослая'
+  if (months <= 12) return 'Baby'
+  if (months <= 60) return 'Young'
+  return 'Adult'
 }
 export const useDirection = (lang, directionStr) => {
   if (!directionStr) return ''
@@ -284,7 +281,7 @@ export const useDirection = (lang, directionStr) => {
   return translatedParts.join(' / ')
 }
 export const useExperience = (lang, startDate) => {
-  if (!startDate) return useTranslate(lang, 'ui', 'Нет данных')
+  if (!startDate) return useTranslate(lang, 'ui', 'No data')
   const start = new Date(startDate)
   const now = new Date()
   let years = now.getFullYear() - start.getFullYear()
@@ -295,11 +292,11 @@ export const useExperience = (lang, startDate) => {
   }
   let categoryKey
   if (years < 1) {
-    categoryKey = 'Начинающий'
+    categoryKey = 'Beginner'
   } else if (years <= 3) {
-    categoryKey = 'Опытный'
+    categoryKey = 'Experienced'
   } else {
-    categoryKey = 'Эксперт'
+    categoryKey = 'Expert'
   }
   return useTranslate(lang, 'experience', categoryKey)
 }
