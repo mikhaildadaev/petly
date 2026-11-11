@@ -37,7 +37,6 @@ export default {
   setup(props) {
     const { lang, frontmatter } = useData()
     const translate = (category, key) => useTranslate(lang.value, category, key)
-
     const items = computed(() => {
       const mainArray = frontmatter.value?.main || []
       const block = mainArray.find(item => item.type === props.type)
@@ -49,7 +48,6 @@ export default {
       scrollToSlide,
       nextSlide,
       prevSlide,
-      goToSlide,
       resetToFirstSlide,
       handleTouchStart,
       handleTouchMove,
@@ -66,23 +64,9 @@ export default {
     const isLastSlide = computed(
       () => currentIndex.value >= totalSlides.value - 1
     )
-    const goNextLooped = () => {
-      if (items.value.length <= 1) return
-      if (isLastSlide.value) {
-        scrollToSlide(0)
-      } else {
-        nextSlide()
-      }
-    }
-    const goPrevLooped = () => {
-      if (items.value.length <= 1) return
-      if (isFirstSlide.value) {
-        scrollToSlide(totalSlides.value - 1)
-      } else {
-        prevSlide()
-      }
-    }
     let timer = null
+    let scrollDebounce = null
+    let isProgrammaticScroll = false
     const startTimer = () => {
       stopTimer()
       if (items.value.length <= 1) return
@@ -100,6 +84,35 @@ export default {
       stopTimer()
       startTimer()
     }
+    const onScroll = () => {
+      if (isProgrammaticScroll) return
+      
+      stopTimer()
+      if (scrollDebounce) clearTimeout(scrollDebounce)
+      scrollDebounce = setTimeout(() => {
+        startTimer()
+      }, 300)
+    }
+    const goNextLooped = () => {
+      if (items.value.length <= 1) return
+      isProgrammaticScroll = true
+      if (isLastSlide.value) {
+        scrollToSlide(0)
+      } else {
+        nextSlide()
+      }
+      setTimeout(() => { isProgrammaticScroll = false }, 500)
+    }
+    const goPrevLooped = () => {
+      if (items.value.length <= 1) return
+      isProgrammaticScroll = true
+      if (isFirstSlide.value) {
+        scrollToSlide(totalSlides.value - 1)
+      } else {
+        prevSlide()
+      }
+      setTimeout(() => { isProgrammaticScroll = false }, 500)
+    }
     const onNextClick = () => {
       goNextLooped()
       resetTimer()
@@ -109,11 +122,13 @@ export default {
       resetTimer()
     }
     const onDotClick = (index) => {
-      goToSlide(index)
+      isProgrammaticScroll = true
+      scrollToSlide(index)
+      setTimeout(() => { isProgrammaticScroll = false }, 500)
       resetTimer()
     }
     const onTouchStart = (e) => {
-      resetTimer()
+      stopTimer()
       handleTouchStart(e)
     }
     const onTouchMove = (e) => {
@@ -128,9 +143,16 @@ export default {
       requestAnimationFrame(() => {
         if (items.value.length > 0) resetToFirstSlide()
       })
+      if (carouselRef.value) {
+        carouselRef.value.addEventListener('scroll', onScroll, { passive: true })
+      }
     })
     onUnmounted(() => {
       stopTimer()
+      if (scrollDebounce) clearTimeout(scrollDebounce)
+      if (carouselRef.value) {
+        carouselRef.value.removeEventListener('scroll', onScroll)
+      }
     })
     return {
       items,
@@ -143,7 +165,6 @@ export default {
       scrollToSlide,
       nextSlide,
       prevSlide,
-      goToSlide,
       resetToFirstSlide,
       onTouchStart,
       onTouchMove,
