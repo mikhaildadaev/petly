@@ -86,7 +86,7 @@
             <div class="content">
               <h4 class="name">{{ item.name }}</h4>
               <p class="description withColor">{{ item.description }}</p>
-              <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="link">{{ translate('ui', 'Перейти по ссылке') }}</a>
+              <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="link">{{ translate('ui', 'Go to link') }}</a>
             </div>
           </div>
         </div>
@@ -99,7 +99,7 @@
             <div class="content">
               <h4 class="name">{{ item.name }}</h4>
               <p class="description withColor">{{ item.description }}</p>
-              <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="link">{{ translate('ui', 'Перейти по ссылке') }}</a>
+              <a v-if="item.link" :href="item.link" target="_blank" rel="noopener" class="link">{{ translate('ui', 'Go to link') }}</a>
             </div>
           </div>
         </div>

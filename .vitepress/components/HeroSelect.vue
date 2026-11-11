@@ -5,7 +5,7 @@
         <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`" :data-gender="displayField === 'genderDisplay' ? item.gender : null">{{ item[displayField] }}</label>
       </template>
     </div>
-    <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': mounted && isFavorite(item.uuid) }" @click.stop="toggleFavorite(item.uuid)" :title="translate('ui', 'Добавить в избранное')"></button>
+    <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': mounted && isFavorite(item.uuid) }" @click.stop="toggleFavorite(item.uuid)" :title="translate('ui', 'Add to favorites')"></button>
     <picture>
       <source :srcset="item.imageVertical" media="(max-width: 735px)" />
       <source :srcset="item.imageHorizontal" media="(min-width: 736px)" />

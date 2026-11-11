@@ -7,7 +7,7 @@
         </div>
         <label class="filter-label">{{ translate('filter', filterConfig.label) }}</label>
       </div>
-      <button v-if="!areAllActive" class="reset" @click="resetFilters" :title="translate('ui', 'Сбросить фильтры')">{{ translate('ui', 'Сбросить фильтры') }}</button>
+      <button v-if="!areAllActive" class="reset" @click="resetFilters" :title="translate('ui', 'Reset the filters')">{{ translate('ui', 'Reset the filters') }}</button>
     </div>
     <div class="cards-carousel">
       <div class="wrapper">
@@ -17,8 +17,8 @@
             <div class="aspect-card load-more prev-load" @click="carouselLoadPrev">
               <div class="content">
                 <div class="icon prev-icon"></div>
-                <div class="text">{{ translate('ui', 'Загрузить предыдущие') }}</div>
-                <div class="count">{{ prevCount }} {{ translate('ui', 'осталось') }}</div>
+                <div class="text">{{ translate('ui', 'Load previous') }}</div>
+                <div class="count">{{ prevCount }} {{ translate('ui', 'left') }}</div>
                 <div class="progress">
                   <div class="bar" :style="{ width: `${(windowStart / filteredItems.length) * 100}%` }"></div>
                 </div>
@@ -32,7 +32,7 @@
                   <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`">{{ item[displayField] }}</label>
                 </template>
               </div>
-              <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': mounted && isFavorite(item.uuid) }" @click.stop="toggleFavorite(item.uuid)" :title="translate('ui', 'Добавить в избранное')"></button>
+              <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': mounted && isFavorite(item.uuid) }" @click.stop="toggleFavorite(item.uuid)" :title="translate('ui', 'Add to favorites')"></button>
               <a :href="getItemLink(item)" @click="handleNavigate($event, item, 'carousel')" rel="noopener noreferrer" class="card-link">
                 <picture>
                   <img :src="item.imageVertical" loading="lazy" />
@@ -48,8 +48,8 @@
             <div class="aspect-card load-more" @click="carouselLoadNext">
               <div class="content">
                 <div class="icon"></div>
-                <div class="text">{{ translate('ui', 'Загрузить следующие') }}</div>
-                <div class="count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
+                <div class="text">{{ translate('ui', 'Load next') }}</div>
+                <div class="count">{{ remaining }} {{ translate('ui', 'left') }}</div>
                 <div class="progress">
                   <div class="bar" :style="{ width: `${((windowStart + windowSize) / filteredItems.length) * 100}%` }"></div>
                 </div>
@@ -61,7 +61,7 @@
       </div>
     </div>
     <div v-if="filteredItems.length === 0 && !isLoading" class="no-results">
-      <p>{{ translate('ui', 'Ничего не найдено') }}</p>
+      <p>{{ translate('ui', 'No data') }}</p>
     </div>
   </section>
 </template>
@@ -206,6 +206,45 @@ export default {
     const toggleFilter = (group, value) => {
       filters[group][value] = !filters[group][value]
     }
+    const updateUrlFilters = () => {
+      if (typeof window === 'undefined') return
+      const url = new URL(window.location.href)
+      Object.keys(config.filters || {}).forEach(key => url.searchParams.delete(key))
+      Object.keys(filters).forEach(group => {
+        const activeValues = Object.keys(filters[group]).filter(key => filters[group][key] === true)
+        if (activeValues.length > 0) {
+          url.searchParams.set(group, activeValues.join(','))
+        }
+      })
+      const allActive = Object.keys(filters).every(group => 
+        Object.values(filters[group]).every(v => v === true)
+      )
+      const newUrl = allActive ? window.location.pathname + window.location.hash : url.toString() 
+      window.history.replaceState(null, '', newUrl)
+    }
+    const loadFiltersFromUrl = () => {
+      if (typeof window === 'undefined') return false
+      const params = new URLSearchParams(window.location.search)
+      let hasUrlFilters = false
+      Object.keys(config.filters || {}).forEach(group => {
+        if (params.has(group)) hasUrlFilters = true
+      })
+      if (!hasUrlFilters) return false
+      Object.keys(config.filters || {}).forEach(group => {
+        const value = params.get(group)
+        if (value !== null) {
+          const includedValues = value.split(',')
+          Object.keys(filters[group]).forEach(key => {
+            filters[group][key] = includedValues.includes(key)
+          })
+        } else {
+          Object.keys(filters[group]).forEach(key => {
+            filters[group][key] = false
+          })
+        }
+      })
+      return true
+    }
     const resetFilters = () => {
       Object.keys(filters).forEach(group => {
         Object.keys(filters[group]).forEach(key => {
@@ -213,6 +252,12 @@ export default {
         })
       })
       resetPagination()
+      if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href)
+        Object.keys(config.filters || {}).forEach(key => url.searchParams.delete(key))
+        const newUrl = url.searchParams.toString() ? url.toString() : window.location.pathname + window.location.hash
+        window.history.replaceState(null, '', newUrl)
+      }
     }
     const areAllActive = computed(() => {
       if (!config.filters) return true
@@ -262,6 +307,7 @@ export default {
               }
             })
           }
+          updateUrlFilters()
           await nextTick()
           if (!filteredItems.value || filteredItems.value.length === 0) {
             return
@@ -302,6 +348,7 @@ export default {
       if (typeof window !== 'undefined') {
         window.addEventListener('resize', handleResize)
       }
+      loadFiltersFromUrl()
       await loadItems()
       await nextTick()
       if (getContext()) {
@@ -318,6 +365,7 @@ export default {
     })
     watch(() => filters, async () => {
         if (isRestoring.value) return
+        updateUrlFilters()
         resetPagination()
         await nextTick()
         resetToFirstSlide()

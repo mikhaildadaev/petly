@@ -8,8 +8,8 @@
             <div class="aspect-card load-more prev-load" @click="carouselLoadPrev">
               <div class="content">
                 <div class="icon prev-icon"></div>
-                <div class="text">{{ translate('ui', 'Загрузить предыдущие') }}</div>
-                <div class="count">{{ prevCount }} {{ translate('ui', 'осталось') }}</div>
+                <div class="text">{{ translate('ui', 'Load previous') }}</div>
+                <div class="count">{{ prevCount }} {{ translate('ui', 'left') }}</div>
                 <div class="progress">
                   <div class="bar" :style="{ width: `${(windowStart / filteredItems.length) * 100}%` }"></div>
                 </div>
@@ -23,7 +23,7 @@
                   <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`">{{ item[displayField] }}</label>
                 </template>
               </div>
-              <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': mounted && isFavorite(item.uuid) }" @click.stop="toggleFavorite(item.uuid)" :title="translate('ui', 'Добавить в избранное')"></button>
+              <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': mounted && isFavorite(item.uuid) }" @click.stop="toggleFavorite(item.uuid)" :title="translate('ui', 'Add to favorites')"></button>
               <a :href="getItemLink(item)" @click="handleNavigate($event, item, 'carousel')" rel="noopener noreferrer" class="card-link">
                 <picture>
                   <img :src="item.imageVertical" loading="lazy" />
@@ -39,8 +39,8 @@
             <div class="aspect-card load-more" @click="carouselLoadNext">
               <div class="content">
                 <div class="icon"></div>
-                <div class="text">{{ translate('ui', 'Загрузить следующие') }}</div>
-                <div class="count">{{ remaining }} {{ translate('ui', 'осталось') }}</div>
+                <div class="text">{{ translate('ui', 'Load next') }}</div>
+                <div class="count">{{ remaining }} {{ translate('ui', 'left') }}</div>
                 <div class="progress">
                   <div class="bar" :style="{ width: `${((windowStart + windowSize) / filteredItems.length) * 100}%` }"></div>
                 </div>
@@ -52,7 +52,7 @@
       </div>
     </div>
     <div v-if="filteredItems.length === 0 && !isLoading" class="no-results">
-      <p>{{ translate('ui', 'Ничего не найдено') }}</p>
+      <p>{{ translate('ui', 'No data') }}</p>
     </div>
   </section>
 </template>

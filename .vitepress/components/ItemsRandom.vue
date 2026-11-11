@@ -11,7 +11,7 @@
                   <label v-if="item && item[displayField]" :class="`tag ${displayField.replace('Display', '')}-tag`">{{ item[displayField] }}</label>
                 </template>
               </div>
-              <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': mounted && isFavorite(item.uuid) }" @click.stop="toggleFavorite(item.uuid)" :title="translate('ui', 'Добавить в избранное')"></button>
+              <button v-if="type === 'pets' && item.uuid" class="like favorite" :class="{ 'is-favorite': mounted && isFavorite(item.uuid) }" @click.stop="toggleFavorite(item.uuid)" :title="translate('ui', 'Add to favorites')"></button>
               <a :href="getItemLink(item)" rel="noopener noreferrer" class="card-link">
                 <picture>
                   <img :src="item.imageVertical" loading="lazy" />
@@ -27,7 +27,7 @@
             <div class="aspect-card load-get" @click="goToLink">
               <div class="content">
                 <div class="icon"></div>
-                <div class="text">{{ translate('ui', 'Перейти в раздел') }}</div>
+                <div class="text">{{ translate('ui', 'Go to section') }}</div>
               </div>
             </div>
           </div>

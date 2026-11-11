@@ -5,7 +5,7 @@
       <div class="text">
         <h1 class="name">{{ item.name }}</h1>
         <p class="description">{{ item.description }}</p>
-        <a v-if="item.link" :href="item.link" class="link">{{ translate('ui', 'Подробнее')}} →</a>
+        <a v-if="item.link" :href="item.link" class="link">{{ translate('ui', 'More detailed')}} →</a>
       </div>
     </div>
   </section>
